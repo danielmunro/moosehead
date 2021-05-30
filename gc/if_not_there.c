@@ -2,6 +2,8 @@
 /* Except for execvp, we stick to ANSI C.				   */
 # include "gcconfig.h"
 # include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 int main(argc, argv, envp)
 int argc;

@@ -1,7 +1,7 @@
 CC      = gcc
 PROF    = -O2 -ggdb
 OLC	= -DGAME_VERSION -DROM
-C_FLAGS =  -Dmoose -Wall $(PROF) $(OLC)
+C_FLAGS =  -g -Dmoose -Wall $(PROF) $(OLC)
 L_FLAGS =  -Dmoose $(PROF) -lm -lcrypt
 
 O_FILES = act_comm.o act_enter.o act_info.o act_move.o act_obj.o\

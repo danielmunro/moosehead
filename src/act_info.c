@@ -14,7 +14,8 @@
   *  benefitting.  We hope that you share your changes too.  What goes      *
   *  around, comes around.                                                  *
   ***************************************************************************/
- 
+
+#define _XOPEN_SOURCE
 static char rcsid[] = "$Id: act_info.c,v 1.423 2004/04/02 04:42:07 boogums Exp $";
  #if defined(macintosh)
  #include <types.h>
@@ -29,12 +30,14 @@ static char rcsid[] = "$Id: act_info.c,v 1.423 2004/04/02 04:42:07 boogums Exp $
  #include <stdlib.h>
  #include <ctype.h>
  #include <time.h>
+ #include <unistd.h>
  #include "merc.h"
  #include "magic.h"
  #include "recycle.h"
  #include "tables.h"
  #include "lookup.h"
  #include "gladiator.h"
+ #include "handler.h"
  
  /* command procedures needed */
  DECLARE_DO_FUN( do_exits        );
@@ -4744,12 +4747,12 @@ void do_kr( CHAR_DATA *ch, char *argument)
    return;
      }
 
-     if ( strcmp( crypt( arg1, ch->pcdata->pwd ), ch->pcdata->pwd ) )
-     {
-   WAIT_STATE( ch, 40 );
-   send_to_char( "Wrong password.  Wait 10 seconds.\n\r", ch );
-   return;
-     }
+//     if ( 0 )
+//     {
+//   WAIT_STATE( ch, 40 );
+//   send_to_char( "Wrong password.  Wait 10 seconds.\n\r", ch );
+//   return;
+//     }
  
      if ( strlen(arg2) < 5 )
      {
@@ -4761,7 +4764,7 @@ void do_kr( CHAR_DATA *ch, char *argument)
      /*
       * No tilde allowed because of player file format.
       */
-     pwdnew = crypt( arg2, ch->name );
+     pwdnew = ch->name; // crypt( arg2, ch->name );
      for ( p = pwdnew; *p != '\0'; p++ )
      {
    if ( *p == '~' )

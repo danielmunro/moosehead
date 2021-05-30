@@ -2,6 +2,8 @@
 
 # include "gcconfig.h"
 # include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
 int main(argc, argv, envp)
 int argc;

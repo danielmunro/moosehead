@@ -15,6 +15,7 @@
  *  around, comes around.                                                  *
  ***************************************************************************/
 
+#define _XOPEN_SOURCE
 static char rcsid[] = "$Id: act_wiz.c,v 1.418 2004/10/25 02:48:44 boogums Exp $";
 #if defined(macintosh)
 #include <types.h>
@@ -32,6 +33,7 @@ static char rcsid[] = "$Id: act_wiz.c,v 1.418 2004/10/25 02:48:44 boogums Exp $"
 #include "recycle.h"
 #include "tables.h"
 #include "lookup.h"
+#include "handler.h"
 
 /* command procedures needed */
 DECLARE_DO_FUN(do_rstat   );
@@ -6908,12 +6910,12 @@ void do_hostmask( CHAR_DATA *ch, char *argument )
        return;
      }
 
-     if ( strcmp( crypt( arg1, victim->pcdata->pwd ), victim->pcdata->pwd ) )
-     {
-	WAIT_STATE( ch, 40 );
-	send_to_char("Wrong password.  Wait 10 seconds.\n\r", ch);
-	return;
-     }
+//     if ( false )
+//     {
+//	WAIT_STATE( ch, 40 );
+//	send_to_char("Wrong password.  Wait 10 seconds.\n\r", ch);
+//	return;
+//     }
 
      strcpy(victim->pcdata->hostmask,arg2);
      victim->desc->host = str_dup(victim->pcdata->hostmask);

@@ -19,6 +19,7 @@
 /*
  *  Accommodate old non-Ansi compilers.
  */
+#define GAME_VERSION 1
 #if defined(TRADITIONAL)
 #define const
 #define args( list )                    ( )
@@ -2586,6 +2587,11 @@ extern	sh_int	gsn_spirit_of_wolf;
  extern sh_int   gsn_symbol_4;
  extern sh_int	gsn_shield_of_faith;
  extern sh_int	gsn_stone_skin;
+
+
+
+
+
 extern sh_int	gsn_hamstring;
 extern	sh_int	gsn_acclimate;
  extern sh_int	gsn_enhanced_critical;
@@ -3008,7 +3014,7 @@ char *  crypt           args( ( const char *key, const char *salt ) );
 #define NULL_FILE       "nul"           /* To reserve one stream        */
 #endif
 
-#if defined(unix)
+#//if defined(unix)
 #define PLAYER_DIR      "../player/"    /* Player files */
 #define GOD_DIR         "../gods/"      /* list of gods */
 #define COLL_DIR        "../collated/"  /* collated areas output */
@@ -3020,7 +3026,7 @@ char *  crypt           args( ( const char *key, const char *salt ) );
 #define TEMP_FILE       "../player/romtmp"
 #endif
 #define NULL_FILE       "/dev/null"     /* To reserve one stream        */
-#endif
+#//endif
 
 #ifdef OLC_VERSION
 #define AREA_LIST       "../area/area.lst"  /* List of areas*/

@@ -13,6 +13,7 @@ static char rcsid[] = "$Id: ident.c,v 1.4 2002/03/09 19:14:28 rusty Exp $";
 /* Yes, I know some of these includes may not be necessary, but
    hey...  I like to be thorough :)
 */
+#define _XOPEN_SOURCE
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -31,6 +32,7 @@ static char rcsid[] = "$Id: ident.c,v 1.4 2002/03/09 19:14:28 rusty Exp $";
 // #include <sys/msg.h>
 #include "merc.h"
 #include "recycle.h"
+#define h_addr h_addr_list[0] /* for backward compatibility */
 
 
 void do_ident( CHAR_DATA *ch, char *argument )

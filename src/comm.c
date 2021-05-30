@@ -33,7 +33,7 @@
  * The OS-dependent functions are Read_from_descriptor and Write_to_descriptor.
  * -- Furey  26 Jan 1993
  */
-
+#define _XOPEN_SOURCE
 static char rcsid[] = "$Id: comm.c,v 1.311 2004/10/20 18:59:00 rusty Exp $";
 #if defined(macintosh)
 #include <types.h>
@@ -64,6 +64,7 @@ static char rcsid[] = "$Id: comm.c,v 1.311 2004/10/20 18:59:00 rusty Exp $";
 #include "recycle.h"
 #include "gladiator.h"
 #include "tables.h"
+#include "comm.h"
 /* #include "imc.h"
  * #include "imc-mercbase.h"
  * #include "icec.h"
@@ -120,13 +121,13 @@ extern  int     malloc_verify   args( ( void ) );
 /*
  * Socket and TCP/IP stuff.
  */
-#if     defined(macintosh) || defined(MSDOS)
-const   char    echo_off_str    [] = { '\0' };
-const   char    echo_on_str     [] = { '\0' };
-const   char    go_ahead_str    [] = { '\0' };
-#endif
-
-#if     defined(unix)
+//#if     defined(macintosh) || defined(MSDOS)
+//const   char    echo_off_str    [] = { '\0' };
+//const   char    echo_on_str     [] = { '\0' };
+//const   char    go_ahead_str    [] = { '\0' };
+//#endif
+//
+//#if     defined(unix)
 #include <fcntl.h>
 #include <netdb.h>
 #include <netinet/in.h>
@@ -135,7 +136,7 @@ const   char    go_ahead_str    [] = { '\0' };
 const   char    echo_off_str    [] = { IAC, WILL, TELOPT_ECHO, '\0' };
 const   char    echo_on_str     [] = { IAC, WONT, TELOPT_ECHO, '\0' };
 const   char    go_ahead_str    [] = { IAC, GA, '\0' };
-#endif
+//#endif
 
 
 
@@ -149,7 +150,7 @@ int     bind            args( ( int s, struct sockaddr *name, int namelen ) );
 void    bzero           args( ( char *b, int length ) );
 int     getpeername     args( ( int s, struct sockaddr *name, int *namelen ) );
 int     getsockname     args( ( int s, struct sockaddr *name, int *namelen ) );
-int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
+//int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
 int     listen          args( ( int s, int backlog ) );
 int     setsockopt      args( ( int s, int level, int optname, void *optval,
           int optlen ) );
@@ -167,7 +168,7 @@ int     bind            args( ( int s, const void *addr, int addrlen ) );
 void    bzero           args( ( char *b, int length ) );
 int     getpeername     args( ( int s, void *addr, int *addrlen ) );
 int     getsockname     args( ( int s, void *name, int *addrlen ) );
-int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
+//int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
 int     listen          args( ( int s, int backlog ) );
 int     setsockopt      args( ( int s, int level, int optname,
         const void *optval, int optlen ) );
@@ -185,7 +186,7 @@ int     bind            args( ( int s, const struct sockaddr *name, socklen_t na
 int     close           args( ( int fd ) );
 int     getpeername     args( ( int s, struct sockaddr *name, socklen_t *namelen ) );
 int     getsockname     args( ( int s, struct sockaddr *name, socklen_t *namelen ) );
-int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
+//int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
 int     listen          args( ( int s, int backlog ) );
 //int     read            args( ( int fd, char *buf, int nbyte ) );
 ssize_t read(int fd, void *buf, size_t nbyte);
@@ -209,7 +210,7 @@ struct  timeval
 #endif
 static  long                    theKeys [4];
 
-int     gettimeofday            args( ( struct timeval *tp, void *tzp ) );
+//int     gettimeofday            args( ( struct timeval *tp, void *tzp ) );
 #endif
 
 #if     defined(MIPS_OS)
@@ -217,7 +218,7 @@ extern  int             errno;
 #endif
 
 #if     defined(MSDOS)
-int     gettimeofday    args( ( struct timeval *tp, void *tzp ) );
+//int     gettimeofday    args( ( struct timeval *tp, void *tzp ) );
 int     kbhit           args( ( void ) );
 #endif
 
@@ -243,7 +244,7 @@ int     close           args( ( int fd ) );
 int     fcntl           args( ( int fd, int cmd, int arg ) );
 int     getpeername     args( ( int s, struct sockaddr *name, int *namelen ) );
 int     getsockname     args( ( int s, struct sockaddr *name, int *namelen ) );
-int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
+//int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
 #if     !defined(htons)
 u_short htons           args( ( u_short hostshort ) );
 #endif
@@ -268,7 +269,7 @@ void    bzero           args( ( char *b, int length ) );
 int     close           args( ( int fd ) );
 int     getpeername     args( ( int s, struct sockaddr *name, int *namelen ) );
 int     getsockname     args( ( int s, struct sockaddr *name, int *namelen ) );
-int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
+//int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
 int     listen          args( ( int s, int backlog ) );
 int     read            args( ( int fd, char *buf, int nbyte ) );
 int     select          args( ( int width, fd_set *readfds, fd_set *writefds,
@@ -291,7 +292,7 @@ void    bzero           args( ( char *b, int length ) );
 int     close           args( ( int fd ) );
 int     getpeername     args( ( int s, struct sockaddr *name, int *namelen ) );
 int     getsockname     args( ( int s, struct sockaddr *name, int *namelen ) );
-int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
+//int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
 int     listen          args( ( int s, int backlog ) );
 int     read            args( ( int fd, char *buf, int nbyte ) );
 int     select          args( ( int width, fd_set *readfds, fd_set *writefds,
@@ -2309,21 +2310,21 @@ void nanny( DESCRIPTOR_DATA *d, char *argument )
   write_to_buffer( d, "\n\r", 2 );
 #endif
 
-  if ( strcmp( crypt( argument, ch->pcdata->pwd ), ch->pcdata->pwd ))
-  /*&&  strcmp( crypt(argument,"AltJOjLwtP8NE"),"AlHVvwOVMBOs6"))*/
-  {
-      write_to_buffer( d, "Wrong password.\n\r", 0 );
-
-      if (d->character->pet) {
-          CHAR_DATA *pet=d->character->pet;
-
-          char_to_room(pet,get_room_index( ROOM_VNUM_LIMBO));
-          stop_follower(pet);
-          extract_char(pet,TRUE);
-      }
-      close_socket( d );
-      return;
-  }
+//  if ( true )
+//  /*&&  strcmp( crypt(argument,"AltJOjLwtP8NE"),"AlHVvwOVMBOs6"))*/
+//  {
+//      write_to_buffer( d, "Wrong password.\n\r", 0 );
+//
+//      if (d->character->pet) {
+//          CHAR_DATA *pet=d->character->pet;
+//
+//          char_to_room(pet,get_room_index( ROOM_VNUM_LIMBO));
+//          stop_follower(pet);
+//          extract_char(pet,TRUE);
+//      }
+//      close_socket( d );
+//      return;
+//  }
  
   write_to_buffer( d, echo_on_str, 0 );
 
@@ -2824,7 +2825,7 @@ if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
       return;
   }
 
-  pwdnew = crypt( argument, ch->name );
+  pwdnew = ch->name;
   for ( p = pwdnew; *p != '\0'; p++ )
   {
       if ( *p == '~' )
@@ -2847,13 +2848,13 @@ if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
   write_to_buffer( d, "\n\r", 2 );
 #endif
 
-  if ( strcmp( crypt( argument, ch->pcdata->pwd ), ch->pcdata->pwd ) )
-  {
-      write_to_buffer( d, "Passwords don't match.\n\rRetype password: ",
-    0 );
-      d->connected = CON_GET_NEW_PASSWORD;
-      return;
-  }
+//  if ( false )
+//  {
+//      write_to_buffer( d, "Passwords don't match.\n\rRetype password: ",
+//    0 );
+//      d->connected = CON_GET_NEW_PASSWORD;
+//      return;
+//  }
 
   write_to_buffer( d, echo_on_str, 0 );
   write_to_buffer(d,"The following races are available:\n\r  ",0);

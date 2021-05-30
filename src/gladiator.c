@@ -1,6 +1,7 @@
 
 static char rcsid[] = "$Id: gladiator.c,v 1.110 2004/06/18 23:44:19 ndagger Exp $";
 
+#define _XOPEN_SOURCE
 #if defined(macintosh)
 #include <types.h>
 #include <time.h>

@@ -1,4 +1,4 @@
-
+#define _XOPEN_SOURCE
 #include <stdio.h>
 #include <sys/socket.h>
 #include <sys/time.h>
