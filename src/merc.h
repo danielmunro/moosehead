@@ -2438,9 +2438,6 @@ struct menu_item
   MENU_FUN *menu_fun;
 };
 
-typedef struct  menu_item               MENU_ITEM;
-typedef struct  menu_item               MENU_DATA[];
-
 #define EDIT_DEFAULT_ROOM     1   /* Default to current or use old */
 #define EDIT_DEFAULT_OBJ      2
 #define EDIT_DEFAULT_MOB      4

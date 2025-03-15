@@ -10313,7 +10313,7 @@ return;
     char arg[MAX_INPUT_LENGTH];
     CHAR_DATA *victim;
     int chance;
-    //char buf[MAX_STRING_LENGTH];
+    char buf[MAX_STRING_LENGTH];
     int sn;
 
     one_argument(argument,arg);

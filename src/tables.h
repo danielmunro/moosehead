@@ -14,8 +14,6 @@ struct imm_command_type
     int bit;
 };
 
-extern	const	struct	imm_command_type imm_command_table[];
-
 struct clan_type
 {
     char 	*name;
@@ -32,29 +30,21 @@ struct gift_type
     sh_int	cost;
 };
 
-extern	const	struct	gift_type	gift_table[];
-
 struct position_type
 {
     char *name;
     char *short_name;
 };
 
-extern	const	struct	position_type	position_table[];
-
 struct sex_type
 {
     char *name;
 };
 
-extern	const	struct	sex_type	sex_table[];
-
 struct size_type
 {
     char *name;
 };
-
-extern 	const 	struct	size_type 	size_table[];
 
 struct obj_size_type
 {

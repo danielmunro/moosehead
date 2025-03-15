@@ -3602,7 +3602,7 @@ void spell_charm_animal( int sn, int level, CHAR_DATA *ch, void *vo,int target )
   {
     return;
   }
-  if ( !IS_SET(victim->form,FORM_ANIMAL) )
+  if ( victim->form != NULL && !IS_SET(victim->form,FORM_ANIMAL) )
   {
     if ( victim == ch )
     {
@@ -5766,7 +5766,7 @@ void spell_dispel_wall( int sn, int level, CHAR_DATA *ch, void *vo, int target)
 	if(paf->type == gsn_wall_ice ) break;
 	}
 
-if (!strcmp(target_name,"")) {
+if (target_name == "") {
     targ = "wall";
   } else {
     targ = target_name;
