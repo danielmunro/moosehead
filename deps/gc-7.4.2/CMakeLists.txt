@@ -44,7 +44,7 @@ ENDIF(APPLE)
 #LIBGC
 
 INCLUDE_DIRECTORIES(include)
-INCLUDE_DIRECTORIES(libatomic_ops/src)
+INCLUDE_DIRECTORIES(../libatomic_ops/src)
 
 SET(SRC alloc.c reclaim.c allchblk.c misc.c mach_dep.c os_dep.c
         mark_rts.c headers.c mark.c obj_map.c blacklst.c finalize.c
