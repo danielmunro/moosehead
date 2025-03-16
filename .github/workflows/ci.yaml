@@ -1,6 +1,6 @@
 on:
   push:
-    branches: ['ci']
+    branches: ['master']
 
 jobs:
   publish-docker-image:
