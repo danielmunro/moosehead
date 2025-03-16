@@ -1,7 +1,16 @@
 # Moosehead
 
-Moosehead SLED, haphazardly updated from the original source.  Requires docker.
-Use the following to run:
+Moosehead SLED, haphazardly updated from the original source.  
+
+To play this iteration of Moosehead:
+
+```
+telnet ruinsofmidgaard.com 4000
+```
+
+# Development
+
+Requires docker to run locally. Use the helper `run.sh`:
 
 ```
 $ docker build . -t mhs:latest
@@ -10,20 +19,25 @@ $ ./run.sh mhs:latest
 
 ## Changelog
 
+### 2025-03-16
+
+* Upgraded to the latest Ubuntu LTS release, 24.04.  Removed the dependencies that were copied in, instead use all the latest dependencies provided by `apt`. 
+
 ### 2025-03-15
 
 * Merged `ubuntu-15.04` into the main branch, fixed a handful of conflicts.  This likely caused a regression or two somewhere, but starting with a clean, single, long-lived branch is worth it in the long run.
 * Fixed the Dockerfile so now a new container can be created and connected to.
 * Copied external dependencies into `deps/` for future-proofing, in case those dependencies disappear from the internet.
 * Added a CI pipeline to build and push a docker image.  Pushing to `ghcr.io/danielmunro/moosehead`.  Versions are the sha of the commit to the main branch that triggered the build.
-* An instance is up and running at `ruinsofmidgaard.com:4000`.
+* An instance is up and running.
 
 ## Unordered Todos
 
 * Grok the code.  Add documentation.
   * Core game loop.
-  * OLC
-* Organize data assets (`player`, `area`, `gods`, `jail`, `jerks`).
+  * OLC.
+* Organize data assets.
+  * Identify all data assets (`player`, `area`, `gods`, `jail`, `jerks`, `olc`). 
   * Put under a `data` directory.
   * Convert to a docker volume.
   * Create an offsite backup strategy.
@@ -41,3 +55,6 @@ $ ./run.sh mhs:latest
   * `clan/`
   * `**/*.eql`
   * `utils/`
+* GH pages
+  * Eq list
+  * Leveling guide
