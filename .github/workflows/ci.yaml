@@ -1,6 +1,10 @@
 on:
   push:
-    branches: ['master']
+    branches: [master]
+    paths:
+      - .github/workflows
+      - src
+      - Dockerfile
 
 jobs:
   publish-docker-image:
