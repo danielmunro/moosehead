@@ -95,7 +95,8 @@ HELP_TRACKER *  help_tracks[28]; // A-Z and #
 SHOP_DATA *   shop_first;
 SHOP_DATA *   shop_last;
 
-NOTE_DATA *   note_free;
+// commented out due to duplicate definitions error with new compiler
+//NOTE_DATA *   note_free;
 
 char      bug_buf   [2*MAX_INPUT_LENGTH];
 char      dns_buf   [20];
@@ -103,7 +104,10 @@ CHAR_DATA *   char_list;
 char *      help_greeting;
 char      log_buf   [2*MAX_INPUT_LENGTH];
 KILL_DATA   kill_table  [MAX_LEVEL];
-NOTE_DATA *   note_list;
+
+// commented out due to duplicate definitions error with new compiler
+//NOTE_DATA *   note_list;
+
 OBJ_DATA *    object_list;
 TIME_INFO_DATA    time_info;
 WEATHER_DATA    weather_info;
