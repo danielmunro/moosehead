@@ -10,4 +10,5 @@ docker run --publish 4000:4000 \
            --mount type=bind,src=$PWD/jail,dst=/mud/moosehead/jail \
            --mount type=bind,src=$PWD/jerks,dst=/mud/moosehead/jerks \
            --mount type=bind,src=$PWD/player,dst=/mud/moosehead/player \
+           --restart unless-stopped \
            $IMAGE
