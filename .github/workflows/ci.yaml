@@ -2,8 +2,8 @@ on:
   push:
     branches: [master]
     paths:
-      - .github/workflows
-      - src
+      - .github/workflows/**
+      - src/**
       - Dockerfile
 
 jobs:
