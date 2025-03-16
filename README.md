@@ -1,14 +1,20 @@
-# moosehead
-MooseHead SLED circa 2005
+# Moosehead
 
-master branch requires gcc-3.3 and a 32-bit OS, very obsolete
+Moosehead SLED, haphazardly updated from the original source.  Requires docker.
+Use the following to run:
 
-mhsled.com branch is what was running at that site late November 2015
+```
+$ docker build . -t mhs:latest
+$ ./run.sh mhs:latest
+```
 
-ubuntu-15.04 branch is most current.  Works with gcc-5.2.1 on a 64bit OS and contains
-a Dockerfile for a Docker image build.
+## Done
 
-It does have two requirements for libraries to be installed on the machine, libgc and libatomic_ops.
-The following URLs are for packages known to work with the code:
-http://hboehm.info/gc/gc_source/gc-7.4.2.tar.gz
-http://hboehm.info/gc/gc_source/libatomic_ops-7.4.0.tar.gz
+* Merge update branches to get MHS running on 64bit architectures, & adds docker.
+* CI build pipeline that pushes docker images.
+
+## Todos
+
+* Grok the code
+* Clean up all the stuff that is backup/outdated/not needed
+* Get an instance up and running
