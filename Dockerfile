@@ -8,7 +8,6 @@ COPY area area
 COPY newareas newareas
 COPY clan clan
 # COPY olc olc
-COPY deps deps
 COPY src src
 
 WORKDIR /mud/moosehead/src
