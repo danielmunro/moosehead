@@ -493,6 +493,12 @@ int main( int argc, char **argv )
     /* OLC version needs even less CPU time allocated to it */
     setpriority(PRIO_PROCESS,0,9);
 #endif
+    for(int i = 0; i < argc; i++) {
+        if (strcmp("--dump-objects-csv", argv[i]) == 0) {
+            dump_obj_csv();
+            exit(0);
+        }
+    }
     game_loop_unix( control );
 /****
 #ifdef IMC_GAME_VERSION

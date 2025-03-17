@@ -10,11 +10,13 @@
  *  license in 'license.txt'.  In particular, you may not remove either of *
  *  these copyright notices.                                               *
  *                                                                         *
- *  M uch time and thought has gone into this software and you are          *
+ *  Much time and thought has gone into this software and you are          *
  *  benefitting.  We hope that you share your changes too.  What goes      *
  *  around, comes around.                                                  *
  ***************************************************************************/
-/* $Id: merc.h,v 1.406 2004/10/25 02:48:45 boogums Exp $"; */
+
+#include <sys/time.h>
+
 #define unix
 
 #if     defined(_AIX)
