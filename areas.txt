@@ -1,0 +1,106 @@
+( ALL ) faerie glen : 2s,7w,1s,1e
+( ALL ) Balance clan hall: 2s, 3e, 2n, 1e, 1s
+( ALL ) Bathe House:2s, 3e, 2n, 3w, 1n, 1u
+( ALL ) Church of Matook: 2s, 3w, 4n, 1e, 2n,e
+( ALL ) Enchanted Lake: 2s, 7e, all n, 1e, 1n, 1e, 3n
+( ALL ) Hall of the Apocalypse: 2s, 3e, 8s, 2w, 2s, 1w, 2s, 2w, 1s, 1w, 1s
+( ALL ) Lost Ways: Many entrances, few from City of Thieves and Midgaard sewer
+( ALL ) Midgaard: Recall
+( ALL ) Ofcol: 2s, 3w, 4n, 2e, 7n, 4e, 1n, 1e, 3n
+( ALL ) The Castle Camorra: 4s, 1d, 1n, 1e, 1n, 1w, 3n, 2w, 1n
+( ALL ) Town Homes 1 - West: 2s, 6w, 1s
+( ALL ) Town Homes 2 - East: 2s, 6e, 1s
+(01-05) Dwarven Daycare: 2s, 6e, 3n, all e, all s
+(01-05) Machine Dreams: 3s, 3e, 1s, 1u
+(01-05) SLED Newbie School: 1u
+(01-10) Bluetspur: 2s, 5w, 4n, all w, all e, all u
+(01-10) Smurf Village: 2s, 7e, all n
+(01-10) Undersmurf: 2s, 7e, 7n, 1w, 1d, 1n (Key from smurfette, in basement open shire and get key to n)
+(01-20) Plains of the North: 2s, 3w, 4n, 2e, 2n
+(01-30) Old Thalos: 2s, 8e, 2n, 3w, 2n, 1e, 2s, 3w, 4s, 4w
+(01-45) Campground: 8s,1w,1s,2w,1s,1s,1e,1s,1w,2s,1e,4s,1e,1d.
+(05-10) Graveyard: all s, 1e, 1s, 2e, 1s, 1w, 1s, 1e, 1s, 2e, 1s
+(05-10) Haon Dor: 2s, 5w
+(05-10) In the Air: 1s, 2u
+(05-15) Dangerous Neighborhood: all s, 1e, 1s, 2e, 1s, 1e
+(05-15) Gnome Village: 2s, 8e, 1s
+(05-15) Miden'nir: 6s, 2w, 3s, 2e, all s
+(05-15) Mob Factory: 3s, 3w, 1s, 1e
+(05-15) Moria: 2s, 6e, all n
+(05-15) Swimming Hole: 4s, 2e, 2s, all west until first south, all south until there
+(05-20) Arachnos: 2s, all w, 1s, 2w, 1n, 1w, 1u
+(05-20) Holy Grove: 2s, 8e, 2n
+(05-20) Valley of the Elves: 2s, 3e, 4n, 2e, 5n, 1w, 5n
+(05-30) Wyvern's Tower: 2s, 6e, 4s, 2e, 1s, 2e, 1d, all e
+(05-30) Dragon Tower: 2s, all w, 1s, 2w, 2s, 1w, 1s, 3w, 1n, 1w, 3n, all w, 1n
+(05-30) Elemental Canyon: 2s, 6e, 4s, 2e, 1s, 2e, 1d, 1s, 4u, 1n, 1d
+(05-30) Sewer: 4s, 1d
+(05-30) Sri Raji: 2s, 11e, 3n
+(05-35) The Shire: 2s, 5w, all n
+(05-35) Mega-City One: 3s, 2e, 2s, all e, 3s
+(05-35) Mystgar's domain: 2s, 3w, 4n, 2e, 7n, 2w
+(05-35) New Ofcol: 2s, 3w, 4n, 2e, 7n, 4e, 1n, 1e, 3n, 3e
+(05-35) The Keep of Mahn-Tor: 2s, 6e, 4s, 2e, 1s, 2e, 1d, 3n, 1e, 4s, 1w, 1s, 1e, 3s, 1d, 1s, enter portal, 3s, 4e, 1s, 2u
+(05-45) The Whore House: all s, 1e, 1s, 2e, 1s, 1w, 2s, 1e
+(05-50) Olympus: 2s, 3w, 4n, 2e, all n, 2u, 1n
+(07-15) Kender Village: 2s, 8e, 1s, 2e, 7s
+(07-15) Orcs' Lair: 2s, 8e, 1s, 2e, 5s, 1e, 1n, 1e
+(07-20) The Theatre of Boinga: 6s, 1w, 1n
+(10-15) Troll Den: 3s, 2e, 2s, 6w, 1n, 1e, 1s
+(10-20) Dwarven Catacombs: 2s, 6e, 3n, all e, all n, all w, 2d
+(10-20) Sands of Sorrow: 3s, 2e, 2s, 10e
+(10-20) Shadowvale: 6s, 2w, 3s, 2e, 4s, 1w, 1s, 5w
+(10-20) The Rainforest: 3s, 2e, 2s,10e, 1n,enter oasis
+(10-25) Crescent Beach: 2s, all west, 2n, 2w, 1u
+(10-25) Dwarven Kingdom: 2s, 6e, 3n, 2e, all n
+(10-25) Thalos: 2s, 6e, 4s, 4w
+(10-25) The Ghoul Forest: 2s, 6e, 4s, 2e, 1s, 2e, 1d, 5n, 4w, 2s, 1w, 2d
+(10-30) High Tower of Sorcery: 2s, all w, 1s, 2w, 2s, 1w, 1s, 3w, 1n, 1w, all n
+(10-35) Astral/Githyanki: 1s, all u, n, all u, 3n
+(10-35) New Thalos: 2s, 21e
+(10-35) The Great Pyramid: 3s, 2e, 2s, 10e, 2n, 3e, 1u, 1s, 1e, 1u, open stones, 2d
+(15-25) Chapel Catacombs: all s, 1e, 1s, 2e, 1s, 1w, 1s, 1e, 1s, 2e, all s, 1d
+(15-25) Drow City: 2s, 6e, 4s, 2e, 1s, 2e, 1d, 1w, 1s, 2d, 1w
+(15 25) Dylan's Area: all south, 1e, 1s, 2e, 1s, 1w, 1s, all up, 1s
+(15-25) Elven High Court: 2s, 6e, 4s, 1w, 1s
+(15-25) Old Marsh: 2s, 6e, 4s, 2e, 1s, 2e, 1d, 3n, 1e, 3s, 1e
+(15-25) The Old Hall of Clan Circle: 2s, 3w, 2n, 3e, 1s
+(15-30) The Haunted House: 8s,1e,1s, 2e, 1s, 2e, 1s, 1e, 1s, 1e, 1s, 1s, 1e, 1s, 1e, 5s
+(15-30) The Secret Tomb: 7s, 1e, 1d, 2e
+(15-35) Emerald forest: 2s, 3w, 8s, 2e, 7s, 2w, u, n, d.
+(15-35) Den of Thieves: 2s, 7w, 2s, 1e, 1s, 1e, 2s, 1w, 1n, 2e
+(15-35) Village Fair: 6s, 2w, 3s, 2e, 2s, 1w, 1n, 4w, 2n
+(20-30) Buccaneer Bay: 2s, all w, 1s, 2w, 2s, 1w, 1s, 3w, 1n, all w
+(20-30) Galaxy: 2s, all w, 1s, 2w, 2s, 1w, 1s, 3w, 1n, 1w, 3n, 2e, 1d, 2w
+(20-30) Redferne's Residence: 9s, 1w, 1s, 2w, 2s, 1e, 4u, 1s, 1u
+(20-35) The "Banshee": 2s, 35e, 1n, 2u
+(20-40) City of Atlantis: 2s, 6e, 4s, 2e, 1s, 2e, 1d, 3n, 1e, 4s, 1w, 1s, 1e, 3s, 1d, 3s, 3d
+(25 40) The Forbidden City: 2s, 11e, 2n, 2w
+(25-45) Cuthbert's Fief: 2s, east until dragon sea, 1w, 4s
+(25-45) Wooster: 2s, 6e, all n, 2e, 5n, 1e
+(30-35) Nirvana: 2s, 8e, 2n, 2e, 1u
+(30-40) Lycanthropia: 2s, 21e, 10n, 2w, 2s
+(30-40) The Gypsy Camp: 2s, 8e, 2n, 3e, 2n, 3w, 1s, 2w, 1s, 1w, 4s, 1e, 2n
+(30-50) Castle Delain: 2s, 6e, all n, 2e, 11n
+(30-50) Nova Veesa: 2s, 41e, 1d, 1s
+(30-51) City of Thieves: 2s, 7w, 2s, 1e, 1s, 1e, 2s, 1w, 1n, 6e, 1s, 1w, 2d, 2s, 1e, 2s, 2e
+(30-51) Plane of Time: 1s, 3u, 1n, 1u, 1e
+(31-51) Temple o' Evil: 2s, 21e, 12n, 4e, 1s, 2w, 9s, 2w
+(32-40) The Lost Bog: 2s, all w, 1s, 2w, 2s, 1w, 7s, 3e, 1s, 2w, 2n
+(32-51) Descent to Hell: 2s, all w, 1s, 2w, 2s, 1w, 1s, 3w, 1n, 1w,7n,3e,2n, 3w, 4s, 4e, 4n, 1u, 4w, 4s, 4e, 4n, 1u, 4w, 4s,4e, 4n, 1u, 2w, 5s, 2u, 4s, 1e, 1s, 1w, 1d, 2w
+(35-50) Sea of Serenity: 2s, 21e, 5s, 1d, all w, all n, 2d
+(35-51) Stormy Mountain: 2s, 6e, 4s, 1w, 1n
+(35-51) Camelot: 8s,1w,1s,2w,2s,1e,s,1w,2s,1e,2s,1w,1n,5w.
+(35-51) Tenochtitlan: 2s, 21e, 5s, 1d, 13w, 4n, 1w, 2n
+(40-50) Ivory Stronghold: 2s, 8e, 2n, 3e, 2n, 1w, 2u, 1w, 1n
+(40-51) Castle Trinity: 2s, all w, 2n, 1e, 1n
+( 51+ ) Altirin Forest: cast gate jury,2e, enter mirror
+( DANGER ) PLANES OF FIRE: Cast Gate to "PYRO", then enter fire
+( DANGER ) PLANES OF WATER: Teleport into this Plane or Find the "Guardian of the blade" in "Sea of Serenity", and then enter "liquid"
+(NOT SO BAD) CITY OF MAGIC : Teleport into the City of Magic or find the portal by "Cast locate portal", it will be the first portal on the list that comes up.
+(Clan ) Avarice Clan Hall: 4s, 1d, 1w, 1d, 1n, 2d, 1w
+(Clan ) Demise Clan Hall: 2s, 3e, 2n, 2w, 1n
+(Clan ) Honor Clan Hall: 2s, 3w, 2n, 2e, 1n
+(Clan ) Posse Clan Hall: 2s, 3e, 2n, 3w, 1s
+(Clan ) Warlock Clan Hall: 2s, 3w, 2n, 3e, 1n
+(Clan ) Zealot Clan Hall: 2s, 3w, 4n, 2e, 7n, 1u
