@@ -5619,17 +5619,22 @@ void spell_identify( int sn, int level, CHAR_DATA *ch, void *vo,int target )
   //
   if( !IS_OBJ_STAT(obj,ITEM_NOIDENTIFY))
   {
+    int damage = avg_weapon_damage(obj->pIndexData->new_format,
+                                   obj->value[1],
+                                   obj->value[2]);
     if (obj->pIndexData->new_format)
     {
       sprintf(buf,"Damage is %dd%d (average %d).\n\r",
-       obj->value[1],obj->value[2],
-       ((1 + obj->value[2]) * obj->value[1] / 2));
+       obj->value[1],
+       obj->value[2],
+       damage);
     }
     else
     {
       sprintf( buf, "Damage is %d to %d (average %d).\n\r",
-        obj->value[1], obj->value[2],
-        ( (obj->value[1] + obj->value[2] ) / 2) );
+        obj->value[1],
+        obj->value[2],
+        damage);
     }
   send_to_char( buf, ch );
      //

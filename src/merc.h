@@ -3870,6 +3870,7 @@ int     liq_lookup      args( ( const char *name) );
 int     material_lookup args( ( const char *name) );
 int     weapon_lookup   args( ( const char *name) );
 int     weapon_type     args( ( const char *name) );
+int     avg_weapon_damage  args( ( bool new_type, int value1, int value2) );
 int	deity_lookup	args( (const char *name) );
 int     deity_type      args( ( const char *name) );
 char    *weapon_name    args( ( int weapon_Type) );

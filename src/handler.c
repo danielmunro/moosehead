@@ -519,6 +519,13 @@ int weapon_type (const char *name)
     return WEAPON_EXOTIC;
 }
 
+int avg_weapon_damage(bool new_format, int value1, int value2) {
+    if (new_format) {
+        return ((1 + value2) * value1 / 2);
+    } else {
+        return ((value1 + value2) / 2);
+    }
+}
 
 int item_lookup(const char *name)
 {

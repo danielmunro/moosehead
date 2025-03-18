@@ -14,49 +14,25 @@ void output_row(OBJ_INDEX_DATA *obj, const char *where) {
            obj->level);
 
     if (obj->item_type == ITEM_WEAPON) {
-        printf("weapon, ");
-        switch (obj->value[0]) {
-            case(WEAPON_EXOTIC) : printf("exotic, "); break;
-            case(WEAPON_SWORD)  : printf("sword, ");  break;
-            case(WEAPON_DAGGER) : printf("dagger, "); break;
-            case(WEAPON_SPEAR)  : printf("spear/staff, ");  break;
-            case(WEAPON_MACE)   : printf("mace/club, ");  break;
-            case(WEAPON_AXE)    : printf("axe, ");    break;
-            case(WEAPON_FLAIL)  : printf("flail, ");  break;
-            case(WEAPON_WHIP)   : printf("whip, ");   break;
-            case(WEAPON_POLEARM): printf("polearm, ");  break;
-            case(WEAPON_GAROTTE): printf("garotte, ");  break;
-            default             : printf("unknown");  break;
-        }
+        printf("weapon, %s, ", weapon_name(obj->value[0]));
+        int damage = avg_weapon_damage(obj->new_format,
+                                       obj->value[1],
+                                       obj->value[2]);
         if (obj->new_format) {
             printf("%dd%d (average %d), ",
-                   obj->value[1],obj->value[2],
-                   ((1 + obj->value[2]) * obj->value[1] / 2));
+                   obj->value[1],
+                   obj->value[2],
+                   damage);
         } else {
             printf("%d to %d (average %d),",
-                   obj->value[1], obj->value[2],
-                   ((obj->value[1] + obj->value[2] ) / 2));
+                   obj->value[1],
+                   obj->value[2],
+                   damage);
         }
         printf("%s, ", weapon_bit_name(obj->value[4]));
     } else if (obj->item_type == ITEM_ARMOR) {
-        printf("armor, ");
-        if (obj->wear_flags & ITEM_WEAR_FINGER) printf("finger, ");
-        else if (obj->wear_flags & ITEM_WEAR_NECK) printf("neck, ");
-        else if (obj->wear_flags & ITEM_WEAR_BODY) printf("body, ");
-        else if (obj->wear_flags & ITEM_WEAR_HEAD) printf("head, ");
-        else if (obj->wear_flags & ITEM_WEAR_LEGS) printf("legs, ");
-        else if (obj->wear_flags & ITEM_WEAR_FEET) printf("feet, ");
-        else if (obj->wear_flags & ITEM_WEAR_HANDS) printf("hands, ");
-        else if (obj->wear_flags & ITEM_WEAR_ARMS) printf("arms, ");
-        else if (obj->wear_flags & ITEM_WEAR_SHIELD) printf("shield, ");
-        else if (obj->wear_flags & ITEM_WEAR_ABOUT) printf("body, ");
-        else if (obj->wear_flags & ITEM_WEAR_WAIST) printf("waist, ");
-        else if (obj->wear_flags & ITEM_WEAR_WRIST) printf("wrist, ");
-        else if (obj->wear_flags & ITEM_WIELD) printf("wield, ");
-        else if (obj->wear_flags & ITEM_HOLD) printf("hold, ");
-        else if (obj->wear_flags & ITEM_WEAR_FLOAT) printf("float, ");
-
-        printf("%d/%d/%d/%d, none, ",
+        printf("armor, %s, %d/%d/%d/%d, none, ",
+               wear_bit_name(obj->wear_flags & ~ITEM_TAKE),
                obj->value[0],
                obj->value[1],
                obj->value[2],
