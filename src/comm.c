@@ -506,7 +506,7 @@ int main( int argc, char **argv )
             exit(0);
         }
     }
-    
+
     game_loop_unix( control );
 /****
 #ifdef IMC_GAME_VERSION

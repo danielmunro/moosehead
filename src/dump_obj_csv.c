@@ -74,16 +74,9 @@ void dump_obj_csv() {
     while (area != NULL) {
         reset = area->reset_first;
         while (reset != NULL) {
-//            printf("debug: reset data: %c %d %d %d %d\n",
-//                   reset->command,
-//                   reset->arg1,
-//                   reset->arg2,
-//                   reset->arg3,
-//                   reset->arg4);
             switch (reset->command) {
                 case 'M': // mob reset
                     mob = get_mob_index(reset->arg1);
-//                    printf("debug: mob: %s\n", mob->short_descr);
                     break;
                 case 'O': // object in room
                     obj = get_obj_index(reset->arg1);
