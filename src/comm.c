@@ -493,12 +493,20 @@ int main( int argc, char **argv )
     /* OLC version needs even less CPU time allocated to it */
     setpriority(PRIO_PROCESS,0,9);
 #endif
+
+    /**
+     * Argument for dumping objects in CSV format.  This is not the ideal
+     * way to do this kind of thing, but dumping the items from memory seemed
+     * like the easiest way to convert the native format to something more
+     * easily consumable by humans (CSV).
+     */
     for(int i = 0; i < argc; i++) {
         if (strcmp("--dump-objects-csv", argv[i]) == 0) {
             dump_obj_csv();
             exit(0);
         }
     }
+    
     game_loop_unix( control );
 /****
 #ifdef IMC_GAME_VERSION
