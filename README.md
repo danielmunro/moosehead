@@ -19,6 +19,10 @@ $ ./run.sh mhs:latest
 
 ## Changelog
 
+### 2025-03-17
+
+* Added a flag to generate an equipment list csv.
+
 ### 2025-03-16
 
 * Upgraded to the latest Ubuntu LTS release, 24.04.  Removed the dependencies that were copied in, instead use all the latest dependencies provided by `apt`. 
@@ -55,6 +59,7 @@ $ ./run.sh mhs:latest
   * `clan/`
   * `**/*.eql`
   * `utils/`
-* GH pages
-  * Eq list
-  * Leveling guide
+* Refactor out the `startup` script
+* Refactor logging
+* Reduce the number of compiler warnings
+* GH pages -- need to define more
