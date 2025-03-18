@@ -11212,7 +11212,6 @@ O 0 3135 100 30004	* a foutain
 D 0 30004   0 16387	* Entrance Room north
 D 0 30004   1 16387	* Entrance Room east
 D 0 30004   3 16384	* Entrance Room west
-O 0 4206 100 30005	* a beat-up blue sofa
 O 0 30007 100 30005	* an oven
 O 0 30006 100 30005	* a fridge
 D 0 30005   3 16387	* a Country Kitchen west
