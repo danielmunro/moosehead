@@ -23,6 +23,7 @@ $ ./run.sh mhs:latest
 
 * Switched to use native docker logging behavior. `log_string` now logs to stdout, new `log_error` logs to stderr.
 * Updated Dockerfile to use the executable directly, removed `area/startup` script.
+* Added license files to top level directory.
 
 ### 2025-03-17
 
