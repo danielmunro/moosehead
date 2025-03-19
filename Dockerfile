@@ -9,7 +9,5 @@ COPY src src
 
 WORKDIR /mud/moosehead/src
 RUN make
-
-WORKDIR /mud/moosehead/area
 EXPOSE 4000
-CMD ["./startup"]
+CMD ["./moose", "4000"]
