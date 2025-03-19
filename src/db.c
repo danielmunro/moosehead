@@ -15,7 +15,6 @@
  *  around, comes around.                                                  *
  ***************************************************************************/
 
-static char rcsid[] = "$Id: db.c,v 1.186 2004/08/26 01:30:26 boogums Exp $";
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -4920,67 +4919,48 @@ void append_file( CHAR_DATA *ch, char *file, char *str )
 /*
  * Reports a bug.
  */
-void bug( const char *str, int param )
-{
+void bug(const char *str, int param) {
     char buf[MAX_STRING_LENGTH];
 
-    if ( fpArea != NULL )
-    {
-  int iLine;
-  int iChar;
+    if (fpArea != NULL) {
+        int iLine;
+        int iChar;
 
-  if ( fpArea == stdin )
-  {
-      iLine = 0;
-  }
-  else
-  {
-      iChar = ftell( fpArea );
-      fseek( fpArea, 0, 0 );
-      for ( iLine = 0; ftell( fpArea ) < iChar; iLine++ )
-      {
-    while ( getc( fpArea ) != '\n' )
-        ;
-      }
-      fseek( fpArea, iChar, 0 );
-  }
+        if (fpArea == stdin) {
+            iLine = 0;
+        } else {
+            iChar = ftell(fpArea);
+            fseek(fpArea, 0, 0);
+            for (iLine = 0; ftell( fpArea ) < iChar; iLine++) {
+                while (getc(fpArea) != '\n');
+            }
+            fseek(fpArea, iChar, 0);
+        }
 
-  sprintf( buf, "[*****] FILE: %s LINE: %d", strArea, iLine );
-  log_string( buf );
-/*
-  if ( ( fp = fopen( "shutdown.txt", "a" ) ) != NULL )
-  {
-      fprintf( fp, "[*****] %s\n", buf );
-      fclose( fp );
-  }
-*/
+        sprintf(buf, "FILE: %s LINE: %d", strArea, iLine);
+        log_error(buf);
     }
 
-    strcpy( buf, "[*****] BUG: " );
-    sprintf( buf + strlen(buf), str, param );
-    log_string( buf );
-/* RT removed due to bug-file spamming 
-//    fclose( fpReserve );
-    if ( ( fp = fopen( BUG_FILE, "a" ) ) != NULL )
-    {
-  fprintf( fp, "%s\n", buf );
-  fclose( fp );
-    }
-//    fpReserve = fopen( NULL_FILE, "r" );
-*/
-
-    return;
+    strcpy(buf, "BUG: ");
+    sprintf(buf + strlen(buf), str, param);
+    log_error(buf);
 }
 
 
 
 /*
- * Writes a string to the log.
+ * Writes a string to stdout.  No specific log level.
  */
 void log_string(const char *str) {
     printf("%s\n", str);
 }
 
+/*
+ * Writes a string to stderr.
+ */
+void log_error(const char *str) {
+    fprintf(stderr, "%s\n", str);
+}
 
 
 /*
