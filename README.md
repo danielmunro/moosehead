@@ -19,6 +19,11 @@ $ ./run.sh mhs:latest
 
 ## Changelog
 
+### 2025-03-19
+
+* Switched to use native docker logging behavior. `log_string` now logs to stdout, new `log_error` logs to stderr.
+* Updated Dockerfile to use the executable directly, removed `area/startup` script.
+
 ### 2025-03-17
 
 * Added a flag to generate an equipment list csv.
