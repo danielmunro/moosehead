@@ -4977,14 +4977,8 @@ void bug( const char *str, int param )
 /*
  * Writes a string to the log.
  */
-void log_string( const char *str )
-{
-    char *strtime;
-
-    strtime                    = ctime( &current_time );
-    strtime[strlen(strtime)-1] = '\0';
-    fprintf( stderr, "%s :: %s\n", strtime, str );
-    return;
+void log_string(const char *str) {
+    printf("%s\n", str);
 }
 
 
