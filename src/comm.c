@@ -34,13 +34,8 @@
  * -- Furey  26 Jan 1993
  */
 
-static char rcsid[] = "$Id: comm.c,v 1.311 2004/10/20 18:59:00 rusty Exp $";
-#if defined(macintosh)
-#include <types.h>
-#else
 #include <sys/types.h>
 #include <sys/time.h>
-#endif
 #include <gc.h>
 #include <unistd.h>
 #include <signal.h>
@@ -54,21 +49,12 @@ static char rcsid[] = "$Id: comm.c,v 1.311 2004/10/20 18:59:00 rusty Exp $";
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-/*
-#include <sys/ipc.h>
-#include <sys/msg.h>
-*/
 #include <sys/time.h>
 #include <sys/resource.h>
 #include "merc.h"
 #include "recycle.h"
 #include "gladiator.h"
 #include "tables.h"
-/* #include "imc.h"
- * #include "imc-mercbase.h"
- * #include "icec.h"
- * #include "icec-mercbase.h"
- */
 /* command procedures needed */
 DECLARE_DO_FUN	( action_wraithform );
 DECLARE_DO_FUN (action_zealot_convert);
@@ -98,9 +84,6 @@ int	nonclan_lookup	args( (const char *name) );
 /*
  * Malloc debugging stuff.
  */
-#if defined(sun)
-#undef MALLOC_DEBUG
-#endif
 
 #if defined(MALLOC_DEBUG)
 #include <malloc.h>
@@ -112,34 +95,16 @@ int clanner_count = 0;
 
 /*
  * Signal handling.
- * Apollo has a problem with __attribute(atomic) in signal.h,
  *   I dance around it.
  */
-#if defined(apollo)
-#define __attribute(x)
-#endif
-
-#if defined(unix)
 #include <signal.h>
 #include <sys/ipc.h>
-#endif
-
-#if defined(apollo)
-#undef __attribute
-#endif
-
 
 
 /*
  * Socket and TCP/IP stuff.
  */
-#if     defined(macintosh) || defined(MSDOS)
-const   char    echo_off_str    [] = { '\0' };
-const   char    echo_on_str     [] = { '\0' };
-const   char    go_ahead_str    [] = { '\0' };
-#endif
 
-#if     defined(unix)
 #include <fcntl.h>
 #include <netdb.h>
 #include <netinet/in.h>
@@ -148,180 +113,12 @@ const   char    go_ahead_str    [] = { '\0' };
 const   char    echo_off_str    [] = { IAC, WILL, TELOPT_ECHO, '\0' };
 const   char    echo_on_str     [] = { IAC, WONT, TELOPT_ECHO, '\0' };
 const   char    go_ahead_str    [] = { IAC, GA, '\0' };
-#endif
-
-
-
-/*
- * OS-dependent declarations.
- */
-#if     defined(_AIX)
-#include <sys/select.h>
-int     accept          args( ( int s, struct sockaddr *addr, int *addrlen ) );
-int     bind            args( ( int s, struct sockaddr *name, int namelen ) );
-void    bzero           args( ( char *b, int length ) );
-int     getpeername     args( ( int s, struct sockaddr *name, int *namelen ) );
-int     getsockname     args( ( int s, struct sockaddr *name, int *namelen ) );
-int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
-int     listen          args( ( int s, int backlog ) );
-int     setsockopt      args( ( int s, int level, int optname, void *optval,
-          int optlen ) );
-int     socket          args( ( int domain, int type, int protocol ) );
-#endif
-
-#if     defined(apollo)
-#include <unistd.h>
-void    bzero           args( ( char *b, int length ) );
-#endif
-
-#if     defined(__hpux)
-int     accept          args( ( int s, void *addr, int *addrlen ) );
-int     bind            args( ( int s, const void *addr, int addrlen ) );
-void    bzero           args( ( char *b, int length ) );
-int     getpeername     args( ( int s, void *addr, int *addrlen ) );
-int     getsockname     args( ( int s, void *name, int *addrlen ) );
-int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
-int     listen          args( ( int s, int backlog ) );
-int     setsockopt      args( ( int s, int level, int optname,
-        const void *optval, int optlen ) );
-int     socket          args( ( int domain, int type, int protocol ) );
-#endif
-
-#if     defined(interactive)
-#include <net/errno.h>
-#include <sys/fnctl.h>
-#endif
-
-#if     defined(linuxXYZZY)
-int     accept          args( ( int s, struct sockaddr *addr, int *addrlen ) );
-int     bind            args( ( int s, struct sockaddr *name, int namelen ) );
-int     close           args( ( int fd ) );
-int     getpeername     args( ( int s, struct sockaddr *name, int *namelen ) );
-int     getsockname     args( ( int s, struct sockaddr *name, int *namelen ) );
-int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
-int     listen          args( ( int s, int backlog ) );
-int     read            args( ( int fd, char *buf, int nbyte ) );
-int     select          args( ( int width, fd_set *readfds, fd_set *writefds,
-          fd_set *exceptfds, struct timeval *timeout ) );
-int     socket          args( ( int domain, int type, int protocol ) );
-int     write           args( ( int fd, char *buf, int nbyte ) );
-#endif
-
-#if     defined(macintosh)
-#include <console.h>
-#include <fcntl.h>
-#include <unix.h>
-struct  timeval
-{
-  time_t  tv_sec;
-  time_t  tv_usec;
-};
-#if     !defined(isascii)
-#define isascii(c)              ( (c) < 0200 )
-#endif
-static  long                    theKeys [4];
-
-int     gettimeofday            args( ( struct timeval *tp, void *tzp ) );
-#endif
-
-#if     defined(MIPS_OS)
-extern  int             errno;
-#endif
-
-#if     defined(MSDOS)
-int     gettimeofday    args( ( struct timeval *tp, void *tzp ) );
-int     kbhit           args( ( void ) );
-#endif
-
-#if     defined(NeXT)
-int     close           args( ( int fd ) );
-int     fcntl           args( ( int fd, int cmd, int arg ) );
-#if     !defined(htons)
-u_short htons           args( ( u_short hostshort ) );
-#endif
-#if     !defined(ntohl)
-u_long  ntohl           args( ( u_long hostlong ) );
-#endif
-int     read            args( ( int fd, char *buf, int nbyte ) );
-int     select          args( ( int width, fd_set *readfds, fd_set *writefds,
-          fd_set *exceptfds, struct timeval *timeout ) );
-int     write           args( ( int fd, char *buf, int nbyte ) );
-#endif
-
-#if     defined(sequent)
-int     accept          args( ( int s, struct sockaddr *addr, int *addrlen ) );
-int     bind            args( ( int s, struct sockaddr *name, int namelen ) );
-int     close           args( ( int fd ) );
-int     fcntl           args( ( int fd, int cmd, int arg ) );
-int     getpeername     args( ( int s, struct sockaddr *name, int *namelen ) );
-int     getsockname     args( ( int s, struct sockaddr *name, int *namelen ) );
-int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
-#if     !defined(htons)
-u_short htons           args( ( u_short hostshort ) );
-#endif
-int     listen          args( ( int s, int backlog ) );
-#if     !defined(ntohl)
-u_long  ntohl           args( ( u_long hostlong ) );
-#endif
-int     read            args( ( int fd, char *buf, int nbyte ) );
-int     select          args( ( int width, fd_set *readfds, fd_set *writefds,
-          fd_set *exceptfds, struct timeval *timeout ) );
-int     setsockopt      args( ( int s, int level, int optname, caddr_t optval,
-          int optlen ) );
-int     socket          args( ( int domain, int type, int protocol ) );
-int     write           args( ( int fd, char *buf, int nbyte ) );
-#endif
-
-/* This includes Solaris Sys V as well */
-#if defined(sun)
-int     accept          args( ( int s, struct sockaddr *addr, int *addrlen ) );
-int     bind            args( ( int s, struct sockaddr *name, int namelen ) );
-void    bzero           args( ( char *b, int length ) );
-int     close           args( ( int fd ) );
-int     getpeername     args( ( int s, struct sockaddr *name, int *namelen ) );
-int     getsockname     args( ( int s, struct sockaddr *name, int *namelen ) );
-int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
-int     listen          args( ( int s, int backlog ) );
-int     read            args( ( int fd, char *buf, int nbyte ) );
-int     select          args( ( int width, fd_set *readfds, fd_set *writefds,
-          fd_set *exceptfds, struct timeval *timeout ) );
-#if defined(SYSV)
-int setsockopt          args( ( int s, int level, int optname,
-          const char *optval, int optlen ) );
-#else
-int     setsockopt      args( ( int s, int level, int optname, void *optval,
-          int optlen ) );
-#endif
-int     socket          args( ( int domain, int type, int protocol ) );
-int     write           args( ( int fd, char *buf, int nbyte ) );
-#endif
-
-#if defined(ultrix)
-int     accept          args( ( int s, struct sockaddr *addr, int *addrlen ) );
-int     bind            args( ( int s, struct sockaddr *name, int namelen ) );
-void    bzero           args( ( char *b, int length ) );
-int     close           args( ( int fd ) );
-int     getpeername     args( ( int s, struct sockaddr *name, int *namelen ) );
-int     getsockname     args( ( int s, struct sockaddr *name, int *namelen ) );
-int     gettimeofday    args( ( struct timeval *tp, struct timezone *tzp ) );
-int     listen          args( ( int s, int backlog ) );
-int     read            args( ( int fd, char *buf, int nbyte ) );
-int     select          args( ( int width, fd_set *readfds, fd_set *writefds,
-          fd_set *exceptfds, struct timeval *timeout ) );
-int     setsockopt      args( ( int s, int level, int optname, void *optval,
-          int optlen ) );
-int     socket          args( ( int domain, int type, int protocol ) );
-int     write           args( ( int fd, char *buf, int nbyte ) );
-#endif
-
-
 
 /*
  * Global variables.
  */
 DESCRIPTOR_DATA *   descriptor_list;    /* All open descriptors         */
 DESCRIPTOR_DATA *   d_next;             /* Next descriptor in loop      */
-//FILE *              fpReserve;          /* Reserved file handle         */
 bool                god;                /* All new chars are gods!      */
 bool                merc_down;          /* Shutdown                     */
 bool                wizlock;            /* Game is wizlocked            */
@@ -342,16 +139,7 @@ sh_int		    posse_thief_kills;
 sh_int		    posse_thug_kills;
 sh_int		    posse_ruffian_kills;
 
-/*
- * OS-dependent local functions.
- */
-#if defined(macintosh) || defined(MSDOS)
-void    game_loop_mac_msdos     args( ( void ) );
-bool    read_from_descriptor    args( ( DESCRIPTOR_DATA *d ) );
-bool    write_to_descriptor     args( ( int desc, char *txt, int length ) );
-#endif
 
-#if defined(unix)
 #define PERMS  0666
 key_t msg_key;
 int   msg_id;
@@ -362,9 +150,6 @@ void    init_descriptor         args( ( int control ) );
 bool    read_from_descriptor    args( ( DESCRIPTOR_DATA *d ) );
 bool    write_to_descriptor     
 	args( ( int desc, char *txt, int length, DESCRIPTOR_DATA *d ) );
-#endif
-
-
 
 
 /*
@@ -394,10 +179,7 @@ int main( int argc, char **argv )
 {
     struct timeval now_time;
     int port;
-
-#if defined(unix)
     int control[2] = {-1,-1};
-#endif
 
     /*
      * Memory debugging if needed.
@@ -413,27 +195,9 @@ int main( int argc, char **argv )
     current_time        = (time_t) now_time.tv_sec;
     strcpy( str_boot_time, ctime( &current_time ) );
 
-    /*
-     * Macintosh console initialization.
-     */
-#if defined(macintosh)
-    console_options.nrows = 31;
-    cshow( stdout );
-    csetmode( C_RAW, stdin );
-    cecho2file( "log file", 1, stderr );
-#endif
 
     /* Set our eUID to that of the user 'mud' */
     seteuid(MUD_UID);
-
-    /*
-     * Reserve one channel for our use.
-     */
-/*    if ( ( fpReserve = fopen( NULL_FILE, "r" ) ) == NULL )
-    {
-  perror( NULL_FILE );
-  exit( 1 );
-    } */
 
     /*
      * Get the port number.
@@ -448,25 +212,11 @@ int main( int argc, char **argv )
   }
 
   port = atoi( argv[1] );
-  /*
-  else if ( ( port = atoi( argv[1] ) ) <= 1024 )
-  {
-      fprintf( stderr, "Port number must be above 1024.\n" );
-      exit( 1 );
-  }
-   */
     }
 
     /*
      * Run the game.
      */
-#if defined(macintosh) || defined(MSDOS)
-    boot_db( );
-    log_string( "Merc is ready to rock." );
-    game_loop_mac_msdos( );
-#endif
-
-#if defined(unix)
     telnet=FALSE;
     control[0] = init_socket( port );
     if( seteuid(0) == 0 )
@@ -482,34 +232,14 @@ int main( int argc, char **argv )
      */
     dump_obj_csv();
 
-/****
-#ifdef IMC_GAME_VERSION
-    imc_startup("/home/chris/moosehead/imc");
-    #imc_startup("/mud/moosehead/imc/");  
-    icec_init();          
-#endif
- ****/
     sprintf( log_buf, "MHS is ready on port %d.", port );
     log_string( log_buf );
-#ifdef GAME_VERSION
-    /* renice to 4 because we run on a shared machine 
-    setpriority(PRIO_PROCESS,0,4);
-     */
-#else
-    /* OLC version needs even less CPU time allocated to it */
-    setpriority(PRIO_PROCESS,0,9);
-#endif
 
     game_loop_unix( control );
-/****
-#ifdef IMC_GAME_VERSION
-    imc_shutdown();
-#endif
- ****/
+
     close (control[0]);
     if( telnet )
       close (control[1]);
-#endif
 
     /*
      * That's all, folks.
@@ -519,9 +249,6 @@ int main( int argc, char **argv )
     return 0;
 }
 
-
-
-#if defined(unix)
 int init_socket( int port )
 {
     static struct sockaddr_in sa_zero;
@@ -544,8 +271,6 @@ int init_socket( int port )
   exit( 1 );
     }
 
-/*if defined(SO_DONTLINGER) && !defined(SYSV)*/
-    {
   struct  linger  ld;
 
 
@@ -560,8 +285,6 @@ int init_socket( int port )
       close(fd);
       exit( 1 );
   }
-    }
-/*endif*/
 
     sa              = sa_zero;
     sa.sin_family   = AF_INET;
@@ -586,266 +309,11 @@ int init_socket( int port )
 
     return fd;
 }
-#endif
-
-
-
-#if defined(macintosh) || defined(MSDOS)
-void game_loop_mac_msdos( void )
-{
-    struct timeval last_time;
-    struct timeval now_time;
-    static DESCRIPTOR_DATA dcon;
-
-    gettimeofday( &last_time, NULL );
-    current_time = (time_t) last_time.tv_sec;
-
-    /*
-     * New_descriptor analogue.
-     */
-    dcon.descriptor     = 0;
-    dcon.connected      = CON_GET_NAME;
-    dcon.host           = str_dup( "localhost" );
-    dcon.outsize        = 2000;
-#ifdef OLC_VERSION
-    dcon.outbuf         = alloc_mem( dcon.outsize );
-#else  /*game version*/
-    dcon.outbuf         = GC_MALLOC( dcon.outsize );
-#endif
-    dcon.next           = descriptor_list;
-    dcon.showstr_head   = NULL;
-    dcon.showstr_point  = NULL;
-    descriptor_list     = &dcon;
-
-    /*
-     * Send the greeting.
-     */
-    {
-  extern char * help_greeting;
-  if ( help_greeting[0] == '.' )
-      write_to_buffer( &dcon, help_greeting+1, 0 );
-  else
-      write_to_buffer( &dcon, help_greeting  , 0 );
-    }
-
-    /* Main loop */
-    while ( !merc_down )
-    {
-  DESCRIPTOR_DATA *d;
-
-  /*
-   * Process input.
-   */
-  for ( d = descriptor_list; d != NULL; d = d_next )
-  {
-      d_next      = d->next;
-      d->fcommand = FALSE;
-
-#if defined(MSDOS)
-      if ( kbhit( ) )
-#endif
-      {
-    if ( d->character != NULL )
-        d->character->timer = 0;
-    if ( !read_from_descriptor( d ) )
-    {
-        if ( d->character != NULL)
-      save_char_obj( d->character );
-        d->outtop   = 0;
-        close_socket( d );
-        continue;
-    }
-      }
-
-      if (d->character != NULL && d->character->daze > 0)
-    --d->character->daze;
-
-      if ( d->character != NULL && d->character->wait > 0 )
-      {
-    --d->character->wait;
-    continue;
-      }
-
-      read_from_buffer( d );
-
-      if ( d->incomm[0] != '\0' )
-      {
-    d->fcommand     = TRUE;
-    stop_idling( d->character );
-    
-    if (d->showstr_point) {
-        show_string(d,d->incomm);
-    } else  
-    if ( d->connected == CON_PLAYING ) {
-       if (!check_macro (d->character, d->incomm)) {
-        if (d->character->pcdata && d->character->pcdata->macro_count > 0) {
-          /* inside a macro, so show command */
-          send_to_char (d->incomm,d->character); 
-          send_to_char ("\n\r",d->character);
-        }          
-        substitute_alias( d, d->incomm );
-       }
-    } else {
-      if ( d->connected == CON_EDITOR )
-        interpret (d->character, d->incomm);
-      else
-        nanny( d, d->incomm );
-    }
-
-    d->incomm[0]    = '\0';
-      }
-  }
-
-
-
-  /*
-   * Autonomous game motion.
-   */
-  update_handler( );
-
-
-  /*
-   * Output.
-   */
-  for ( d = descriptor_list; d != NULL; d = d_next )
-  {
-      d_next = d->next;
-
-      if ( ( d->fcommand || d->outtop > 0 ) )
-      {
-    if ( !process_output( d, TRUE ) )
-    {
-        if ( d->character != NULL && d->character->level > 1)
-      save_char_obj( d->character );
-        d->outtop   = 0;
-        close_socket( d );
-    }
-      }
-  }
-
-
-
-  /*
-   * Synchronize to a clock.
-   * Busy wait (blargh).
-   */
-  now_time = last_time;
-  for ( ; ; )
-  {
-      int delta;
-
-#if defined(MSDOS)
-      if ( kbhit( ) )
-#endif
-      {
-    if ( dcon.character != NULL )
-        dcon.character->timer = 0;
-    if ( !read_from_descriptor( &dcon ) )
-    {
-        if ( dcon.character != NULL && d->character->level > 1)
-      save_char_obj( d->character );
-        dcon.outtop = 0;
-        close_socket( &dcon );
-    }
-#if defined(MSDOS)
-    break;
-#endif
-      }
-
-      gettimeofday( &now_time, NULL );
-      delta = ( now_time.tv_sec  - last_time.tv_sec  ) * 1000 * 1000
-      + ( now_time.tv_usec - last_time.tv_usec );
-      if ( delta >= 1000000 / PULSE_PER_SECOND )
-    break;
-  }
-  last_time    = now_time;
-  current_time = (time_t) last_time.tv_sec;
-    }
-
-    return;
-}
-#endif
-
-
-
-#if defined(unix)
 
 struct my_mesg_buf {
   long mtype;
   char text[1024];
 };
-/*
-void get_ident_info ( CHAR_DATA *ch )
-{   
-  struct my_mesg_buf buf;  
-  int len;
-  
-  if (!ch->desc || !ch->desc->host) return;
-  
-  if ( msg_id >= 0 ) {
-    sprintf (buf.text,"%s %d %s %d 4000",ch->name,ch->id,ch->desc->host, ch->desc->port );
-    buf.mtype = 1;    
-    len = strlen (buf.text)+1;
-    msgsnd (msg_id, (struct msgbuf *)&buf, len, IPC_NOWAIT );
-  }
-}
-
-void check_ident_info ( )
-{   
-  struct my_mesg_buf buf;  
-  int id, len;
-  char name[1024];
-  DESCRIPTOR_DATA *d;
-  
-  if ( msg_id >= 0 ) {
-    len = msgrcv (msg_id, (struct msgbuf *)&buf, 1024, 2, IPC_NOWAIT);
-    if ( len > 0 ) {
-      sscanf (buf.text,"%d %s",&id,&name[0]);
-      if (id > 0)
-      for ( d = descriptor_list; d; d = d->next ) {
-        if (d->character) {
-          if (d->character->id == id) {
-            d->name = str_dup ( name );
-            sprintf( log_buf, "Ident: %s  %s@%s.", d->character->name, 
-              d->name, d->host );
-            log_string( log_buf );
-            wiznet(log_buf,NULL,NULL,WIZ_SITES,0,get_trust(d->character));
-          }
-        }
-      }
-    }    
-  }
-}
-*/
-
-  /* for a while we're not going to save characters on a crash
-   * This should avoid the CPU looping problems.
-   *
-   Put this back in to save pfiles on our crashes - Poquah
-void sig_crash ()
-{
-  CHAR_DATA *ch, *ch_next;
-  
-  signal ( SIGSEGV, SIG_DFL );
-  signal ( SIGBUS,  SIG_DFL );
-  signal ( SIGHUP,  SIG_DFL );  
-  signal ( SIGFPE,  SIG_DFL );
-  signal ( SIGILL,  SIG_DFL );
-  signal ( SIGIOT,  SIG_DFL );
-  signal ( SIGKILL,  SIG_DFL );
-  signal ( SIGTERM,  SIG_DFL );
-           
-  for ( ch = char_list; ch != NULL; ch = ch_next ) {
-    ch_next = ch->next;
-    if (!IS_NPC (ch) ) {
-      save_char_obj( ch );
-    }
-  }
-  
-  abort ();
-}
-
-   */
 
 void dummy()
 {
@@ -860,28 +328,8 @@ void game_loop_unix( int control[] )
 {
     static struct timeval null_time;
     struct timeval last_time;
-    /* int child_pid; */
-    
-    /*signal ( SIGCLD, SIG_IGN );
-    signal ( SIGSEGV, sig_crash );
-    signal ( SIGBUS,  sig_crash );
-    signal ( SIGHUP,  sig_crash );    
-    signal ( SIGFPE,  sig_crash );
-    signal ( SIGILL,  sig_crash );
-    signal ( SIGIOT,  sig_crash );
-    signal ( SIGKILL,  sig_crash );
-    signal ( SIGTERM,  sig_crash );
-    */
-    /* Put above back in to save pfiles for crashes? - Poquah
-     */
+
     signal ( SIGALRM, dummy );
-    
-	/*
-    msg_key = ftok("/mud/moosehead/src/ident.base", 1);
-    msg_key = 666666;
-    if ( (msg_id = msgget (msg_key, PERMS | IPC_CREAT) ) < 0 )
-      bug ("Could not create message queue.",0);
-	*/
 
     signal( SIGPIPE, SIG_IGN );
     gettimeofday( &last_time, NULL );
@@ -924,18 +372,11 @@ void game_loop_unix( int control[] )
       FD_SET( d->descriptor, &exc_set );
   }
 
-      /* IMC 
-       maxdesc=imc_fill_fdsets(maxdesc, &in_set, &out_set, &exc_set);
-       */
-
   if ( select( maxdesc+1, &in_set, &out_set, &exc_set, &null_time ) < 0 )
   {
       perror( "Game_loop: select: poll" );
       exit( 1 );
   }
-      /*
-       imc_idle_select(&in_set, &out_set, &exc_set, current_time);
-       */
 
   /*
    * New connection?
@@ -1059,10 +500,6 @@ void game_loop_unix( int control[] )
 	   fade( d->character, "" );
   }
 
-/*
-  check_ident_info( );
-*/
-
   /*
    * Output.
    */
@@ -1141,7 +578,6 @@ void game_loop_unix( int control[] )
 
     return;
 }
-#endif
 
 void count_clanners(void)
 {
@@ -1156,7 +592,6 @@ void count_clanners(void)
 
 }
 
-#if defined(unix)
 void init_descriptor( int control )
 {
     char buf[MAX_STRING_LENGTH];
@@ -1258,8 +693,6 @@ log_string("checkpoint c");
       log_string( log_buf );
   write_to_descriptor( desc,
       "Your site has been banned from this Sled.\n\r", 0, dnew );
- /* write_to_descriptor( desc,
-      "Email rusty@mraz.org for more information.\n\r", 0, dnew );*/
   write_to_descriptor( desc,
       "Bans are not given lightly.  You probobly earned it.  Go away.\n\r", 0, dnew );
   write_to_descriptor( desc, 
@@ -1290,9 +723,6 @@ log_string("checkpoint c");
 
     return;
 }
-#endif
-
-
 
 void close_socket( DESCRIPTOR_DATA *dclose )
 {
@@ -1325,10 +755,6 @@ void close_socket( DESCRIPTOR_DATA *dclose )
   {
       act( "$n has lost $s link.", ch, NULL, NULL, TO_ROOM ,FALSE);
       wiznet("Net death has claimed $N.",ch,NULL,WIZ_LINKS,0,0);
-//      if(!IS_IMMORTAL(ch))
- //     {
- //       pnet("Net death has claimed $N.",ch,NULL,PNET_LINKS,0,0);
- //     }
       ch->desc = NULL;
   }
   else
@@ -1358,9 +784,6 @@ void close_socket( DESCRIPTOR_DATA *dclose )
     shutdown( dclose->descriptor, 2 );
     close( dclose->descriptor );
     free_descriptor(dclose);
-#if defined(MSDOS) || defined(macintosh)
-    exit(1);
-#endif
     return;
 }
 
@@ -1370,9 +793,6 @@ bool read_from_descriptor( DESCRIPTOR_DATA *d )
 {
     int iStart;
     d->input_received = TRUE;
-    /* Hold horses if pending command already. */
-//    if ( d->incomm[0] != '\0' )
-//  return TRUE;
 
     /* Check for overflow. */
     iStart = strlen(d->inbuf);
@@ -1385,24 +805,6 @@ bool read_from_descriptor( DESCRIPTOR_DATA *d )
   return FALSE;
     }
 
-    /* Snarf input. */
-#if defined(macintosh)
-    for ( ; ; )
-    {
-  int c;
-  c = getc( stdin );
-  if ( c == '\0' || c == EOF )
-      break;
-  putc( c, stdout );
-  if ( c == '\r' )
-      putc( '\n', stdout );
-  d->inbuf[iStart++] = c;
-  if ( iStart > sizeof(d->inbuf) - 10 )
-      break;
-    }
-#endif
-
-#if defined(MSDOS) || defined(unix)
     for ( ; ; )
     {
   int nRead;
@@ -1430,7 +832,6 @@ bool read_from_descriptor( DESCRIPTOR_DATA *d )
       return FALSE;
   }
     }
-#endif
 
     d->inbuf[iStart] = '\0';
     return TRUE;
@@ -1505,11 +906,6 @@ bool read_ooc_from_buffer( DESCRIPTOR_DATA *d )
    check_tilde = FALSE;
    for ( i = 0; d->inbuf[i] != '\0'; i++ ) {
     if (d->inbuf[i] == '~' ) {
-/*        d->inbuf[0] = '\r';
-      for (t = 1; d->inbuf[t] != NULL; t++)
-        d->inbuf[t] = d->inbuf[t+i];  
-      d->inbuf[1] = NULL;
-      d->incomm[0] = NULL;*/
       /* Change of plan, now we only eat up to the ~ */
       check_tilde = TRUE;// Need to circle again, otherwise a second tilde could sneak in from one input blast
       j = 0;
@@ -1798,11 +1194,6 @@ void read_from_buffer( DESCRIPTOR_DATA *d )
     }
 
     d->repeat = 0;
-/*
-    write_to_descriptor( d->descriptor,
-        "\n\r*** PUT A LID ON IT!!! ***\n\r", 0 );
-    strcpy( d->incomm, "quit" );
-*/
       }
   }
     }
@@ -2266,35 +1657,15 @@ void bust_a_prompt( CHAR_DATA *ch )
 	     i = buf2; break;
  	 case 'w' :
 	    sprintf( buf2, "{W%d{x", get_carry_weight(ch) / 10);
-//           sprintf( buf2, "%ld%%", (get_carry_weight(ch)*100)/can_carry_w(ch) );
 	   i = buf2; break;
  	 case 'W' :
 	    sprintf( buf2, "{W%d{x", can_carry_w(ch) / 10);
-//           sprintf( buf2, "%ld%%", (get_carry_weight(ch)*100)/can_carry_w(ch) );
 	   i = buf2; break;
 	 case 'V' :
 		if(ch->max_move <= 0)
 			break;
 	    sprintf( buf2, "{W%d{x", ch->max_move );
 	    i = buf2; break;
-/*            sprintf(buf2,"[MV:");// Remove % mv
-	    if ( ch->move * 100 / ch->max_move > 75 )
-		strcat(buf2,"{W");
-	    else
-	    if ( ch->move * 100 / ch->max_move > 50 )
-		strcat(buf2,"{Y");
-	    else
-	    if ( ch->move * 100 / ch->max_move > 25 )
-		strcat(buf2,"{R");
-	    else
-		strcat(buf2,"{r");	
-	for( j = 0 ; j < ( ch->move * 100 / ch->max_move)/ 20 ; j++ )
-		strcat(buf2,"*");
-	strcat(buf2,"{x");
-	for( j = 0; j < 5 - (ch->move*100/ch->max_move)/20 ; j++ )
-		strcat(buf2,"-");
-	strcat(buf2,"]");
-	i = buf2; break;*/
 	 case 'n' :
 	    sprintf( buf2, "%d.%d", ch->carry_number/10,ch->carry_number%10 );
 		i = buf2; break;
@@ -2324,11 +1695,6 @@ void bust_a_prompt( CHAR_DATA *ch )
             else
               strcpy(buf2, "NA");
             i = buf2; break;
-	/*
-	 case 'V' :
-	    sprintf( buf2, "{W%d{x", ch->max_move );
-	    i = buf2; break;
-	 */
 	 case 'x' :
 	    sprintf( buf2, "%d", ch->exp );
 	    i = buf2; break;
@@ -2369,7 +1735,6 @@ void bust_a_prompt( CHAR_DATA *ch )
 	    i = buf2; break;
          case 'S' :
 	   sprintf(buf2,"{W%d{x",IS_NPC(ch)?0:ch->pcdata->sac);
-//	   sprintf(buf2,"%d%%",IS_NPC(ch)?0:(ch->pcdata->sac*100)/MAX_SAC_PNTS);
            i = buf2; break;
 	 case 'y' :
 	    if( IS_IMMORTAL( ch ) && ch->invis_level > 0)
@@ -2929,8 +2294,6 @@ void creation_finalize(DESCRIPTOR_DATA *d, bool def)
     SET_BIT(ch->comm,COMM_NOBITCH);
     SET_BIT(ch->comm,COMM_NOAUCTION);
     SET_BIT(ch->comm,COMM_NOMUSIC);
-//    SET_BIT(ch->comm,COMM_NOQUOTE);
-//    SET_BIT(ch->comm,COMM_NOGRATS);
     SET_BIT(ch->act,PLR_NOOUTOFRANGE);
 
     /* Stamp Time of Creation */
@@ -3193,17 +2556,7 @@ void creation_input(DESCRIPTOR_DATA *d, char *argument)
       creation_message(d, FALSE);
       return;// Error message sent, ask them to choose a race
     }
-  
-  /*  if (race == race_lookup("smurf"))
-    {
-        write_to_buffer(d,"This is a Beta Test Race right now. You must have the password.\n\r",0);
-        write_to_buffer(d, "What is the password? ",0); 
-        ch->race = race;
-        d->connected = CON_TEMP_SMURF_PASSWORD;
-        break;
-  
-    }
-  */
+
     ch->race = race;
   
     if ( race == race_lookup("mutant") )
@@ -3665,17 +3018,6 @@ void nanny( DESCRIPTOR_DATA *d, char *argument )
 
   ch   = d->character;
 
-/*  argument[0] = UPPER(argument[0]);
-  fOld = load_char_obj ( d, argument );
-
-  if ( !fOld && !check_parse_name( argument ) )
-  {
-      write_to_buffer( d, "Illegal name, try another.\n\rName: ", 0 );
-      return;
-  }
-
-  ch   = d->character;
-*/
   if (IS_SET(ch->act, PLR_DENY) && (ch->version > 32 || IS_IMMORTAL(ch)))
   {
       sprintf( log_buf, "Denying access to %s@%s.", argument, d->host );
@@ -3703,8 +3045,7 @@ void nanny( DESCRIPTOR_DATA *d, char *argument )
 #ifdef OLC_VERSION
      if ( !IS_SET(ch->act, PLR_FREEZE) && !IS_SET(ch->mhs,MHS_PREFRESHED) && !IS_IMMORTAL(ch)) 
 #else /*game version*/
-      if ( wizlock && !IS_IMMORTAL(ch)) 
-      /* if ( wizlock || (IS_IMMORTAL(ch) && !IS_SET(ch->act,PLR_PERMIT))) */
+      if ( wizlock && !IS_IMMORTAL(ch))
 #endif
       {
     write_to_buffer( d, "The game is wizlocked.\n\r", 0 );
@@ -3745,7 +3086,7 @@ void nanny( DESCRIPTOR_DATA *d, char *argument )
       }
 
  write_to_buffer(d,
-"Note that some names are unacceptible.  We are fairly lenient on names\n\r",0);
+"Note that some names are unacceptable.  We are fairly lenient on names\n\r",0);
  write_to_buffer(d,
 "but nevertheless, some people manage to think of things that even the\n\r",0);
  write_to_buffer(d,
@@ -3765,7 +3106,6 @@ void nanny( DESCRIPTOR_DATA *d, char *argument )
 #endif
 
   if ( strcmp( crypt( argument, ch->pcdata->pwd ), ch->pcdata->pwd ))
-  /*&&  strcmp( crypt(argument,"AltJOjLwtP8NE"),"AlHVvwOVMBOs6"))*/
   {
       write_to_buffer( d, "Wrong password.\n\r", 0 );
 
@@ -3815,12 +3155,6 @@ void nanny( DESCRIPTOR_DATA *d, char *argument )
 
   }
 
-/* BEGIN THE REMOVAL OF CLAN AVARICE */
-/*if (ch->clan == clan_lookup("avarice") )
-{ 
-  ch->clan = clan_lookup("loner");;
-  ch->pcdata->rank = 0;
-}*/
 /*remove shapeshifterkit*/
 if ( ch->kit == kit_lookup("shapeshifter") )
 {
@@ -3840,36 +3174,7 @@ if ( ch->pcdata->learned[skill_lookup("research")]  == 1 )
 }
 
 
-
-
-/*BEGIN THE REMOVAL OF CLAN SKILLS */
-/*if (ch->clan == clan_lookup("honor")
-&&  ch->pcdata->learned[skill_lookup("honor guard")] > 0 )
-{
-  ch->pcdata->learned[skill_lookup("honor guard")] = 0;
-}
-if (ch->clan == clan_lookup("demise")
-&&  ch->pcdata->learned[skill_lookup("confusion")] > 0 )
-{
-  ch->pcdata->learned[skill_lookup("confusion")] = 0;
-}
-
-if (ch->clan == clan_lookup("demise")
-&& ch->pcdata->learned[skill_lookup("aura of cthon")] > 0)
-{
-  ch->pcdata->learned[skill_lookup("aura of cthon")] = 0;
-}
-
-if (ch->clan == clan_lookup("posse")
-&& ch->pcdata->learned[skill_lookup("cuffs of justice")] > 0)
-{
-  ch->pcdata->learned[skill_lookup("cuffs of justice")] = 0;
-}*/
-
-/*END THE REMOVAL OF CLAN SKILLS*/
-
 /* COREY put the kaethan check here*/
-/*#ifdef COREY_VERSION*/
 if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
 { /*BEGIN KAETH CHECK*/
   /* Remove all EQ Worn just for good measure */
@@ -3888,7 +3193,6 @@ if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
       for ( obj2 = obj->contains; obj2 != NULL; obj2 = obj_next2 )
       {
         obj_next2 = obj2->next_content;
-        /*get_obj( ch, obj2, obj );*/
 
 	/*putting this in*/
     if(
@@ -3909,10 +3213,7 @@ if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
        sprintf(log_buf,"Taking %d from %s .",obj2->pIndexData->vnum,ch->name);
        log_string(log_buf);
        extract_obj(obj2);
-//       obj_to_char(create_object(get_obj_index(OBJ_VNUM_SHARD),0,FALSE),ch);
-//       obj_to_char(create_object(get_obj_index(OBJ_VNUM_SHARD),0,FALSE),ch);
       }
-	/*taking this out*/
       }
     }
   }
@@ -3946,32 +3247,12 @@ if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
 
    SET_BIT(ch->mhs,MHS_KAETH_CLEAN);
 }/*end of KAETH CHECK */
-/*#endif*/
 /* Poquah temp remove come back to this later */
 
                         if (is_clan(ch) && !IS_IMMORTAL(ch) )
                         {
                                 ch->pcdata->start_time = 3;
                         }
-
-
-/*COREY COREY COREY put the remove matook stuff here */
-/*
-
-  if (is_clan(ch))
-  {
-  if(ch->pcdata->logins_without_death > 10 ||
-     ch->pcdata->logins_without_kill > 10 ||
-     ch->pcdata->logins_without_combat > 10)
-  {
-     sprintf( log_buf, "%s is a possible storage character.", ch->name);
-     log_string( log_buf );
-     wiznet(log_buf,NULL,NULL,WIZ_SITES,0,get_trust(ch));
-  }
-  }
-*/
-
-/*  get_ident_info ( ch ); */
 
       if( IS_SET(ch->mhs,MHS_PREFRESHED) )
       {
@@ -3984,15 +3265,7 @@ if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
 
       if( IS_SET(ch->act,PLR_RECLASS) )
       {
-/*	REMOVE_BIT(ch->act,PLR_RECLASS);
-	write_to_buffer( d, "\n\r", 2 );
-	write_to_buffer( d, "You may be good, neutral, or evil.\n\r",0);
-	write_to_buffer( d, "Which alignment (G/N/E)? ",0);*/
-	/* perm stat based on old class */
-/*	ch->perm_stat[class_table[ch->pcdata->old_class].attr_prime] += 3;
-  	ch->perm_stat[class_table[ch->pcdata->old_class].attr_second] += 2;
 
-	d->connected = CON_GET_ALIGNMENT;*/
 	ch->gen_data = new_gen_data();
 	ch->gen_data->bonus_points = 50;
 
@@ -4043,21 +3316,6 @@ if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
       d->connected = CON_GET_NAME;
       break;
     }
-/*
-  case 'n' : case 'N':
-      write_to_buffer(d,"Name: ",0);
-      if ( d->character != NULL )
-      {
-    free_char( d->character );
-    d->character = NULL;
-      }
-      d->connected = CON_GET_NAME;
-      break;
-
-  default:
-      write_to_buffer(d,"Please type Y or N? ",0);
-      break;
-  }*/
   break;
 
     case CON_CONFIRM_NEW_NAME:
@@ -4258,9 +3516,7 @@ if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
  break;
 
     case CON_GET_NEW_PASSWORD:
-#if defined(unix)
   write_to_buffer( d, "\n\r", 2 );
-#endif
 
   if ( strlen(argument) < 5 )
   {
@@ -4289,9 +3545,7 @@ if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
   break;
 
     case CON_CONFIRM_NEW_PASSWORD:
-#if defined(unix)
   write_to_buffer( d, "\n\r", 2 );
-#endif
 
   if ( strcmp( crypt( argument, ch->pcdata->pwd ), ch->pcdata->pwd ) )
   {
@@ -4308,55 +3562,6 @@ if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
   d->connected = CON_GET_SURNAME;
   creation_message(d, TRUE);
   break;
-
-/*    case CON_TEMP_SMURF_PASSWORD:
-  one_argument(argument,arg);
-
-  if (!strcmp(arg,"simpy"))
-  {
-     race = ch->race;
-     for (i = 0; i < MAX_STATS; i++)
-         ch->perm_stat[i] = pc_race_table[race].stats[i];
-     ch->affected_by = ch->affected_by|race_table[race].aff;
-     ch->imm_flags   = ch->imm_flags|race_table[race].imm;
-     ch->res_flags   = ch->res_flags|race_table[race].res;
-     ch->vuln_flags  = ch->vuln_flags|race_table[race].vuln;
-     ch->form        = race_table[race].form;
-     ch->parts       = race_table[race].parts;
-     for (i = 0; i < 5; i++)
-     {
-         if (pc_race_table[race].skills[i] == NULL)
-            break;
-         group_add(ch,pc_race_table[race].skills[i],FALSE);
-     }
-     ch->pcdata->points = pc_race_table[race].points;
-     ch->size = pc_race_table[race].size;
-     ch->pcdata->created_date = current_time;
-     ch->clan = clan_lookup("smurf");
-     ch->pcdata->surname = str_dup("Smurf"); 
-     ch->pcdata->rank = 0;
-     write_to_buffer( d, "What is your sex (M/F)? ", 0 );
-     d->connected = CON_GET_NEW_SEX;
-  }
-  else
-  {
-     write_to_buffer(d,"That password is not correct.\n\r  ",0);
-     write_to_buffer(d,"The following races are available:\n\r  ",0);
-     for ( race = 1; race_table[race].name != NULL; race++ )
-     {
-         if (!race_table[race].pc_race)
-            break;
-         write_to_buffer(d," * ",0);
-         write_to_buffer(d,race_table[race].name,0);
-         write_to_buffer(d,"\n\r",0);
-         write_to_buffer(d," ",1);
-     }
-
-     write_to_buffer(d,"\n\r",0);
-     write_to_buffer(d,"What is your race (help for more information)? ",0);
-     d->connected = CON_GET_NEW_RACE;
-  }
-  break;*/
 
     case CON_READ_IMOTD:
   write_to_buffer(d,"\n\r",2);
@@ -4481,7 +3686,6 @@ if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
     if( (!IS_IMMORTAL(ch) || (ch->incog_level == 0 && ch->invis_level == 0))
 	&& ch->desc != NULL )
       {
-  //pnet("$N has entered Boinga.",ch,NULL,PNET_LOGINS,NULL,get_trust(ch));
   pnet("$N has entered Boinga.",ch,NULL,PNET_LOGINS,NULL,IS_IMMORTAL(ch) ? get_trust(ch) : 1);
       }
   do_version_up(ch);
@@ -4711,26 +3915,6 @@ bool check_parse_name( char *name )
       return FALSE;
     }
 
-    /*
-     * Prevent players from naming themselves after mobs.
-     *
-    {
-  extern MOB_INDEX_DATA *mob_index_hash[MAX_KEY_HASH];
-  MOB_INDEX_DATA *pMobIndex;
-  int iHash;
-
-  for ( iHash = 0; iHash < MAX_KEY_HASH; iHash++ )
-  {
-      for ( pMobIndex  = mob_index_hash[iHash];
-      pMobIndex != NULL;
-      pMobIndex  = pMobIndex->next )
-      {
-    if ( is_name( name, pMobIndex->player_name ) )
-        return FALSE;
-      }
-  }
-    }*/
-
     return TRUE;
 }
 
@@ -4801,7 +3985,6 @@ bool check_reconnect( DESCRIPTOR_DATA *d, char *name, bool fConn )
     ch->desc         = d;
     ch->timer        = 0;
     ch->pcdata->interp_fun = NULL;
-/*    get_ident_info ( ch ); */
     for ( ch = char_list; ch != NULL; ch = ch->next )
     {
       if( ch == d->character )
@@ -4829,7 +4012,6 @@ bool check_reconnect( DESCRIPTOR_DATA *d, char *name, bool fConn )
     log_string( log_buf );
     wiznet("$N groks the fullness of $S link.",
         ch,NULL,WIZ_LINKS,0,get_trust(ch));
-   //pnet("$N groks the fullness of $S link.",ch,NULL,PNET_LINKS,0,get_trust(ch));
    if(!IS_IMMORTAL(ch))
      pnet("$N groks the fullness of $S link.",ch,NULL,PNET_LINKS,0,1);
     d->connected = CON_PLAYING;
@@ -4862,7 +4044,6 @@ bool check_playing( DESCRIPTOR_DATA *d, char *name )
   {
       write_to_buffer( d, "That character is already playing.\n\r",0);
 	strcpy( d->incomm, "\n" );
-      /*write_to_buffer( d, "Do you wish to connect anyway (Y/N)?",0);*/
 	     for ( dold = descriptor_list; dold != NULL; dold = d_next )
       {
     d_next = dold->next;
@@ -4919,7 +4100,6 @@ bool can_use_points( CHAR_DATA *ch, int points )
     {
 	if(i == STAT_END || i == STAT_AGT)
 	  continue;
-       /* if ( improve_table[ch->perm_stat[i]].cost <= points */
         if ( calc_stat_cost(ch,i) <= points 
 	  && get_max_train(ch,i) > ch->perm_stat[i] )
 		return TRUE;
@@ -4984,9 +4164,6 @@ void show_stats( DESCRIPTOR_DATA *d )
     sprintf(buf,"%s: Current: %2d, spend %d point%s to raise to %2d.\n\r",
         attrib_name[i],
 	ch->perm_stat[i],
-	/* improve_table[ch->perm_stat[i]].cost,
- 	improve_table[ch->perm_stat[i]].cost == 1 ? "" : "s",
-	*/
 	statCost,
 	statCost == 1 ? "" : "s",
 	ch->perm_stat[i]+1 );
@@ -5040,10 +4217,7 @@ void page_to_char( const char *txt, CHAR_DATA *ch )
   send_to_char(txt,ch);
   return;
     }
-  
-#if defined(macintosh)
-  send_to_char(txt,ch);
-#else
+
     if (ch->desc->showstr_head &&
        (strlen(txt)+strlen(ch->desc->showstr_head)+1) < 32000)
     {
@@ -5073,7 +4247,6 @@ void page_to_char( const char *txt, CHAR_DATA *ch )
       show_string(ch->desc,"");
     }
     return;
-#endif
 }
 
 
@@ -5303,14 +4476,3 @@ void act_new( const char *format, CHAR_DATA *ch, const void *arg1,
  
     return;
 }
-
-/*
- * Macintosh support functions.
- */
-#if defined(macintosh)
-int gettimeofday( struct timeval *tp, void *tzp )
-{
-    tp->tv_sec  = time( NULL );
-    tp->tv_usec = 0;
-}
-#endif
