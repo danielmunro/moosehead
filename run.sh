@@ -13,5 +13,4 @@ docker run --publish 4000:4000 \
            --restart unless-stopped \
            --detach \
            --tty \
-           --user $UID \
            $IMAGE
