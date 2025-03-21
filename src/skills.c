@@ -978,7 +978,7 @@ int skill_level( CHAR_DATA *ch, int sn )
     if ( skill_table[sn].skill_level[ch->class] > 51 )
 	return 53;
 
-    if ( skill_table[sn].skill_level[ch->class] < 1 )
+    if ( skill_table[sn].skill_level[ch->class] > -1 )
 	return ( skill_table[sn].skill_level[ch->class] );
 
      /* Leave as is for normal classes */
