@@ -9,7 +9,6 @@ docker run --publish 4000:4000 \
            --mount type=bind,src=$PWD/gods,dst=/mud/moosehead/gods \
            --mount type=bind,src=$PWD/jail,dst=/mud/moosehead/jail \
            --mount type=bind,src=$PWD/jerks,dst=/mud/moosehead/jerks \
-           --mount type=bind,src=$PWD/player,dst=/mud/moosehead/player \
            --mount type=volume,src=mud-data,dst=/mud/moosehead/data \
            --restart unless-stopped \
            --detach \

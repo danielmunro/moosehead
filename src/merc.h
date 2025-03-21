@@ -3582,37 +3582,22 @@ char *  crypt           args( ( const char *key, const char *salt ) );
  *   so players can go ahead and telnet to all the other descriptors.
  * Then we close it whenever we need to open a file (e.g. a save file).
  */
-#if defined(macintosh)
-#define PLAYER_DIR      ""              /* Player files                 */
-#define TEMP_FILE       "romtmp"
-#define TEMP_FILE2      "romtmp2"
-#define NULL_FILE       "proto.are"             /* To reserve one stream        */
-#endif
 
 #define alloc_mem GC_MALLOC
 
-#if defined(MSDOS)
-#define PLAYER_DIR      "../player/"    /* Player files */
-#define GOD_DIR         "../gods/"      /* list of gods */
-#define COLL_DIR        "../collated/"  /* collated areas output */
-#define NEW_DIR         "../newareas/"  /* new areas */
-#define TEMP_FILE       "../player/romtmp"
-#define NULL_FILE       "nul"           /* To reserve one stream        */
-#endif
-
 #if defined(unix)
-#define PLAYER_DIR      "../player/"    /* Player files */
+#define PLAYER_DIR      "../data/player/"    /* Player files */
 #define GOD_DIR         "../gods/"      /* list of gods */
 #define COLL_DIR        "../collated/"  /* collated areas output */
 #define CLAN_DIR        "../clan/"      /* clan stuff */
 #define CLAN_BAK_DIR        "../clanbak/"      /* clan stuff */
 #define NEW_DIR         "../newareas/"  /* new areas */
 #ifdef OLC_VERSION
-#define TEMP_FILE       "../player/mhstmp"
-#define TEMP_FILE2      "../player/mhstmp2"
+#define TEMP_FILE       "../data/player/mhstmp"
+#define TEMP_FILE2      "../data/player/mhstmp2"
 #else
-#define TEMP_FILE       "../player/romtmp"
-#define TEMP_FILE2      "../player/mhstmp2"
+#define TEMP_FILE       "../data/player/romtmp"
+#define TEMP_FILE2      "../data/player/mhstmp2"
 #endif
 #define NULL_FILE       "/dev/null"     /* To reserve one stream        */
 #endif
