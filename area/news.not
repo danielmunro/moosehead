@@ -1,203 +1,0 @@
-Sender  Andaron~
-Date    Sun Jan 13 15:38:05 2013~
-Stamp   1358120285
-To      Slodhian Uniball~
-Subject edithelp on OLC~
-Text
-Edithelp works on OLC now. I haven't tested thoroughly so be careful of
-committing too much unsaved work as it could be unstable still.  I'll be adding
-ways to load the edited files to test and live later.
-
-Let me know if there's any issues or missing features.  Once it's polished we
-can turn it loose for anyone to access (They can currently, but they have to
-know it exists to use it :P)
-
-I plan to do the work on classes, races, and any spells that I've tweaked
-myself, but feel free to adjust whatever you think is important.
-
-Oh, and the helpfile for it is a pretty rough draft, I just threw everything it
-could do in there so you guys could use it, I'll take another pass later to
-clean it up and make it really readable.
-
-Andaron
-~
-Sender  Andaron~
-Date    Tue Jan 15 23:28:57 2013~
-Stamp   1358321337
-To      all~
-Subject Shiny new helpfiles~
-Text
-If you check out the helpfiles, you'll notice a new layout for many of them.
-The ones that don't have it yet will be picking it up as time goes on, and our
-imms have gained new helpfile editing capabilities -- so look for new
-improvements such as haven't been seen before!
-
-Andaron
-~
-Sender  Slodhian~
-Date    Thu Jan 17 12:49:58 2013~
-Stamp   1358455798
-To      all~
-Subject Inferno~
-Text
-in hope for Trinity help file
-I have placed near it (inside a great tree) an burning inferno.
-It will be staying there until next crash/boot
-
-Enjoy
-~
-Sender  Slodhian~
-Date    Mon Jan 21 05:59:28 2013~
-Stamp   1358776768
-To      all~
-Subject Changes in last beroot~
-Text
-{x - Help slodhian is so cool topics doesn't work anymore, you need to type only
-{x   help topics
-{x - Gladiators cannot use potions, pills, wands, scrolls or staves once combat
-{x   starts
-{x - DOT (damage over time) does no longer count down while gladiators are
-{x   preparing or waiting for bets
-{x - All notes last 1 month now, except god notes
-{x - +++ Few minor and major tweaks for immortals.
-~
-Sender  Slodhian~
-Date    Thu Jan 31 22:59:17 2013~
-Stamp   1359701957
-To      all~
-Subject First weekend of month, Double xp~
-Text
-Double xp has been turned on a bit early.
-Use time to see how much time is left
-
-Enjoy
-~
-Sender  Slodhian~
-Date    Fri Feb  1 20:14:23 2013~
-Stamp   1359778463
-To      all~
-Subject Double~
-Text
-due downtime, I have added 2 hours to doublexp
-You can use "time" to check time left
-~
-Sender  Slodhian~
-Date    Fri Feb  1 22:09:29 2013~
-Stamp   1359785369
-To      all~
-Subject Help maxstats~
-Text
-Help maxstats
-This helpfile will tell you every races maxstats
-Notice that they may be different due classes etc
-but they are basis for all races
-
-Thank Uniball for introducing the stats
-~
-Sender  Andaron~
-Date    Wed Feb 20 15:42:11 2013~
-Stamp   1361403731
-To      all~
-Subject Rumors have reached the town~
-Text
-Rumors of a shadow that persists in the brightest light have reached the
-gossips in town, and the constant chatter has found its way to you.  It is said
-that this shadow is located somewhere near ghoul forest,
-away from prying eyes. Nobody can say how long it's been there, but maybe now
-is a good time to find it and check it out.
-~
-Sender  Uniball~
-Date    Mon Feb 25 11:25:24 2013~
-Stamp   1361820324
-To      all~
-Subject New Addition to Time~
-Text
-Just wanted to let everyone know that they should take the take to visit Father
-Time if they are interested in the newest addition to the area.
-
-
-Seek and Destory. Rape, pillage and Enjoy!
-~
-Sender  Slodhian~
-Date    Tue Feb 26 16:09:23 2013~
-Stamp   1361923763
-To      all~
-Subject addition to rules. 7. this will be monitored~
-Text
-just to remove ability to spouses using your char, rule has been placed
-on it. This prevents you from buying help from china also.
-~
-Sender  Slodhian~
-Date    Fri Mar  1 14:59:48 2013~
-Stamp   1362178788
-To      all~
-Subject Double Weekend (1st weekend of month)~
-Text
-forgot to mention here that I placed 61 hour timer on double
-
-Just was marveling how fast Uniball reports changes in mhs Facebook site
-forgot totally to post it here :)
-
-Enjoy the weekend! and level fast my young padawans!
-~
-Sender  Slodhian~
-Date    Fri Mar  1 18:20:30 2013~
-Stamp   1362190830
-To      all~
-Subject new help: shadebounty~
-Text
-May explain a bit more our new things.
-No more guessing (well not ...atleast that much ;))
-Enjoy!
-~
-Sender  Slodhian~
-Date    Wed May  1 14:08:25 2013~
-Stamp   1367442505
-To      all~
-Subject First weekend of Month~
-Text
-As everyone might remember, we have kept alive the Doubleweekends
-at the first weekend of month.
-.
-In May, That is next weekend (3rd-5th of may) so remind everyone you know
-and Come in and enjoy leveling.
-.
-with best wishes,
-Immortal Team
-~
-Sender  Uniball~
-Date    Sun May  5 23:13:43 2013~
-Stamp   1367820823
-To      all~
-Subject Bugs and Other things needed to be adressed~
-Text
-I would like to take this time to inform everyone that we the Admin team are
-actively seeking out bugs and other imperfections that you would like to see
-addressed and fixed. If you know of any, or happen upon any you can note us
-admins or just note me personally and we will do everything possible to address
-the issue as quickly as possible.
-
-Thank you all, and hope everyone is enjoying their time spent here.
-Uniball
-~
-Sender  Andaron~
-Date    Fri Jun 21 16:57:49 2013~
-Stamp   1371859069
-To      all~
-Subject Test changes updated~
-Text
-If you drop in on test (Port 4002) there's a bunch of new changes spanning
-most of the classes available to poke at.
-
-Using 'help test known' gives a good place to start on what's going on.
-
-~
-Sender  Slodhian~
-Date    Sun Jun 23 01:45:09 2013~
-Stamp   1371977109
-To      all~
-Subject Summer solstice~
-Text
-Missed it with couple days. so in return
-doublexp for all!
-~
