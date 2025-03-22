@@ -1,5 +1,26 @@
 # Changelog
 
+## 2025-03-22
+
+* Use the new docker data volume for all game data (areas, newareas, clans, players, gods, jerks, jail, olc).
+* Since data is no longer in git, add a backup script, which runs weekly.  The entire volume is gzipped and uploaded to a private S3 bucket. 
+
+## 2025-03-21
+
+* Fix an error that could lead to a buffer overflow.
+  * Skill level lookup would ignore the reclass and look only at the base class, then the other base class.
+  * When neither base class had access to the skill, ie for a skill like 'chi' where neither mage or warrior had access to it, but the samurai reclass did, a -1 would be returned for the level the skill is obtained.
+  * This caused a buffer overflow in the 'skills' command since the string formatting uses a '%d', which is for signed integers.
+  * The fix was to return the reclass level if it was greater than -1.
+* Removed a few more unused resources.
+
+## 2025-03-20
+
+* Create a fresh CSV dump of items on every start up.  Save it to the docker data volume.
+* Clean up comm.c:
+  * Remove most/all commented out code.
+  * Remove platform/arch specific code.  Unix will be the only supported arch going forward.
+
 ## 2025-03-19
 
 * Switched to use native docker logging behavior. `log_string` now logs to stdout, new `log_error` logs to stderr.
