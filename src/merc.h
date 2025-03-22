@@ -3585,57 +3585,57 @@ char *  crypt           args( ( const char *key, const char *salt ) );
 
 #define alloc_mem GC_MALLOC
 
-#if defined(unix)
-#define PLAYER_DIR      "../data/player/"    /* Player files */
-#define GOD_DIR         "../gods/"      /* list of gods */
-#define COLL_DIR        "../collated/"  /* collated areas output */
-#define CLAN_DIR        "../clan/"      /* clan stuff */
-#define CLAN_BAK_DIR        "../clanbak/"      /* clan stuff */
-#define NEW_DIR         "../newareas/"  /* new areas */
+#define BASE_DIR        "/mud/moosehead"
+#define DATA_DIR        BASE_DIR "/data"
+#define PLAYER_DIR      DATA_DIR "/player/"    /* Player files */
+#define GOD_DIR         DATA_DIR "/gods/"      /* list of gods */
+#define COLL_DIR        DATA_DIR "/collated/"  /* collated areas output */
+#define CLAN_DIR        DATA_DIR "/clan/"      /* clan stuff */
+#define CLAN_BAK_DIR    DATA_DIR "/clanbak/"      /* clan stuff */
+#define NEW_DIR         DATA_DIR "/newareas/"  /* new areas */
 #ifdef OLC_VERSION
-#define TEMP_FILE       "../data/player/mhstmp"
-#define TEMP_FILE2      "../data/player/mhstmp2"
+#define TEMP_FILE       DATA_DIR "/player/mhstmp"
+#define TEMP_FILE2      DATA_DIR "/player/mhstmp2"
 #else
-#define TEMP_FILE       "../data/player/romtmp"
-#define TEMP_FILE2      "../data/player/mhstmp2"
+#define TEMP_FILE       DATA_DIR "/player/romtmp"
+#define TEMP_FILE2      DATA_DIR "/player/mhstmp2"
 #endif
 #define NULL_FILE       "/dev/null"     /* To reserve one stream        */
-#endif
 
 #ifdef OLC_VERSION // New help code
-#define HELP_FILE   "../olc/olcarea/new_helps.are"
-#define HELP_BAK    "../olc/olcarea/new_helps.bak"
+#define HELP_FILE       DATA_DIR "/olc/olcarea/new_helps.are"
+#define HELP_BAK        DATA_DIR "/olc/olcarea/new_helps.bak"
 #else
-#define HELP_FILE   "../area/new_helps.are"
-#define HELP_BAK   "../area/new_helps.bak"
+#define HELP_FILE       DATA_DIR "/area/new_helps.are"
+#define HELP_BAK        DATA_DIR "/area/new_helps.bak"
 #ifdef ANDARONDEV
-#define HELP_FILE_OLC "/mud/moosehead/olc/olcarea/new_helps.are"
+#define HELP_FILE_OLC   DATA_DIR "/olc/olcarea/new_helps.are"
 #else
-#define HELP_FILE_OLC "../olc/olcarea/new_helps.are"
+#define HELP_FILE_OLC   DATA_DIR "/olc/olcarea/new_helps.are"
 #endif
 #endif
 
 #ifdef OLC_VERSION
 #define AREA_LIST       "../area/area.lst"  /* List of areas*/
 #else
-#define AREA_LIST       "../area/area.act"  /* List of areas*/
+#define AREA_LIST       DATA_DIR "/area/area.act"  /* List of areas*/
 #endif
-#define BUG_FILE        "../area/bugs.not" /* For 'bug' and bug()*/
-#define TYPO_FILE       "../area/typos.txt" /* For 'typo'*/
-#define NOTE_FILE       "../area/notes.not"/* For 'notes'*/
-#define IDEA_FILE       "../area/ideas.not"
-#define PENALTY_FILE    "../area/penal.not"
-#define CLAN_FILE	"../area/clan.not"
-#define IMMORTAL_FILE	"../area/immortal.not"
-#define NEWS_FILE       "../area/news.not"
-#define CHANGES_FILE    "../area/chang.not"
-#define OOC_FILE	"../area/ooc.not"
-#define QUEST_FILE	"../area/quest.not"
-#define SHUTDOWN_FILE   "../area/shutdown.txt"/* For 'shutdown'*/
-#define BAN_FILE        "../area/ban.txt" /* for bans */
-#define DNS_FILE        "../area/dns.txt" /* for bad DNS servers */
-#define MUSIC_FILE      "../area/music.txt" /* for lyrics */
-#define OLC_LOG_FILE    "../log/olc.log"
+#define BUG_FILE        DATA_DIR "/area/bugs.not" /* For 'bug' and bug()*/
+#define TYPO_FILE       DATA_DIR "/area/typos.txt" /* For 'typo'*/
+#define NOTE_FILE       DATA_DIR "/area/notes.not"/* For 'notes'*/
+#define IDEA_FILE       DATA_DIR "/area/ideas.not"
+#define PENALTY_FILE    DATA_DIR "/area/penal.not"
+#define CLAN_FILE	    DATA_DIR "/area/clan.not"
+#define IMMORTAL_FILE	DATA_DIR "/area/immortal.not"
+#define NEWS_FILE       DATA_DIR "/area/news.not"
+#define CHANGES_FILE    DATA_DIR "/area/chang.not"
+#define OOC_FILE	    DATA_DIR "/area/ooc.not"
+#define QUEST_FILE	    DATA_DIR "/area/quest.not"
+#define SHUTDOWN_FILE   DATA_DIR "/area/shutdown.txt"/* For 'shutdown'*/
+#define BAN_FILE        DATA_DIR "/area/ban.txt" /* for bans */
+#define DNS_FILE        DATA_DIR "/area/dns.txt" /* for bad DNS servers */
+#define MUSIC_FILE      DATA_DIR "/area/music.txt" /* for lyrics */
+#define OLC_LOG_FILE    DATA_DIR "/log/olc.log"
 
 /*
  * Our function prototypes.
