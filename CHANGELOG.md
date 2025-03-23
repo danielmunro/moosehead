@@ -2,8 +2,8 @@
 
 ## 2025-03-22
 
-* Use the new docker data volume for all game data (areas, newareas, clans, players, gods, jerks, jail, olc).
-* Since data is no longer in git, add a backup script, which runs weekly.  The entire volume is gzipped and uploaded to a private S3 bucket. 
+* Use a docker volume for all game data (areas, newareas, clans, players, gods, jerks, jail, olc).
+* Add a backup script, since data is no longer stored in git. Currently, backup runs daily, with a retention period of one week.  Next steps will include adding weekly and monthly backups.  The entire docker volume is gzipped and uploaded to a private S3 bucket.
 
 ## 2025-03-21
 
