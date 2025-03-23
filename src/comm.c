@@ -175,7 +175,7 @@ void creation_message(DESCRIPTOR_DATA *d, bool forward);
 int creation_step(DESCRIPTOR_DATA *d, bool forward, bool accept);
 bool is_creation(DESCRIPTOR_DATA *d);
 
-int main( int argc, char **argv )
+int run( int argc, char **argv )
 {
     struct timeval now_time;
     int port;
