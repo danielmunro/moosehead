@@ -15,7 +15,6 @@
  *  around, comes around.                                                  *
  ***************************************************************************/
 
-static char rcsid[] = "$Id: handler.c,v 1.235 2004/03/27 15:51:41 boogums Exp $";
 #if defined(macintosh)
 #include <types.h>
 #else

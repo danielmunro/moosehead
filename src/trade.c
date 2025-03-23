@@ -1,4 +1,3 @@
-static char rcsid[] = "$Id: trade.c,v 1.15 2003/09/20 18:34:20 boogums Exp $";
 #if defined(macintosh)
 #include <types.h>
 #else

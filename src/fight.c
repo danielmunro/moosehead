@@ -15,7 +15,6 @@
  *  airound, comes around.                                                  *
  ***************************************************************************/
 
-static char rcsid[] = "$Id: fight.c,v 1.945 2005/02/17 05:16:22 boogums Exp $";
 #if defined(macintosh)
 #include <types.h>
 #else

@@ -1,6 +1,5 @@
 /* Code specifically for the new skill system */
 
-static char rcsid[] = "$Id: skills.c,v 1.81 2003/12/07 20:56:13 boogums Exp $";
 #if defined(macintosh)
 #include <types.h>
 #include <time.h>

@@ -27,8 +27,6 @@
     G  E  I  R  N  L  R  U  S  M  E  Z  U  G  A
 */
 
-
-static char rcsid[] = "$Id: const.c,v 1.460 2004/09/01 02:35:01 boogums Exp $";
 #if defined(macintosh)
 #include <types.h>
 #else

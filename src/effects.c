@@ -15,7 +15,6 @@
  *  around, comes around.                                                  *
  ***************************************************************************/
  
-static char rcsid[] = "$Id: effects.c,v 1.40 2004/03/27 15:51:41 boogums Exp $";
 #if defined(macintosh)
 #include <types.h>
 #else

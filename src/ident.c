@@ -8,7 +8,6 @@ assumed with respect to the use of this code.
 
 This header file is not to be removed.
 ***/
-static char rcsid[] = "$Id: ident.c,v 1.4 2002/03/09 19:14:28 rusty Exp $";
 
 /* Yes, I know some of these includes may not be necessary, but
    hey...  I like to be thorough :)

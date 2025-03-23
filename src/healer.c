@@ -2,7 +2,6 @@
    direct questions or comments to rtaylor@cie-2.uoregon.edu
    any use of this code must include this header */
 
-static char rcsid[] = "$Id: healer.c,v 1.9 2001/09/05 16:29:16 boogums Exp $";
 #if defined(macintosh)
 #include <types.h>
 #include <time.h>

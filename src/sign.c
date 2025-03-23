@@ -6,7 +6,6 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <netinet/in.h>
-static char rcsid[] = "$Id: sign.c,v 1.2 1999/07/14 18:14:09 mud Exp $";
 
 #define PORT 4000
 #define MESSAGE "\n\n\n Go to thesled.us 4000 - we'll try a second migration tonight \n\n\n"

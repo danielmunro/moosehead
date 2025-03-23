@@ -15,7 +15,6 @@
  *  around, comes around.                                                  *
  ***************************************************************************/
  
-static char rcsid[] = "$Id: alias.c,v 1.5 2002/06/20 15:55:00 rusty Exp $";
 #if defined(macintosh)
 #include <types.h>
 #else

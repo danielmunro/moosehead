@@ -15,7 +15,6 @@
  *  around, comes around.                                                  *
  ***************************************************************************/
 
-static char rcsid[] = "$Id: editor.c,v 1.3 2000/04/18 20:33:49 mud Exp $";
 #if defined(macintosh)
 #include <types.h>
 #else

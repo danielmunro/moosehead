@@ -15,7 +15,6 @@
  *  around, comes around.  Right?                                          *
  ***************************************************************************/
 
-static char rcsid[] = "$Id: deity.c,v 1.59 2003/09/28 01:58:37 ndagger Exp $";
 #if defined(macintosh)
 #include <types.h>
 #else

@@ -15,7 +15,6 @@
  *  around, comes around.                                                  *
  ***************************************************************************/
  
-static char rcsid[] = "$Id: db3.c,v 1.11 2001/12/04 17:54:52 rage Exp $";
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

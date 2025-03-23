@@ -1,5 +1,4 @@
 /* db_new.c */
-static char rcsid[] = "$Id: db2.c,v 1.10 2001/06/25 20:40:04 mud Exp $";
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

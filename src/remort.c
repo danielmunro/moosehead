@@ -15,7 +15,6 @@
  *  around, comes around.                                                  *
  ***************************************************************************/
 
-static char rcsid[] = "$Id: remort.c,v 1.31 2004/03/29 23:57:16 ndagger Exp $";
 #if defined(macintosh)
 #include <types.h>
 #else

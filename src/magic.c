@@ -15,7 +15,6 @@
  *  around, comes around.                                                  *
  ***************************************************************************/
 
-static char rcsid[] = "$Id: magic.c,v 1.484 2005/04/18 02:58:27 rusty Exp $";
 #if defined(macintosh)
 #include <types.h>
 #else

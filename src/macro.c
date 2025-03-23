@@ -18,7 +18,6 @@
  *  around, comes around.                                                  *
  ***************************************************************************/
 
-static char rcsid[] = "$Id: macro.c,v 1.2 1999/07/14 18:13:58 mud Exp $";
 #if defined(macintosh)
 #include <types.h>
 #else

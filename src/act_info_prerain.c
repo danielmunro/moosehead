@@ -15,7 +15,6 @@
   *  around, comes around.                                                  *
   ***************************************************************************/
  
-static char rcsid[] = "$Id: act_info.c,v 1.423 2004/04/02 04:42:07 boogums Exp $";
  #if defined(macintosh)
  #include <types.h>
  #else

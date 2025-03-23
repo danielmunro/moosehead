@@ -15,7 +15,6 @@
  *  around, comes around.                                                  *
  ***************************************************************************/
  
-static char rcsid[] = "$Id: flags.c,v 1.4 2000/02/09 21:03:15 mud Exp $";
 #if defined(macintosh)
 #include <types.h>
 #include <time.h>

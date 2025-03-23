@@ -15,7 +15,6 @@
  *  around, comes around.                                                  *
  ***************************************************************************/
  
-static char rcsid[] = "$Id: recycle.c,v 1.8 2001/04/09 18:33:00 mud Exp $";
 #if defined(macintosh)
 #include <types.h>
 #include <time.h>
