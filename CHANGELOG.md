@@ -1,5 +1,9 @@
 # Changelog
 
+## 2025-03-23
+
+* Add a test target.  Add tests for recently updated code.  Add a step in CI to run tests before building and pushing a new docker image.
+
 ## 2025-03-22
 
 * Use a docker volume for all game data (areas, newareas, clans, players, gods, jerks, jail, olc).
