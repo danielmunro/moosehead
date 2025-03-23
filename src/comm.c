@@ -20,9 +20,6 @@
 
 
 /*
- * This file contains all of the OS-dependent stuff:
- *   startup, signals, BSD sockets for tcp/ip, i/o, timing.
- *
  * The data flow for input is:
  *    Game_loop ---> Read_from_descriptor ---> Read
  *    Game_loop ---> Read_from_buffer
@@ -30,7 +27,6 @@
  * The data flow for output is:
  *    Game_loop ---> Process_Output ---> Write_to_descriptor -> Write
  *
- * The OS-dependent functions are Read_from_descriptor and Write_to_descriptor.
  * -- Furey  26 Jan 1993
  */
 
@@ -175,10 +171,8 @@ void creation_message(DESCRIPTOR_DATA *d, bool forward);
 int creation_step(DESCRIPTOR_DATA *d, bool forward, bool accept);
 bool is_creation(DESCRIPTOR_DATA *d);
 
-int run( int argc, char **argv )
-{
+int run(int port) {
     struct timeval now_time;
-    int port;
     int control[2] = {-1,-1};
 
     /*
@@ -198,21 +192,6 @@ int run( int argc, char **argv )
 
     /* Set our eUID to that of the user 'mud' */
     seteuid(MUD_UID);
-
-    /*
-     * Get the port number.
-     */
-    port = 4000;
-    if ( argc > 1 )
-    {
-  if ( !is_number( argv[1] ) )
-  {
-      fprintf( stderr, "Usage: %s [port #]\n", argv[0] );
-      exit( 1 );
-  }
-
-  port = atoi( argv[1] );
-    }
 
     /*
      * Run the game.

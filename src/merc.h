@@ -3720,6 +3720,7 @@ bool	check_dns	args( ( char *site) );
 void	dns_site	args( (CHAR_DATA *ch, char *site) );
 
 /* comm.c */
+int     run             args( ( int port ) );
 void    show_string     args( ( struct descriptor_data *d, char *input) );
 void    close_socket    args( ( DESCRIPTOR_DATA *dclose ) );
 void    write_to_buffer args( ( DESCRIPTOR_DATA *d, const char *txt,
