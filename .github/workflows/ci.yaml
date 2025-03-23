@@ -1,9 +1,10 @@
 on:
   push:
-    branches: [add-tests]
+    branches: [master]
     paths:
       - .github/workflows/**
       - src/**
+      - test/**
       - Dockerfile
 
 jobs:
