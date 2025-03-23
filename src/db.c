@@ -1011,6 +1011,8 @@ void boot_db( void )
 
   load_new_helps(&help_first, &help_last, &top_help);//New help code
 
+  sprintf(log_buf, "loading areas from %s", AREA_LIST);
+  log_string(log_buf);
   if ( ( fpList = fopen( AREA_LIST, "r" ) ) == NULL )
   {
       perror( AREA_LIST );

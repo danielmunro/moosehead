@@ -1,0 +1,20 @@
+FROM ubuntu:24.04
+
+RUN apt update
+RUN apt install -y -- curl gcc libgc-dev libatomic-ops-dev csh make file gdb git
+
+RUN git clone https://github.com/zorgnax/libtap.git
+RUN cd libtap && make && make install
+RUN ldconfig
+
+WORKDIR /mud/moosehead
+COPY src src
+COPY test test
+
+WORKDIR /mud/moosehead/src
+RUN make
+
+WORKDIR /mud/moosehead/test
+RUN make
+
+CMD ["./test"]
