@@ -30,6 +30,7 @@ $ ./run.sh mhs:latest
   * `src/o`
   * `src/quest_log*.txt`
   * `src/pload.c`
+  * `src/foo.c`
   * `**/*.eql`
 * Reduce the number of compiler warnings
 * GH pages -- need to define this
