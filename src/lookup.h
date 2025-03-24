@@ -1,4 +1,3 @@
-/* $Id: lookup.h,v 1.8 2000/02/08 02:11:42 mud Exp $ */
 #define MAX_IMM_COMM 27
 /* various lookup procedures that use table.h */
 

@@ -27,11 +27,7 @@
     G  E  I  R  N  L  R  U  S  M  E  Z  U  G  A
 */
 
-#if defined(macintosh)
-#include <types.h>
-#else
 #include <sys/types.h>
-#endif
 #include <stdio.h>
 #include <time.h>
 #include "merc.h"

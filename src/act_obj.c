@@ -14,13 +14,8 @@
  *  around, comes around.                                                  *
  ***************************************************************************/
 
-#if defined(macintosh)
-#include <types.h>
-#include <time.h>
-#else
 #include <sys/types.h>
 #include <sys/time.h>
-#endif
 #include <gc.h>
 #include <stdio.h>
 #include <string.h>

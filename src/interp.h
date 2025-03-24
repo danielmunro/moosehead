@@ -1,4 +1,3 @@
-/* $Id: interp.h,v 1.125 2004/04/25 00:32:05 boogums Exp $" */
 /* this is a listing of all the commands and command related data */
 
 /* for command types */

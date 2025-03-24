@@ -27,7 +27,6 @@ This header file is not to be removed.
 #include <unistd.h>
 #include <errno.h>
 #include <time.h>
-// #include <sys/msg.h>
 #include "merc.h"
 #include "recycle.h"
 

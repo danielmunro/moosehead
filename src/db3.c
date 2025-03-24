@@ -23,14 +23,9 @@
 #include <gc.h>
 #endif
 #include <time.h>
-#if defined(macintosh)
-#include <types.h>
-#else
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/resource.h>
-#endif
- 
 #include "merc.h"
 #include "tables.h"
 #include "db.h"

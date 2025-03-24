@@ -15,12 +15,8 @@
  *  around, comes around.                                                  *
  ***************************************************************************/
 
-#if defined(macintosh)
-#include <types.h>
-#else
 #include <sys/types.h>
 #include <sys/time.h>
-#endif
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -31,9 +27,6 @@
 #include "interp.h"
 #include "lookup.h"
 #include "gladiator.h"
-
-/* command procedures needed */
-//DECLARE_DO_FUN(do_quit  );
 
 /* In comm.c */
 void count_clanners(void);
