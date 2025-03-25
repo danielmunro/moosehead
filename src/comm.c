@@ -126,8 +126,7 @@ bool                wizlock;            /* Game is wizlocked            */
 bool                newlock;            /* Game is newlocked            */
 bool		    no_dns;
 char                str_boot_time[MAX_INPUT_LENGTH];
-time_t              current_time;       /* time of this pulse */        
-bool		    telnet;		/* if we're binding to the telnet port*/
+time_t              current_time;       /* time of this pulse */
 sh_int		    avarice_kills;
 sh_int		    demise_kills;
 sh_int		    honor_kills;
@@ -145,7 +144,7 @@ sh_int		    posse_ruffian_kills;
 key_t msg_key;
 int   msg_id;
 
-void    game_loop_unix          args( ( int control[] ) );
+void    game_loop_unix          args( ( int control ) );
 int     init_socket             args( ( int port ) );
 void    init_descriptor         args( ( int control ) );
 bool    read_from_descriptor    args( ( DESCRIPTOR_DATA *d ) );
@@ -178,7 +177,7 @@ bool is_creation(DESCRIPTOR_DATA *d);
 
 int run(int port) {
     struct timeval now_time;
-    int control[2] = {-1,-1};
+    int control = -1;
 
     /*
      * Memory debugging if needed.
@@ -194,36 +193,36 @@ int run(int port) {
     current_time        = (time_t) now_time.tv_sec;
     strcpy( str_boot_time, ctime( &current_time ) );
 
-
-    /* Set our eUID to that of the user 'mud' */
-    seteuid(MUD_UID);
+    /*
+     * Set the uid to a hardcoded value (1001).  This probably had a good
+     * historical reason to be set but can probably all be removed.  If
+     * removed, we need to make sure the game can still write to the files
+     * in the docker data volume.
+     */
+    if (seteuid(MUD_UID) == -1) {
+        sprintf(log_buf, "failed to set uid to %d", MUD_UID);
+        log_error(log_buf);
+        exit(1);
+        return 1;
+    }
 
     /*
      * Run the game.
      */
-    telnet=FALSE;
-    control[0] = init_socket( port );
-    if( seteuid(0) == 0 )
-    {
-      telnet = TRUE;
-      control[1] = init_socket( 23 );
-    }
-    if( telnet ) seteuid(MUD_UID);
-    boot_db( );
+    control = init_socket(port);
+    boot_db();
 
     /*
      * Get a fresh CSV dump of objects on every game startup.
      */
     dump_obj_csv();
 
-    sprintf( log_buf, "MHS is ready on port %d.", port );
-    log_string( log_buf );
+    sprintf(log_buf, "MHS is ready on port %d.", port);
+    log_string(log_buf);
 
-    game_loop_unix( control );
+    game_loop_unix(control);
 
-    close (control[0]);
-    if( telnet )
-      close (control[1]);
+    close(control);
 
     /*
      * That's all, folks.
@@ -308,7 +307,7 @@ void dummy()
 	return;
 }
 
-void game_loop_unix( int control[] )
+void game_loop_unix(int control)
 {
     static struct timeval null_time;
     struct timeval last_time;
@@ -339,14 +338,9 @@ void game_loop_unix( int control[] )
   FD_ZERO( &in_set  );
   FD_ZERO( &out_set );
   FD_ZERO( &exc_set );
-  FD_SET( control[0], &in_set );
-  if(control[0] > maxdesc)
-    maxdesc = control[0];
-  if( telnet )
-  {
-  FD_SET( control[1], &in_set );
-  if(control[1] > maxdesc)
-    maxdesc = control[1];
+  FD_SET( control, &in_set );
+  if(control > maxdesc) {
+    maxdesc = control;
   }
   for ( d = descriptor_list; d; d = d->next )
   {
@@ -365,12 +359,8 @@ void game_loop_unix( int control[] )
   /*
    * New connection?
    */
-  if ( FD_ISSET( control[0], &in_set ) )
-      init_descriptor( control[0] );
-  if( telnet )
-  {
-  if ( FD_ISSET( control[1], &in_set ) )
-      init_descriptor( control[1] );
+  if ( FD_ISSET( control, &in_set ) ) {
+      init_descriptor(control);
   }
 
   /*
@@ -576,31 +566,28 @@ void count_clanners(void)
 
 }
 
-void init_descriptor( int control )
-{
+void init_descriptor(int control) {
     char buf[MAX_STRING_LENGTH];
     DESCRIPTOR_DATA *dnew;
     struct sockaddr_in sock;
     struct hostent *from = NULL;
     int desc;
-    int size;
+    socklen_t addr_len = sizeof(sock);
 
-    size = sizeof(sock);
-    getsockname( control, (struct sockaddr *) &sock, &size );
-    if ( ( desc = accept( control, (struct sockaddr *) &sock, &size) ) < 0 )
-    {
-  perror( "New_descriptor: accept" );
-  return;
+    getsockname(control, (struct sockaddr *) &sock, &addr_len);
+
+    if ((desc = accept(control, (struct sockaddr *) &sock, &addr_len)) < 0) {
+        perror("New_descriptor: accept");
+        return;
     }
 
 #if !defined(FNDELAY)
 #define FNDELAY O_NDELAY
 #endif
 
-    if ( fcntl( desc, F_SETFL, FNDELAY ) == -1 )
-    {
-  perror( "New_descriptor: fcntl: FNDELAY" );
-  return;
+    if (fcntl(desc, F_SETFL, FNDELAY) == -1) {
+        perror("New_descriptor: fcntl: FNDELAY");
+        return;
     }
 
     /*
@@ -608,61 +595,39 @@ void init_descriptor( int control )
      */
     dnew = new_descriptor();
 
-    dnew->descriptor    = desc;
-    dnew->connected     = CON_GET_NAME;
-    dnew->showstr_head  = NULL;
+    dnew->descriptor = desc;
+    dnew->connected = CON_GET_NAME;
+    dnew->showstr_head = NULL;
     dnew->showstr_point = NULL;
-    dnew->outsize       = 2048;
+    dnew->outsize = 2048;
 #ifdef OLC_VERSION
     dnew->outbuf        = alloc_mem( dnew->outsize );
 #else  /*game version*/
-    dnew->outbuf        = GC_MALLOC( dnew->outsize );
+    dnew->outbuf = GC_MALLOC(dnew->outsize);
 #endif
 
-    size = sizeof(sock);
-    if ( getpeername( desc, (struct sockaddr *) &sock, &size ) < 0 )
-    {
-  perror( "New_descriptor: getpeername" );
-  dnew->host = str_dup( "(unknown)" );
+    if (getpeername(desc, (struct sockaddr *) &sock, &addr_len) < 0) {
+        perror("New_descriptor: getpeername");
+        dnew->host = str_dup("(unknown)");
+    } else {
+        /*
+         * Would be nice to use inet_ntoa here but it takes a struct arg,
+         * which ain't very compatible between gcc and system libraries.
+         */
+        int addr;
+
+        addr = ntohl(sock.sin_addr.s_addr);
+        sprintf(buf, "%d.%d.%d.%d",
+                (addr >> 24) & 0xFF, (addr >> 16) & 0xFF,
+                (addr >> 8) & 0xFF, (addr) & 0xFF
+        );
+        sprintf(log_buf, "Sock.sinaddr:  %s", buf);
+        log_string(log_buf);
+
+        dnew->port = ntohs(sock.sin_port);
+        dnew->host = str_dup(from ? from->h_name : buf);
     }
-    else
-    {
-  /*
-   * Would be nice to use inet_ntoa here but it takes a struct arg,
-   * which ain't very compatible between gcc and system libraries.
-   */
-  int addr;
 
-  addr = ntohl( sock.sin_addr.s_addr );
-  sprintf( buf, "%d.%d.%d.%d",
-      ( addr >> 24 ) & 0xFF, ( addr >> 16 ) & 0xFF,
-      ( addr >>  8 ) & 0xFF, ( addr       ) & 0xFF
-      );
-log_string("checkpoint a");
-  sprintf( log_buf, "Sock.sinaddr:  %s", buf );
-log_string("checkpoint b");
-  log_string( log_buf );
-
-log_string("checkpoint c");
-  if ( 0) { // !no_dns ) {
-  alarm(30);
-  strcpy(dns_buf,buf);
-	log_string("GOOBER 2");
-  if(!check_dns(buf))
-{
-	log_string("GOOBER 1 ");
-  from = gethostbyaddr( (char *) &sock.sin_addr,
-      sizeof(sock.sin_addr), AF_INET );
-	log_string("GOOBER 2");
-}
-  alarm(0);
-  strcpy(dns_buf,"");
-  }
-
-      dnew->port = ntohs (sock.sin_port);
-      dnew->host = str_dup( from ? from->h_name : buf );
-    }
-  
     /*
      * Swiftest: I added the following to ban sites.  I don't
      * endorse banning of sites, but Copper has few descriptors now
@@ -671,38 +636,38 @@ log_string("checkpoint c");
      *
      * Furey: added suffix check by request of Nickel of HiddenWorlds.
      */
-    if ( check_ban(dnew->host,BAN_ALL))
-    {
-      sprintf( log_buf, "Ban denied %s.", dnew->host );
-      log_string( log_buf );
-  write_to_descriptor( desc,
-      "Your site has been banned from this Sled.\n\r", 0, dnew );
-  write_to_descriptor( desc,
-      "Bans are not given lightly.  You probobly earned it.  Go away.\n\r", 0, dnew );
-  write_to_descriptor( desc, 
-      "If you are connecting from mudconnector.com, please use a different IP to connect to our SLED from.  Thank you The MHS Admin Team.\n\r", 0, dnew);
+    if (check_ban(dnew->host, BAN_ALL)) {
+        sprintf(log_buf, "Ban denied %s.", dnew->host);
+        log_string(log_buf);
+        write_to_descriptor(desc,
+                            "Your site has been banned from this Sled.\n\r", 0, dnew);
+        write_to_descriptor(desc,
+                            "Bans are not given lightly.  You probobly earned it.  Go away.\n\r", 0, dnew);
+        write_to_descriptor(desc,
+                            "If you are connecting from mudconnector.com, please use a different IP to connect to our SLED from.  Thank you The MHS Admin Team.\n\r",
+                            0, dnew);
 #if defined (GAME_VERSION)
-  shutdown( desc, 2 );
-  close( desc );
-  free_descriptor(dnew);
-  return;
+        shutdown( desc, 2 );
+        close( desc );
+        free_descriptor(dnew);
+        return;
 #endif
     }
     /*
      * Init descriptor data.
      */
-    dnew->next                  = descriptor_list;
-    descriptor_list             = dnew;
+    dnew->next = descriptor_list;
+    descriptor_list = dnew;
 
     /*
      * Send the greeting.
      */
     {
-  extern char * help_greeting;
-  if ( help_greeting[0] == '.' )
-      write_to_buffer( dnew, help_greeting+1, 0 );
-  else
-      write_to_buffer( dnew, help_greeting  , 0 );
+        extern char *help_greeting;
+        if (help_greeting[0] == '.')
+            write_to_buffer(dnew, help_greeting + 1, 0);
+        else
+            write_to_buffer(dnew, help_greeting, 0);
     }
 
     return;
@@ -1317,8 +1282,8 @@ void bust_a_prompt( CHAR_DATA *ch )
 {
     char buf[MAX_STRING_LENGTH];
     char buf2[MAX_STRING_LENGTH];
-    const char *str;
-    const char *i;
+    const char *str = "";
+    const char *i = "";
     char *point;
     int j;
     char doors[MAX_INPUT_LENGTH];
@@ -1640,7 +1605,7 @@ void bust_a_prompt( CHAR_DATA *ch )
 	    sprintf( buf2 + 2, "%d{x", ch->move );
 	     i = buf2; break;
  	 case 'w' :
-	    sprintf( buf2, "{W%d{x", get_carry_weight(ch) / 10);
+	    sprintf( buf2, "{W%ld{x", get_carry_weight(ch) / 10);
 	   i = buf2; break;
  	 case 'W' :
 	    sprintf( buf2, "{W%d{x", can_carry_w(ch) / 10);
@@ -3584,7 +3549,7 @@ if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
     set_clan_skills(ch);
   }
 
-  if (ch->pcdata->last_level == 0 || ch->pcdata->last_level == NULL)
+  if (ch->pcdata->last_level == 0)
      ch->pcdata->last_level = 1; /* Fixes symbol bugs */
   if ( ch->level == 0 )
   {
@@ -3670,7 +3635,7 @@ if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
     if( (!IS_IMMORTAL(ch) || (ch->incog_level == 0 && ch->invis_level == 0))
 	&& ch->desc != NULL )
       {
-  pnet("$N has entered Boinga.",ch,NULL,PNET_LOGINS,NULL,IS_IMMORTAL(ch) ? get_trust(ch) : 1);
+  pnet("$N has entered Boinga.",ch,NULL,PNET_LOGINS,0,IS_IMMORTAL(ch) ? get_trust(ch) : 1);
       }
   do_version_up(ch);
 
@@ -3719,72 +3684,68 @@ if (IS_SET(ch->mhs,MHS_HIGHLANDER))
     return;
 }
 
-bool check_parse_surname( char *name )
-{
+bool check_parse_surname(char *name) {
     int clan;
 
     /*
      * Reserved words.
      */
-  if ( is_name( name, 
-      "all auto immortal self someone something the you outcast loner on off") )
-    return FALSE;
-  
+    if (is_name(name,
+                "all auto immortal self someone something the you outcast loner on off"))
+        return FALSE;
+
     /* check clans */
-    for (clan = 0; clan < MAX_CLAN; clan++)
-    {
-    	if (LOWER(name[0]) == LOWER(clan_table[clan].name[0])
-    	&&  !str_cmp(name,clan_table[clan].name))
-    	   return FALSE;
+    for (clan = 0; clan < MAX_CLAN; clan++) {
+        if (LOWER(name[0]) == LOWER(clan_table[clan].name[0])
+            && !str_cmp(name, clan_table[clan].name))
+            return FALSE;
     }
 
-    if (str_cmp(capitalize(name),"Rusty") && (!str_prefix("rusty",name)
-        || !str_suffix("rusty",name)))
-    return FALSE;
+    if (str_cmp(capitalize(name), "Rusty") && (!str_prefix("rusty", name)
+                                               || !str_suffix("rusty", name)))
+        return FALSE;
 
     /*
      * Length restrictions.
      */
-     
-    if ( strlen(name) <  2 )
-  return FALSE;
 
-    if ( strlen(name) > 12 )
-  return FALSE;
+    if (strlen(name) < 2)
+        return FALSE;
+
+    if (strlen(name) > 12)
+        return FALSE;
 
     /*
      * Alphanumerics only.
      * Lock out IllIll twits.
      */
     {
-  char *pc;
-  bool fIll,adjcaps = FALSE,cleancaps = FALSE;
-  int total_caps = 0;
+        char *pc;
+        bool fIll, adjcaps = FALSE, cleancaps = FALSE;
+        int total_caps = 0;
 
-  fIll = TRUE;
-  for ( pc = name; *pc != '\0'; pc++ )
-  {
-      if ( !isalpha(*pc) && *pc != 0x27 )
-    return FALSE;
+        fIll = TRUE;
+        for (pc = name; *pc != '\0'; pc++) {
+            if (!isalpha(*pc) && *pc != 0x27)
+                return FALSE;
 
-      if ( isupper(*pc)) /* ugly anti-caps hack */
-      {
-    if (adjcaps)
-        cleancaps = TRUE;
-    total_caps++;
-    adjcaps = TRUE;
-      }
-      else
-    adjcaps = FALSE;
+            if (isupper(*pc)) /* ugly anti-caps hack */
+            {
+                if (adjcaps)
+                    cleancaps = TRUE;
+                total_caps++;
+                adjcaps = TRUE;
+            } else
+                adjcaps = FALSE;
 
-      if ( LOWER(*pc) != 'i' && LOWER(*pc) != 'l' )
-    fIll = FALSE;
-  }
-  if ( fIll )
-      return FALSE;
+            if (LOWER(*pc) != 'i' && LOWER(*pc) != 'l')
+                fIll = FALSE;
+        }
+        if (fIll)
+            return FALSE;
 
-  if (cleancaps || (total_caps > (strlen(name)) / 2 && strlen(name) < 3))
-      return FALSE;
+        if (cleancaps || (total_caps > (strlen(name)) / 2 && strlen(name) < 3))
+            return FALSE;
     }
 
     return TRUE;
@@ -4235,55 +4196,43 @@ void page_to_char( const char *txt, CHAR_DATA *ch )
 
 
 /* string pager */
-void show_string(struct descriptor_data *d, char *input)
-{
-    char buffer[4*MAX_STRING_LENGTH];
+void show_string(struct descriptor_data *d, char *input) {
+    char buffer[4 * MAX_STRING_LENGTH];
     char buf[MAX_INPUT_LENGTH];
     register char *scan, *chk;
     int lines = 0, toggle = 1;
-    int show_lines;
+    int show_lines = 0;
 
-    one_argument(input,buf);
-    if (buf[0] != '\0')
-    {
-	  if (d->showstr_head)
-  	  {
-      	   free_mem(d->showstr_head,strlen(d->showstr_head));
-     	   d->showstr_head = 0;
-  	  }
-  	  d->showstr_point  = 0;
- 	  return;
-    }
-
-    if (d->character)
-	show_lines = d->character->lines;
-    else
-	show_lines = 0;
-
-    for (scan = buffer; ; scan++, d->showstr_point++)
-    {
-	if (((*scan = *d->showstr_point) == '\n' || *scan == '\r')
-	   && (toggle = -toggle) < 0)
-	   lines++;
-
-  else if (!*scan || (show_lines > 0 && lines >= show_lines))
-  {
-      *scan = '\0';
-      write_to_buffer(d,buffer,strlen(buffer));
-      for (chk = d->showstr_point; isspace(*chk); chk++);
-      {
-	if (!*chk)
-	{
-           if (d->showstr_head)
-           {
-		free_mem(d->showstr_head,strlen(d->showstr_head));
-		d->showstr_head = 0;
+    one_argument(input, buf);
+    if (buf[0] != '\0') {
+        if (d->showstr_head) {
+            free_mem(d->showstr_head, strlen(d->showstr_head));
+            d->showstr_head = 0;
         }
-        d->showstr_point  = 0;
+        d->showstr_point = 0;
+        return;
     }
-      }
-      return;
-  }
+
+    if (d->character) {
+        show_lines = d->character->lines;
+    }
+
+    for (scan = buffer;; scan++, d->showstr_point++) {
+        if (((*scan = *d->showstr_point) == '\n' || *scan == '\r') && (toggle = -toggle) < 0) {
+            lines++;
+        } else if (!*scan || (show_lines > 0 && lines >= show_lines)) {
+            *scan = '\0';
+            write_to_buffer(d, buffer, strlen(buffer));
+            for (chk = d->showstr_point; isspace(*chk); chk++) {}
+            if (!*chk) {
+                if (d->showstr_head) {
+                    free_mem(d->showstr_head, strlen(d->showstr_head));
+                    d->showstr_head = 0;
+                }
+                d->showstr_point = 0;
+            }
+            return;
+        }
     }
     return;
 }
