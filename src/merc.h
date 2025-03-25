@@ -17,19 +17,8 @@
 
 #include <sys/time.h>
 
-#define unix
-
-#if     defined(_AIX)
-#if     !defined(const)
-#define const
-#endif
-typedef int                             sh_int;
-typedef int                             bool;
-#define unix
-#else
-typedef short   int                     sh_int;
-typedef unsigned char                   bool;
-#endif
+typedef short int     sh_int;
+typedef unsigned char bool;
 
 /*
  * Function types.
@@ -59,8 +48,6 @@ typedef void MENU_FUN   args( ( CHAR_DATA *ch, int menu_id ) );
 /* system calls */
 int unlink();
 int system();
-
-
 
 /*
  * Short scalar types.
@@ -3310,23 +3297,11 @@ extern sh_int	gsn_asphyxiate;
 extern sh_int   gsn_confusion;
 extern sh_int   gsn_cone_of_silence;
 extern sh_int gsn_blade_barrier;
+
 /*
  * Utility macros.
  */
-#define IS_VALID(data)          ((data) != NULL && (data)->valid)
-#define VALIDATE(data)          ((data)->valid = TRUE)
-#define INVALIDATE(data)        ((data)->valid = FALSE)
-#define UMIN(a, b)              ((a) < (b) ? (a) : (b))
-#define UMAX(a, b)              ((a) > (b) ? (a) : (b))
-#define URANGE(a, b, c)         ((b) < (a) ? (a) : ((b) > (c) ? (c) : (b)))
-#define LOWER(c)                ((c) >= 'A' && (c) <= 'Z' ? (c)+'a'-'A' : (c))
-#define UPPER(c)                ((c) >= 'a' && (c) <= 'z' ? (c)+'A'-'a' : (c))
-#define IS_SET(flag, bit)       ((flag) & (bit))
-#define SET_BIT(var, bit)       ((var) |= (bit))
-#define REMOVE_BIT(var, bit)    ((var) &= ~(bit))
-#define TOGGLE_BIT(var,bit)     ((var) ^= (bit))
-
-
+#include "macros.h"
 
 /*
  * Character macros.
@@ -3480,96 +3455,6 @@ extern sh_int      posse_killer_kills;
 extern sh_int      posse_thief_kills;
 extern sh_int      posse_ruffian_kills;
 extern sh_int      posse_thug_kills;
-
-/*
- * OS-dependent declarations.
- * These are all very standard library functions,
- *   but some systems have incomplete or non-ansi header files.
- */
-#if     defined(_AIX)
-char *  crypt           args( ( const char *key, const char *salt ) );
-#endif
-
-#if     defined(apollo)
-int     atoi            args( ( const char *string ) );
-void *  calloc          args( ( unsigned nelem, size_t size ) );
-char *  crypt           args( ( const char *key, const char *salt ) );
-#endif
-
-#if     defined(hpux)
-char *  crypt           args( ( const char *key, const char *salt ) );
-#endif
-
-#if     defined(linux)
-char *  crypt           args( ( const char *key, const char *salt ) );
-#endif
-
-#if     defined(macintosh)
-#define NOCRYPT
-#if     defined(unix)
-#undef  unix
-#endif
-#endif
-
-#if     defined(MIPS_OS)
-char *  crypt           args( ( const char *key, const char *salt ) );
-#endif
-
-#if     defined(MSDOS)
-#define NOCRYPT
-#if     defined(unix)
-#undef  unix
-#endif
-#endif
-
-#if     defined(NeXT)
-char *  crypt           args( ( const char *key, const char *salt ) );
-#endif
-
-#if     defined(sequent)
-char *  crypt           args( ( const char *key, const char *salt ) );
-int     fclose          args( ( FILE *stream ) );
-int     fprintf         args( ( FILE *stream, const char *format, ... ) );
-/*int     fread           args( ( void *ptr, int size, int n, FILE *stream 
-) );*/
-int     fseek           args( ( FILE *stream, long offset, int ptrname ) );
-void    perror          args( ( const char *s ) );
-int     ungetc          args( ( int c, FILE *stream ) );
-#endif
-
-#if     defined(sun)
-char *  crypt           args( ( const char *key, const char *salt ) );
-int     fclose          args( ( FILE *stream ) );
-int     fprintf         args( ( FILE *stream, const char *format, ... ) );
-#if     defined(SYSV)
-/*siz_t   fread           args( ( void *ptr, size_t size, size_t n, 
-          FILE *stream) );*/
-#else/*
-int     fread           args( ( void *ptr, int size, int n, FILE *stream 
-) );*/ 
-#endif
-int     fseek           args( ( FILE *stream, long offset, int ptrname ) );
-void    perror          args( ( const char *s ) );
-int     ungetc          args( ( int c, FILE *stream ) );
-#endif
-
-#if     defined(ultrix)
-char *  crypt           args( ( const char *key, const char *salt ) );
-#endif
-
-
-
-/*
- * The crypt(3) function is not available on some operating systems.
- * In particular, the U.S. Government prohibits its export from the
- *   United States to foreign countries.
- * Turn on NOCRYPT to keep passwords in plain text.
- */
-#if     defined(NOCRYPT)
-#define crypt(s1, s2)   (s1)
-#endif
-
-
 
 /*
  * Data files used by the server.
@@ -3961,12 +3846,9 @@ char*	exit_bit_name	args( ( int exit_flags ) );
 
 /* interp.c */
 void    interpret       args( ( CHAR_DATA *ch, char *argument ) );
-bool    is_number       args( ( char *arg ) );
-int     number_argument args( ( char *argument, char *arg ) );
-int     mult_argument   args( ( char *argument, char *arg) );
-char *  one_argument    args( ( char *argument, char *arg_first ) );
-char *  one_argument_cs args( ( char *argument, char *arg_first ) );
 bool	check_social	args( ( CHAR_DATA *ch, char *command, char *argument ));
+
+#include "input.h"
 
 /* clan.c */
 int calculate_bonus_merit args((CHAR_DATA *ch, bool new_join));

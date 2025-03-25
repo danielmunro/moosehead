@@ -4944,22 +4944,6 @@ void bug(const char *str, int param) {
 }
 
 
-
-/*
- * Writes a string to stdout.  No specific log level.
- */
-void log_string(const char *str) {
-    printf("%s\n", str);
-}
-
-/*
- * Writes a string to stderr.
- */
-void log_error(const char *str) {
-    fprintf(stderr, "%s\n", str);
-}
-
-
 /*
  * This function is here to aid in debugging.
  * If the last expression in a function is another function call,

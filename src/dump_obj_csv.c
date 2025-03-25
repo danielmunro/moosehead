@@ -77,7 +77,6 @@ void output_row(FILE *fp, OBJ_INDEX_DATA *obj, const char *area_name, const char
 }
 
 void dump_obj_csv() {
-
     log_string("generate latest items list csv");
 
     // get the file pointer for the csv output

@@ -51,6 +51,11 @@
 #include "recycle.h"
 #include "gladiator.h"
 #include "tables.h"
+#include "dump_obj_csv.h"
+#include "handler.h"
+#include "act_comm.h"
+#include "clan.h"
+
 /* command procedures needed */
 DECLARE_DO_FUN	( action_wraithform );
 DECLARE_DO_FUN (action_zealot_convert);
