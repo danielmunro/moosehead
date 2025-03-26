@@ -1,7 +1,7 @@
 FROM ubuntu:24.04
 
 RUN apt update
-RUN apt install -y -- curl gcc libgc-dev libatomic-ops-dev csh make file gdb
+RUN apt install -y -- curl gcc libgc-dev libatomic-ops-dev make file gdb
 
 WORKDIR /mud/moosehead
 COPY src src
