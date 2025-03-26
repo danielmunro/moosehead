@@ -1,5 +1,14 @@
 # Changelog
 
+## 2025-03-26
+
+* fight.c - fix compiler warnings, format the file.
+
+## 2025-03-25
+
+* comm.c - fix compiler warnings, mainly wrong types, implicit declarations, and indentation.
+* Add tests for `input.c`.
+
 ## 2025-03-23
 
 * Add a test target.  Add tests for recently updated code.  Add a step in CI to run tests before building and pushing a new docker image.
