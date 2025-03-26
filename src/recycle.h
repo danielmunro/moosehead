@@ -1,4 +1,3 @@
-/* $Id: recycle.h,v 1.6 1999/11/23 20:36:49 mud Exp $" */
 /* externs */
 extern char str_empty[1];
 extern int mobile_count;
@@ -128,9 +127,6 @@ void              free_range (VNUM_RANGE_DATA *range);
 #define MD MEM_DATA
 long  get_pc_id args( (void) );
 long  get_mob_id args( (void) );
-/* MD  *new_mem_data args( (void) );
-void  free_mem_data args( ( MEM_DATA *memory) );
-MD  *find_memory args( (MEM_DATA *memory, long id) );*/
 #undef MD
 
 /* buffer procedures */
