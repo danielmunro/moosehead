@@ -681,8 +681,9 @@ void interpret( CHAR_DATA *ch, char *argument )
     }
     *ps=0;
 /* Lets see if this works...NIGHTDAGGER */
-if (cmd_table[cmd].log != LOG_NEVER)
-  wiznet(log_buf,ch,NULL,WIZ_SECURE,0,get_trust(ch));
+if (cmd_table[cmd].log != LOG_NEVER) {
+    wiznet(log_buf, ch, NULL, WIZ_SECURE, 0, get_trust(ch));
+}
   log_string( log_buf );
     }
 /* Disabling the "temporary" log all
