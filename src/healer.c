@@ -17,7 +17,7 @@ void do_heal(CHAR_DATA *ch, char *argument)
     char arg[MAX_INPUT_LENGTH];
     int cost,sn;
     SPELL_FUN *spell;
-    char *words;
+    char *words = "";
     bool glad_healing = FALSE;
 
     /* check for healer */
