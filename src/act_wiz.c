@@ -56,15 +56,13 @@ DECLARE_DO_FUN(do_disconnect);
 DECLARE_DO_FUN(do_help);
 DECLARE_DO_FUN(do_clantalk);
 
-//bool override;
 /*
  * Local functions.
  */
-ROOM_INDEX_DATA * find_locationargs( CHAR_DATA *ch, char *arg );
-bool check_parse_nameargs( char *name );
-void remove_highlanderargs( CHAR_DATA *ch,CHAR_DATA *victim );
-char * format_obj_to_charargs( OBJ_DATA *obj, CHAR_DATA *ch,
-				bool fShort );
+ROOM_INDEX_DATA *find_location(CHAR_DATA *ch, char *arg);
+bool check_parse_name(char *name);
+void remove_highlander (CHAR_DATA *ch,CHAR_DATA *victim);
+char *format_obj_to_char (OBJ_DATA *obj, CHAR_DATA *ch, bool fShort);
 
 char * const wear_name[] = { "<{Wused as light{x>     ",
 		"<{Wworn on finger{x>    ", "<{Wworn on finger{x>    ",
