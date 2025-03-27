@@ -30,6 +30,8 @@
 
 #include "merc.h"
 #include "recycle.h"
+#include "input.h"
+#include "comm.h"
 
 void clear_macro_marks ( CHAR_DATA *ch )
 {
@@ -40,37 +42,6 @@ void clear_macro_marks ( CHAR_DATA *ch )
     macro->mark = FALSE;
     macro = macro->next;
   }  
-}
-
-char *one_argument_spec ( char *argument, char *arg_first )
-{
-    char cEnd;
-
-    while ( isspace(*argument) )
-  argument++;
-
-    cEnd = ' ';
-    if ( *argument == '\'' || *argument == '"' )
-  cEnd = *argument++;
-
-    while ( *argument != '\0' )
-    {
-  if ( *argument == cEnd )
-  {
-      argument++;
-      break;
-  }
-  
-  *arg_first = *argument;
-  arg_first++;
-  argument++;
-    }
-    *arg_first = '\0';
-
-    while ( isspace(*argument) )
-  argument++;
-
-    return argument;
 }
 
 bool check_macro ( CHAR_DATA *ch, char *argument )
@@ -110,7 +81,7 @@ bool check_macro ( CHAR_DATA *ch, char *argument )
           cnt = buf[++idx] - '1';
           if ((cnt >= 0) && (cnt < 10)) {
             if (argp[cnt]) {
-              one_argument_spec (argp[cnt],arg);
+              one_argument_cs (argp[cnt],arg);
               strcat (buf2,arg);
             }
           }
