@@ -1471,11 +1471,12 @@ void do_clantalk( CHAR_DATA *ch, char *argument )
       send_timestamp(victim, TRUE, TRUE);
       if ( !is_same_clan(ch,victim) )
       {
-        if(ch->pcdata->clan_info)
-	  sprintf(buf,"<%s> ",ch->pcdata->clan_info->clan->name);
-        else
-	  sprintf(buf,"[%s] ",clan_table[ch->clan].who_name);
-	  send_to_char(buf,victim);
+        if(ch->pcdata->clan_info) {
+            sprintf(buf, "<%s> ", ch->pcdata->clan_info->clan->name);
+        } else {
+            sprintf(buf, "[%s] ", clan_table[ch->clan].who_name);
+        }
+	    send_to_char(buf,victim);
       } 
 
     channel_vis_status(ch,d->character);
@@ -2637,7 +2638,6 @@ void do_quit_command ( CHAR_DATA *ch, char *argument )
 void do_quit( CHAR_DATA *ch, char *argument )
 {
     DESCRIPTOR_DATA *d, *d_next, *d_glad;
-    int loss;
     long id;
     char buf[MAX_STRING_LENGTH];
     char arg[MAX_STRING_LENGTH];
@@ -2657,48 +2657,21 @@ void do_quit( CHAR_DATA *ch, char *argument )
   }
   edit_stop(ch);
   end_long_edit(ch, NULL);/* Handles its own safety checks */
-/*
-    if (IS_SET(ch->mhs,MHS_SHAPESHIFTED) && (ch->race != ch->save_race))
-       shapeshift_remove(ch);
-*/
-    /*if ( ch->in_room->vnum >= 0 &&
-     (ch->in_room->vnum < 3001 || ch->in_room->vnum >3383)
-     && (ch->in_room->vnum < 9500 || ch->in_room->vnum >9799)
-        && ch->in_room->vnum != 2 && !IS_IMMORTAL(ch) 
-  && !IS_SET(ch->in_room->room_flags,ROOM_SAFE)
-  && !IS_SET(ch->in_room->room_flags,ROOM_PRIVATE)
-    )
-       {
-        loss = 2 * ch->level;
-        gain_exp(ch, 0 - loss);
-        send_to_char( 
-  "You lost experience for quitting outside of town.\n\r", ch );
-  if(ch->level >= 40 && number_percent() >50 
-	&& (!IS_AFFECTED(ch,AFF_CURSE) || !IS_SET(ch->mhs,MHS_CURSE)) &&
-	!ch->in_room->area->no_transport ) 
-    {
-	sprintf(buf,"%s sends you to visit Hassan.\n\r",
-		deity_table[ch->pcdata->deity].pname);
-      send_to_char(buf,ch);
-       char_from_room (ch);
-       clear_mount(ch);
-       char_to_room (ch,get_room_index( ROOM_VNUM_TEMPLE ));          }
-  }*/
-    send_to_char( 
+  send_to_char(
 	"Alas, all good things must come to an end.\n\r",ch);
     act( "$n has left the game.", ch, NULL, NULL, TO_ROOM, FALSE );
     sprintf( log_buf, "%s has quit.", ch->name );
-    log_string( log_buf );
-    if (ch->desc == NULL)
-    strcpy(host,"linkdead");
-  else
-  strcpy(host,ch->desc->host);
+  log_string( log_buf );
+  if (ch->desc == NULL) {
+      strcpy(host, "linkdead");
+  } else {
+      strcpy(host, ch->desc->host);
+  }
   wiznet("$N rejoins the real world.",ch,NULL,WIZ_LOGINS,WIZ_SITES,get_trust(ch));
   if( (!IS_IMMORTAL(ch) || (ch->incog_level == 0 && ch->invis_level == 0))
 	&& !str_cmp(arg, "") )
   {
-    //pnet("$N leaves Boinga.",ch,NULL,PNET_LOGINS,NULL,get_trust(ch));
-    pnet("$N leaves Boinga.",ch,NULL,PNET_LOGINS,NULL,IS_IMMORTAL(ch) ? get_trust(ch) : 1);
+    pnet("$N leaves Boinga.",ch,NULL,PNET_LOGINS,0,IS_IMMORTAL(ch) ? get_trust(ch) : 1);
   }
          sprintf( buf, "%s@%s has quit.", ch->name, host );
         wiznet(buf,NULL,NULL,WIZ_SITES,0,get_trust(ch));
@@ -3259,7 +3232,6 @@ void display_group_member(CHAR_DATA *ch, CHAR_DATA *gch)
 void do_group( CHAR_DATA *ch, char *argument )
 {
     char buf[MAX_STRING_LENGTH];
-    char buf2[MAX_STRING_LENGTH];
     char arg[MAX_INPUT_LENGTH];
     CHAR_DATA *victim;
 
@@ -4100,7 +4072,7 @@ void do_bounty( CHAR_DATA *ch, char *argument )
 	return;
     }
 
-    if ( arg2 == NULL || *arg2 == '\0' || !is_number(arg2) )
+    if ( *arg2 == '\0' || !is_number(arg2) )
     {
         send_to_char("Usage: bounty <character> <amount in gold>\n\r",ch); 	
  	return;
