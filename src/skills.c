@@ -342,13 +342,12 @@ void do_spells(CHAR_DATA *ch, char *argument)
       return;
     }
     buf2[0] = '\0';
-    for (lev = lev0; lev < UMIN(levN+1,LEVEL_HERO); lev++)
-      if (spell_list[lev][0] != '\0')
-       {
-	strcat(buf2, spell_list[lev]);
-      /*  strcat(buf2, "\n\r"); */
-       }
-      page_to_char(buf2, ch);
+    for (lev = lev0; lev < UMIN(levN+1,LEVEL_HERO); lev++) {
+        if (spell_list[lev][0] != '\0') {
+            strcat(buf2, spell_list[lev]);
+        }
+    }
+    page_to_char(buf2, ch);
 }
 
 void do_skills(CHAR_DATA *ch, char *argument)
@@ -419,29 +418,26 @@ void do_skills(CHAR_DATA *ch, char *argument)
         }
       }
     }
-     
-    /* return results */
- 
+
     if (!found)
     {
       send_to_char("You know no skills.\n\r",ch);
       return;
     }
     buf2[0] = '\0';
-    for (lev = lev0; lev < UMIN(levN+1,LEVEL_HERO); lev++)
-      if (skill_list[lev][0] != '\0')
-       {
-        strcat(buf2, skill_list[lev]);
-       }
+    for (lev = lev0; lev < UMIN(levN+1,LEVEL_HERO); lev++) {
+        if (skill_list[lev][0] != '\0') {
+            strcat(buf2, skill_list[lev]);
+        }
+    }
 
-      if ( ch->pcdata->specialize )
-      {
-	 sprintf(buf,"\n\rSpecialization: %s\n\r",
-		skill_table[ch->pcdata->specialize].name);
-	 strcat(buf2,buf);
-      }
+    if ( ch->pcdata->specialize ) {
+      sprintf(buf,"\n\rSpecialization: %s\n\r",
+      skill_table[ch->pcdata->specialize].name);
+      strcat(buf2,buf);
+    }
 
-      page_to_char(buf2, ch);
+    page_to_char(buf2, ch);
 }
 
 
