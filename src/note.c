@@ -28,6 +28,7 @@
 #include "recycle.h"
 #include "tables.h"
 #include "clan.h"
+#include "lookup.h"
 
 /* globals from db.c for load_notes */
 #if !defined(macintosh)

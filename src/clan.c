@@ -29,6 +29,7 @@
 #include "tables.h"
 #include "act_obj.h"
 #include "live_edit.h"
+#include "mag2.h"
 
 #define START_OBJ(ch, hedit) (hedit ? (ch)->pcdata->clan_info->clan->planned : (ch)->pcdata->clan_info->pers_plan)
 

@@ -9,6 +9,7 @@
 
 #include "merc.h"
 #include "recycle.h"
+#include "magic.h"
 
 #define     PLR_NOTRADE         0
 #define     TRADE_REQUEST       1

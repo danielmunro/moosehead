@@ -28,6 +28,7 @@
 #include "tables.h"
 #include "gladiator.h"
 #include "clan.h"
+#include "lookup.h"
 
 /* command procedures needed */
 DECLARE_DO_FUN(do_return  );
