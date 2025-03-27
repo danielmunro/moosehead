@@ -176,51 +176,6 @@ void do_gain(CHAR_DATA *ch, char *argument)
       return;
     }
 
-/* No more converting pracs to trains 
-    if (!str_prefix(arg,"convert"))
-    {
-	if (ch->practice < 10)
-	{
-	    act("$N tells you 'You are not yet ready.'",
-		ch,NULL,trainer,TO_CHAR,FALSE);
-	    return;
-	}
-
-	act("$N helps you apply your practice to training",
-		ch,NULL,trainer,TO_CHAR,FALSE);
-	ch->practice -= 10;
-	ch->train +=1 ;
-	return;
-    }
-    */
-
-/*
-    if (!str_prefix(arg,"points"))
-    {
-	if (ch->train < 2)
-	{
-	    act("$N tells you 'You are not yet ready.'",
-		ch,NULL,trainer,TO_CHAR,FALSE);
-	    return;
-	}
-
-	if (ch->pcdata->points <= 40)
-	{
-	    act("$N tells you 'There would be no point in that.'",
-		ch,NULL,trainer,TO_CHAR,FALSE);
-	    return;
-	}
-
-	act("$N trains you, and you feel more at ease with your skills.",
-	    ch,NULL,trainer,TO_CHAR,FALSE);
-
-	ch->train -= 2;
-	ch->pcdata->points -= 1;
-	ch->exp = exp_per_level(ch,ch->pcdata->points) * ch->level;
-	return;
-    }
-    */
-
     /* else add a group/skill */
 
     gn = group_lookup(argument);
@@ -240,10 +195,6 @@ void do_gain(CHAR_DATA *ch, char *argument)
 	    return;
 	}
 
-/*
-	if (ch->train < group_table[gn].rating[ch->class])
-	if (ch->practice < (group_table[gn].rating[ch->class] * 10))
-	*/
 	if (ch->practice < (group_table[gn].rating[ch->class] * 10))
 	{
 	    act("$N tells you 'You are not yet ready for that group.'",
@@ -256,9 +207,6 @@ void do_gain(CHAR_DATA *ch, char *argument)
 	act("$N trains you in the art of $t",
 	    ch,group_table[gn].name,trainer,TO_CHAR,FALSE);
 	ch->practice -= (group_table[gn].rating[ch->class] * 10);
-	/*
-	ch->train -= group_table[gn].rating[ch->class];
-	*/
 	return;
     }
 
@@ -286,10 +234,7 @@ void do_gain(CHAR_DATA *ch, char *argument)
                 ch,NULL,trainer,TO_CHAR,FALSE);
             return;
         }
- 
- /*
-        if (ch->train < skill_table[sn].rating[ch->class])
-	*/
+
         if (ch->practice < (skill_table[sn].rating[ch->class] * 10 ))
         {
             act("$N tells you 'You are not yet ready for that skill.'",
@@ -301,9 +246,6 @@ void do_gain(CHAR_DATA *ch, char *argument)
 	ch->pcdata->learned[sn] = 1;
         act("$N trains you in the art of $t",
             ch,skill_table[sn].name,trainer,TO_CHAR,FALSE);
-	    /*
-        ch->train -= skill_table[sn].rating[ch->class];
-	*/
         ch->practice -= (skill_table[sn].rating[ch->class] * 10);
         return;
     }
@@ -328,7 +270,6 @@ int apply_chi(CHAR_DATA *ch, int num)
 
 void do_spells(CHAR_DATA *ch, char *argument)
 {
-//return;	
     char spell_list[LEVEL_HERO][MAX_STRING_LENGTH];
     char spell_columns[LEVEL_HERO];
     int sn,lev,mana,lev0=0,levN=LEVEL_HERO;
@@ -412,7 +353,6 @@ void do_spells(CHAR_DATA *ch, char *argument)
 
 void do_skills(CHAR_DATA *ch, char *argument)
 {
-//return;
     char skill_list[LEVEL_HERO][MAX_STRING_LENGTH];
     char skill_columns[LEVEL_HERO];
     int sn,lev,lev0=0,levN=LEVEL_HERO;
@@ -492,7 +432,6 @@ void do_skills(CHAR_DATA *ch, char *argument)
       if (skill_list[lev][0] != '\0')
        {
         strcat(buf2, skill_list[lev]);
-       /* strcat(buf2,"\n\r"); */
        }
 
       if ( ch->pcdata->specialize )
