@@ -19,12 +19,16 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+
 #include "merc.h"
 #include "lookup.h"
 #include "music.h"
 #include "tables.h"
 #include "gladiator.h"
 #include "db.h"
+#include "special.h"
+#include "act_obj.h"
+#include "recycle.h"
 
 /* command procedures needed */
 DECLARE_DO_FUN(do_quit    );

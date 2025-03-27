@@ -25,12 +25,16 @@
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <gc.h>
+
 #include "merc.h"
 #include "db.h"
 #include "recycle.h"
 #include "music.h"
 #include "lookup.h"
 #include "gladiator.h"
+#include "clan.h"
+#include "live_edit.h"
+#include "act_obj.h"
 
 extern int bounty_available[];
 extern int bounty_vnum;

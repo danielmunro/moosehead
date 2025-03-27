@@ -23,9 +23,11 @@
 #include <stdlib.h>
 #include <time.h>
 #include <gc.h>
+
 #include "merc.h"
 #include "recycle.h"
 #include "tables.h"
+#include "clan.h"
 
 /* globals from db.c for load_notes */
 #if !defined(macintosh)

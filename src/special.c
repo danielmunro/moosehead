@@ -20,9 +20,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
 #include "merc.h"
 #include "tables.h"
 #include "magic.h"
+#include "mag2.h"
 #include "lookup.h"
 
 void	check_equip	args( (CHAR_DATA *ch) );

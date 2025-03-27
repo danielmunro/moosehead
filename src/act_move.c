@@ -19,9 +19,12 @@
 #include <sys/time.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+
 #include "merc.h"
 #include "tables.h"
 #include "gladiator.h"
+#include "clan.h"
 
 /* command procedures needed */
 DECLARE_DO_FUN(do_look    );

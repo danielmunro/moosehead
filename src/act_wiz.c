@@ -16,16 +16,22 @@
  ***************************************************************************/
 
 #include <sys/types.h>
-#include <sys/time.h>
+#include <time.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h>
+
 #include "merc.h"
 #include "recycle.h"
 #include "tables.h"
 #include "lookup.h"
+#include "handler.h"
+#include "act_info.h"
+#include "act_obj.h"
+#include "act_comm.h"
+#include "clan.h"
 
 /* command procedures needed */
 DECLARE_DO_FUN(do_rstat);

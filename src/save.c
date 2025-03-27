@@ -21,10 +21,12 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
+
 #include "merc.h"
 #include "recycle.h"
 #include "lookup.h"
 #include "tables.h"
+#include "act_obj.h"
 
 #if !defined(macintosh)
 extern  int     _filbuf         args( (FILE *) );

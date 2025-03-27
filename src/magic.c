@@ -20,11 +20,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
 #include "merc.h"
 #include "magic.h"
 #include "recycle.h"
 #include "tables.h"
 #include "gladiator.h"
+#include "act_obj.h"
 
 /* command procedures needed */
 DECLARE_DO_FUN(do_look    );
