@@ -4945,6 +4945,8 @@ void group_gain(CHAR_DATA *ch, CHAR_DATA *victim) {
         if (!is_same_group(gch, ch) || IS_NPC(gch))
             continue;
 
+        xp_compute(gch, victim, group_levels);
+
         for (obj = gch->carrying; obj != NULL; obj = obj_next) {
             obj_next = obj->next_content;
             if (obj->wear_loc == WEAR_NONE)
