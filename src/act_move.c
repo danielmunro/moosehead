@@ -2659,7 +2659,7 @@ void do_hide( CHAR_DATA *ch, char *argument )
 	return;
 
     if ( number_percent( ) < get_skill(ch,gsn_hide)/
-    HAS_KIT(ch,"ninja") ? 2 : 3)
+    (HAS_KIT(ch,"ninja") ? 2 : 3))
     {
   SET_BIT(ch->affected_by, AFF_HIDE);
   check_improve(ch,gsn_hide,TRUE,3);
@@ -3521,13 +3521,10 @@ bool is_abolishable( AFFECT_DATA *af )
 {
      int sn = af->type;
 
-     if ( 	sn == skill_lookup("poison")
- ||             sn == skill_lookup("dust storm")
- ||		sn == skill_lookup("plague")
- ||	af->where == DAMAGE_OVER_TIME )
-	return TRUE;
-
-	return FALSE;
+     return sn == skill_lookup("poison")
+            || sn == skill_lookup("dust storm")
+            || sn == skill_lookup("plague")
+            || af->where == DAMAGE_OVER_TIME;
 }
 
 void action_ambush( CHAR_DATA *ch, char *argument )
