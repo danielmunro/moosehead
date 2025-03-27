@@ -47,8 +47,8 @@ void clear_macro_marks ( CHAR_DATA *ch )
 bool check_macro ( CHAR_DATA *ch, char *argument )
 {
   MACRO_DATA *macro;
-  char *buf,buf2[MAX_STRING_LENGTH];
-  char arg[MAX_STRING_LENGTH],*argp[100];
+  char *buf,buf2[MAX_INPUT_LENGTH];
+  char arg[MAX_INPUT_LENGTH],*argp[100];
   int idx, len, cnt;
   
   if (IS_NPC (ch))
@@ -88,7 +88,7 @@ bool check_macro ( CHAR_DATA *ch, char *argument )
         } else if ((buf[idx] == ';') || (buf[idx] == ':')) {
           len = strlen (buf2);          
           buf2[len]   = '\n';
-          buf2[len+1] = NULL;                  
+          buf2[len+1] = '\0';
         } else if (buf[idx] == '$') {
           cnt = buf[++idx] - '1';
           if ((cnt >= 0) && (cnt < 10)) {
@@ -97,7 +97,7 @@ bool check_macro ( CHAR_DATA *ch, char *argument )
         } else {          
           len = strlen (buf2);          
           buf2[len]   = buf[idx];
-          buf2[len+1] = NULL;
+          buf2[len+1] = '\0';
         }
         idx++;
       }
@@ -105,7 +105,7 @@ bool check_macro ( CHAR_DATA *ch, char *argument )
       len = strlen (buf2);
       buf2[len]   = '\n';       
       buf2[len+1] = 1;                /* signals end of macro */      
-      buf2[len+2] = NULL;
+      buf2[len+2] = '\0';
 
       if(len + 4 + strlen(ch->desc->inbuf) > MAX_STRING_LENGTH)
       {// Protection from far too long input buffers
@@ -118,9 +118,6 @@ bool check_macro ( CHAR_DATA *ch, char *argument )
 
       strcat (buf2,ch->desc->inbuf);  /* make sure extra commands are after macro */
       strcpy (ch->desc->inbuf,buf2);  /* also needed for macros inside of macros */
-     /* for (cnt = 0; cnt < 100; cnt++)
-        if (argp[cnt])
-          free_string (argp[cnt]);*/
       return TRUE;
     }
     macro = macro->next;    
@@ -132,7 +129,7 @@ void do_unmacro ( CHAR_DATA *ch, char *argument )
 {
   MACRO_DATA *macro,*previous;
   char buf[MAX_STRING_LENGTH];
-  char arg[MAX_STRING_LENGTH];
+  char arg[MAX_INPUT_LENGTH];
   
   one_argument (argument, arg);  
   if (!arg[0]) {
@@ -218,7 +215,7 @@ void do_macro ( CHAR_DATA *ch, char *argument )
     
   if ((strlen (argument) > 80) && !IS_IMMORTAL(ch)) {
     send_to_char ("Macro truncated to 80 characters.\n\r",ch);
-    argument[80] = NULL;    
+    argument[80] = '\0';
   }
     
   macro = new_macro();    
