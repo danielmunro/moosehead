@@ -142,16 +142,17 @@ void do_remort( CHAR_DATA *ch, char *argument)
                            || ch->kit== kit_lookup("archeologist") 
                            || ch->kit== kit_lookup("lycanthrope hunter")
 			   || ch->kit== kit_lookup("vampyre hunter")
-			   )
-			{
-			   for ( i = 0 ; i < 5 ; i++ )
-				 if ( kit_table[ch->kit].skills[i] == NULL )
-				   break;
-				 else
-				 group_remove(ch,kit_table[ch->kit].skills[i]);
+			   ) {
+			   for ( i = 0 ; i < 5 ; i++ ) {
+                   if (kit_table[ch->kit].skills[i] == NULL) {
+                       break;
+                   } else {
+                       group_remove(ch, kit_table[ch->kit].skills[i]);
+                   }
+               }
 
-				 ch->kit = 0;
-													 }
+               ch->kit = 0;
+			}
 
 
     /* Remove the starting hp,mana,move then divide the remaining
