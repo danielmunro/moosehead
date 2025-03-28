@@ -91,12 +91,12 @@ void dump_obj_csv() {
 
     // process resets by game area
     char where_buf[MAX_INPUT_LENGTH];
-    AREA_DATA *area = area_first;
-    OBJ_INDEX_DATA *obj;
-    RESET_DATA *reset;
-    MOB_INDEX_DATA *mob;
-    ROOM_INDEX_DATA *room;
-    OBJ_INDEX_DATA *container;
+    AREA_DATA *area = area_first = NULL;
+    OBJ_INDEX_DATA *obj = NULL;
+    RESET_DATA *reset = NULL;
+    MOB_INDEX_DATA *mob = NULL;
+    ROOM_INDEX_DATA *room = NULL;
+    OBJ_INDEX_DATA *container = NULL;
     while (area != NULL) {
         reset = area->reset_first;
         while (reset != NULL) {
