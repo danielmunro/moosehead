@@ -870,7 +870,6 @@ void do_join(CHAR_DATA *ch, char *argument) {
 	char arg[MAX_INPUT_LENGTH];
 	char buf[MAX_STRING_LENGTH];
 	CLAN_DATA *clan;
-	CHAR_DATA *leader;
 	bool leader_found = FALSE;
 
 	if (IS_NPC(ch))
@@ -1231,23 +1230,6 @@ void do_outcast(CHAR_DATA *ch, char *argument) {
 		victim = get_char_online(ch, arg);
 		if (victim != NULL && is_same_clan(ch, victim)
 				&& victim->pcdata->rank < 5) {
-			/*        if (victim->clan == clan_lookup("avarice"))
-			 victim->pcdata->learned[skill_lookup("cure vision")] = 0;
-			 if (victim->clan == clan_lookup("demise"))
-			 victim->pcdata->learned[skill_lookup("confusion")] = 0;
-			 if (victim->clan == clan_lookup("demise"))
-			 victim->pcdata->learned[skill_lookup("aura of cthon")] = 0;
-			 if (victim->clan == clan_lookup("posse"))
-			 victim->pcdata->learned[skill_lookup("cuffs of justice")] = 0;
-			 if (victim->clan == clan_lookup("zealot"))
-			 {
-			 victim->pcdata->learned[skill_lookup("annointment")] = 0;
-			 victim->pcdata->deity = deity_lookup("mojo");
-			 }
-			 if (victim->clan == clan_lookup("honor"))
-			 victim->pcdata->learned[skill_lookup("honor guard")] = 0;
-			 */
-
 			victim->clan = nonclan_lookup("outcast");
 			victim->pcdata->rank = 0;
 			victim->pcdata->outcT = 2700;
@@ -1255,7 +1237,7 @@ void do_outcast(CHAR_DATA *ch, char *argument) {
 			if (IS_SET(victim->pcdata->clan_flags, CLAN_ALLOW_SANC)) {
 				REMOVE_BIT(victim->pcdata->clan_flags, CLAN_ALLOW_SANC);
 			}
-			if (victim->in_room->clan != NULL
+			if (victim->in_room->clan > -1
 					&& !clan_table[victim->in_room->clan].independent) {
 				char_from_room(victim);
 				char_to_room(victim, get_room_index(ROOM_VNUM_MATOOK));
@@ -1478,10 +1460,11 @@ void do_highlander(CHAR_DATA *ch, char *argument) {
 			victim->pcdata->highlander_data[ALL_KILLS] = 0;
 			victim->pcdata->highlander_data[REAL_KILLS] = 0;
 			victim->pcdata->save_clan = victim->clan;
-			if (!is_clan(victim))
-				victim->clan = clan_lookup("temp");
+			if (!is_clan(victim)) {
+                victim->clan = nonclan_lookup("temp");
+            }
 			sprintf(buf,
-					"%s adds %s to Highlander, %d/%d/%d/%d/%d/%d with all=%d and real=%d",
+					"%s adds %s to Highlander, %d/%d/%ld/%d/%d/%d with all=%d and real=%d",
 					ch->name, victim->name, victim->pcdata->perm_hit,
 					victim->pcdata->perm_mana, victim->pcdata->perm_move,
 					victim->max_hit, victim->max_mana, victim->max_move,
@@ -1499,7 +1482,7 @@ void remove_highlander(CHAR_DATA *ch, CHAR_DATA *victim) {
 	char buf[MAX_STRING_LENGTH];
 
 	sprintf(buf,
-			"%s removes %s from Highlander, before %d/%d/%d/%d/%d/%d with all=%d and real=%d",
+			"%s removes %s from Highlander, before %d/%d/%ld/%d/%d/%d with all=%d and real=%d",
 			ch->name, victim->name, victim->pcdata->perm_hit,
 			victim->pcdata->perm_mana, victim->pcdata->perm_move,
 			victim->max_hit, victim->max_mana, victim->max_move,
@@ -1524,7 +1507,7 @@ void remove_highlander(CHAR_DATA *ch, CHAR_DATA *victim) {
 	REMOVE_BIT(victim->mhs, MHS_HIGHLANDER);
 
 	sprintf(buf,
-			"%s removes %s from Highlander, after %d/%d/%d/%d/%d/%d with all=%d and real=%d",
+			"%s removes %s from Highlander, after %d/%d/%ld/%d/%d/%d with all=%d and real=%d",
 			ch->name, victim->name, victim->pcdata->perm_hit,
 			victim->pcdata->perm_mana, victim->pcdata->perm_move,
 			victim->max_hit, victim->max_mana, victim->max_move,
@@ -1540,7 +1523,6 @@ void do_guild(CHAR_DATA *ch, char *argument) {
 	char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
 	char buf[MAX_STRING_LENGTH];
 	CHAR_DATA *victim;
-	int clan;
 
 	if (IS_NPC(ch))
 		return;
@@ -5750,13 +5732,6 @@ void do_rset(CHAR_DATA *ch, char *argument) {
 	return;
 }
 
-/*  removed by Nightdagger, 1/18/03, don't need it
- void do_socke( CHAR_DATA *ch, char *argument )
- {
- send_to_char("You must use the full command to check sockets.\n\r",ch);
- }
- */
-
 void do_sockets(CHAR_DATA *ch, char *argument) {
 	char buf[4 * MAX_STRING_LENGTH];
 	char buf2[MAX_STRING_LENGTH];
@@ -5820,19 +5795,19 @@ void do_sockets(CHAR_DATA *ch, char *argument) {
 			if (d->character == NULL) {
 				cdbuf[0] = '\0';
 
-				if (d->descriptor != NULL && d->connected != NULL
-						&& d->host != NULL && d->port != NULL) {
+				if (d->descriptor > 0 && d->connected > 0
+						&& d->host != NULL && d->port > 0) {
 					sprintf(buf2, "[%2d] Nobody yet @%s:%d\r\n", d->descriptor,
 							d->host, d->port);
 					strcat(buf, buf2);
 				} else {
 					sprintf(cdbuf,
 							"SOCKET ERROR Desc: %2d Conn: %-18s Host: %s Port: %d",
-							(d->descriptor != NULL) ? d->descriptor : 0,
-							(d->connected != NULL) ?
+							d->descriptor,
+							(d->connected > 0) ?
 									connect_table[d->connected] : "NULL",
 							(d->host != NULL) ? d->host : "NULL",
-							(d->port != NULL) ? d->port : 0);
+							d->port);
 					log_string(cdbuf);
 				}
 
