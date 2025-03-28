@@ -644,10 +644,11 @@ void fire_effect(void *vo, int level, int dam, int target)
             break;
         }
 
-	if (obj->carried_by != NULL)
-		act( msg, obj->carried_by, obj, NULL, TO_ALL ,FALSE);
-	else if (obj->in_room != NULL && obj->in_room->people != NULL)
-		act(msg,obj->in_room->people,obj,NULL,TO_ALL,FALSE);
+	if (obj->carried_by != NULL) {
+        act(msg, obj->carried_by, obj, NULL, TO_ALL, FALSE);
+    } else if (obj->in_room != NULL && obj->in_room->people != NULL) {
+        act(msg, obj->in_room->people, obj, NULL, TO_ALL, FALSE);
+    }
 		
 		if(obj->damaged >= 100)
 		{
@@ -661,12 +662,11 @@ void fire_effect(void *vo, int level, int dam, int target)
             {
                 n_obj = t_obj->next_content;
                 obj_from_obj(t_obj);
-		if (obj->in_room != NULL)
-      obj_to_room(t_obj,obj->in_room);
-		else if (obj->carried_by != NULL)
-		    obj_to_room(t_obj,obj->carried_by->in_room);
-		else
-		{
+		if (obj->in_room != NULL) {
+            obj_to_room(t_obj, obj->in_room);
+        } else if (obj->carried_by != NULL) {
+            obj_to_room(t_obj, obj->carried_by->in_room);
+        } else {
 		    extract_obj(t_obj);
 		    continue;
 		}
