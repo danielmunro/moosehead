@@ -284,12 +284,12 @@ void check_mutate( CHAR_DATA *ch )
          ch->parts       = race_table[new_race].parts;
 		       
 		      
-	 for (i = 0; i < 5; i++)
-         {
-              if (pc_race_table[new_race].skills[i] == NULL)
-   	   	break;
-    	 	group_add(ch,pc_race_table[new_race].skills[i],FALSE);
+    for (i = 0; i < 5; i++) {
+        if (pc_race_table[new_race].skills[i] == NULL) {
+            break;
         }
+        group_add(ch,pc_race_table[new_race].skills[i],FALSE);
+    }
 		
 	ch->size = pc_race_table[new_race].size;
 	ch->race = new_race;
