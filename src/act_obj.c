@@ -802,9 +802,7 @@ void do_scribe( CHAR_DATA *ch, char *argument )
     OBJ_DATA *scroll;
     OBJ_DATA *ink;
 
-    /*OBJ_DATA *obj;*/
         int sn;
-        int new_sn_percent;
         int way_cool_spell;
 
         int spell_level1;
@@ -944,11 +942,6 @@ void do_scribe( CHAR_DATA *ch, char *argument )
         }
 
         percent = URANGE(5,percent,100);
-
-        /*send_to_char("Checking to see if the scribe is going to work or not.\n\r",ch);*/
-
-        new_sn_percent = number_percent( );
-
 
         if ( sn == skill_lookup("dispel magic") )
         {
@@ -2022,7 +2015,6 @@ void do_offer(CHAR_DATA *ch, char *argument)
       int amount;
       CHAR_DATA *owner = NULL;
       DESCRIPTOR_DATA *d;
-      OBJ_DATA *looting, *prev;
       DAMAGE_DATA *loot_prev = NULL;
       DAMAGE_DATA *loot = container->loot_track;
       if(!loot)
@@ -2120,11 +2112,8 @@ void do_offer(CHAR_DATA *ch, char *argument)
 
 void do_search(CHAR_DATA *ch, char *argument)
 {
-  int index;
   char arg1[MAX_INPUT_LENGTH];
   char arg2[MAX_INPUT_LENGTH];
-  OBJ_DATA *obj;
-  OBJ_DATA *obj_next;
   OBJ_DATA *container;
   /* Default search */
   int search_type = RARITY_UNCOMMON | RARITY_RARE | RARITY_GEM | RARITY_IMPOSSIBLE;
@@ -2220,8 +2209,7 @@ void do_search(CHAR_DATA *ch, char *argument)
     {
       CHAR_DATA *owner = NULL;
       DESCRIPTOR_DATA *d;
-      OBJ_DATA *looting, *prev;
-      DAMAGE_DATA *loot_prev;
+      OBJ_DATA *looting;
       DAMAGE_DATA *loot = container->loot_track;
       if(!loot)
       {
@@ -2254,7 +2242,6 @@ void do_search(CHAR_DATA *ch, char *argument)
       {/* ~ means it was a mob kill - illegal name, can't be accidentally created */
         if(!str_cmp(loot->source, ch->name) || !str_cmp(loot->source, "~"))
           break;
-        loot_prev = loot;
       }
       if(!loot)
       {
@@ -2268,7 +2255,6 @@ void do_search(CHAR_DATA *ch, char *argument)
          char **prgpstrShow;
          int *prgnShow;
          char *pstrShow;
-         OBJ_DATA *obj;
          int nShow;
          int iShow;
          int count;
@@ -3115,14 +3101,12 @@ void do_put( CHAR_DATA *ch, char *argument )
         last_obj = obj_check;
       }
     }
-    if(obj_count > 50 && last_obj)
-      last_obj->timer = 2200;/* Bit over 24 hours */
-      if (obj->timer)
-    SET_BIT(obj->extra_flags,ITEM_HAD_TIMER);
-      //else if(container->pIndexData->vnum == OBJ_VNUM_PIT)
-      //    obj->timer = 200;
-//      else
-//          obj->timer = 6500;//Around 72 hours
+    if(obj_count > 50 && last_obj) {
+        last_obj->timer = 2200;/* Bit over 24 hours */
+    }
+    if (obj->timer) {
+        SET_BIT(obj->extra_flags, ITEM_HAD_TIMER);
+    }
    }
 
   obj_from_char( obj );
@@ -3728,7 +3712,7 @@ void do_lick( CHAR_DATA *ch, char *argument )
     }
 
 
-    if ( argument == '\0' )
+    if ( argument == NULL )
     {
   send_to_char("What do you wish to poison?\n\r",ch);
   return;
@@ -3907,7 +3891,6 @@ void do_fill( CHAR_DATA *ch, char *argument )
     OBJ_DATA *obj2 = NULL;
     OBJ_DATA *fountain;
     bool found;
-    int count;
 
     argument = one_argument( argument, arg1 );
     one_argument( argument, arg2 );
@@ -3941,7 +3924,6 @@ void do_fill( CHAR_DATA *ch, char *argument )
     }
 
     found = FALSE;
-    count = 0;
     for ( fountain = ch->in_room->contents; fountain != NULL;
            fountain = fountain->next_content )
     {
@@ -3949,12 +3931,8 @@ void do_fill( CHAR_DATA *ch, char *argument )
        {
           if ( fountain->item_type == ITEM_FOUNTAIN )
           {
-/*           if ( ++count == number )
-             {
-             */
-                 found = TRUE;
-                 break;
-          /*   }         */
+             found = TRUE;
+             break;
           }
        }
        else
@@ -5885,7 +5863,7 @@ void do_snatch( CHAR_DATA *ch, char *argument )
     char arg1 [MAX_INPUT_LENGTH];
     char arg2 [MAX_INPUT_LENGTH];
     CHAR_DATA *victim;
-    OBJ_DATA *obj, *t_obj, *n_obj;
+    OBJ_DATA *obj; //, *t_obj, *n_obj;
     int percent;
 
     argument = one_argument( argument, arg1 );
@@ -6123,7 +6101,7 @@ void do_slice( CHAR_DATA *ch, char *argument )
     char arg1 [MAX_INPUT_LENGTH];
     char arg2 [MAX_INPUT_LENGTH];
     CHAR_DATA *victim;
-    OBJ_DATA *obj, *t_obj, *n_obj;
+    OBJ_DATA *obj, *t_obj; //, *n_obj;
     int percent;
     int count = 0;
     int item_bonus = 0, item_chance = 33;
@@ -7253,7 +7231,7 @@ void do_buy( CHAR_DATA *ch, char *argument )
 
   if ( (ch->silver + 100 * ch->gold) < cost )
   {
-      sprintf(buf, "You can't afford it, you need %d more silver.\n\r", cost - ch->silver - 100 * ch->gold);
+      sprintf(buf, "You can't afford it, you need %ld more silver.\n\r", cost - ch->silver - 100 * ch->gold);
       send_to_char(buf, ch);
       return;
   }
@@ -7388,9 +7366,9 @@ void do_buy( CHAR_DATA *ch, char *argument )
   if ( (ch->silver + ch->gold * 100) < cost * number )
   {
       if (number > 1)
-        sprintf(buf, "$n tells you 'You're short %d silver to buy %d of those.'", cost * number - ch->silver - 100 * ch->gold, number);
+        sprintf(buf, "$n tells you 'You're short %ld silver to buy %d of those.'", cost * number - ch->silver - 100 * ch->gold, number);
       else
-        sprintf(buf, "$n tells you 'You can't afford to buy $p, you need %d more silver.'", cost - ch->silver - 100 * ch->gold);
+        sprintf(buf, "$n tells you 'You can't afford to buy $p, you need %ld more silver.'", cost - ch->silver - 100 * ch->gold);
       act(buf,
         keeper, obj, ch, TO_VICT ,FALSE);
 //      ch->reply = keeper;
@@ -7437,7 +7415,7 @@ void do_buy( CHAR_DATA *ch, char *argument )
     if(number == 1 || get_carry_weight(ch)+ get_obj_weight(obj) > can_carry_w(ch))
       sprintf(buf, "You can't carry that much weight, even one of those is too much.\n\r");
     else
-      sprintf(buf, "You can't carry that much weight, you can only manage %d of those.\n\r",
+      sprintf(buf, "You can't carry that much weight, you can only manage %ld of those.\n\r",
       (can_carry_w(ch) - get_carry_weight(ch)) / get_obj_weight(obj));
     send_to_char( buf, ch );
     return;
@@ -7460,13 +7438,13 @@ void do_buy( CHAR_DATA *ch, char *argument )
   {
       sprintf(buf,"$n buys $p[%d].",number);
       act(buf,ch,obj,NULL,TO_ROOM,FALSE);
-      sprintf(buf,"You buy $p[%d] for %d silver.",number,cost * number);
+      sprintf(buf,"You buy $p[%d] for %ld silver.",number,cost * number);
       act(buf,ch,obj,NULL,TO_CHAR,FALSE);
   }
   else
   {
       act( "$n buys $p.", ch, obj, NULL, TO_ROOM ,FALSE);
-      sprintf(buf,"You buy $p for %d silver.",cost);
+      sprintf(buf,"You buy $p for %ld silver.",cost);
       act( buf, ch, obj, NULL, TO_CHAR ,FALSE);
   }
   deduct_cost(ch,cost * number);
@@ -7726,7 +7704,7 @@ void do_sell( CHAR_DATA *ch, char *argument )
         act(buf,ch,NULL,keeper,TO_CHAR,FALSE);
         check_improve(ch,gsn_haggle,TRUE,4);
     }
-    sprintf( buf, "You sell $p for %d silver and %d gold piece%s.",
+    sprintf( buf, "You sell $p for %ld silver and %ld gold piece%s.",
   cost - (cost/100) * 100, cost/100, cost == 1 ? "" : "s" );
     act( buf, ch, obj, NULL, TO_CHAR ,FALSE);
     ch->gold     += cost/100;
