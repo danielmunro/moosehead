@@ -858,18 +858,17 @@ void do_kit( CHAR_DATA *ch, char *argument )
             return;
         }
 
-        for ( i = 0 ; i < MAX_STATS ; i++ )
-            if ( kit_table[kit].min_stat[i] > 0 &&
-                 ch->perm_stat[i] < kit_table[kit].min_stat[i] )
-            {
-                if(i == STAT_AGT || i == STAT_END)
-                   continue;// Not checking these
-                if(ch->perm_stat[i] != get_max_train(ch, i))
-                {
-                  send_to_char("Your attributes are not high enough.\n\r",ch);
-                  return;
+        for ( i = 0 ; i < MAX_STATS ; i++ ) {
+            if (kit_table[kit].min_stat[i] > 0 &&
+                ch->perm_stat[i] < kit_table[kit].min_stat[i]) {
+                if (i == STAT_AGT || i == STAT_END)
+                    continue;// Not checking these
+                if (ch->perm_stat[i] != get_max_train(ch, i)) {
+                    send_to_char("Your attributes are not high enough.\n\r", ch);
+                    return;
                 }
             }
+        }
 
             if ( kit == kit_lookup("vampyre hunter") &&
                 IS_SET(ch->act,PLR_VAMP)
@@ -1032,7 +1031,7 @@ ch->practice += (skill_table[ch->pcdata->specialize].rating[ch->class] * 10);
             {
                 if(i == STAT_AGT || i == STAT_END)
                    continue;
-                char buf2[10];
+                char buf2[64];
 
                 buf[0] = '\0';
                 switch( i )
@@ -1199,7 +1198,7 @@ void do_peek(CHAR_DATA *ch, char *argument)
 
      for (iSocial = 0; social_table[iSocial].name[0] != '\0'; iSocial++)
      {
-   sprintf(buf,"%-12s",social_table[iSocial].name);
+   sprintf(buf, "%-12.12s", social_table[iSocial].name);
    send_to_char(buf,ch);
    if (++col % 6 == 0)
        send_to_char("\n\r",ch);
@@ -2222,61 +2221,59 @@ void do_glance ( CHAR_DATA *ch, char *argument )
    if ( can_see_obj( ch, obj ) )
    {
        pdesc = get_extra_descr( arg3, obj->extra_descr );
-       if ( pdesc != NULL )
-         if (++count == number)
-         {
-         send_to_char( pdesc, ch );
-         /* LORE */
-         if (!IS_NPC(ch) &&
-       number_percent( ) < get_skill(ch,gsn_lore))
-           {
-       if ( ( number_percent( ) * number_percent( ) ) < 40
-            && !IS_OBJ_STAT(obj,ITEM_SELL_EXTRACT))
-         {
-           if(obj->pIndexData->cost == obj->cost)
-           {
-            obj->cost += ( get_skill(ch,gsn_lore) *
-             0.001 * obj->cost);
-           send_to_char( "Your understanding of the lore behind it increases its worth!\n\r",  ch );
+       if ( pdesc != NULL ) {
+           if (++count == number) {
+               send_to_char(pdesc, ch);
+               /* LORE */
+               if (!IS_NPC(ch) &&
+                   number_percent() < get_skill(ch, gsn_lore)) {
+                   if ((number_percent() * number_percent()) < 40
+                       && !IS_OBJ_STAT(obj, ITEM_SELL_EXTRACT)) {
+                       if (obj->pIndexData->cost == obj->cost) {
+                           obj->cost += (get_skill(ch, gsn_lore) *
+                                         0.001 * obj->cost);
+                           send_to_char("Your understanding of the lore behind it increases its worth!\n\r", ch);
+                       }
+                   }
+                   if (ch->mana >= 20) {
+                       spell_identify(gsn_lore,
+                                      (4 * obj->level) / 3, ch, obj, TARGET_OBJ);
+                       ch->mana -= 20;
+                       check_improve(ch, gsn_lore, TRUE, 4);
+                   }
+               }
+               return;
            }
-         }
-       if (ch->mana >= 20){
-       spell_identify(gsn_lore,
-           (4* obj->level)/3,ch,obj,TARGET_OBJ);
-       ch->mana -= 20;
-       check_improve(ch,gsn_lore,TRUE,4);}
-           }
-         return;
-         }
-       else continue;
+       } else {
+           continue;
+       }
        pdesc = get_extra_descr( arg3, obj->pIndexData->extra_descr );
-       if ( pdesc != NULL )
-         if (++count == number)
-         {
-         send_to_char( pdesc, ch );
-         /* LORE */
-         if (!IS_NPC(ch) &&
-       number_percent( ) <= get_skill(ch,gsn_lore))
-           {
-       if ( ( number_percent( ) * number_percent( ) ) < 40
-            && !IS_OBJ_STAT(obj,ITEM_SELL_EXTRACT))
-         {
-           if(obj->pIndexData->cost == obj->cost)
-           {
-           obj->cost += ( get_skill(ch,gsn_lore) *
-             0.001 * obj->cost);
-           send_to_char( "Your understanding of the lore behind it increases its worth!\n\r",  ch );
+       if ( pdesc != NULL ) {
+           if (++count == number) {
+               send_to_char(pdesc, ch);
+               /* LORE */
+               if (!IS_NPC(ch) &&
+                   number_percent() <= get_skill(ch, gsn_lore)) {
+                   if ((number_percent() * number_percent()) < 40
+                       && !IS_OBJ_STAT(obj, ITEM_SELL_EXTRACT)) {
+                       if (obj->pIndexData->cost == obj->cost) {
+                           obj->cost += (get_skill(ch, gsn_lore) *
+                                         0.001 * obj->cost);
+                           send_to_char("Your understanding of the lore behind it increases its worth!\n\r", ch);
+                       }
+                   }
+                   if (ch->mana >= 20) {
+                       spell_identify(gsn_lore,
+                                      (4 * obj->level) / 3, ch, obj, TARGET_OBJ);
+                       ch->mana -= 20;
+                       check_improve(ch, gsn_lore, TRUE, 4);
+                   }
+               }
+               return;
            }
-         }
-       if(ch->mana >= 20){
-       spell_identify(gsn_lore,
-           (4* obj->level)/3,ch,obj,TARGET_OBJ);
-       ch->mana -= 20;
-       check_improve(ch,gsn_lore,TRUE,4);}
-           }
-         return;
-         }
-       else continue;
+       } else {
+           continue;
+       }
 
        if ( is_name( arg3, obj->name ) )
          if (++count == number)
@@ -2693,114 +2690,23 @@ void do_score( CHAR_DATA *ch, char *argument )
 {
      char buf[MAX_STRING_LENGTH];
      ROOM_INDEX_DATA *location;
-     int i,percent;
-     char wound[100];
-     char mental[100];
-     char moves[100];
-
-      if (ch->max_hit > 0)
-    percent = ch->hit * 100 / ch->max_hit;
-      else
-    percent = -1;
-
-/*      if(is_affected(ch, gsn_rage))
-    sprintf(wound, "You are in battle-rage.\n\r");
-      else if (percent >= 100)
-    sprintf(wound,"You are in excellent condition.\n\r");
-      else if (percent >= 90)
-    sprintf(wound,"You have a few scratches.\n\r");
-      else if (percent >= 75)
-    sprintf(wound,"You have some small wounds and bruises.\n\r");
-      else if (percent >= 50)
-    sprintf(wound,"You have quite a few wounds.\n\r");
-      else if (percent >= 30)
-    sprintf(wound,"You have some big nasty wounds and scratches.\n\r");
-      else if (percent >= 15)
-    sprintf(wound,"You are pretty hurt.\n\r");
-      else if (percent >= 0)
-    sprintf(wound,"You are in awful condition.\n\r");
-      else
-    sprintf(wound,"You are bleeding to death.\n\r");
-
-      if (ch->max_mana > 0)
-    percent = ch->mana * 100 / ch->max_mana;
-      else
-    percent = -1;
-
-      if (percent >= 100)
-    sprintf(mental,"You are mentally fit.\n\r");
-      else if (percent >= 90)
-    sprintf(mental,"You are a bit slow.\n\r");
-      else if (percent >= 75)
-    sprintf(mental,"You have some mental lapses.\n\r");
-      else if (percent >= 50)
-    sprintf(mental,"You are quite drained.\n\r");
-      else if (percent >= 30)
-    sprintf(mental,"You feel dazed.\n\r");
-      else if (percent >= 15)
-    sprintf(mental,"You are nearly spent.\n\r");
-      else if (percent >= 0)
-    sprintf(mental,"You are brain dead.\n\r");
-      else
-    sprintf(mental,"You are helpless.\n\r");
-
-      if (ch->max_move > 0)
-    percent = ch->move * 100 / ch->max_move;
-      else
-    percent = -1;
-
-      if (percent >= 100)
-    sprintf(moves,"You are full of energy.\n\r");
-      else if (percent >= 90)
-    sprintf(moves,"You are energetic.\n\r");
-      else if (percent >= 75)
-    sprintf(moves,"You are breathing hard.\n\r");
-      else if (percent >= 50)
-    sprintf(moves,"Your heart is pounding.\n\r");
-      else if (percent >= 30)
-    sprintf(moves,"You feel winded.\n\r");
-      else if (percent >= 15)
-    sprintf(moves,"You are cramping up.\n\r");
-      else if (percent >= 0)
-    sprintf(moves,"You are exhausted.\n\r");
-      else
-    sprintf(moves,"You are motionless.\n\r");*/
-
-
-
- /*
-     sprintf( buf,
-   "You are %s%s%s, level %d(%d), %d years old (%d hours).\n\r",
-   IS_SET(ch->mhs,MHS_SAVANT) ? "a Savant" : ch->name,
-   ch->level, IS_NPC(ch) ? 0 : ch->pcdata->debit_level, get_age(ch),
-   ( ch->played + (int) (current_time - ch->logon) ) / 3600 );
- */
+     int i;
 
      sprintf( buf,
    "You are %s %s, %d years old (%d hours).\n\r",
    ch->name, IS_NPC(ch) ? "" : ch->pcdata->surname,
    get_age(ch), ( ch->played + (int) (current_time - ch->logon) ) / 3600);
-/*     sprintf( buf,
-   "You are %s %s, %d years old (%d hours).\n\r%s%s%s",
-   ch->name, IS_NPC(ch) ? "" : ch->pcdata->surname,
-   get_age(ch), ( ch->played + (int) (current_time - ch->logon) ) / 3600,
-   wound, mental, moves );*/
      send_to_char( buf, ch );
 
-/*   if ( ch->position == POS_FIGHTING )
-   {
-     send_to_char("{RStats not available during combat.{x\r\n",ch);
-   }
-   else
-*/   {
-  if (is_affected(ch,gsn_rage))
-     sprintf(buf, "You have ??? {Yhit points{x, %d of %d {Gmana{x, %d of %d {Bmoves{x.\n\r",
-        ch->mana,ch->max_mana,ch->move,ch->max_move);
-  else
-     sprintf(buf, "You have %d of %d {Yhit points{x, %d of %d {Gmana{x, %d of %d {Bmoves{x.\n\r",
-      ch->hit,ch->max_hit,ch->mana,ch->max_mana,ch->move,ch->max_move);
+  if (is_affected(ch,gsn_rage)) {
+      sprintf(buf, "You have ??? {Yhit points{x, %d of %d {Gmana{x, %d of %d {Bmoves{x.\n\r",
+              ch->mana, ch->max_mana, ch->move, ch->max_move);
+  } else {
+      sprintf(buf, "You have %d of %d {Yhit points{x, %d of %d {Gmana{x, %d of %d {Bmoves{x.\n\r",
+              ch->hit, ch->max_hit, ch->mana, ch->max_mana, ch->move, ch->max_move);
+  }
      send_to_char(buf, ch);
-   }
+
 
      if ( get_trust( ch ) != ch->level )
      {
@@ -2847,7 +2753,7 @@ void do_score( CHAR_DATA *ch, char *argument )
      }
 
      sprintf( buf,
-   "You are carrying %d.%d/%d.%d items, %d.%d of %d.%d pounds.\n\r",
+   "You are carrying %d.%d/%d.%d items, %ld.%ld of %d.%d pounds.\n\r",
    ch->carry_number / 10, ch->carry_number % 10,
    can_carry_n(ch) /10, can_carry_n(ch) % 10,
    get_carry_weight(ch) / 10, get_carry_weight(ch) % 10,
@@ -2872,7 +2778,7 @@ void do_score( CHAR_DATA *ch, char *argument )
        if(ch->pcdata->clan_info->delay_merit)
        {
          MERIT_TRACKER *mtrack;
-         int amount = 0, earliest = 0, early_val = 0;
+         int amount = 0;
          for(mtrack = ch->pcdata->clan_info->delay_merit; mtrack; mtrack = mtrack->next)
          {
            amount += mtrack->amount;
@@ -3629,7 +3535,6 @@ void do_whois (CHAR_DATA *ch, char *argument)
   CHAR_DATA *wch;
   char const *class;
   char who_name[200];
-  int len;
   char const *display_race;
 
   if (d->connected != CON_PLAYING || !can_see(ch,d->character,TRUE))
@@ -3665,7 +3570,7 @@ void do_whois (CHAR_DATA *ch, char *argument)
       if ( wch->clan && !is_clan(wch))
        sprintf(sbuf," ");
 
-    sprintf(cbuf,clan_table[wch->clan].who_name);
+    sprintf(cbuf, "%s", clan_table[wch->clan].who_name);
     if ( clan_table[wch->clan].hidden &&
         ( !is_same_clan(wch,ch) || (IS_IMMORTAL(ch) && get_trust(ch)<58)) )
         {
@@ -3711,13 +3616,12 @@ void do_whois (CHAR_DATA *ch, char *argument)
       /* a little formatting */
   if (wch->level >= MAX_LEVEL - 8) {
     if ( wch->pcdata->who_name && (wch->pcdata->who_name[0] != '\0')) {
-      strcpy (who_name,"             ");
-      len = strlen (wch->pcdata->who_name);
-      if (len > 11) {
-        strncpy (who_name,wch->pcdata->who_name,12);
-      } else {
-        strncpy (&who_name[(12-len)/2],wch->pcdata->who_name,len);
+      int max_len = 12;
+      int padding = (max_len - strlen(wch->pcdata->who_name)) / 2;
+      if (padding < 0) {
+          padding = 0;
       }
+      sprintf(who_name, "%*s%.12s%*s", padding, "", wch->pcdata->who_name, padding, "");
       who_name[12] = '\0';
       class = who_name;
     }
@@ -3785,7 +3689,6 @@ void do_whois (CHAR_DATA *ch, char *argument)
 
 void do_cstat(CHAR_DATA *ch)
 {
-    CSTAT_DATA *cstat;
     char buf[MAX_STRING_LENGTH];
 
     send_to_char("Are stats really that important?  Go PKill now.",ch);
@@ -3841,7 +3744,7 @@ void do_who( CHAR_DATA *ch, char *argument )
 {
     char buf[MAX_STRING_LENGTH];
     char buf2[MAX_STRING_LENGTH];
-    char sbuf[MAX_STRING_LENGTH], cbuf[MAX_STRING_LENGTH];
+    char sbuf[MAX_INPUT_LENGTH], cbuf[MAX_INPUT_LENGTH];
     BUFFER *output;
     DESCRIPTOR_DATA *d;
     int iClass;
@@ -4001,7 +3904,6 @@ void do_who( CHAR_DATA *ch, char *argument )
         CHAR_DATA *wch;
         char const *class;
         char who_name[200];
-        int len;
         char const *display_race;
 
         /*
@@ -4093,7 +3995,7 @@ void do_who( CHAR_DATA *ch, char *argument )
         && is_clan(wch)) sprintf(sbuf, "] ");
       if (wch->clan && !is_clan(wch) ) sprintf(sbuf," ");
 
-      sprintf(cbuf,clan_table[wch->clan].who_name);
+      sprintf(cbuf, "%s", clan_table[wch->clan].who_name);
         if(clan_table[wch->clan].hidden &&
          ( !is_same_clan(wch,ch) || (IS_IMMORTAL(ch) && get_trust(ch)<58) ) )
           {
@@ -4134,13 +4036,12 @@ if(wch->pcdata && wch->pcdata->clan_info)
         {
 
     if ( wch->pcdata->who_name && (wch->pcdata->who_name[0] != '\0')) {
-      strcpy (who_name,"             ");
-      len = strlen (wch->pcdata->who_name);
-      if (len > 11) {
-        strncpy (who_name,wch->pcdata->who_name,12);
-      } else {
-        strncpy (&who_name[(12-len)/2],wch->pcdata->who_name,len);
+      int max_len = 12;
+      int padding = (max_len - strlen (wch->pcdata->who_name)) / 2;
+      if (padding < 0) {
+          padding = 0;
       }
+      sprintf(who_name, "%*s%.12s%*s", padding, "", wch->pcdata->who_name, padding, "");
       who_name[12] = '\0';
       class = who_name;
     }
@@ -4859,96 +4760,12 @@ void do_kr( CHAR_DATA *ch, char *argument)
  void do_report( CHAR_DATA *ch, char *argument )
  {
      char buf[MAX_INPUT_LENGTH];
-//     char wound[80];
-//     char mental[80];
-//     char moves[80];
-     int percent = 0;
 
      if ( is_affected(ch, gsn_rage) )
      {
          send_to_char("Report?  Report what?  You feel just FINE!\n\r",ch);
          return;
      }
-// OLD report with no numbers, new report is after it.
-/*    if (ch->max_hit > 0)
-    percent = ch->hit * 100 / ch->max_hit;
-      else
-    percent = -1;
-
-      if (percent >= 100)
-    strcpy(wound,"I am in excellent condition, ");
-      else if (percent >= 90)
-    strcpy(wound,"I have a few scratches, ");
-      else if (percent >= 75)
-    strcpy(wound,"I have some small wounds and bruises, ");
-      else if (percent >= 50)
-    strcpy(wound,"I have quite a few wounds, ");
-      else if (percent >= 30)
-    strcpy(wound,"I have some big nasty wounds and scratches, ");
-      else if (percent >= 15)
-    strcpy(wound,"I am pretty hurt, ");
-      else if (percent >= 0)
-    strcpy(wound,"I am in awful condition, ");
-      else
-    strcpy(wound,"I am bleeding to death, ");
-
-      if (ch->max_mana > 0)
-    percent = ch->mana * 100 / ch->max_mana;
-      else
-    percent = -1;
-
-      if (percent >= 100)
-    strcpy(mental,"am mentally fit ");
-      else if (percent >= 90)
-    strcpy(mental,"am a bit slow ");
-      else if (percent >= 75)
-    strcpy(mental,"have some mental lapses ");
-      else if (percent >= 50)
-    strcpy(mental,"am quite drained ");
-      else if (percent >= 30)
-    strcpy(mental,"feel dazed ");
-      else if (percent >= 15)
-    strcpy(mental,"am nearly spent ");
-      else if (percent >= 0)
-    strcpy(mental,"am brain dead ");
-      else
-    strcpy(mental,"am helpless ");
-
-      if (ch->max_move > 0)
-    percent = ch->move * 100 / ch->max_move;
-      else
-    percent = -1;
-
-      if (percent >= 100)
-    strcpy(moves,"and am full of energy.");
-      else if (percent >= 90)
-    strcpy(moves,"and am energetic.");
-      else if (percent >= 75)
-    strcpy(moves,"and am breathing hard.");
-      else if (percent >= 50)
-    strcpy(moves,"and my heart is pounding.");
-      else if (percent >= 30)
-    strcpy(moves,"and feel winded.");
-      else if (percent >= 15)
-    strcpy(moves,"and am cramping up.");
-      else if (percent >= 0)
-    strcpy(moves,"and am exhausted.");
-      else
-    strcpy(moves,"and am motionless.");
-
-     sprintf( buf,
-   "You say '%s%s%s %d xp.'\n\r",
-   wound, mental, moves,
-   ch->exp   );
-
-     send_to_char( buf, ch );
-
-     sprintf( buf, "$n says '%s%s%s %d xp.'",
-   wound, mental, moves,
-   ch->exp   );
-
-     act( buf, ch, NULL, NULL, TO_ROOM, TRUE );
-*/
    sprintf(buf, "You say 'I have %d/%d hp, %d/%d mana, %d/%d mv. %d xp.'", ch->hit, ch->max_hit, ch->mana, ch->max_mana, ch->move, ch->max_move, ch->exp);
    send_to_char(buf,ch);
 
@@ -4973,29 +4790,6 @@ void do_kr( CHAR_DATA *ch, char *argument)
 
      if ( IS_NPC(ch) )
    return;
-
-/*
-     if ( argument[0] == '-' )
-     {
-        argument = argument +1;
-        if ( !str_cmp(argument,"skills") )
-                fSkills = TRUE;
-        else
-        if ( !str_cmp(argument,"spells") )
-                fSpells = TRUE;
-        else
-        if ( !str_cmp(argument,"new") )
-                fNew = TRUE;
-        else
-        if ( !str_cmp(argument,"skip") )
-                fSkip = TRUE;
-        else
-        if ( !str_cmp(argument,"old") )
-                fOld = TRUE;
-        else
-                argument[0] = '\0';
-     }
-     */
 
      target_name = one_argument( argument, arg );
      one_argument( target_name, arg2 );
@@ -5221,7 +5015,7 @@ void do_kr( CHAR_DATA *ch, char *argument)
  {
      char arg1[MAX_INPUT_LENGTH];
      char arg2[MAX_INPUT_LENGTH];
-     char log_buf[MAX_INPUT_LENGTH];
+     char log_buf[MAX_STRING_LENGTH];
      char *pArg;
      char *pwdnew;
      char *p;
@@ -5423,119 +5217,8 @@ bool check_match( CHAR_DATA *ch, CHAR_DATA *victim)
 
 void do_enemy( CHAR_DATA *ch, char *argument )
 {
-   char buf[MAX_STRING_LENGTH];
-   DESCRIPTOR_DATA *d;
-   CHAR_DATA *victim;
-   char arg1[MAX_INPUT_LENGTH];
-
 /* Enemy code killed by NIGHTDAGGER on 04/25/2003 */
    send_to_char("Enemy lists don't exist anymore.\n\r",ch);
-   return;
-
-/*   if (ch->clan != clan_lookup("warlock")
-       && ch->clan != clan_lookup("zealot")
-       && ch->clan != clan_lookup("honor")
-       && ch->clan != clan_lookup("posse"))
-      return;
-
-   one_argument(argument, arg1);
-
-   if( ch->pcdata->rank == MAX_RANK && arg1[0] != '\0' )
-   {
-      if ( (victim = get_char_world(ch, arg1)) == NULL )
-      {
-         send_to_char("They aren't here.\n\r", ch);
-         return;
-      }
-
-      if (IS_NPC(victim))
-      {
-         send_to_char("Don't be a fucknut.\n\r", ch);
-         return;
-      }
-
-      if (ch->clan == clan_lookup("warlock"))
-         if (IS_SET(victim->mhs,MHS_WARLOCK_ENEMY))
-            REMOVE_BIT(victim->mhs,MHS_WARLOCK_ENEMY);
-
-      if (ch->clan == clan_lookup("zealot"))
-         if (IS_SET(victim->mhs,MHS_ZEALOT_ENEMY))
-            REMOVE_BIT(victim->mhs,MHS_ZEALOT_ENEMY);
-
-      if (ch->clan == clan_lookup("posse"))
-         if (IS_SET(victim->mhs,MHS_POSSE_ENEMY))
-            REMOVE_BIT(victim->mhs,MHS_POSSE_ENEMY);
-
-      if (ch->clan == clan_lookup("honor"))
-         if (IS_SET(victim->mhs,MHS_HONOR_ENEMY))
-            REMOVE_BIT(victim->mhs,MHS_HONOR_ENEMY);
-
-      send_to_char("Enemy Removed.",ch);
-   }
-   else
-   {
-      if(ch->clan == clan_lookup("warlock"))
-      {
-         strcpy( buf, "WARLOCK ENEMIES:\n\r");
-         for (d = descriptor_list; d != NULL; d = d->next)
-         {
-            if (d->character != NULL)
-            {
-               if (IS_SET(d->character->mhs, MHS_WARLOCK_ENEMY))
-               {
-                  strcat( buf, d->character->name);
-                  strcat( buf, "\n\r");
-               }
-            }
-         }
-      }
-      if(ch->clan == clan_lookup("posse"))
-      {
-         strcpy( buf, "POSSE ENEMIES:\n\r");
-         for (d = descriptor_list; d != NULL; d = d->next)
-         {
-            if (d->character != NULL)
-            {
-               if (IS_SET(d->character->mhs, MHS_POSSE_ENEMY))
-               {
-                  strcat( buf, d->character->name);
-                  strcat( buf, "\n\r");
-               }
-            }
-         }
-      }
-      if(ch->clan == clan_lookup("zealot"))
-      {
-         strcpy( buf, "ZEALOT ENEMIES:\n\r");
-         for (d = descriptor_list; d != NULL; d = d->next)
-         {
-            if (d->character != NULL)
-            {
-               if (IS_SET(d->character->mhs, MHS_ZEALOT_ENEMY))
-               {
-                  strcat( buf, d->character->name);
-                  strcat( buf, "\n\r");
-               }
-            }
-         }
-      }
-      if(ch->clan == clan_lookup("honor"))
-      {
-         strcpy( buf, "HONOR ENEMIES:\n\r");
-         for (d = descriptor_list; d != NULL; d = d->next)
-         {
-            if (d->character != NULL)
-            {
-               if (IS_SET(d->character->mhs, MHS_HONOR_ENEMY))
-               {
-                  strcat( buf, d->character->name);
-                  strcat( buf, "\n\r");
-               }
-            }
-         }
-      }
-      send_to_char( buf, ch );
-   }*/
    return;
 }
 
