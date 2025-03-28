@@ -88,8 +88,8 @@ void save_area ( CHAR_DATA *ch, AREA_DATA *pArea )
   AFFECT_DATA *af;
   FILE *fp;
   char *pstr,*pstr2;
-  char buf[MAX_STRING_LENGTH],
-       buf2[MAX_STRING_LENGTH],
+  char buf[MAX_INPUT_LENGTH],
+       buf2[MAX_INPUT_LENGTH],
        sbuf[MAX_STRING_LENGTH];
   int vnum,door,flags;
 
@@ -105,7 +105,7 @@ void save_area ( CHAR_DATA *ch, AREA_DATA *pArea )
       pstr2 = ++pstr;
       pstr = strchr (pstr,'.');
     }
-    *pstr2 = NULL;
+    *pstr2 = 0;
     strcat (buf2,"bak");
     fp = fopen (buf2,"r");
     if (fp != NULL) {
