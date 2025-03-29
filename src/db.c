@@ -65,7 +65,7 @@ time_t time(time_t *tloc);
 #endif
 
 bool new_helps = FALSE;// New help code
-void load_new_helps(HELP_DATA **first, HELP_DATA **last, int *counter);
+int load_new_helps(HELP_DATA **first, HELP_DATA **last);
 void create_help_tracks(void);
 
 /* externals for counting purposes */
@@ -415,7 +415,6 @@ void do_synchelps( CHAR_DATA *ch, char *argument )
   char *old_greeting;
   HELP_TRACKER *pTracker, *pTracker_next;
   HELP_DATA *first_new = NULL, *last_new = NULL;
-  int top_new = 0;
   oldfp = fopen(HELP_FILE_OLC, "r");
   if(!oldfp)
   {
@@ -461,7 +460,7 @@ void do_synchelps( CHAR_DATA *ch, char *argument )
   // Live reload now
   old_greeting = help_greeting;
   help_greeting = NULL;// Ensures it's available in the new helps
-  load_new_helps(&first_new, &last_new, &top_new);
+  int top_new = load_new_helps(&first_new, &last_new);
   if(!help_greeting) // BIG PROBLEM IF THIS HAPPENS - game can't start
   {// Little has been added to memory at this point
     delete_helps(&first_new);
@@ -588,7 +587,9 @@ void rename_area (char *strArea)
       pstr2 = ++pstr;
       pstr = strchr (pstr,'.');
     }
-    if (pstr2) *pstr2 = (char)NULL;
+    if (pstr2) {
+        pstr2 = "";
+    }
     strcat (buf2,"old");
     fp = fopen (buf2,"r");
     if (fp != NULL) {
@@ -607,7 +608,9 @@ void rename_area (char *strArea)
     pstr2 = ++pstr;
     pstr = strchr (pstr,'.');
   }  
-  if (pstr2) *pstr2 = (char)NULL;
+  if (pstr2) {
+      pstr2 = "";
+  }
   strcat (strBak,"bak");  
   
   fp = fopen (strArea,"r");
@@ -1008,7 +1011,7 @@ void boot_db( void )
     {
   FILE *fpList;
 
-  load_new_helps(&help_first, &help_last, &top_help);//New help code
+  top_help = load_new_helps(&help_first, &help_last);//New help code
 
   sprintf(log_buf, "loading areas from %s", AREA_LIST);
   log_string(log_buf);
@@ -1365,15 +1368,16 @@ void create_help_tracks(void)
   }
 }
 
-void load_new_helps(HELP_DATA **first, HELP_DATA **last, int *counter)
+int load_new_helps(HELP_DATA **first, HELP_DATA **last)
 {
   HELP_DATA *pHelp;
   char buf[255];
+  int counter = 0;
   FILE *fp = fopen(HELP_FILE, "r");
   if(!fp)
   {// Load the old help files
     bug("Unable to open new help file.\n\r", 0);
-    return;
+    return 0;
   }
   new_helps = TRUE;
   for ( ; ; )
@@ -1402,7 +1406,11 @@ void load_new_helps(HELP_DATA **first, HELP_DATA **last, int *counter)
       }
     }
     
-    fscanf(fp, "%ld %d %s",  &pHelp->modified, &pHelp->status, buf);
+    int count = fscanf(fp, "%ld %d %s",  &pHelp->modified, &pHelp->status, buf);
+    if (count < 3) {
+        sprintf(log_buf, "load_new_helps: fscanf returned %d (less than 3)", count);
+        log_error(log_buf);
+    }
 
     if(!pHelp->status)
       pHelp->status = HELP_STAT_LEGACY;
@@ -1424,9 +1432,10 @@ void load_new_helps(HELP_DATA **first, HELP_DATA **last, int *counter)
   
     *last = pHelp;
     pHelp->next = NULL;
-    *counter++;
+    counter += 1;
   }
   fclose(fp);
+  return counter;
 }
 
 /*
@@ -2647,10 +2656,12 @@ void MobIndexToInstance ( CHAR_DATA *mob, MOB_INDEX_DATA *pMobIndex )
   int i;
   AFFECT_DATA af;
   
-  while ( mob->flash_affected )
-    flash_affect_remove( mob, mob->flash_affected, APPLY_PRIMARY);
-  while ( mob->affected )
-    affect_remove( mob, mob->affected, APPLY_PRIMARY);
+  while ( mob->flash_affected ) {
+      flash_affect_remove(mob, mob->flash_affected, APPLY_PRIMARY);
+  }
+  while ( mob->affected ) {
+      affect_remove(mob, mob->affected, APPLY_PRIMARY);
+  }
 
 
     mob->pIndexData = pMobIndex;
@@ -2964,8 +2975,9 @@ void ObjIndexToInstance ( OBJ_DATA *obj, OBJ_INDEX_DATA *pObjIndex, int level, b
   int i;
   AFFECT_DATA *paf;
 
-  while ( obj->affected )
-    affect_remove_obj ( obj, obj->affected );
+  while ( obj->affected ) {
+      affect_remove_obj(obj, obj->affected);
+  }
   
     obj->enchanted  = FALSE;
     obj->warps 	    = 0;
@@ -3078,8 +3090,9 @@ void ObjIndexToInstance ( OBJ_DATA *obj, OBJ_INDEX_DATA *pObjIndex, int level, b
       case 1:
       case 2: 
       case 3:
-	  if ( obj->value[4] == 0  && ( obj->value[1] > 1 && obj->value[2] > 1))
-		SET_BIT( obj->value[4], WEAPON_VORPAL );
+	  if ( obj->value[4] == 0  && ( obj->value[1] > 1 && obj->value[2] > 1)) {
+          SET_BIT(obj->value[4], WEAPON_VORPAL);
+      }
 		sprintf(log_buf,"Vorpal: %s vnum %d after %d",
 			obj->name,obj->pIndexData->vnum,weapons_popped);
 		break;
@@ -3996,12 +4009,9 @@ char *str_dup( const char *str )
     if ( str >= string_space && str < top_string )
   return (char *) str;
 
-#ifdef OLC_VERSION
-    str_new = alloc_mem( strlen(str) + 1 );
-#else
-    str_new = GC_MALLOC( strlen(str) );
-#endif
-    strncpy( str_new, str, strlen(str) );
+    str_new = GC_MALLOC(strlen(str) + 1);
+    strcpy(str_new, str);
+
     return str_new;
 }
 
@@ -4438,7 +4448,7 @@ void do_dump( CHAR_DATA *ch, char *argument )
     aff_count = 0;
 
     /* mobile prototypes */
-    fprintf(fp,"MobProt %4d (%8d bytes)\n",
+    fprintf(fp,"MobProt %4d (%8ld bytes)\n",
   top_mob_index, top_mob_index * (sizeof(*pMobIndex))); 
 
     /* mobs */
@@ -4454,7 +4464,7 @@ void do_dump( CHAR_DATA *ch, char *argument )
     for (fch = char_free; fch != NULL; fch = fch->next)
   count2++;
 
-    fprintf(fp,"Mobs  %4d (%8d bytes), %2d free (%d bytes)\n",
+    fprintf(fp,"Mobs  %4d (%8ld bytes), %2d free (%ld bytes)\n",
   count, count * (sizeof(*fch)), count2, count2 * (sizeof(*fch)));
 
     /* pcdata */
@@ -4462,7 +4472,7 @@ void do_dump( CHAR_DATA *ch, char *argument )
     for (pc = pcdata_free; pc != NULL; pc = pc->next)
   count++; 
 
-    fprintf(fp,"Pcdata  %4d (%8d bytes), %2d free (%d bytes)\n",
+    fprintf(fp,"Pcdata  %4d (%8ld bytes), %2d free (%ld bytes)\n",
   num_pcs, num_pcs * (sizeof(*pc)), count, count * (sizeof(*pc)));
 
     /* descriptors */
@@ -4472,7 +4482,7 @@ void do_dump( CHAR_DATA *ch, char *argument )
     for (d= descriptor_free; d != NULL; d = d->next)
   count2++;
 
-    fprintf(fp, "Descs  %4d (%8d bytes), %2d free (%d bytes)\n",
+    fprintf(fp, "Descs  %4d (%8ld bytes), %2d free (%ld bytes)\n",
   count, count * (sizeof(*d)), count2, count2 * (sizeof(*d)));
 
     /* object prototypes */
@@ -4484,7 +4494,7 @@ void do_dump( CHAR_DATA *ch, char *argument )
             nMatch++;
         }
 
-    fprintf(fp,"ObjProt %4d (%8d bytes)\n",
+    fprintf(fp,"ObjProt %4d (%8ld bytes)\n",
   top_obj_index, top_obj_index * (sizeof(*pObjIndex)));
 
 
@@ -4499,7 +4509,7 @@ void do_dump( CHAR_DATA *ch, char *argument )
     for (obj = obj_free; obj != NULL; obj = obj->next)
   count2++;
 
-    fprintf(fp,"Objs  %4d (%8d bytes), %2d free (%d bytes)\n",
+    fprintf(fp,"Objs  %4d (%8ld bytes), %2d free (%ld bytes)\n",
   count, count * (sizeof(*obj)), count2, count2 * (sizeof(*obj)));
 
     /* affects */
@@ -4507,15 +4517,15 @@ void do_dump( CHAR_DATA *ch, char *argument )
     for (af = affect_free; af != NULL; af = af->next)
   count++;
 
-    fprintf(fp,"Affects %4d (%8d bytes), %2d free (%d bytes)\n",
+    fprintf(fp,"Affects %4d (%8ld bytes), %2d free (%ld bytes)\n",
   aff_count, aff_count * (sizeof(*af)), count, count * (sizeof(*af)));
 
     /* rooms */
-    fprintf(fp,"Rooms %4d (%8d bytes)\n",
+    fprintf(fp,"Rooms %4d (%8ld bytes)\n",
   top_room, top_room * (sizeof(*room)));
 
      /* exits */
-    fprintf(fp,"Exits %4d (%8d bytes)\n",
+    fprintf(fp,"Exits %4d (%8ld bytes)\n",
   top_exit, top_exit * (sizeof(*exit)));
 
     fclose(fp);

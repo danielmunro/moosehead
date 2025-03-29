@@ -97,7 +97,7 @@ void test_one_argument_successive() {
 
     char *result1 = one_argument(argument, arg1);
     char *result2 = one_argument(result1, arg2);
-    char *result3 = one_argument(result2, arg3);
+    one_argument(result2, arg3);
 
     ok(strcmp(arg1, "get") == 0);
     ok(strcmp(arg2, "foo") == 0);
@@ -148,7 +148,7 @@ void test_one_argument_cs_successive() {
 
     char *result1 = one_argument_cs(argument, arg1);
     char *result2 = one_argument_cs(result1, arg2);
-    char *result3 = one_argument_cs(result2, arg3);
+    one_argument_cs(result2, arg3);
 
     ok(strcmp(arg1, "get") == 0);
     ok(strcmp(arg2, "foo") == 0);

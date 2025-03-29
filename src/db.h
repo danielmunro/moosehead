@@ -36,9 +36,9 @@ extern AREA_NAME_DATA  *area_name_first,*area_name_last;
 /* from db2.c */
 extern int  social_count;
 
-/* conversion from db.h */
 void  convert_mob(MOB_INDEX_DATA *mob);
 void  convert_obj(OBJ_INDEX_DATA *obj);
+char *str_dup(const char *str);
 
 /* macro for flag swapping */
 #define GET_UNSET(flag1,flag2)  (~(flag1)&((flag1)|(flag2)))
