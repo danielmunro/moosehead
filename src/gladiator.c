@@ -997,19 +997,17 @@ void begin_gladiator (void)
                else
                   team_select = 1;
 
-               if(d->character->pcdata->gladiator_team == 1)
-                  random = get_room_index(ROOM_VNUM_TEAM_GLADIATOR);
-                  if (gladiator_info.blind == TRUE)
-                  {
+               if(d->character->pcdata->gladiator_team == 1) {
+                   random = get_room_index(ROOM_VNUM_TEAM_GLADIATOR);
+               }
+              if (gladiator_info.blind) {
                      free_string( d->character->long_descr );                
 	             /* NEVER go past this length */
 	             d->character->long_descr = str_dup( "An extra long Gladiator string is here, taking up space." );
 	             set_glad_name(d->character);
-                  }
-               else
-	       {
+              } else {
                   random = get_room_index(ROOM_VNUM_TEAM_BARBARIAN);
-                  if (gladiator_info.blind == TRUE)
+                  if (gladiator_info.blind)
                   {
                      free_string( d->character->long_descr );           
 	             /* NEVER go past this length */
@@ -1438,7 +1436,7 @@ void do_odds ( CHAR_DATA *ch , char *argument )
   DESCRIPTOR_DATA *d;
   char buf[MAX_STRING_LENGTH];
   char buf1[60];
-  char buf2[10];
+  char buf2[11];
   int this_odds = 0;
   int odds = 0;
   int thiswinloss, gladadj, winlossavg, avg_level; 
