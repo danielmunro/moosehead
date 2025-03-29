@@ -197,14 +197,26 @@ bool is_aligned( CHAR_DATA *ch )
 
   switch(deity_table[ch->pcdata->deity].align)
   {
-   case ALIGN_NONE: matches = TRUE; break;
+   case ALIGN_NONE:
+    matches = TRUE;
+    break;
    case ALIGN_GOOD:
-	if(IS_GOOD(ch)) matches = TRUE; break;
+	if(IS_GOOD(ch)) {
+        matches = TRUE;
+    }
+    break;
    case ALIGN_NEUTRAL:
-	if(IS_NEUTRAL(ch)) matches = TRUE; break;
+	if(IS_NEUTRAL(ch)) {
+        matches = TRUE;
+    }
+    break;
    case ALIGN_EVIL:
-	if(IS_EVIL(ch)) matches = TRUE; break;
-   default: return matches;
+	if(IS_EVIL(ch)) {
+        matches = TRUE;
+    }
+    break;
+   default:
+       return matches;
    }
 
    return matches;
@@ -216,7 +228,6 @@ void do_pray( CHAR_DATA *ch, char *argument )
     char buf[MAX_STRING_LENGTH];
     DESCRIPTOR_DATA *d; 
     int gift;
-    int giftcost;
 
     if(IS_NPC(ch))
       return;
@@ -663,8 +674,8 @@ void give_gift(CHAR_DATA *ch,int gift)
 	     if(!IS_NPC(gch))
 	       if ( !IS_SET (gch->mhs, MHS_BANISH) && 
 		  gch->pcdata->deity != deity_lookup("almighty") &&
-		  number_percent() < ch->clan == nonclan_lookup("zealot") ?
-		  40 : 5 )
+		  number_percent() < (ch->clan == nonclan_lookup("zealot") ?
+		  40 : 5 ))
                   {
 		    SET_BIT(gch->mhs, MHS_BANISH);
 		  }
@@ -828,7 +839,6 @@ void reanimation(CHAR_DATA *ch)
 	
   if(ch->pcdata && ch->pcdata->linked[0])
   {
-    bool found = FALSE;
     int i;
     for(i = 0; i < LINK_MAX; i++)
     {
@@ -836,7 +846,6 @@ void reanimation(CHAR_DATA *ch)
         break;
       if(ch->pcdata->linked[i]->wear_loc == WEAR_HIDDEN)
       {
-        found = TRUE;
         ch->pcdata->linked[i]->wear_loc = WEAR_NONE;
         if(ch->pcdata->linked[i]->damaged == 1000)
           act("$p is {Rshattered{x and will cost extra to repair.", ch, ch->pcdata->linked[i], NULL, TO_CHAR, FALSE);
@@ -1808,7 +1817,7 @@ int deity_favor_message(CHAR_DATA *ch, CHAR_DATA *victim, int xp)
 		 If a lower level has a unique a higher level doesn't (And the higher level has uniques also)
 		  it should be split in do_favor_reward by checking favor level for that index
 	*/
-	int rarity[FAVOR_RARITY], i, j, count, total[FAVOR_RARITY], strength;
+	int rarity[FAVOR_RARITY], i, j, count, total[FAVOR_RARITY], strength = 0;
 	memset(rarity, 0, sizeof(int) * FAVOR_RARITY);
 	/* Three favor levels, which modify which rewards are available */
 	switch(ch->pcdata->deity_favor)
