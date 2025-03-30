@@ -37,24 +37,9 @@
 
 #define FLA_LINE_NUM      1
 
-/* void edit_line  ( CHAR_DATA *ch, int num ); */
 void edit_line_show ( CHAR_DATA *ch, bool show_pos );
 void insert_line (CHAR_DATA *ch,char *mode,int ins_after,bool show);
 int count_lines ( CHAR_DATA *ch );
-
-/* MENU_DATA line_menu = {
-  {"Line Editor","",0,NULL},
-  {"[Clear] Buffer","clear",ID_LINE_CLEAR,edit_line},
-  {"[Show] Buffer","show",ID_LINE_SHOW,edit_line},
-  {"[Append] Lines","append",ID_LINE_APPEND,edit_line},
-  {"[Insert] After Line","insert",ID_LINE_INSERT,edit_line},
-  {"[Delete] Lines","object",ID_LINE_DELETE,edit_line},
-  {"[Replace] Line","replace",ID_LINE_REPLACE,edit_line},
-  {"Toggle Line [Numbers]","numbers",ID_LINE_NUM,edit_line},
-  {"[Cancel] Changes","cancel",ID_LINE_CANCEL,edit_line},
-  {"[Exit] Editor","exit",ID_LINE_EXIT,edit_line},
-  {NULL,"",0,NULL}
-}; */
 
 char *get_line_from_buf (char *arg,char *buf)
 {   
@@ -62,20 +47,20 @@ char *get_line_from_buf (char *arg,char *buf)
   char c;  
   
   idx = 0;  
-  buf[0] = NULL;
+  buf[0] = '\0';
   if (!arg || !arg[0]) return NULL;  
   while (idx < MAX_STRING_LENGTH) {
     c = arg[idx];
     switch (c) {          
       case '\n':
         if (arg[idx+1] == '\r') {          
-          buf[idx] = NULL;
+          buf[idx] = '\0';
           idx++;
         }        
       case '\r':
         idx++;
       case '\0':        
-        buf[idx] = NULL;
+        buf[idx] = '\0';
         return arg+idx;        
       default:
         buf[idx] = c;
@@ -138,8 +123,7 @@ void do_line_editor ( CHAR_DATA *ch, char *arg, DO_FUN *call_back )
     insert_line (ch,"Type '/help' for a list of commands.",count_lines(ch),TRUE);
   } else {
     return;
-  }  
-  /* do_menu (ch,NULL); */
+  }
 }
 
 LINE_DATA *get_line_num ( CHAR_DATA *ch, int num )
@@ -331,7 +315,7 @@ void get_delete_line_2 (CHAR_DATA *ch, char *arg, char *arg2)
 
 void get_delete_line_1 (CHAR_DATA *ch,char *arg)
 {
-  if (arg[0] == NULL) {
+  if (arg[0] == '\0') {
     send_to_char ("Deletion cancelled.\n\r",ch);
     insert_info (ch,NULL,FALSE);
     return;
@@ -371,7 +355,7 @@ void insert_line_callback (CHAR_DATA *ch, char *arg)
       act("$n comes back from the line editor.",ch,NULL,NULL,TO_ROOM,TRUE);
 
       line = ch->pcdata->line_edit->line;
-      bigbuf[0] = NULL;
+      bigbuf[0] = '\0';
       while (line) {
         strcat (bigbuf,line->text);
         strcat (bigbuf,"\n\r");
@@ -450,13 +434,13 @@ void insert_line_callback (CHAR_DATA *ch, char *arg)
     }
     if (!str_prefix (&arg2[1],"delete")) {
       arg = one_argument (arg,arg2);
-      if (arg2[0] == NULL) {
+      if (arg2[0] == '\0') {
         send_to_char ("Enter line to delete:  ",ch);
         ch->pcdata->interp_fun = &get_delete_line_1;
         return;
       } else {
         arg = one_argument (arg,arg3);
-        if (arg3[0] == NULL) {
+        if (arg3[0] == '\0') {
           get_delete_line_2 (ch,arg2,NULL);
           return;
         } else {
@@ -469,7 +453,7 @@ void insert_line_callback (CHAR_DATA *ch, char *arg)
     if (!str_prefix (&arg2[1],"insert")) {
       
       arg = one_argument (arg,arg2);
-      if (arg2[0] == NULL) {
+      if (arg2[0] == '\0') {
         send_to_char ("Insert after line:  ",ch);
         ch->pcdata->interp_fun = &get_insert_line_num;
         return;
