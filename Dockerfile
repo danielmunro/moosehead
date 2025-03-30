@@ -11,4 +11,4 @@ RUN make
 
 EXPOSE 4000
 
-CMD ["./moose", "4000"]
+ENTRYPOINT ["./moose"]

@@ -111,6 +111,9 @@ int clanner_count = 0;
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <arpa/telnet.h>
+
+extern char *help_greeting;
+
 const   char    echo_off_str    [] = { IAC, WILL, TELOPT_ECHO, '\0' };
 const   char    echo_on_str     [] = { IAC, WONT, TELOPT_ECHO, '\0' };
 const   char    go_ahead_str    [] = { IAC, GA, '\0' };
@@ -124,8 +127,9 @@ bool                god;                /* All new chars are gods!      */
 bool                merc_down;          /* Shutdown                     */
 bool                wizlock;            /* Game is wizlocked            */
 bool                newlock;            /* Game is newlocked            */
-bool		    no_dns;
+bool		        no_dns;
 char                str_boot_time[MAX_INPUT_LENGTH];
+char                greeting_message[MAX_STRING_LENGTH];
 time_t              current_time;       /* time of this pulse */
 sh_int		    avarice_kills;
 sh_int		    demise_kills;
@@ -175,7 +179,7 @@ void creation_message(DESCRIPTOR_DATA *d, bool forward);
 int creation_step(DESCRIPTOR_DATA *d, bool forward, bool accept);
 bool is_creation(DESCRIPTOR_DATA *d);
 
-int run(int port) {
+int run(const char *build_version, int port) {
     struct timeval now_time;
     int control = -1;
 
@@ -216,6 +220,10 @@ int run(int port) {
      * Get a fresh CSV dump of objects on every game startup.
      */
     dump_obj_csv();
+
+    sprintf(greeting_message, help_greeting, build_version);
+    sprintf(log_buf, "Build version is %-6.6s", build_version);
+    log_string(log_buf);
 
     sprintf(log_buf, "MHS is ready on port %d.", port);
     log_string(log_buf);
@@ -662,13 +670,7 @@ void init_descriptor(int control) {
     /*
      * Send the greeting.
      */
-    {
-        extern char *help_greeting;
-        if (help_greeting[0] == '.')
-            write_to_buffer(dnew, help_greeting + 1, 0);
-        else
-            write_to_buffer(dnew, help_greeting, 0);
-    }
+    write_to_buffer(dnew, greeting_message, 0);
 
     return;
 }
