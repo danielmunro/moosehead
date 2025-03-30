@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Usage
-# ./run.sh <image-to-run> <build>
+# ./run.sh <image-to-run> <tag>
 
 export IMAGE=$1
-export BUILD=$2
+export TAG=$2
 docker run --publish 4000:4000 \
            --mount type=volume,src=mud-data,dst=/mud/moosehead/data \
            --restart unless-stopped \
            --detach \
            --tty \
-           $IMAGE:$BUILD $BUILD 4000
+           $IMAGE:$TAG $TAG 4000
