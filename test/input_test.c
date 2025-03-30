@@ -122,6 +122,23 @@ void test_one_argument_single_quotes() {
     ok(strcmp(result, "bar") == 0);
 }
 
+void test_one_argument_one_word() {
+    char argument[MAX_INPUT_LENGTH] = "get";
+    char arg[MAX_INPUT_LENGTH];
+    char *result = one_argument(argument, arg);
+
+    ok(result[0] == '\0');
+    ok(strcmp(arg, "get") == 0);
+}
+
+void test_one_argument_empty_string() {
+    char argument[MAX_INPUT_LENGTH] = "";
+    char arg[MAX_INPUT_LENGTH];
+    one_argument(argument, arg);
+
+    ok(arg[0] == '\0');
+}
+
 void test_one_argument_cs() {
     char argument[MAX_INPUT_LENGTH] = "get foo bar";
     char arg[MAX_INPUT_LENGTH];
@@ -191,6 +208,8 @@ void run_input_tests() {
     test_one_argument_successive();
     test_one_argument_double_quotes();
     test_one_argument_single_quotes();
+    test_one_argument_one_word();
+    test_one_argument_empty_string();
 
     test_one_argument_cs();
     test_one_argument_cs_capitalization();
