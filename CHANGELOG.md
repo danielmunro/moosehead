@@ -1,5 +1,10 @@
 # Changelog
 
+## 2025-03-30
+
+* Add build version to the greeting screen.
+* Fix a ton of compiler warnings.
+
 ## 2025-03-26
 
 * fight.c - fix compiler warnings, format the file.

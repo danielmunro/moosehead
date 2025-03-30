@@ -17,4 +17,4 @@ RUN make
 WORKDIR /mud/moosehead/test
 RUN make
 
-CMD ["./test"]
+ENTRYPOINT ["./test"]

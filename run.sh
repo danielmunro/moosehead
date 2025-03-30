@@ -10,4 +10,4 @@ docker run --publish 4000:4000 \
            --restart unless-stopped \
            --detach \
            --tty \
-           $IMAGE $BUILD 4000
+           $IMAGE:$BUILD $BUILD 4000
