@@ -112,6 +112,12 @@ WEATHER_DATA    weather_info;
 int	weapons_popped = 0;
 GLADIATOR_INFO_DATA    gladiator_info;
 
+enum EqListType {
+    EQ_LIST_ARMOR,
+    EQ_LIST_WEAPON,
+    EQ_LIST_ALL
+};
+
 sh_int          gsn_light_blast;
 sh_int          gsn_shaded_room;
 sh_int          gsn_sunburst;
@@ -4228,33 +4234,32 @@ void do_eqlist( CHAR_DATA *ch, char *argument )
    char arg1[MAX_INPUT_LENGTH];
    char buf[MAX_STRING_LENGTH];
    char buf2[MAX_STRING_LENGTH];
-   char fname[20];
+   char fname[64];
+   int eq_list_to_generate;
 
    argument = one_argument(argument, arg1);
 
    if (arg1[0] == '\0')
    {
-      send_to_char("Arguement missing see 'help eqlist'.\n\r",ch);
+      send_to_char("Argument missing see 'help eqlist'.\n\r",ch);
       return;
    }
 
-//   fclose(fpReserve);
-
-   strcpy(fname, "eqlist.eql");
-
-   if (!str_prefix("armor",arg1))
-   {
-      strcpy(fname, "armor.eql");
-   }
-   if (!str_prefix("weapons",arg1))
-   {
-      strcpy(fname, "weapons.eql");
+   if (str_prefix("armor",arg1) == 0) {
+       sprintf(fname, "%s/armor.eql", DATA_DIR);
+       eq_list_to_generate = EQ_LIST_ARMOR;
+   } else if (str_prefix("weapons",arg1) == 0) {
+       sprintf(fname, "%s/weapons.eql", DATA_DIR);
+       eq_list_to_generate = EQ_LIST_WEAPON;
+   } else {
+       sprintf(fname, "%s/eqlist.eql", DATA_DIR);
+       eq_list_to_generate = EQ_LIST_ALL;
    }
 
    /* open file */
    fp = fopen(fname,"w");
 
-   if (!str_prefix("armor",arg1) || !str_prefix("all",arg1))
+   if (eq_list_to_generate == EQ_LIST_ARMOR || eq_list_to_generate == EQ_LIST_ALL)
    {
       nMatch = 0;
       for (vnum = 0; nMatch < top_obj_index; vnum++)
@@ -4327,7 +4332,7 @@ if( !IS_OBJ_STAT(pObjIndex,ITEM_NOIDENTIFY))
 	 }
    }
 
-   if (!str_prefix("weapons",arg1) || !str_prefix("all",arg1))
+   if (eq_list_to_generate == EQ_LIST_WEAPON || eq_list_to_generate == EQ_LIST_ALL)
    {
      for (wcount = 0; wcount < 10; wcount++)
      {
