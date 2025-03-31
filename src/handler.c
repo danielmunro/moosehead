@@ -41,7 +41,6 @@ DECLARE_DO_FUN(do_look  );
  */
 void  affect_modify args( ( CHAR_DATA *ch, AFFECT_DATA *paf, bool fAdd, int AppType ) );
 void  destruct_trade args( ( TRADE_DATA *trade, bool ifree ) );
-void  add_prev_owner args( ( OBJ_DATA *obj, CHAR_DATA *ch) );
 /*
  * External functions.
  */
@@ -765,23 +764,28 @@ bool is_clan(CHAR_DATA *ch)
 
 bool is_same_clan(CHAR_DATA *ch, CHAR_DATA *victim)
 {
-  if(IS_NPC(ch) || IS_NPC(victim))
-    return FALSE;
+  if(IS_NPC(ch) || IS_NPC(victim)) {
+      return FALSE;
+  }
   if(ch->pcdata->clan_info)
   {
-    if(ch->pcdata->clan_info->clan->default_clan)
-      return FALSE;
-    if(victim->pcdata->clan_info)
-      return ch->pcdata->clan_info->clan == victim->pcdata->clan_info->clan;
+    if(ch->pcdata->clan_info->clan->default_clan) {
+        return FALSE;
+    }
+    if(victim->pcdata->clan_info) {
+        return ch->pcdata->clan_info->clan == victim->pcdata->clan_info->clan;
+    }
     return FALSE;
   }
-  else if(victim->pcdata->clan_info)
-    return FALSE;
+  else if(victim->pcdata->clan_info) {
+      return FALSE;
+  }
 
-    if (clan_table[ch->clan].independent && clan_table[ch->clan].true_clan)
-  return FALSE;
-    else 
-  return (ch->clan == victim->clan);
+    if (clan_table[ch->clan].independent && clan_table[ch->clan].true_clan) {
+        return FALSE;
+    } else {
+        return (ch->clan == victim->clan);
+    }
 }
 
 /* checks mob format */
@@ -2148,14 +2152,11 @@ bool is_room_affected ( ROOM_INDEX_DATA *room, int sn )
 void affect_join( CHAR_DATA *ch, AFFECT_DATA *paf )
 {
     AFFECT_DATA *paf_old;
-    bool found;
-
-    found = FALSE;
     for ( paf_old = ch->affected; paf_old != NULL; paf_old = paf_old->next )
     {
   if ( paf_old->type == paf->type )
   {
-      paf->level = (paf->level += paf_old->level) / 2;
+      paf->level = (paf->level + paf_old->level) / 2;
       paf->duration += paf_old->duration;
       paf->modifier += paf_old->modifier;
       affect_remove( ch, paf_old, APPLY_BOTH);
@@ -3038,12 +3039,13 @@ void extract_char( CHAR_DATA *ch, bool fPull )
     nuke_pets(ch);
     ch->pet = NULL; /* just in case */
 
-  while(ch->damaged)
-    damage_remove(ch, ch->damaged);
+  while(ch->damaged) {
+      damage_remove(ch, ch->damaged);
+  }
 
-    if ( fPull )
-
-  die_follower( ch );
+    if ( fPull ) {
+        die_follower(ch);
+    }
   die_ignore(ch);
     
     stop_fighting( ch, TRUE );
@@ -3800,21 +3802,26 @@ bool can_see( CHAR_DATA *ch, CHAR_DATA *victim, bool ooc )
     int chance,nchance;
 
 /* RT changed so that WIZ_INVIS has levels */
-    if ( ch == victim )
-       return TRUE;
+    if ( ch == victim ) {
+        return TRUE;
+    }
 
-    if ( ooc && victim->level < 52 && (!IS_NPC(victim) || is_same_group(ch, victim)))
-	return TRUE;
+    if ( ooc && victim->level < 52 && (!IS_NPC(victim) || is_same_group(ch, victim))) {
+        return TRUE;
+    }
 
-    if ( get_trust(ch) < victim->invis_level)
-       return FALSE;
+    if ( get_trust(ch) < victim->invis_level) {
+        return FALSE;
+    }
 
-    if (get_trust(ch) < victim->incog_level && ch->in_room != victim->in_room)
-       return FALSE;
+    if (get_trust(ch) < victim->incog_level && ch->in_room != victim->in_room) {
+        return FALSE;
+    }
 
     if ( (!IS_NPC(ch) && IS_SET(ch->act, PLR_HOLYLIGHT)) 
-          ||(IS_NPC(ch) && IS_IMMORTAL(ch)))
-       return TRUE;
+          ||(IS_NPC(ch) && IS_IMMORTAL(ch))) {
+        return TRUE;
+    }
 
     if(victim->in_room && ch->in_room)
     {
@@ -3892,29 +3899,34 @@ bool can_see( CHAR_DATA *ch, CHAR_DATA *victim, bool ooc )
        chance += get_skill(victim, gsn_ninjitsu)/5;
 
 
-       if (IS_NPC(ch))
-	  chance *= 3/2;
+       if (IS_NPC(ch)) {
+           chance *= 3 / 2;
+       }
 
-          if( number_percent() < chance ) 
-             return FALSE;
+          if( number_percent() < chance ) {
+              return FALSE;
+          }
        } 
     
     if (IS_AFFECTED(victim, AFF_HIDE) && victim->fighting == NULL) 
     {
-       if(!IS_AFFECTED(ch,AFF_DETECT_HIDDEN))
-	  return FALSE;
+       if(!IS_AFFECTED(ch,AFF_DETECT_HIDDEN)) {
+           return FALSE;
+       }
 
        chance = get_skill(victim,gsn_hide);
        chance -= 25;//get_curr_stat(ch,STAT_INT);/* Maxed until rework */
        chance += get_curr_stat(victim,STAT_DEX);
        chance -= (ch->level - victim->level) * 2;
 
-       if ( victim->class == class_lookup("assassin") )
-          chance += get_curr_stat(victim,STAT_DEX);
+       if ( victim->class == class_lookup("assassin") ) {
+           chance += get_curr_stat(victim, STAT_DEX);
+       }
 
           if( number_percent() <= chance ||
-	      number_percent() < get_skill(victim, gsn_ninjitsu))
-             return FALSE;
+	      number_percent() < get_skill(victim, gsn_ninjitsu)) {
+              return FALSE;
+          }
        }
 
     return TRUE;
@@ -3996,7 +4008,7 @@ bool can_see_obj( CHAR_DATA *ch, OBJ_DATA *obj )
   return TRUE;
 
 
-    if(!IS_NPC(ch) && ch->clan != clan_lookup("smurf"))
+    if(!IS_NPC(ch) && ch->clan != nonclan_lookup("smurf"))
     {
        if ( IS_SET(obj->extra_flags, ITEM_INVIS)
             && !IS_AFFECTED(ch, AFF_DETECT_INVIS) )
@@ -4041,15 +4053,18 @@ bool can_wear_obj( CHAR_DATA *ch, OBJ_DATA *obj )
  */
 bool can_drop_obj( CHAR_DATA *ch, OBJ_DATA *obj )
 {
-  if(obj->link_name)
-    return FALSE;
+  if(obj->link_name) {
+      return FALSE;
+  }
 
     if ( !IS_SET(obj->extra_flags, ITEM_NODROP) ||
-      IS_SET(obj->extra_flags2, ITEM2_TEMP_UNCURSED))
-  return TRUE;
+      IS_SET(obj->extra_flags2, ITEM2_TEMP_UNCURSED)) {
+        return TRUE;
+    }
 
-    if ( !IS_NPC(ch) && ch->level >= LEVEL_IMMORTAL )
-  return TRUE;
+    if ( !IS_NPC(ch) && ch->level >= LEVEL_IMMORTAL ) {
+        return TRUE;
+    }
 
     return FALSE;
 }
@@ -4593,60 +4608,6 @@ char *off_bit_name(int off_flags)
     if (off_flags & ASSIST_ELEMENT   ) strcat(buf, " assist_element");
     if (off_flags & OFF_BANE_TOUCH   ) strcat(buf, " bane_touch");
     return ( buf[0] != '\0' ) ? buf+1 : "none";
-}
-
-
-void add_prev_owner( OBJ_DATA *obj, CHAR_DATA *ch)
-{
-
- char buf[MAX_STRING_LENGTH];
- char buf2[MAX_STRING_LENGTH];
- char buf3[MAX_STRING_LENGTH];
- int count = 0, i;
- int n = 0;
- bool sCopy = FALSE;
-
- /* grab the current list of previous owners */
-
-   strcpy(buf, obj->prev_owner);
-   log_string(buf);
-
- /* count the number of names in the list */
-
- for ( i = 0; i <=strlen(buf); i++)
- {
-   if (isspace(buf[i]))
-     count++;
- }
- 
- /* if we don't have 5 names yet, just tack on the last name, and return */
- if ( count < 5)
- {
- strcat(buf, ch->name);
- strcat(buf, " ");
- obj->prev_owner = strdup(buf);
- sprintf(buf3, "count: %d  buf: %s", count, buf);
- log_string(buf3);
- return;
- }
- /* now comes the hard part, removed the first name, and tack on the new one */
- else
- {
- for (i=0; i<=strlen(buf) ; i++) 
- {
- if ( isspace(buf[i]) && !sCopy )
-    sCopy = TRUE;
- 
- if (sCopy)
- {
-  buf2[n++] = buf[i];
- }
- }
- obj->prev_owner = strdup(buf2);
- sprintf(buf3, "count: %d  buf: %s", count, buf);
- log_string(buf3);
- }
- return;
 }
 
 bool check_hai_ruki( CHAR_DATA *ch )
