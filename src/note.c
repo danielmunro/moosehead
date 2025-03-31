@@ -813,7 +813,6 @@ void do_text(CHAR_DATA *ch, char *argument)
 
 void parse_note( CHAR_DATA *ch, char *argument, int type )
 {
-    BUFFER *buffer;
     char buf[MAX_STRING_LENGTH];
     char buf2[6*MAX_STRING_LENGTH];
     char arg[MAX_INPUT_LENGTH];
@@ -975,7 +974,7 @@ void parse_note( CHAR_DATA *ch, char *argument, int type )
       if ( is_note_to( ch, pnote ) )
       {
 	if ((is_exact_name(ch->name,pnote->to_list)
-	    || ((is_clan(ch) || (ch->clan == clan_lookup("matook")))
+	    || ((is_clan(ch) || (ch->clan == nonclan_lookup("matook")))
 	        &&  is_exact_name(clan_table[ch->clan].name,pnote->to_list)))
 	    && IS_SET(ch->display,DISP_COLOR))  
 	{
@@ -1129,28 +1128,6 @@ void parse_note( CHAR_DATA *ch, char *argument, int type )
       return;
   }
       do_long_edit(ch,argument, LONG_EDIT_NOTE, LONG_EDIT_NEWLINE);
-/*  buffer = new_buf();
-
-  if (strlen(ch->pnote->text)+strlen(argument) >= 4096)
-  {
-      send_to_char( "Note too long.\n\r", ch );
-      return;
-  }
-
-  add_buf(buffer,ch->pnote->text);
-  if ( strlen(argument) > 79 )
-    {
-     argument[79] = '\0';
-     send_to_char("Line too long, truncated to:\n\r",ch);
-     send_to_char(argument,ch);
-     send_to_char("\n\r",ch);
-    }
-  add_buf(buffer,argument);
-  add_buf(buffer,"\n\r");
-  free_string( ch->pnote->text );
-  ch->pnote->text = str_dup( buf_string(buffer) );
-  free_buf(buffer);
-  send_to_char( "Ok.\n\r", ch );*/
   return;
     }
 
@@ -1169,8 +1146,6 @@ void parse_note( CHAR_DATA *ch, char *argument, int type )
 
     if (!str_cmp(arg,"-"))
     {
-  int len;
-  bool found = FALSE;
 
   note_attach(ch,type);
         if (ch->pnote->type != type)
@@ -1180,37 +1155,6 @@ void parse_note( CHAR_DATA *ch, char *argument, int type )
             return;
         }
         do_long_edit(ch,argument, LONG_EDIT_NOTE, LONG_EDIT_DELETE);
-/*
-  if (ch->pnote->text == NULL || ch->pnote->text[0] == '\0')
-  {
-      send_to_char("No lines left to remove.\n\r",ch);
-      return;
-  }
-
-  strcpy(buf,ch->pnote->text);
-
-  for (len = strlen(buf); len > 0; len--)
-  {
-      if (buf[len] == '\r')
-      {
-    if (!found)  // back it up
-    {
-        if (len > 0)
-      len--;
-        found = TRUE;
-    }
-    else // found the second one 
-    {
-        buf[len + 1] = '\0';
-        free_string(ch->pnote->text);
-        ch->pnote->text = str_dup(buf);
-        return;
-    }
-      }
-  }
-  buf[0] = '\0';
-  free_string(ch->pnote->text);
-  ch->pnote->text = str_dup(buf);*/
   return;
     }
 
@@ -1479,7 +1423,6 @@ bool start_long_edit(CHAR_DATA *ch, int limit, int type, char *base_str)
 void do_long_edit(CHAR_DATA *ch, char *arg, int type, int edit_type)
 {
   int i;
-  int last_word;
   char gap = ' ';
   if(IS_NPC(ch))
     return;
@@ -1633,7 +1576,6 @@ void do_long_edit(CHAR_DATA *ch, char *arg, int type, int edit_type)
   /* Now continue */
   {/* Add on the text, format for line length as we go */
     int wrapped = 0;
-    int extra;
     int count = ch->pcdata->edit_count;
     int word = 0;
     if(ch->pcdata->edit_len + 1 >= ch->pcdata->edit_limit)
@@ -1658,7 +1600,7 @@ void do_long_edit(CHAR_DATA *ch, char *arg, int type, int edit_type)
       }
       ch->pcdata->edit_str[ch->pcdata->edit_len] = '\0';
     }
-    last_word = ch->pcdata->edit_len;/* We know there's a space here */
+    /* We know there's a space here */
     for(i = 0; ; i++)
     {
       if(arg[i] == '{')
@@ -1694,14 +1636,14 @@ void do_long_edit(CHAR_DATA *ch, char *arg, int type, int edit_type)
           send_to_char("Text too long.\n\r", ch);
           return;
         }
-        while(word < i)
-          ch->pcdata->edit_str[ch->pcdata->edit_len++] = arg[word++];
+        while(word < i) {
+            ch->pcdata->edit_str[ch->pcdata->edit_len++] = arg[word++];
+        }
         ch->pcdata->edit_count = count;
         ch->pcdata->edit_str[ch->pcdata->edit_len] = '\0';
-        if(arg[i] == '\0')
-          break;
-        last_word = ch->pcdata->edit_len;
-//        count_word = count;
+        if(arg[i] == '\0') {
+            break;
+        }
       }
       if(count > 79)
       {/* Check the word value for backing up to it, then insert \n\r */
@@ -1717,10 +1659,9 @@ void do_long_edit(CHAR_DATA *ch, char *arg, int type, int edit_type)
           ch->pcdata->edit_str[ch->pcdata->edit_len] = '\0';
           count -= ch->pcdata->edit_count;/* The current word going on to the new line */
           ch->pcdata->edit_count = 0;
-//          count_word = 0;
-          last_word = ch->pcdata->edit_len;
-          if(arg[word] == ' ')
-            word++;/* Don't transfer its space to the next line */
+          if(arg[word] == ' ') {
+              word++;/* Don't transfer its space to the next line */
+          }
         }
         else
         {/* We have to make our own word break */
@@ -1730,9 +1671,7 @@ void do_long_edit(CHAR_DATA *ch, char *arg, int type, int edit_type)
           ch->pcdata->edit_str[ch->pcdata->edit_len++] = '\r';
           ch->pcdata->edit_str[ch->pcdata->edit_len] = '\0';
           count = 1;/* This letter is wrapping to the next line from this */
-//          count_word = 0;
           ch->pcdata->edit_count = 0;
-          last_word = ch->pcdata->edit_len;
         }
         wrapped = ch->pcdata->edit_len;
       }
