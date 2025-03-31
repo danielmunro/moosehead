@@ -107,7 +107,6 @@ void spell_cone_of_silence(int sn, int level, CHAR_DATA *ch, void *vo, int targe
     OBJ_DATA *stone;
     AFFECT_DATA af;
     int skill;
-    int currentLevel;
 
     if ((skill = get_skill(ch,gsn_cone_of_silence)) < 2 ) 
     {
@@ -130,7 +129,6 @@ void spell_cone_of_silence(int sn, int level, CHAR_DATA *ch, void *vo, int targe
       send_to_char("If you want to be quiet, don't say anything.\r\n",ch);
       return;
     }
-    currentLevel = ch->level;
     if ( number_range(1,10) == 4 )
     {
       send_to_char("A ball gag flares {Wbrightly{x and {YVANISHES{x!!!",ch);
@@ -1511,11 +1509,7 @@ void spell_rust_armor(int sn,int level,CHAR_DATA *ch,void *vo,int target)
 {
     CHAR_DATA *victim = (CHAR_DATA *) vo;
     OBJ_DATA *obj, *obj_next;
-    /*
-    int material;
-    */
     int loclevel;
-    int i;
 
     if(IS_SET(victim->mhs,MHS_HIGHLANDER) && !IS_NPC(victim))
     {
@@ -2248,12 +2242,11 @@ void spell_nexus( int sn, int level, CHAR_DATA *ch, void *vo, int target)
 void do_morph( CHAR_DATA *ch, char *argument )
 {
     AFFECT_DATA af;
-    int sn, dur;
+    int dur;
 
-    if(IS_NPC(ch))
-      return;
-
-    sn = skill_lookup("morph");
+    if(IS_NPC(ch)) {
+        return;
+    }
 
     if ( ch->mana < (ch->level/5) )
     {
@@ -2283,19 +2276,6 @@ void do_morph( CHAR_DATA *ch, char *argument )
        af.modifier  = 0;
        af.bitvector = AFF_MORPH;
        affect_to_char( ch, &af );
-
-/*       if(!IS_SET(ch->mhs,MHS_CURSE))
-       {
-          af.where     = TO_AFFECTS;
-          af.type      = sn;
-          af.level     = 2*ch->level;
-          af.duration  = dur;
-          af.location  = APPLY_NONE;
-          af.modifier  = 0;
-          af.bitvector = MHS_CURSE;
-          affect_to_char( ch, &af );
-       }
-*/
     }
     else
     {
@@ -2964,11 +2944,15 @@ void spell_crusade(int sn, int level, CHAR_DATA *ch, void *vo, int targ)
   switch(number_range(1,2))
   {
 	default: break;
-	case 1:  if ( !saves_spell( level, victim,DAM_HOLY) )
-		victim->move /= 2; 
+	case 1:
+        if ( !saves_spell( level, victim,DAM_HOLY) ) {
+            victim->move /= 2;
+        }
 		break;
-	case 2:   if ( !saves_spell( level, victim,DAM_HOLY) )
-		{ victim->mana /= 3; victim->mana *= 2; }
+	case 2:
+        if ( !saves_spell( level, victim,DAM_HOLY) ) {
+            victim->mana /= 3; victim->mana *= 2;
+        }
 		break;
   }
   check_killer(ch,victim);
@@ -3597,7 +3581,7 @@ void spell_charm_animal( int sn, int level, CHAR_DATA *ch, void *vo,int target )
   {
     return;
   }
-  if ( victim->form != NULL && !IS_SET(victim->form,FORM_ANIMAL) )
+  if (!IS_SET(victim->form,FORM_ANIMAL))
   {
     if ( victim == ch )
     {
@@ -4100,40 +4084,7 @@ void spell_make_bag( int sn, int level, CHAR_DATA *ch, void *vo,int target )
 
 void spell_aura_of_valor(int sn, int level, CHAR_DATA *ch, void *vo, int target)
 {
-    CHAR_DATA *victim = (CHAR_DATA *) vo;
-    AFFECT_DATA af;
- 
     send_to_char("Sorry, this isn't a spell anymore.\n\r",ch);
-    return;
-
-    if ( IS_SET(ch->pcdata->clan_flags, CLAN_NO_SKILL_1) )
-    {
-        send_to_char("You have been sanctioned from using this skill.\n\r",ch);
-        return;
-    }
-
-    if ( ch->clan != clan_lookup("honor") )
-    {
-        send_to_char("You are not a member of Honor.\n\r",ch);
-        return;
-    } 
-
-    if ( is_affected(victim,sn) )
-    {
-        send_to_char("You are already surrounded by an aura of valor.\n\r",victim);
-        return;
-    }
-
-    af.where     = TO_AFFECTS;
-    af.type      = sn;
-    af.level     = level;
-    af.duration  = (victim->level / 2);
-    af.location  = APPLY_NONE;
-    af.modifier  = 0;
-    af.bitvector = 0;
-    affect_to_char( victim, &af );
-
-    send_to_char("You are surrounded by an aura of valor./n/r",victim);
     return;
 }
 
@@ -5761,7 +5712,7 @@ void spell_dispel_wall( int sn, int level, CHAR_DATA *ch, void *vo, int target)
 	if(paf->type == gsn_wall_ice ) break;
 	}
 
-if (target_name == "") {
+if (strcmp(target_name, "") == 0) {
     targ = "wall";
   } else {
     targ = target_name;
@@ -6004,7 +5955,6 @@ void spell_hemorrhage( int sn, int level, CHAR_DATA *ch, void *vo, int target)
 {
     CHAR_DATA *victim = (CHAR_DATA *) vo;
     AFFECT_DATA af;
-    char buf[MAX_STRING_LENGTH];
 
     level = ch->level + ch->level / 14; /* Up to casting at 54 */
 
@@ -6167,9 +6117,7 @@ void spell_guardian(int sn,int level,CHAR_DATA *ch,void *vo,int target)
   int cost;
   char buf[256];
   CHAR_DATA *guardian;
-  AFFECT_DATA af;
-  bool release = FALSE;
-  int i, count;
+  int i;
 
   level = ch->level;
   
@@ -6184,8 +6132,6 @@ void spell_guardian(int sn,int level,CHAR_DATA *ch,void *vo,int target)
     send_to_char("Gladiators can not use clan skills.\n\r",ch);
     return;
   }
-  
-  count = 0;
 
   for ( guardian = char_list; guardian != NULL; guardian = guardian->next )
     if (guardian->pIndexData && guardian->pIndexData->vnum == MOB_VNUM_CLAN_GUARDIAN && guardian->qchar == ch)
