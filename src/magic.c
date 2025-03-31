@@ -822,7 +822,6 @@ bool cast_spell( CHAR_DATA *ch, char *argument, bool fChant, bool fFocus )
     char arg2[MAX_INPUT_LENGTH];
     CHAR_DATA *victim;
     OBJ_DATA *obj;
-    EXIT_DATA *exit;
     void *vo;
     int mana;
     int spell_skill;
@@ -901,7 +900,6 @@ bool cast_spell( CHAR_DATA *ch, char *argument, bool fChant, bool fFocus )
     victim  = NULL;
     obj   = NULL;
     vo    = NULL;
-    exit = NULL;
     target  = TARGET_NONE;
       
     switch ( skill_table[sn].target )
@@ -3058,8 +3056,9 @@ void spell_demonfire(int sn, int level, CHAR_DATA *ch, void *vo,int target)
   send_to_char("The demons turn upon you!\n\r",ch);
     }
  
-   if ( !is_affected(ch, skill_lookup("indulgence")) )
-    ch->alignment = UMAX(-1000, ch->alignment - 50);
+   if ( !is_affected(ch, skill_lookup("indulgence")) ) {
+       ch->alignment = UMAX(-1000, ch->alignment - 50);
+   }
 
     if (victim != ch)
     {
@@ -5144,10 +5143,11 @@ void spell_heat_metal( int sn, int level, CHAR_DATA *ch, void *vo,int target )
           victim,obj_lose,NULL,TO_CHAR,FALSE);
       dam += (number_range(1,obj_lose->level) / 3);
                         obj_from_char(obj_lose);
-			if(!IS_NPC(victim) && IS_SET(victim->mhs,MHS_GLADIATOR))
-                           obj_to_char( obj_lose, victim ); 
-			else
-                           obj_to_room(obj_lose, victim->in_room);
+			if(!IS_NPC(victim) && IS_SET(victim->mhs,MHS_GLADIATOR)) {
+                obj_to_char(obj_lose, victim);
+            } else {
+                obj_to_room(obj_lose, victim->in_room);
+            }
 			   obj_lose->stolen_timer += 10 * number_fuzzy(5);
                         fail = FALSE;
                     }
@@ -5170,10 +5170,11 @@ void spell_heat_metal( int sn, int level, CHAR_DATA *ch, void *vo,int target )
                             victim,obj_lose,NULL,TO_CHAR,FALSE);
                         dam += (number_range(1,obj_lose->level) / 6);
                         obj_from_char(obj_lose);
-			if(!IS_NPC(victim) && IS_SET(victim->mhs,MHS_GLADIATOR))
-                           obj_to_char( obj_lose, victim ); 
-			else
-                           obj_to_room(obj_lose, victim->in_room);
+			if(!IS_NPC(victim) && IS_SET(victim->mhs,MHS_GLADIATOR)) {
+                obj_to_char(obj_lose, victim);
+            } else {
+                obj_to_room(obj_lose, victim->in_room);
+            }
 			   obj_lose->stolen_timer += 10 * number_fuzzy(5);
       fail = FALSE;
                     }
@@ -5202,10 +5203,11 @@ void spell_heat_metal( int sn, int level, CHAR_DATA *ch, void *vo,int target )
           victim);
       dam += 1;
       obj_from_char(obj_lose);
-      if(!IS_NPC(victim) && IS_SET(victim->mhs,MHS_GLADIATOR))
-         obj_to_char( obj_lose, victim ); 
-      else
-         obj_to_room(obj_lose,victim->in_room);
+      if(!IS_NPC(victim) && IS_SET(victim->mhs,MHS_GLADIATOR)) {
+          obj_to_char(obj_lose, victim);
+      } else {
+          obj_to_room(obj_lose, victim->in_room);
+      }
 	 obj_lose->stolen_timer += 10 * number_fuzzy(5);
       fail = FALSE;
         }
@@ -5227,10 +5229,11 @@ void spell_heat_metal( int sn, int level, CHAR_DATA *ch, void *vo,int target )
                             victim,obj_lose,NULL,TO_CHAR,FALSE);
                         dam += (number_range(1,obj_lose->level) / 6);
                         obj_from_char(obj_lose);
-                        if(!IS_NPC(victim) && IS_SET(victim->mhs,MHS_GLADIATOR))
-                           obj_to_char( obj_lose, victim ); 
-                        else
-                           obj_to_room(obj_lose, victim->in_room);
+                        if(!IS_NPC(victim) && IS_SET(victim->mhs,MHS_GLADIATOR)) {
+                            obj_to_char(obj_lose, victim);
+                        } else {
+                            obj_to_room(obj_lose, victim->in_room);
+                        }
 			   obj_lose->stolen_timer += 10 * number_fuzzy(5);
                         fail = FALSE;
                     }
@@ -7642,7 +7645,7 @@ void spell_animate_dead ( int sn, int level, CHAR_DATA *ch, void *vo, int targ)
     send_to_char ("Your controlling as many undead as you can handle.",ch);
     return;
   }
-  if (target_name == "") {
+  if (strcmp(target_name, "") == 0) {
     target = "corpse";
   } else {
     target = target_name;
@@ -7898,8 +7901,9 @@ void spell_draw_life ( int sn, int level, CHAR_DATA *ch, void *vo,int target)
     if (hp > 120) hp = 120;
     if (hp < 20) hp = 20;
     
-  if( (!is_affected(ch, skill_lookup("indulgence"))) || (ch->kit != kit_lookup("necromancer")) )
-    ch->alignment = UMAX(-1000, ch->alignment - number_range (40,70));
+  if( (!is_affected(ch, skill_lookup("indulgence"))) || (ch->kit != kit_lookup("necromancer")) ) {
+      ch->alignment = UMAX(-1000, ch->alignment - number_range(40, 70));
+  }
 
     act("You draw the last remains of energy from the corpse.",ch,NULL,NULL,TO_CHAR,FALSE);
     act("As the corpse disintegrates, $n looks healthier.",ch,NULL,NULL,TO_ROOM,FALSE);
@@ -7933,7 +7937,6 @@ void spell_turn_undead ( int sn, int level, CHAR_DATA *ch, void *vo,int target)
   OBJ_DATA *obj,*next_obj;
   sh_int found = 0;
   sh_int skl = 0;
-  sh_int passedLevel =0;
 
   for ( gch = ch->in_room->people; gch != NULL; gch = next_char ) 
   {
@@ -7965,7 +7968,6 @@ void spell_turn_undead ( int sn, int level, CHAR_DATA *ch, void *vo,int target)
         if (gch->leader == ch) 
 	{
        	   REMOVE_BIT(gch->affected_by,AFF_CHARM);
-           //gch->leader = NULL;
            remove_from_group(gch);
            gch->master = NULL;
     	}
@@ -8094,8 +8096,9 @@ void spell_withstand_death ( int sn, int level, CHAR_DATA *ch, void *vo,int targ
     send_to_char( "You feel like you can withstand death itself.\n\r", victim );
     act( "$n looks more powerful than death.", victim, NULL, NULL, TO_ROOM ,FALSE);
     
-  if( !is_affected(ch, skill_lookup("indulgence")) )
-    ch->alignment = UMAX(-1000, ch->alignment - number_range (20,50));
+  if( !is_affected(ch, skill_lookup("indulgence")) ) {
+      ch->alignment = UMAX(-1000, ch->alignment - number_range(20, 50));
+  }
     
     return;
 }
@@ -8376,14 +8379,12 @@ void write_spell( CHAR_DATA *ch, int sn )
     sprintf( buf2, "%s", buf );
     sprintf( buf,  "%s", skill_table[sn].name );
 
-
       if ( get_skill(ch,gsn_spellcraft) >= number_percent() )
       {
         check_improve(ch,gsn_spellcraft,TRUE,10);
-	send_to_char(buf,ch);
-	return;
+        send_to_char(buf,ch);
+      } else {
+          send_to_char(buf2, ch);
       }
-      else
-	send_to_char(buf2,ch);
 	return;
 }
