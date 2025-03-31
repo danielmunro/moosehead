@@ -581,7 +581,7 @@ void do_rank(CHAR_DATA *ch, char *argument)
   }
   if(!victim)
   {
-    sprintf(arg2, "%s not found to set the rank of.  Name must be exact.\n\r", arg1);
+    sprintf(arg2, "%.32s not found to set the rank of.  Name must be exact.\n\r", arg1);
     send_to_char(arg2, ch);
     return;
   }
@@ -595,7 +595,7 @@ void do_rank(CHAR_DATA *ch, char *argument)
     send_to_char("The clan already has as many leaders as are allowed.\n\r", ch);
     return;
   }
-  if(victim->rank == 5 && !IS_IMMORTAL(ch) && ch != victim)
+  if(victim->rank == 5 && !IS_IMMORTAL(ch) && strcmp(ch->name, victim->name) != 0)
   {
     send_to_char("You may not demote another leader.\n\r", ch);
     return;
@@ -605,7 +605,7 @@ void do_rank(CHAR_DATA *ch, char *argument)
   else if(rank == 5)
     victim->clan->leaders++;
   victim->rank = rank;
-  if(victim != ch)
+  if(strcmp(victim->name, ch->name) != 0)
   {
     sprintf(arg2, "%s is now rank %d.\n\r", victim->name, rank);
     send_to_char(arg2, ch);
@@ -631,7 +631,7 @@ bool check_alliance(CLAN_DATA *first, CLAN_DATA *second)
 
 void do_chelp(CHAR_DATA *ch, char *argument)
 {/* Charters or rules */
-  char buf[256], arg[256];
+  char arg[256];
   char *to_page = NULL;
   BUFFER *output;
   if(IS_NPC(ch))
@@ -1097,14 +1097,12 @@ void do_ally(CHAR_DATA *ch, char *argument)
 void calculate_award_tribute(CLAN_DATA *clan)
 {
   CLAN_CHAR *cchar, *highest;
-  bool found = TRUE;
   int divisor = 3;
   clan->tribute -= clan->awarded_tribute;
   clan->max_tribute -= clan->awarded_tribute;
   clan->awarded_tribute = 0;
   while(1)
   {
-    found = FALSE;
     highest = NULL;
     for(cchar = clan->members; cchar; cchar = cchar->next)
     {
@@ -1171,7 +1169,7 @@ void remove_clan_member(CLAN_CHAR *cchar)
       if(cchar->clan->members == NULL && !cchar->clan->default_clan)
       {/* Last member is gone, mark to disband the clan */
         char save_old[256], save_new[256];
-        CLAN_DATA *clan, *prev_clan;
+        CLAN_DATA *clan;
         deleted_clan = TRUE;
         for(old_c = outcast->members; old_c != NULL; old_c = old_c->next)
         {
@@ -1353,8 +1351,7 @@ void add_clan_member(CLAN_DATA *clan, CHAR_DATA *ch, int rank)
   }
   else
   {
-    CLAN_CHAR *cchar;
-    for(prev = clan->members; prev->next != NULL; prev = prev->next);
+    for(prev = clan->members; prev->next != NULL; prev = prev->next) {}
       prev->next = new_c;
   }
   if(!clan->default_clan)
@@ -1558,8 +1555,8 @@ void do_establish(CHAR_DATA *ch, char *argument)
 {
   CLAN_DATA *clan, *temp;
   char buf[256];
-  char arg[256];
-  int i, type;
+  char arg[64];
+  int i;
   if(IS_NPC(ch))
   {
     send_to_char("NPCs may not establish a clan.\n\r", ch);
@@ -2051,11 +2048,15 @@ void load_clans(void)
   }
   else
   {
-    fscanf(fp, "%s %d", input, &default_clan);
+    if (fscanf(fp, "%s %d", input, &default_clan) < 2) {
+        log_error("load_clans: error reading default_clan 1");
+    }
     while(!feof(fp) && str_cmp(input, "#End"))
     {
       load_clan(input, default_clan);
-      fscanf(fp, "%s %d", input, &default_clan);
+      if (fscanf(fp, "%s %d", input, &default_clan) < 2) {
+          log_error("load_clans: error reading default_clan 2");
+      }
     }
     if(str_cmp(input, "#End"))
       bug("Unexpected end of file for loading clans.", 0);
@@ -2063,9 +2064,9 @@ void load_clans(void)
   }
   for(clan = clan_first; clan != NULL; clan = clan->next)
   {
-    if(!loner && !str_cmp(clan->name, "Loner"))
+    if(!loner && str_cmp(clan->name, "Loner") == 0)
       loner = TRUE;
-    else if(!outcast && !str_cmp(clan->name, "Outcast"))
+    else if(!outcast && str_cmp(clan->name, "Outcast") == 0)
       outcast = TRUE;
     update_clan_version(clan);/* Even on the default clans, in case it impacts their members */
   }
@@ -2093,12 +2094,17 @@ void fread_clan_messages(FILE *fp, CLAN_DATA *clan)
   char input[256];
   while(!feof(fp))
   {
-    fscanf(fp, "%s", input);
-    if(!str_cmp(input, "#End"))
-      return; /* Done */
-    if(!str_cmp(input, "Msg"))
+    if (!fscanf(fp, "%s", input)) {
+        log_error("fread_clan_messages: error reading input");
+    }
+    if(str_cmp(input, "#End") == 0) {
+        return; /* Done */
+    }
+    if(str_cmp(input, "Msg") == 0)
     {
-      fscanf(fp, "%s", input);
+      if (!fscanf(fp, "%s", input)) {
+          log_error("fread_clan_messages: error reading Msg");
+      }
       for(member = clan->members; member != NULL; member = member->next)
       {
         if(!member->messages && !str_cmp(member->name, input))
@@ -2155,10 +2161,12 @@ void load_clan(char *clan_name, int def_clan)
   while(!feof(fp) && !done)
   {
     bool found = FALSE;
-    fscanf(fp, "%s", input);
+    if (!fscanf(fp, "%s", input)) {
+        log_error("load_clan: error reading input");
+    }
     switch(input[0])
     {
-      case '#': if(!str_cmp(input, "#End"))
+      case '#': if(str_cmp(input, "#End") == 0)
                 {/* There should be two ends */
                   if(!first_end)
                     first_end = TRUE;
@@ -2167,14 +2175,14 @@ void load_clan(char *clan_name, int def_clan)
                   found = TRUE;
                 }
                 break;
-      case 'A': if(!str_cmp(input, "Ally"))
+      case 'A': if(str_cmp(input, "Ally") == 0)
       {
         ALLIANCE_DATA *ally;
         CLAN_DATA *target;
         found = TRUE;
         for(target = clan_first; target != NULL; target = target->next)
         {
-          if(!str_cmp(target->name, input))
+          if(str_cmp(target->name, input) == 0)
             break;
         }
         if(!target)
@@ -2194,87 +2202,134 @@ void load_clan(char *clan_name, int def_clan)
         else
           clan->allies = ally;
         ally->clan = target;
-        fscanf(fp, "%d %d %d %d %d %d", &ally->cost, &ally->bribe,
-          &ally->to_pay, &in_int, &ally->offer_duration, &ally->duration);
+        if (fscanf(fp, "%d %d %d %d %d %d", &ally->cost, &ally->bribe,
+             &ally->to_pay, &in_int, &ally->offer_duration, &ally->duration) < 6) {
+            log_error("load_clan: error reading Ally");
+        }
         if(in_int)
           ally->pending = TRUE;
       }
-      else if(!str_cmp(input, "Assists")) {
-          fscanf(fp, "%d", &clan->assists); found = TRUE; }
-      else if(!str_cmp(input, "AwardMerit"))
+      else if(str_cmp(input, "Assists") == 0) {
+          if (!fscanf(fp, "%d", &clan->assists)) {
+              log_error("load_clan: error reading Assists");
+          }
+          found = TRUE;
+      }
+      else if(str_cmp(input, "AwardMerit") == 0)
       {
-        if(!cchar)
-          bug("No clan char for setting award merit.", 0);
-        else
-          fscanf(fp, "%d", &cchar->award_merit);
+        if(!cchar) {
+            bug("No clan char for setting award merit.", 0);
+        } else if (!fscanf(fp, "%d", &cchar->award_merit)) {
+            log_error("load_clan: error reading AwardMerit");
+        }
         found = TRUE;
       }
-      else if(!str_cmp(input, "ATribute")) {
-        fscanf(fp, "%d", &clan->awarded_tribute); found = TRUE; }
+      else if(str_cmp(input, "ATribute") == 0) {
+        if (!fscanf(fp, "%d", &clan->awarded_tribute)) {
+            log_error("load_clan: error reading ATribute");
+        }
+        found = TRUE;
+      }
       break;
-      case 'C': if(!str_cmp(input, "Charter")) {
+      case 'C': if(str_cmp(input, "Charter") == 0) {
           read_to_tilde(fp, &clan->charter); found = TRUE; }
-          if(!str_cmp(input, "CreateDate")) {
-            fscanf(fp, "%ld", &clan->creation); found = TRUE; }
-          if(!str_cmp(input, "Color")) {
-            fscanf(fp, "%s", input);
+          if(str_cmp(input, "CreateDate") == 0) {
+            if (!fscanf(fp, "%ld", &clan->creation)) {
+                log_error("load_clan: error reading CreateDate");
+            }
+            found = TRUE;
+          }
+          if(str_cmp(input, "Color") == 0) {
+            if (!fscanf(fp, "%s", input)) {
+                log_error("load_clan: error reading Color");
+            }
             clan->color[0] = input[0]; clan->color[1] = input[1];
             clan->color[2] = '\0';
             found = TRUE; }
         break;
-      case 'D': if(!str_cmp(input, "Donated"))
-        {
-          if(!cchar)
-            bug("No clan char for setting donated.", 0);
-          else
-            fscanf(fp, "%d", &cchar->donated);
-          found = TRUE;
-        }
+      case 'D':
+          if(str_cmp(input, "Donated") == 0) {
+              if(!cchar) {
+                  bug("No clan char for setting donated.", 0);
+              } else if (!fscanf(fp, "%d", &cchar->donated)) {
+                  log_error("load_clan: error reading Donated");
+              }
+              found = TRUE;
+          }
         break;
-      case 'E': if(!str_cmp(input, "Enemy")) {
-          fscanf(fp, "%d", &clan->enemy); found = TRUE; }
+      case 'E':
+          if(str_cmp(input, "Enemy") == 0) {
+              if (!fscanf(fp, "%d", &clan->enemy)) {
+                  log_error("load_clan: error reading Enemy");
+              }
+              found = TRUE;
+          }
       break;
-      case 'F': if(!str_cmp(input, "Flags"))
+      case 'F':
+          if(str_cmp(input, "Flags") == 0) {
+              if(!cchar) {
+                  bug("No clan char for setting flags.", 0);
+              } else if (!fscanf(fp, "%ld", &cchar->flags)) {
+                  log_error("load_clan: error reading Flags");
+              }
+          found = TRUE;
+        }
+        break;
+      case 'H':
+          if(str_cmp(input, "Hall") == 0) {
+              if (!fscanf(fp, "%d", &clan->hall_index)) {
+                  log_error("load_clan: error reading Hall");
+              }
+              found = TRUE;
+          }
+        break;
+      case 'I':
+          if(str_cmp(input, "Ini") == 0) {
+              if (!fscanf(fp, "%d", &clan->initiation)) {
+                  log_error("load_clan: error reading Ini");
+              }
+              found = TRUE;
+          }
+          if(str_cmp(input, "IniDate") == 0) {
+            if (!fscanf(fp, "%ld", &clan->init_date)) {
+                log_error("load_clan: error reading IniDate");
+            }
+            found = TRUE;
+          }
+        break;
+      case 'J': if(str_cmp(input, "Join") == 0)
         {
-          if(!cchar)
-            bug("No clan char for setting flags.", 0);
-          else
-            fscanf(fp, "%ld", &cchar->flags);
+          if(!cchar) {
+              bug("No clan char for setting join.", 0);
+          } else {
+              if (!fscanf(fp, "%ld", &cchar->join_date)) {
+                  log_error("load_clan: error reading Join");
+              }
+          }
           found = TRUE;
         }
         break;
-      case 'H': if(!str_cmp(input, "Hall")) {
-          fscanf(fp, "%d", &clan->hall_index);
-          found = TRUE;
-        }
+      case 'K':
+          if(str_cmp(input, "Kills") == 0) {
+              if (!fscanf(fp, "%d", &clan->kills)) {
+                  log_error("load_clan: error reading Kills");
+              }
+              found = TRUE;
+          }
         break;
-      case 'I': if(!str_cmp(input, "Ini")) {
-          fscanf(fp, "%d", &clan->initiation); found = TRUE; }
-          if(!str_cmp(input, "IniDate")) {
-            fscanf(fp, "%ld", &clan->init_date); found = TRUE; }
-        break;
-      case 'J': if(!str_cmp(input, "Join"))
+      case 'L': if(str_cmp(input, "Login") == 0)
         {
-          if(!cchar)
-            bug("No clan char for setting join.", 0);
-          else
-            fscanf(fp, "%ld", &cchar->join_date);
+          if(!cchar) {
+              bug("No clan char for setting login.", 0);
+          } else {
+              if (!fscanf(fp, "%ld", &cchar->last_login)) {
+                  log_error("load_clan: error reading Login");
+              }
+          }
           found = TRUE;
         }
         break;
-      case 'K': if(!str_cmp(input, "Kills")) {
-          fscanf(fp, "%d", &clan->kills); found = TRUE; }
-        break;
-      case 'L': if(!str_cmp(input, "Login"))
-        {
-          if(!cchar)
-            bug("No clan char for setting login.", 0);
-          else
-            fscanf(fp, "%ld", &cchar->last_login);
-          found = TRUE;
-        }
-        break;
-      case 'R': if(!str_cmp(input, "Rules")) {
+      case 'R': if(str_cmp(input, "Rules") == 0) {
           read_to_tilde(fp, &clan->rules); found = TRUE; }
         else if(!str_cmp(input, "Rank"))
         {
@@ -2282,7 +2337,9 @@ void load_clan(char *clan_name, int def_clan)
             bug("No clan char for setting rank.", 0);
           else
           {
-            fscanf(fp, "%d", &cchar->rank);
+            if (!fscanf(fp, "%d", &cchar->rank)) {
+                log_error("load_clan: error reading Rules");
+            }
             if(clan->default_clan)
               cchar->rank = 0;/* No rank for loners or outcasts */
             else if(cchar->rank == 5)
@@ -2291,41 +2348,56 @@ void load_clan(char *clan_name, int def_clan)
           found = TRUE;
         }
         break;
-      case 'T': if(!str_cmp(input, "Type")) {
-          fscanf(fp, "%d", &clan->type); found = TRUE; }
-        else if(!str_cmp(input, "Tribute")) {
-          fscanf(fp, "%d", &clan->tribute); found = TRUE; }
-        break;
+      case 'T':
+          if(str_cmp(input, "Type") == 0) {
+              if (!fscanf(fp, "%d", &clan->type)) {
+                  log_error("load_clan: error reading Type");
+              }
+              found = TRUE;
+          } else if(str_cmp(input, "Tribute") == 0) {
+              if (!fscanf(fp, "%d", &clan->tribute)) {
+                  log_error("load_clan: error reading Tribute");
+              }
+              found = TRUE;
+          }
+          break;
       case 'M': if(!str_cmp(input, "Member")) {
           cchar = new_clan_char();
-          if(!clan->members)
-            clan->members = cchar;
-          else
-          {
+          if(!clan->members) {
+              clan->members = cchar;
+          } else {
             cchar->next = clan->members;
-            while(cchar->next->next)
-              cchar->next = cchar->next->next;
+            while(cchar->next->next) {
+                cchar->next = cchar->next->next;
+            }
             cchar->next->next = cchar;
             cchar->next = NULL;
           }
           cchar->clan = clan;
-          fscanf(fp, "%s", input);
+          if (!fscanf(fp, "%s", input)) {
+              log_error("load_clan: error reading Member");
+          }
           cchar->name = str_dup(input);
           found = TRUE;
         }
-        else if(!str_cmp(input, "Merit"))
+        else if(str_cmp(input, "Merit") == 0)
         {
-          if(!cchar)
-            bug("No clan char for setting merit.", 0);
-          else
-            fscanf(fp, "%d", &cchar->merit);
+          if(!cchar) {
+              bug("No clan char for setting merit.", 0);
+          } else {
+              if (!fscanf(fp, "%d", &cchar->merit)) {
+                  log_error("load_clan: error reading Merit");
+              }
+          }
           found = TRUE;
         }
-        else if(!str_cmp(input, "MeritMatch"))
+        else if(str_cmp(input, "MeritMatch") == 0)
         {
           MERIT_TRACKER *cur, *last = NULL;
           int amount = -1, expire = -1;
-          fscanf(fp, "%d %d", &amount, &expire);
+          if (fscanf(fp, "%d %d", &amount, &expire) < 2) {
+              log_error("load_clan: error reading MeritMatch 1");
+          }
           while(!feof(fp) && amount >= 0 && expire >= 0 &&
             (amount != 0 || expire != 0))
           {
@@ -2343,21 +2415,26 @@ void load_clan(char *clan_name, int def_clan)
               last->next = cur;
               last = last->next;
             }
-            fscanf(fp, "%d %d", &amount, &expire);
+            if (fscanf(fp, "%d %d", &amount, &expire) < 2) {
+                log_error("load_clan: error reading MeritMatch 2");
+            }
           }
           if(feof(fp))
             bug("Bad end to merit match", 0);
           found = TRUE;
         }
-        else if(!str_cmp(input, "MeritLost"))
+        else if(str_cmp(input, "MeritLost") == 0)
         {
-          if(!cchar)
-            bug("No clan char for setting merit lost.", 0);
-          else
-            fscanf(fp, "%d", &cchar->lost_merit);
+          if(!cchar) {
+              bug("No clan char for setting merit lost.", 0);
+          } else {
+              if (!fscanf(fp, "%d", &cchar->lost_merit)) {
+                  log_error("load_clan: error reading MeritLost");
+              }
+          }
           found = TRUE;
         }
-        else if(!str_cmp(input, "MeritTrack"))
+        else if(str_cmp(input, "MeritTrack") == 0)
         {
           if(!cchar)
             bug("No clan char for setting delay merit.", 0);
@@ -2365,7 +2442,9 @@ void load_clan(char *clan_name, int def_clan)
           {
             MERIT_TRACKER *cur, *last = NULL;
             int amount = -1, expire = -1;
-            fscanf(fp, "%d %d", &amount, &expire);
+            if (fscanf(fp, "%d %d", &amount, &expire) < 2) {
+                log_error("load_clan: error reading amount & expire for MeritTrack 1");
+            }
             while(!feof(fp) && (amount != 0 || expire != 0))
             {
               cur = new_merit();
@@ -2381,39 +2460,63 @@ void load_clan(char *clan_name, int def_clan)
                 last->next = cur;
                 last = last->next;
               }
-              fscanf(fp, "%d %d", &amount, &expire);
+              if (fscanf(fp, "%d %d", &amount, &expire) < 2) {
+                  log_error("load_clan: error reading amount & expire for MeritTrack 2");
+              }
             }
             if(feof(fp))
               bug("Bad end to merit delay", 0);
           }
           found = TRUE;
         }
-        else if(!str_cmp(input, "MeritPrimary"))
+        else if(str_cmp(input, "MeritPrimary") == 0)
         {
-          if(!cchar)
-            bug("No clan char for setting merit primary.", 0);
-          else
-            fscanf(fp, "%d", &cchar->primary_merit);
+          if(!cchar) {
+              bug("No clan char for setting merit primary.", 0);
+          } else {
+              if (!fscanf(fp, "%d", &cchar->primary_merit)) {
+                  log_error("load_clan: error reading MeritPrimary");
+              }
+          }
           found = TRUE;
         }
-        else if(!str_cmp(input, "MeritBank"))
+        else if(str_cmp(input, "MeritBank") == 0)
         {
-          if(!cchar)
-            bug("No clan char for setting merit bank.", 0);
-          else
-            fscanf(fp, "%d", &cchar->banked_merit);
+          if(!cchar) {
+              bug("No clan char for setting merit bank.", 0);
+          } else {
+              if (!fscanf(fp, "%d", &cchar->banked_merit)) {
+                  log_error("load_clan: error reading MeritBank");
+              }
+          }
           found = TRUE;
         }
-        else if(!str_cmp(input, "MinVnum")) {
-          fscanf(fp, "%d", &clan->vnum_min); found = TRUE; }
-        else if(!str_cmp(input, "MaxVnum")) {
-          fscanf(fp, "%d", &clan->vnum_max); found = TRUE; }
-        else if(!str_cmp(input, "MTribute")) {
-          fscanf(fp, "%d", &clan->max_tribute); found = TRUE; }
+        else if(str_cmp(input, "MinVnum") == 0) {
+          if (!fscanf(fp, "%d", &clan->vnum_min)) {
+              log_error("load_clan: error reading MinVnum");
+          }
+          found = TRUE;
+        }
+        else if(str_cmp(input, "MaxVnum") == 0) {
+          if (!fscanf(fp, "%d", &clan->vnum_max)) {
+              log_error("load_clan: error reading MaxVnum");
+          }
+          found = TRUE;
+        }
+        else if(str_cmp(input, "MTribute") == 0) {
+          if (!fscanf(fp, "%d", &clan->max_tribute)) {
+              log_error("load_clan: error reading MTribute");
+          }
+          found = TRUE;
+        }
         break;
       case 'V':
-        if(!str_cmp(input, "Version")) {
-          fscanf(fp, "%d", &clan->version); found = TRUE; }
+        if(str_cmp(input, "Version") == 0) {
+          if (!fscanf(fp, "%d", &clan->version)) {
+              log_error("load_clan: error reading Version");
+          }
+          found = TRUE;
+        }
         break;
     }
     if(!found)
@@ -2592,7 +2695,7 @@ bool save_hall(char *clan_name, PLAN_DATA *plans, bool save_immediately)
   /* Write the plan exits */
   for(obj = plans; obj != NULL; obj = obj->next)
   {
-    if(!IS_SET(obj->type, (PLAN_ROOM | PLAN_PLACED)) == (PLAN_ROOM | PLAN_PLACED)
+    if(!IS_SET(obj->type, (PLAN_ROOM | PLAN_PLACED))
       || obj->to_place == NULL)
       continue;
     fwrite_room_exits(fp, obj);
