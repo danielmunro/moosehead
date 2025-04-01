@@ -582,11 +582,17 @@ void rename_area (char *strArea)
   char *pstr,*pstr2;
   FILE *fp;
   char *strtime;
+  char filename[MAX_INPUT_LENGTH];
+
+  sprintf(filename, "%s/area/%s", DATA_DIR, strArea);
+
+  sprintf(log_buf, "rename_area: attempting to load area file :: %s", filename);
+  log_string(log_buf);
   
-  fp = fopen(strArea,"r");
+  fp = fopen(filename,"r");
   if (fp != NULL) {    /* if the file exists, rename it */
     fclose (fp);
-    strcpy (buf2,strArea);
+    strcpy (buf2,filename);
     pstr = buf2;
     pstr2 = NULL;
     while (pstr) {
@@ -602,12 +608,14 @@ void rename_area (char *strArea)
       fclose (fp);
       unlink (buf2);
     }
-    rename (strArea,buf2);
-    sprintf (sbuf,"Renaming '%s' as '%s'.",strArea,buf2);
+    rename (filename,buf2);
+    sprintf (sbuf,"Renaming '%s' as '%s'.",filename,buf2);
     log_string (sbuf);    
+  } else {
+      sprintf("rename_area: failed to load area file :: %s", filename);
   }
   
-  strcpy (strBak,strArea);
+  strcpy(strBak, filename);
   pstr = strBak;
   pstr2 = NULL;
   while (pstr) {
@@ -617,45 +625,54 @@ void rename_area (char *strArea)
   if (pstr2) {
       pstr2 = "";
   }
-  strcat (strBak,"bak");  
-  
-  fp = fopen (strArea,"r");
+  strcat (strBak,"bak");
+
+  sprintf(log_buf, "rename_area: attempting to delete area file :: %s", filename);
+  log_string(log_buf);
+
+  fp = fopen (filename,"r");
   if (fp != NULL) {
     fclose (fp);
-    unlink (strArea);
-    sprintf (sbuf,"Deleting '%s'",strArea);
+    unlink (filename);
+    sprintf (sbuf,"rename_area: deleted area file :: %s",filename);
     log_string (sbuf);
   }
-  
+
+  sprintf(log_buf, "rename_area: attempting to restore area file from backup :: %s %s", filename, strBak);
+  log_string(log_buf);
+
   fp = fopen (strBak,"r");
   if (fp != NULL) {
     fclose (fp);
   
-    rename (strBak,strArea);
-    sprintf (sbuf,"Renaming '%s' as '%s'.\n",strBak,strArea);
-    log_string (sbuf);
+    rename(strBak, filename);
+    sprintf(sbuf,"rename_area: renaming '%s' as '%s'", strBak, filename);
+    log_string(sbuf);
   } else {
-    log_string ("Could not find backup to recopy over.");
+    log_error("rename_area: could not find backup to recopy over.");
   }
   
   strtime       = ctime( &current_time );
   strtime[strlen(strtime)-1]  = '\0';  
   
 //  if (fpReserve) fclose(fpReserve);
-  if ( ( fp = fopen( NOTE_FILE, "a" ) ) == NULL ) {
-    perror (NOTE_FILE);
-  } else {  
-    fprintf( fp, "Sender  MHS II~\n" );
-    fprintf( fp, "Date    %s~\n", strtime );
-    fprintf( fp, "Stamp   %ld\n", current_time );
-    fprintf( fp, "To      immortal~\n" );
-    fprintf( fp, "Subject Failed to boot '%s'~\n", strArea );
-    fprintf( fp, "Text\n" );
-    fprintf( fp, "Renamed '%s' as '%s'\n",strArea,buf2 );
-    fprintf( fp, "If backup existed, '%s' was replaced.\n",strArea );
-    fprintf( fp, "\nMHS\n~\n" );
-    fclose ( fp );
-  }  
+  if (LOG_FAILED_BOOT) {
+      log_string("sending note on failed boot");
+      if ((fp = fopen(NOTE_FILE, "a")) == NULL) {
+          perror(NOTE_FILE);
+      } else {
+          fprintf(fp, "Sender  MHS II~\n");
+          fprintf(fp, "Date    %s~\n", strtime);
+          fprintf(fp, "Stamp   %ld\n", current_time);
+          fprintf(fp, "To      immortal~\n");
+          fprintf(fp, "Subject Failed to boot '%s'~\n", strArea);
+          fprintf(fp, "Text\n");
+          fprintf(fp, "Renamed '%s' as '%s'\n", strArea, buf2);
+          fprintf(fp, "If backup existed, '%s' was replaced.\n", strArea);
+          fprintf(fp, "\nMHS\n~\n");
+          fclose(fp);
+      }
+  }
   
 //  fpReserve = fopen( NULL_FILE, "r" );
   
@@ -1036,7 +1053,8 @@ void boot_db( void )
     
       strcpy( strArea, fread_word( fpList ) );
       sprintf(area_file, "%s/area/%s", DATA_DIR, strArea);
-log_string(area_file);
+      sprintf(log_buf, "boot_db: attempting to load area file :: %s", area_file);
+      log_string(log_buf);
       if ( strArea[0] == '$' )
     break;
 
@@ -1048,9 +1066,9 @@ log_string(area_file);
       {
     if ( ( fpArea = fopen( area_file, "r" ) ) == NULL )
     {
-        perror( strArea );
-        sprintf (buf,"Skipping area '%s'",strArea);
-        log_string (buf);        
+        perror(strArea);
+        sprintf(log_buf,"boot_db: error reading area file, skipping :: %s", area_file);
+        log_string(log_buf);
         continue;
     }
       }      

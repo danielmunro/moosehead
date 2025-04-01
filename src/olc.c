@@ -1149,9 +1149,9 @@ bool check_range (CHAR_DATA *ch,int range_type,int vnum)
   VNUM_RANGE_DATA *range;
   char *type = "unknown";
 
-  /* if (get_trust(ch) >= CREATOR) {
+  if (get_trust(ch) >= CREATOR) {
     return TRUE;
-  }  */
+  }
   if (vnum == -1) {
     switch (range_type) {
       case RANGE_ROOM:
