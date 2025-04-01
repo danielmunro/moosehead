@@ -265,9 +265,9 @@ void fwrite_char( CHAR_DATA *ch, FILE *fp )
     fprintf( fp, "LstKBy %s~\n", ch->pcdata->last_killed_by );
     fprintf( fp, "LstAtkedBy %s~\n", ch->pcdata->last_attacked_by );
     fprintf( fp, "LstAtkedByTimer %d\n", ch->pcdata->last_attacked_by_timer );
-    fprintf( fp, "LstCombatDate %d\n", ch->pcdata->last_combat_date );
-    fprintf( fp, "LstKillDate %d\n", ch->pcdata->last_kill_date );
-    fprintf( fp, "LstDeathDate %d\n", ch->pcdata->last_death_date );
+    fprintf( fp, "LstCombatDate %ld\n", ch->pcdata->last_combat_date );
+    fprintf( fp, "LstKillDate %ld\n", ch->pcdata->last_kill_date );
+    fprintf( fp, "LstDeathDate %ld\n", ch->pcdata->last_death_date );
     fprintf( fp, "LoginsWOKill %d\n", ch->pcdata->logins_without_kill );
     fprintf( fp, "LoginsWODeath %d\n", ch->pcdata->logins_without_death);
     fprintf( fp, "LoginsWOCombat %d\n", ch->pcdata->logins_without_combat );
@@ -306,7 +306,7 @@ void fwrite_char( CHAR_DATA *ch, FILE *fp )
     fprintf( fp, "Vump  %d\n", ch->trumps );
     fprintf( fp, "Node %d\n", ch->pcdata->node );
     fprintf( fp, "Cap %d\n", ch->pcdata->capped );
-    fprintf( fp, "Created %d\n", ch->pcdata->created_date );
+    fprintf( fp, "Created %ld\n", ch->pcdata->created_date );
     fprintf( fp, "Glad %d %d %d %d %d %d\n",
            ch->pcdata->gladiator_data[GLADIATOR_VICTORIES],
            ch->pcdata->gladiator_data[GLADIATOR_KILLS],
@@ -398,8 +398,9 @@ void fwrite_char( CHAR_DATA *ch, FILE *fp )
   fprintf(fp,"Inco %d\n",ch->incog_level);
   if(ch->pcdata->timestamps)
     fprintf(fp, "TimeStamps %d\n", ch->pcdata->timestamps);
-  if(ch->pcdata->timestamp_color && ch->pcdata->timestamp_color[0])
-    fprintf(fp, "TimeStmpColor %s~\n", ch->pcdata->timestamp_color);
+  if(ch->pcdata->timestamp_color && ch->pcdata->timestamp_color[0]) {
+      fprintf(fp, "TimeStmpColor %s~\n", ch->pcdata->timestamp_color);
+  }
     fprintf( fp, "Pos  %d\n",
   ch->position == POS_FIGHTING ? POS_STANDING : ch->position );
     if (ch->practice != 0)
@@ -469,7 +470,7 @@ void fwrite_char( CHAR_DATA *ch, FILE *fp )
   fprintf( fp, "WhoName %s~\n", ch->pcdata->who_name );
   fprintf( fp, "TSex %d\n", ch->pcdata->true_sex  );
   fprintf( fp, "LLev %d\n", ch->pcdata->last_level  );
-  fprintf( fp, "HMVP %d %d %d\n", ch->pcdata->perm_hit,
+  fprintf( fp, "HMVP %d %d %ld\n", ch->pcdata->perm_hit,
                ch->pcdata->perm_mana,
                ch->pcdata->perm_move);
   fprintf( fp, "Cnd  %d %d %d %d\n",
@@ -1714,9 +1715,11 @@ ch->pcdata->perm_move = pc_race_table[ch->race].starting_hmv[2];
     }
     fMatch = TRUE;
       }
-      if(!str_cmp(word, "OldC"))
+      if(str_cmp(word, "OldC") == 0)
       {
-        fscanf(fp, "%d %d %d", &ch->pcdata->old_c_clan, &ch->pcdata->old_c_hours, &ch->pcdata->old_c_rank);
+        if (fscanf(fp, "%d %d %d", &ch->pcdata->old_c_clan, &ch->pcdata->old_c_hours, &ch->pcdata->old_c_rank) < 3) {
+            log_error("fread_char: error reading OldC");
+        }
         fMatch = TRUE;
       }
       KEY( "Outc",      ch->pcdata->outcT, fread_number(fp) );
@@ -2191,7 +2194,7 @@ void fread_obj( CHAR_DATA *ch, FILE *fp )
 
     bool prefresh_char = FALSE;
     if(ch != NULL)
-        prefresh_char = IS_SET(ch->mhs, MHS_PREFRESHED);
+        prefresh_char = IS_SET(ch->mhs, MHS_PREFRESHED) != 0;
 
     fVnum = FALSE;
     obj = NULL;
@@ -2611,8 +2614,6 @@ void fread_obj( CHAR_DATA *ch, FILE *fp )
 
 void save_pits(void)
 {
-  PLAN_DATA *plan;
-  CLAN_DATA *clan;
         OBJ_DATA *obj;
         char strsave[MAX_INPUT_LENGTH];
         FILE *fp;
