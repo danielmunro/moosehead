@@ -3456,7 +3456,7 @@ extern sh_int      posse_thug_kills;
 #endif
 
 #ifdef OLC_VERSION
-#define AREA_LIST       "../area/area.lst"  /* List of areas*/
+#define AREA_LIST       DATA_DIR "/area/area.lst"  /* List of areas*/
 #else
 #define AREA_LIST       DATA_DIR "/area/area.act"  /* List of areas*/
 #endif

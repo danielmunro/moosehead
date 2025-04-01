@@ -1027,14 +1027,16 @@ void boot_db( void )
       exit( 1 );
   }
   
-  area_name_first = NULL;  
+  area_name_first = NULL;
+  char area_file[MAX_INPUT_LENGTH];
     
   for ( ; ; )
   {
     int min_vnum;
     
       strcpy( strArea, fread_word( fpList ) );
-log_string(strArea);
+      sprintf(area_file, "%s/area/%s", DATA_DIR, strArea);
+log_string(area_file);
       if ( strArea[0] == '$' )
     break;
 
@@ -1044,7 +1046,7 @@ log_string(strArea);
       }
       else
       {
-    if ( ( fpArea = fopen( strArea, "r" ) ) == NULL )
+    if ( ( fpArea = fopen( area_file, "r" ) ) == NULL )
     {
         perror( strArea );
         sprintf (buf,"Skipping area '%s'",strArea);
@@ -1058,7 +1060,7 @@ log_string(strArea);
 #else /*game version*/
       area_name = GC_MALLOC (sizeof (AREA_NAME_DATA));
 #endif
-      area_name->name = str_dup (strArea);
+      area_name->name = str_dup (area_file);
       if (!area_name_first) {
         area_name_first = area_name_last = area_name;
       } else {
