@@ -1131,8 +1131,9 @@ bool spec_cast_dispel( CHAR_DATA *ch )
     int sn;
 
     if ( ch->position != POS_FIGHTING 
-	|| (ch->daze > 0 && number_percent() > (ch->level*3)/2))
+	|| (ch->daze > 0 && number_percent() > (ch->level*3)/2)) {
         return FALSE;
+    }
 
     for ( victim = ch->in_room->people; victim != NULL; victim = v_next )
     {
@@ -1168,30 +1169,28 @@ bool spec_altirin_undead( CHAR_DATA *ch )
     /* always make sure they stay wizi unless somebody is in the room */
 
    /* They are only active at night, so only run this loop if its night time */
-   if ( time_info.hour < 6 || time_info.hour > 19 )
-    for ( rch = ch->in_room->people ; rch != NULL ; rch = rch->next_in_room )
-    {
-	if ( IS_NPC(rch) || rch == ch || IS_IMMORTAL(rch) )
-		continue;
+   if ( time_info.hour < 6 || time_info.hour > 19 ) {
+       for (rch = ch->in_room->people; rch != NULL; rch = rch->next_in_room) {
+           if (IS_NPC(rch) || rch == ch || IS_IMMORTAL(rch))
+               continue;
 
-	if ( ch->invis_level )
-	{
-	   ch->invis_level = 0;
-	   act("The air before you shimmers as $n fades into existance.",
-		ch, NULL, NULL, TO_ROOM,FALSE);
-	   return TRUE;
-	}
-	else
-	{ /* undead already went vis, which means somebody is here attack! */
-	    act("$n shifts and phases briefly.",ch,NULL,NULL,TO_ROOM,FALSE);
-	    multi_hit( ch, rch, 0 );
-	    return TRUE;
-	}
-    }
+           if (ch->invis_level) {
+               ch->invis_level = 0;
+               act("The air before you shimmers as $n fades into existance.",
+                   ch, NULL, NULL, TO_ROOM, FALSE);
+               return TRUE;
+           } else { /* undead already went vis, which means somebody is here attack! */
+               act("$n shifts and phases briefly.", ch, NULL, NULL, TO_ROOM, FALSE);
+               multi_hit(ch, rch, 0);
+               return TRUE;
+           }
+       }
+   }
 
     /* Out here?  Means we didn't see anybody.  Go invis */
-    if ( ch->invis_level )
-	return FALSE;
+    if ( ch->invis_level ) {
+        return FALSE;
+    }
 
  act("The air shimmers, and then $n fades away.",ch, NULL, NULL, TO_ROOM,FALSE);
     ch->invis_level = 53;
@@ -1327,12 +1326,21 @@ bool spec_jabber( CHAR_DATA *ch )
 
     switch(dice(1,20))
     {
-      case 2: if(ch->pIndexData->spec_words[2])
-        do_say(ch,ch->pIndexData->spec_words[2]); return TRUE;
-      case 10:  if(ch->pIndexData->spec_words[0])
-        do_say(ch,ch->pIndexData->spec_words[0]); return TRUE;
-      case 18:  if(ch->pIndexData->spec_words[1])
-        do_say(ch,ch->pIndexData->spec_words[1]); return TRUE;
+      case 2:
+          if(ch->pIndexData->spec_words[2]) {
+              do_say(ch, ch->pIndexData->spec_words[2]);
+          }
+          return TRUE;
+      case 10:
+          if(ch->pIndexData->spec_words[0]) {
+              do_say(ch, ch->pIndexData->spec_words[0]);
+          }
+          return TRUE;
+      case 18:
+          if(ch->pIndexData->spec_words[1]) {
+              do_say(ch, ch->pIndexData->spec_words[1]);
+          }
+          return TRUE;
       default: break;
     }
 
@@ -2907,20 +2915,21 @@ bool spec_elemental_fire(CHAR_DATA *ch)
 	   If there is, attach whoever he's fighting, if anyone. */
 	if ( (victim = ch->fighting) == NULL )
 	{
-		for ( vch = ch->in_room->people ; vch != NULL ; vch = vch->next_in_room)
-			if ( IS_NPC(vch) && (vch->pIndexData->vnum == MOB_VNUM_KING_FIRE ||
-                                             vch->spec_fun == spec_elemental_fire ||
-					     vch->spec_fun == spec_breath_fire ) )
-				if ( (victim = vch->fighting) != NULL && (
-					victim->spec_fun != spec_elemental_fire &&
-					victim->spec_fun != spec_breath_fire ))
-					{
-					do_say(ch, ch->pIndexData->spec_words[2]);
-					multi_hit(ch, victim, TYPE_UNDEFINED);
-					return TRUE;
-					}
-				else
-					return FALSE;
+		for ( vch = ch->in_room->people ; vch != NULL ; vch = vch->next_in_room) {
+            if (IS_NPC(vch) && (vch->pIndexData->vnum == MOB_VNUM_KING_FIRE ||
+                                vch->spec_fun == spec_elemental_fire ||
+                                vch->spec_fun == spec_breath_fire)) {
+                if ((victim = vch->fighting) != NULL && (
+                        victim->spec_fun != spec_elemental_fire &&
+                        victim->spec_fun != spec_breath_fire)) {
+                    do_say(ch, ch->pIndexData->spec_words[2]);
+                    multi_hit(ch, victim, TYPE_UNDEFINED);
+                    return TRUE;
+                } else {
+                    return FALSE;
+                }
+            }
+        }
 	}
 	else
 	{
@@ -2976,8 +2985,8 @@ bool spec_elemental_fire(CHAR_DATA *ch)
 bool spec_elemental_water(CHAR_DATA *ch)
 {
 
-   int summon, use_sn = -1;
-   CHAR_DATA *summ, *victim, *vch;
+   int summon = -1, use_sn = -1;
+   CHAR_DATA *summ, *victim;
    int cost = 1000;
 
    
@@ -3005,6 +3014,9 @@ bool spec_elemental_water(CHAR_DATA *ch)
 		case MOB_VNUM_WATER_WIERD:
 		  summon = MOB_VNUM_ICE_DRAKE;
 		  break;
+        default:
+          log_error("spec_elemental_water: no mob vnum");
+          return FALSE;
 	   }
 	    if ( (ch->hit <= ch->max_hit * 3/4) && number_percent() < 30 )
             {
