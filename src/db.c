@@ -612,7 +612,8 @@ void rename_area (char *strArea)
     sprintf (sbuf,"Renaming '%s' as '%s'.",filename,buf2);
     log_string (sbuf);    
   } else {
-      sprintf("rename_area: failed to load area file :: %s", filename);
+      sprintf(log_buf, "rename_area: failed to load area file :: %s", filename);
+      log_string(log_buf);
   }
   
   strcpy(strBak, filename);
@@ -935,7 +936,6 @@ void boot_db( void )
   /* needed to keep track of area file names */
   /* help.are and a few others don't have an AREA_DATA */
   AREA_NAME_DATA *area_name;
-  char buf[MAX_STRING_LENGTH];
 
 #if defined(unix)
     /* open file fix */
@@ -957,9 +957,7 @@ void boot_db( void )
   }
   top_string  = string_space;
   fBootDb   = TRUE;
-    }    
-
- sprintf(log_buf,"here1 ");  
+    }
 
     /*
      * Init random number generator.
@@ -4048,7 +4046,6 @@ char *str_dup( const char *str )
 #ifdef OLC_VERSION
 char *str_dup_perm( const char *str )
 {       
-  int len;
   char *plast;
   int ic;
   int iHash;
@@ -4062,10 +4059,9 @@ char *str_dup_perm( const char *str )
   if ( str[0] == '\0' )
     return &str_empty[0];
 
-  if ( str >= string_space && str < top_string )
-    return (char *) str;  
-  
-  len = strlen (str);
+  if (str >= string_space && str < top_string) {
+    return (char *) str;
+  }
   
   plast = top_string + sizeof(char *);
   if ( plast > &string_space[MAX_STRING - MAX_STRING_LENGTH] )
