@@ -23,3 +23,5 @@ $ ./run.sh mhs:latest
 * Remove non-unix-architecture code
 * Reduce the number of compiler warnings
 * GitHub pages
+* Clean up duplicate code/functions
+  * str_dup/str_dup_perm
