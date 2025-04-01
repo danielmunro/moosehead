@@ -727,7 +727,6 @@ void set_room_exits(PLAN_DATA *obj)
 
 void load_room_obj(PLAN_DATA *obj, bool strings)
 {
-  int i;
   ROOM_INDEX_DATA *pRoomIndex;
   if(obj->to_place == NULL)
   {
@@ -961,7 +960,6 @@ void load_mob_obj(PLAN_DATA *obj, bool strings)
 
 void modify_room_marker(CLAN_DATA *clan, ROOM_INDEX_DATA *room, int dir, bool place)
 {/* Remove any previous marker in this room, place a new one if place is TRUE */
-  PLAN_DATA *obj;
   int sign_vnum;
   if(clan == NULL || room == NULL)
     return; /* Personal editing */
@@ -1661,8 +1659,10 @@ void fread_clan_hall(FILE *fp, PLAN_DATA **head, CLAN_DATA *clan)
   char input[MAX_INPUT_LENGTH];
   while(!feof(fp))
   {
-    fscanf(fp, "%s", input);
-    if(!strcmp(input, "Label"))
+    if (!fscanf(fp, "%s", input)) {
+        log_error("fread_clan_hall: error reading Label");
+    }
+    if(strcmp(input, "Label") == 0)
     {
       int type = 0;
       obj = new_plan();
@@ -1702,13 +1702,15 @@ void fread_clan_hall(FILE *fp, PLAN_DATA **head, CLAN_DATA *clan)
       }
       while(!feof(fp))
       {
-        if(!strcmp(input, "Exit"))
+        if(strcmp(input, "Exit") == 0)
           fread_plan_exit(fp, *head, clan);
-        else if(!strcmp(input, "#End"))
+        else if(strcmp(input, "#End") == 0)
           break;
         else
           fread_to_eol(fp);
-        fscanf(fp, "%s", input);
+        if (!fscanf(fp, "%s", input)) {
+            log_error("fread_clan_hall: error reading to eol");
+        }
       }
       /* Finalize */
       for(obj = *head; obj != NULL; obj = obj->next)
@@ -1730,95 +1732,111 @@ bool fread_plan_obj(FILE *fp, PLAN_DATA *obj)
   if(fp == NULL || obj == NULL)
     return FALSE;
   /* Should be called only after "Label" has been found */
-  fscanf(fp, "%s", input);
+  if (!fscanf(fp, "%s", input)) {
+      log_error("fread_plan_obj: error reading input 1");
+  }
   obj->label = str_dup(input);
   while(!feof(fp))
   {
-    fscanf(fp, "%s", input);
+    if (!fscanf(fp, "%s", input)) {
+        log_error("fread_plan_obj: error reading input 2");
+    }
     switch(input[0])
     {
       case 'C':
-        if(!strcmp(input, "Cost"))
+        if(strcmp(input, "Cost") == 0)
         {
-          fscanf(fp, "%d", &obj->cost);
+          if (!fscanf(fp, "%d", &obj->cost)) {
+              log_error("fread_plan_obj: error reading Cost");
+          }
           found = TRUE;
         }
       case 'D':
-        if(!strcmp(input, "Desc"))
+        if(strcmp(input, "Desc") == 0)
         {
           read_to_tilde(fp, &obj->desc);
           found = TRUE;
         }
         break;
       case '#':
-        if(!strcmp(input, "#End"))
+        if(strcmp(input, "#End") == 0)
         {
           return TRUE; /* Done */
         }
         break;
       case 'F':
-        if(!strcmp(input, "Flags"))
+        if(strcmp(input, "Flags") == 0)
         {
-          fscanf(fp, "%ld", &obj->flags);
+          if (!fscanf(fp, "%ld", &obj->flags)) {
+              log_error("fread_plan_obj: error reading F");
+          }
           found = TRUE;
         }
-        else if(!strcmp(input, "Flagged"))
+        else if(strcmp(input, "Flagged") == 0)
         {
           obj->flagged = TRUE;
           found = TRUE;
         }
         break;
       case 'I':
-        if(!strcmp(input, "Index"))
+        if(strcmp(input, "Index") == 0)
         {
-          fscanf(fp, "%d", &obj->plan_index);
+          if (!fscanf(fp, "%d", &obj->plan_index)) {
+              log_error("fread_plan_obj: error reading I");
+          }
           found = TRUE;
         }
         break;
       case 'L':
-        if(!strcmp(input, "Long"))
+        if(strcmp(input, "Long") == 0)
         {
           read_to_tilde(fp, &obj->long_d);
           found = TRUE;
         }
-        else if(!strcmp(input, "Loc"))
+        else if(strcmp(input, "Loc") == 0)
         {
-          fscanf(fp, "%d", &obj->loc);
+          if (!fscanf(fp, "%d", &obj->loc)) {
+              log_error("fread_plan_obj: error reading Loc");
+          }
           found = TRUE;
         }
         break;
       case 'N':
-        if(!strcmp(input, "Name"))
+        if(strcmp(input, "Name") == 0)
         {
           read_to_tilde(fp, &obj->name);
           found = TRUE;
         }
         break;
       case 'S':
-        if(!strcmp(input, "Short"))
+        if(strcmp(input, "Short") == 0)
         {
           read_to_tilde(fp, &obj->short_d);
           found = TRUE;
         }
         break;
       case 'O':
-        if(!strcmp(input, "Opt"))
+        if(strcmp(input, "Opt") == 0)
         {
-          fscanf(fp, "%d %d", &obj->opt[0], &obj->opt[1]);
+          if (fscanf(fp, "%d %d", &obj->opt[0], &obj->opt[1]) < 2) {
+              log_error("fread_plan_obj: error reading Opt");
+          }
           found = TRUE;
         }
         break;
       case 'R':
-        if(!strcmp(input, "Review"))
+        if(strcmp(input, "Review") == 0)
         {
           obj->reviewed = TRUE;
           found = TRUE;
         }
         break;
       case 'T':
-        if(!strcmp(input, "Type"))
+        if(strcmp(input, "Type") == 0)
         {
-          fscanf(fp, "%ld", &obj->type);
+          if (!fscanf(fp, "%ld", &obj->type)) {
+              log_error("fread_plan_obj: error reading Type");
+          }
           found = TRUE;
           if(IS_SET(obj->type, PLAN_ROOM))
             obj->exits = new_p_exit();
@@ -1837,7 +1855,9 @@ bool fread_plan_exit(FILE *fp, PLAN_DATA *first, CLAN_DATA *clan)
 {
   int dir, index, link_index, exit_index, outside_index;
   PLAN_DATA *room = NULL;
-  fscanf(fp, "%d %d %d %d %d", &dir, &index, &link_index, &exit_index, &outside_index);
+  if (fscanf(fp, "%d %d %d %d %d", &dir, &index, &link_index, &exit_index, &outside_index) < 5) {
+      log_error("error reading exit information");
+  }
   room = find_edit_obj_by_index(first, PLAN_ROOM, index);
   if(room == NULL || dir < 0 || dir > 6)
     return FALSE;
@@ -4848,7 +4868,6 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
   {
     PLAN_DATA *ch_room;
     PLAN_DATA *obj, *new_obj;
-    int amount;
     if(hedit && (!check_can_edit(ch, CLAN_CAN_PLACE, hedit) ||
       !check_can_edit(ch, CLAN_CAN_REMOVE, hedit)))
     {
@@ -5330,7 +5349,7 @@ void do_movehall(CHAR_DATA *ch, char *argument )
 {
   CLAN_DATA *clan;
   int i, dir;
-  char arg[256], buf[256];
+  char arg[MAX_INPUT_LENGTH];
   if(!IS_IMMORTAL(ch) || ch->level < 57)
   {
     send_to_char("You don't have the power to move halls.\n\r", ch);
