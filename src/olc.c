@@ -1521,22 +1521,22 @@ void edit_main        ( CHAR_DATA *ch, int num )
 {
   switch (num) {
     case ID_EDIT_SETTINGS:
-      ch->pcdata->menu = &settings_menu;
+      ch->pcdata->menu = (MENU_DATA *) &settings_menu;
       break;
     case ID_EDIT_AREA:
-      ch->pcdata->menu = &area_menu;
+      ch->pcdata->menu = (MENU_DATA *) &area_menu;
       break;
     case ID_EDIT_ROOM:
-      ch->pcdata->menu = &room_menu;
+      ch->pcdata->menu = (MENU_DATA *) &room_menu;
       break;
     case ID_EDIT_MOB:
-      ch->pcdata->menu = &mob_menu;
+      ch->pcdata->menu = (MENU_DATA *) &mob_menu;
       break;
     case ID_EDIT_OBJECT:
-      ch->pcdata->menu = &object_menu;
+      ch->pcdata->menu = (MENU_DATA *) &object_menu;
       break;
     case ID_EDIT_RESETS:
-      ch->pcdata->menu = &reset_menu;
+      ch->pcdata->menu = (MENU_DATA *) &reset_menu;
       break;
   }
   do_menu (ch,NULL);
@@ -2275,7 +2275,7 @@ void edit_room ( CHAR_DATA *ch, int num )
       if (check_range (ch,RANGE_ROOM,-1)) {
         sprintf (buf,"Modify room [%d].",ch->pcdata->edit.room->vnum);
         olc_log_string (ch,buf);
-        ch->pcdata->menu = &room_modify_menu;
+        ch->pcdata->menu = (MENU_DATA *) &room_modify_menu;
         do_menu (ch,NULL);
       }
       break;
@@ -2326,7 +2326,7 @@ void edit_sector ( CHAR_DATA *ch, int num )
 {
   char buf[MAX_STRING_LENGTH];
 
-  ch->pcdata->menu = &room_modify_menu;
+  ch->pcdata->menu = (MENU_DATA *) &room_modify_menu;
   if (num == ID_EDIT_PREVIOUS) {
     do_menu (ch,NULL);
     return;
@@ -2653,7 +2653,7 @@ void edit_room_exits ( CHAR_DATA *ch, int num )
       edit_door_remove (ch);
       break;
     case ID_EDIT_PREVIOUS:
-      ch->pcdata->menu = &room_modify_menu;
+      ch->pcdata->menu = (MENU_DATA *) &room_modify_menu;
       do_menu (ch,NULL);
       break;
   }
@@ -2852,12 +2852,12 @@ void edit_room_modify ( CHAR_DATA *ch, int num )
       ch->pcdata->interp_fun = edit_room_mana;
       break;
     case ID_ROOM_DOOR:
-      ch->pcdata->menu = &exit_modify_menu;
+      ch->pcdata->menu = (MENU_DATA *) &exit_modify_menu;
       send_to_char ("Which exit [north,east,south,west,up,down]:  ",ch);
       ch->pcdata->interp_fun = edit_room_door_select;
       break;
     case ID_ROOM_TERRAIN:
-      ch->pcdata->menu = &sector_menu;
+      ch->pcdata->menu = (MENU_DATA *) &sector_menu;
       do_menu (ch,NULL);
       break;
     case ID_ROOM_CLAN:
@@ -2873,7 +2873,7 @@ void edit_room_modify ( CHAR_DATA *ch, int num )
       ch->pcdata->interp_fun = edit_room_extend_rem;
       break;
     case ID_EDIT_PREVIOUS:
-      ch->pcdata->menu = &room_menu;
+      ch->pcdata->menu = (MENU_DATA *) &room_menu;
       do_menu (ch,NULL);
       break;
   }
@@ -3396,13 +3396,13 @@ void edit_mob_size ( CHAR_DATA *ch, int num )
 {
   if (num == ID_EDIT_CANCEL) {
     send_to_char ("Operation Cancelled.\n\r",ch);
-    ch->pcdata->menu = &mob_modify_menu;
+    ch->pcdata->menu = (MENU_DATA *) &mob_modify_menu;
     do_menu (ch,NULL);
     return;
   }
   ch->pcdata->edit.mob->size = num;
   send_to_char ("Ok.\n\r",ch);
-  ch->pcdata->menu = &mob_modify_menu;
+  ch->pcdata->menu = (MENU_DATA *) &mob_modify_menu;
   do_menu (ch,NULL);
 }
 
@@ -3481,7 +3481,7 @@ void edit_mob_position ( CHAR_DATA *ch, int num )
 {
   char buf[MAX_STRING_LENGTH];
 
-  ch->pcdata->menu = &mob_modify_menu;
+  ch->pcdata->menu = (MENU_DATA *) &mob_modify_menu;
   switch (num) {
     case ID_EDIT_CANCEL:
       send_to_char ("Operation cancelled.\n\r>  ",ch);
@@ -3592,7 +3592,7 @@ void edit_mob_modify ( CHAR_DATA *ch, int num )
       ch->pcdata->interp_fun = edit_mob_sex;
       break;
     case ID_MOB_POS:
-      ch->pcdata->menu = &mob_position_menu;
+      ch->pcdata->menu = (MENU_DATA *) &mob_position_menu;
       do_menu (ch,NULL);
       break;
     case ID_MOB_WEALTH:
@@ -3600,7 +3600,7 @@ void edit_mob_modify ( CHAR_DATA *ch, int num )
       ch->pcdata->interp_fun = edit_mob_wealth;
       break;
     case ID_MOB_SIZE:
-      ch->pcdata->menu = &mob_size_menu;
+      ch->pcdata->menu = (MENU_DATA *) &mob_size_menu;
       do_menu (ch,NULL);
       break;
     case ID_MOB_ALIGN:
@@ -3617,7 +3617,7 @@ void edit_mob_modify ( CHAR_DATA *ch, int num )
       do_menu (ch,NULL);
       break;
     case ID_EDIT_PREVIOUS:
-      ch->pcdata->menu = &mob_menu;
+      ch->pcdata->menu = (MENU_DATA *) &mob_menu;
       do_menu (ch,NULL);
       break;
   }
@@ -3825,7 +3825,7 @@ void edit_mob_conf_shop ( CHAR_DATA *ch, char *arg )
     return;
   }
 
-  ch->pcdata->menu = &mob_shop_menu;
+  ch->pcdata->menu = (MENU_DATA *) &mob_shop_menu;
   do_menu (ch,NULL);
 }
 
@@ -3961,7 +3961,7 @@ void edit_shop_remove ( CHAR_DATA *ch )
 {
   ch->pcdata->edit.mob->pShop = NULL;
   send_to_char ("Shop removed.\n\r",ch);
-  ch->pcdata->menu = &mob_menu;
+  ch->pcdata->menu = (MENU_DATA *) &mob_menu;
   ch->pcdata->interp_fun = do_menu;
   do_menu (ch,NULL);
 }
@@ -3992,7 +3992,7 @@ void edit_mob_shop ( CHAR_DATA *ch, int num )
       edit_shop_info (ch);
       break;
     case ID_EDIT_PREVIOUS:
-      ch->pcdata->menu = &mob_menu;
+      ch->pcdata->menu = (MENU_DATA *) &mob_menu;
       do_menu (ch,NULL);
       break;
   }
@@ -4044,7 +4044,7 @@ void edit_mob ( CHAR_DATA *ch, int num )
         if (check_range (ch,RANGE_MOB,-1)) {
           sprintf (buf,"Modify mob [%d].",ch->pcdata->edit.mob->vnum);
           olc_log_string (ch,buf);
-          ch->pcdata->menu = &mob_modify_menu;
+          ch->pcdata->menu = (MENU_DATA *) &mob_modify_menu;
           do_menu (ch,NULL);
         }
       }
@@ -4068,7 +4068,7 @@ void edit_mob ( CHAR_DATA *ch, int num )
           send_to_char ("Mob is not a shopkeeper, make it one (Y/N)?  ",ch);
           ch->pcdata->interp_fun = edit_mob_conf_shop;
         } else {
-          ch->pcdata->menu = &mob_shop_menu;
+          ch->pcdata->menu = (MENU_DATA *) &mob_shop_menu;
           do_menu (ch,NULL);
         }
       }
@@ -4701,7 +4701,7 @@ void edit_obj_type ( CHAR_DATA *ch, int num )
     send_to_char (buf,ch);
   }
 
-  ch->pcdata->menu = &obj_modify_menu;
+  ch->pcdata->menu = (MENU_DATA *) &obj_modify_menu;
   do_menu (ch,NULL);
   return;
 }
@@ -4930,7 +4930,7 @@ void edit_obj_add_aff ( CHAR_DATA *ch, int num )
   AFFECT_DATA *paf;
 
   if ( num == ID_EDIT_PREVIOUS ) {
-    ch->pcdata->menu = &obj_modify_menu;
+    ch->pcdata->menu = (MENU_DATA *) &obj_modify_menu;
     do_menu (ch,NULL);
     return;
   }
@@ -5088,7 +5088,7 @@ void edit_obj_modify  ( CHAR_DATA *ch, int num )
       ch->pcdata->interp_fun = edit_obj_material;
       break;
     case ID_OBJ_TYPE:
-      ch->pcdata->menu = &obj_type_menu;
+      ch->pcdata->menu = (MENU_DATA *) &obj_type_menu;
       do_menu (ch,NULL);
       break;
     case ID_OBJ_FLAGS:
@@ -5132,7 +5132,7 @@ void edit_obj_modify  ( CHAR_DATA *ch, int num )
       ch->pcdata->interp_fun = edit_obj_extend_rem;
       break;
     case ID_OBJ_AFF_ADD:
-      ch->pcdata->menu = &obj_affect_menu;
+      ch->pcdata->menu = (MENU_DATA *) &obj_affect_menu;
       do_menu (ch,NULL);
       break;
     case ID_OBJ_AFF_REMOVE:
@@ -5143,7 +5143,7 @@ void edit_obj_modify  ( CHAR_DATA *ch, int num )
         send_to_char ("No affects to remove.\n\r>  ",ch);
       break;
     case ID_EDIT_PREVIOUS:
-      ch->pcdata->menu = &object_menu;
+      ch->pcdata->menu = (MENU_DATA *) &object_menu;
       do_menu (ch,NULL);
       break;
   }
@@ -5196,7 +5196,7 @@ void edit_object ( CHAR_DATA *ch, int num )
         if (check_range (ch,RANGE_OBJ,-1)) {
           sprintf (buf,"Modify object [%d].",ch->pcdata->edit.obj->vnum);
           olc_log_string (ch,buf);
-          ch->pcdata->menu = &obj_modify_menu;
+          ch->pcdata->menu = (MENU_DATA *) &obj_modify_menu;
           do_menu (ch,NULL);
         }
       }
@@ -5584,7 +5584,7 @@ void edit_reset_main ( CHAR_DATA *ch, int num )
 
 void edit_goto_main ( CHAR_DATA *ch, int num )
 {
-  ch->pcdata->menu = &edit_menu;
+  ch->pcdata->menu = (MENU_DATA *) &edit_menu;
   do_menu (ch,NULL);
 }
 
@@ -5617,7 +5617,7 @@ void do_edit ( CHAR_DATA *ch, char *argument )
   }
 
   SET_BIT (ch->comm,COMM_IN_OLC);
-  ch->pcdata->menu = &edit_menu;
+  ch->pcdata->menu = (MENU_DATA *) &edit_menu;
   ch->pcdata->interp_fun = do_menu;
   if (ch->pcdata->edit.area == NULL) {
     ch->pcdata->edit.per_flags = EDIT_DEFAULT_ROOM|EDIT_DEFAULT_OBJ|EDIT_DEFAULT_MOB|
