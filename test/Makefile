@@ -1,6 +1,6 @@
 CC      = gcc
 PROF    = -O2 -ggdb
-OLC	= -DGAME_VERSION -DROM
+OLC	= -DGAME_VERSION -DLOG_FAILED_BOOT=0 -DROM
 C_FLAGS =  -Dmoose -Wall $(PROF) $(OLC) -I/usr/local/include
 L_FLAGS =  -lm -lcrypt -lpthread -ldl -latomic_ops -lgc -ltap
 
