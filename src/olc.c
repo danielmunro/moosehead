@@ -28,6 +28,7 @@
 #include "lookup.h"
 #include "tables.h"
 #include "gc.h"
+#include "input.h"
 #ifdef GAME_VERSION
 #define str_dup_perm str_dup
 #define alloc_mem GC_MALLOC
@@ -1706,9 +1707,7 @@ void edit_area_new_vnum (CHAR_DATA *ch, char *arg)
 void edit_area_new_file (CHAR_DATA *ch, char *arg)
 {
   char buf[MAX_STRING_LENGTH];
-  char *ptr;
   FILE *fp;
-  int idx;
 
   if (!arg[0]) {
     send_to_char ("Invalid filename.  Operation canceled.\n\r>  ",ch);
@@ -1717,20 +1716,16 @@ void edit_area_new_file (CHAR_DATA *ch, char *arg)
     ch->pcdata->interp_fun = do_menu;
     return;
   }
-  idx = 0;
-  while (arg[idx]) {
-    arg[idx] = tolower (arg[idx]);
-    idx++;
+
+  string_to_lower(arg);
+
+  if (strlen (arg) > 8) {
+    arg[8] = '\0';
   }
 
-  if ((ptr = strstr (arg,".are")) != NULL) {
-    *ptr = NULL;
-  }
-  if (strlen (arg) > 8) {
-    arg[8] = NULL;
-  }
-  strcat (arg,".are");
-  sprintf (buf,"%s%s",NEW_DIR,arg);
+  strcat (arg, ".are");
+  sprintf (buf, "%s%s", NEW_DIR, arg);
+
   if ((fp = fopen (buf,"r")) != NULL) {
     fclose (fp);
     send_to_char ("Filename '%s' already exists.\n\r>  ",ch);
@@ -2214,10 +2209,10 @@ void edit_room_list (CHAR_DATA *ch)
 {
   ROOM_INDEX_DATA *room;
   int idx;
-  char buf[MAX_STRING_LENGTH],bigbuf[4*MAX_STRING_LENGTH];
+  char buf[MAX_STRING_LENGTH] = "";
+  char bigbuf[4 * MAX_STRING_LENGTH] = "";
   int col = FALSE;
 
-  bigbuf[0] = NULL;
   for (idx = ch->pcdata->edit.area->min_vnum_room;
        idx <= ch->pcdata->edit.area->max_vnum_room; idx++) {
     if (strlen (bigbuf) > (4*MAX_STRING_LENGTH - 200)) {
@@ -2667,8 +2662,6 @@ void edit_room_desc ( CHAR_DATA *ch, char *buf )
 
 void edit_room_extend_desc ( CHAR_DATA *ch, char *arg )
 {
-
-
   /* no need to free string */
   ch->pcdata->edit.room->extra_descr->description = str_dup (arg);
   send_to_char (">  ",ch);
@@ -2728,13 +2721,13 @@ void edit_room_extend_add ( CHAR_DATA *ch, char *arg )
 
 void edit_room_extend_rem ( CHAR_DATA *ch, char *arg )
 {
-  EXTRA_DESCR_DATA *ed,*first_ed,*prev_ed;
+  EXTRA_DESCR_DATA *ed,*prev_ed;
   char buf[MAX_STRING_LENGTH];
   bool found = FALSE;
 
   prev_ed = NULL;
   ch->pcdata->interp_fun = do_menu;
-  first_ed = ed = ch->pcdata->edit.room->extra_descr;
+  ed = ch->pcdata->edit.room->extra_descr;
   while (ed) {
     if (!str_prefix (arg,ed->keyword)) {
       if (prev_ed) {
@@ -2914,10 +2907,9 @@ void edit_mob_list (CHAR_DATA *ch)
 {
   MOB_INDEX_DATA *mob;
   int idx;
-  char buf[MAX_STRING_LENGTH],bigbuf[4*MAX_STRING_LENGTH];
+  char buf[MAX_STRING_LENGTH] = "", bigbuf[4*MAX_STRING_LENGTH] = "";
   int col = FALSE;
 
-  bigbuf[0] = NULL;
   for (idx = ch->pcdata->edit.area->min_vnum_mob;
        idx <= ch->pcdata->edit.area->max_vnum_mob; idx++) {
     if (strlen (bigbuf) > (4*MAX_STRING_LENGTH - 200)) {
@@ -3865,10 +3857,11 @@ void edit_shop_buy_type ( CHAR_DATA *ch, char *arg )
 
   ch->pcdata->interp_fun = do_menu;
   if (strcmp (arg,"clear") == 0) {
-    for ( iTrade = 0; iTrade < MAX_TRADE; iTrade++ )
-      ch->pcdata->edit.mob->pShop->buy_type[iTrade] = 0;
-      send_to_char ("Buy types cleared.\n\r>  ",ch);
-      return;
+    for ( iTrade = 0; iTrade < MAX_TRADE; iTrade++ ) {
+        ch->pcdata->edit.mob->pShop->buy_type[iTrade] = 0;
+    }
+    send_to_char ("Buy types cleared.\n\r>  ",ch);
+    return;
   }
   num = item_lookup (arg);
   if (num == 0) {
@@ -4371,37 +4364,13 @@ void edit_obj_info  ( CHAR_DATA *ch )
     return;
 }
 
-/*    OBJ_INDEX_DATA *    next;
-    EXTRA_DESCR_DATA *  extra_descr;
-    AFFECT_DATA *       affected;
-    bool                new_format;
-    char *              name;
-    char *              short_descr;
-    char *              description;
-    sh_int              vnum;
-    sh_int              reset_num;
-    char *              material;
-    sh_int              item_type;
-    int                 extra_flags;
-    int                 wear_flags;
-    sh_int              level;
-    sh_int              condition;
-    sh_int              count;
-    sh_int              weight;
-    sh_int              wear_timer;
-    int                 cost;
-    int                 value[5]; */
-
-
-
 void edit_obj_list (CHAR_DATA *ch)
 {
   OBJ_INDEX_DATA *obj;
   int idx;
-  char buf[MAX_STRING_LENGTH],bigbuf[4*MAX_STRING_LENGTH];
+  char buf[MAX_STRING_LENGTH] = "", bigbuf[4*MAX_STRING_LENGTH] = "";
   int col = FALSE;
 
-  bigbuf[0] = NULL;
   for (idx = ch->pcdata->edit.area->min_vnum_obj;
        idx <= ch->pcdata->edit.area->max_vnum_obj; idx++) {
     if (strlen (bigbuf) > (4*MAX_STRING_LENGTH - 200)) {
@@ -4880,13 +4849,13 @@ void edit_obj_extend_add ( CHAR_DATA *ch, char *arg )
 
 void edit_obj_extend_rem ( CHAR_DATA *ch, char *arg )
 {
-  EXTRA_DESCR_DATA *ed,*first_ed,*prev_ed;
+  EXTRA_DESCR_DATA *ed,*prev_ed;
   char buf[MAX_STRING_LENGTH];
   bool found = FALSE;
 
   prev_ed = NULL;
   ch->pcdata->interp_fun = do_menu;
-  first_ed = ed = ch->pcdata->edit.obj->extra_descr;
+  ed = ch->pcdata->edit.obj->extra_descr;
   while (ed) {
     if (!str_prefix (arg,ed->keyword)) {
       if (prev_ed) {
