@@ -9,5 +9,6 @@ docker run --publish 4000:4000 \
            --mount type=volume,src=mud-data,dst=/mud/moosehead/data \
            --restart unless-stopped \
            --detach \
+           --label mhs=true \
            --tty \
            $IMAGE:$TAG $TAG 4000
