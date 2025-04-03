@@ -1115,34 +1115,16 @@ char *avg_table[] = {
 
 extern   sh_int  rev_dir[];
 
-void olc_log_string (CHAR_DATA *ch,char *str)
-{
-    FILE *fp;
-    char *strtime;
-    char buf[MAX_STRING_LENGTH];
+void olc_log_string(CHAR_DATA *ch, char *str) {
+    sprintf(log_buf, "OLC %s - %s",ch->name,str);
+    log_string(log_buf);
+    wiznet (log_buf, ch, NULL, WIZ_OLC, 0, get_trust(ch));
 
-    strtime                    = ctime( &current_time );
-    strtime[strlen(strtime)-1] = '\0';
-
-    if ( str[0] == '\0' ) return;
-
-//    fclose( fpReserve );
-    if ( ( fp = fopen( OLC_LOG_FILE, "a" ) ) == NULL )
-    {
-  perror( OLC_LOG_FILE );
-    }
-    else
-    {
-  fprintf(fp, "%s::%s -%s\n",strtime,ch->name,str);
-  sprintf(buf, "OLC %s - %s",ch->name,str);
-  wiznet (buf,ch,NULL,WIZ_OLC,0,get_trust (ch));
-  fclose( fp );
-    }
-
-//    fpReserve = fopen( NULL_FILE, "r" );
     return;
+}
 
-
+void set_previous_menu(CHAR_DATA *ch) {
+    ch->pcdata->menu = ch->pcdata->edit.prev_menu;
 }
 
 bool check_range (CHAR_DATA *ch,int range_type,int vnum)
@@ -1411,52 +1393,30 @@ void build_attack_menu (CHAR_DATA *ch, MENU_FUN call_back)
   count -= 2;
   att_menu = alloc_mem (sizeof(MENU_ITEM)*(count+3));
 
-  *att_menu[0].text = str_dup ("Attack Type Menu");
+  att_menu[0].text = str_dup ("Attack Type Menu");
 
   att_menu[0].menu_fun = call_back;
-  *att_menu[0].context = "";
+  att_menu[0].context = "";
   att_menu[0].id = 20;
   for ( t = 1; t <= count; t++ )
   {
     char buf[MAX_STRING_LENGTH];
 
     sprintf (buf,"%s%s",(t < 10) ? " ":"",capitalize (attack_table[t].name));
-    *att_menu[t].text = str_dup (buf);
-    *att_menu[t].context = attack_table[t].name;
+    att_menu[t].text = str_dup (buf);
+    att_menu[t].context = attack_table[t].name;
     att_menu[t].id = t;
     att_menu[t].menu_fun = call_back;
   }
-  *att_menu[count+1].text = str_dup ("[Cancel]");
-  *att_menu[count+1].context = "cancel";
+  att_menu[count+1].text = "[Cancel]";
+  att_menu[count+1].context = "cancel";
   att_menu[count+1].id = ID_EDIT_CANCEL;
   att_menu[count+1].menu_fun = call_back;
-  *att_menu[count+2].text = NULL;
+  att_menu[count+2].text = '\0';
   att_menu[count+2].menu_fun = NULL;
 
   ch->pcdata->edit.prev_menu = ch->pcdata->menu;
   ch->pcdata->menu = att_menu;
-}
-
-void destroy_attack_menu (CHAR_DATA *ch)
-{
-  MENU_DATA *att_menu;
-  int t,count;
-
-  att_menu = ch->pcdata->menu;
-  count = 0;
-  for (t = 0;; t++) {
-    if (!attack_table[t].name) break;
-    count++;
-  }
-  count = 0;
-  for ( t = 0; t <= (count+2); t++) {
-    count++;
-    if (!*att_menu[t].text) break;
-    free_string ( *att_menu[t].text );
-  }
-
-  free_mem (att_menu,sizeof (MENU_ITEM)*count);
-  ch->pcdata->menu = ch->pcdata->edit.prev_menu;
 }
 
 void show_flags ( int flags, char **flag_table, CHAR_DATA *ch)
@@ -3328,11 +3288,12 @@ void edit_mob_attack (CHAR_DATA *ch, int num)
     sprintf (buf,"Attack type now %s.\n\r>  ",
       capitalize(attack_table[mob->dam_type].name));
     send_to_char (buf,ch);
-    destroy_attack_menu (ch);
+    set_previous_menu(ch);
     return;
+
   }
   send_to_char ("Operation canceled.\n\r>  ",ch);
-  destroy_attack_menu (ch);
+  set_previous_menu(ch);
   do_menu (ch,NULL);
   return;
 }
