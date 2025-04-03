@@ -74,7 +74,7 @@ void do_menu ( CHAR_DATA *ch, char *arg )
           sprintf (buf,format,choice, menu[choice].text,
             (choice < 10) ? " ":"");
           send_to_char (buf,ch);
-          if (menu[choice+t/2].text != '\0') {
+          if (menu[choice+t/2].text != NULL) {
             sprintf (buf,"%d.  %s\n\r", choice+t/2, menu[choice+t/2].text);
             send_to_char (buf,ch);
           } else  {
