@@ -1501,11 +1501,11 @@ void edit_flags ( CHAR_DATA *ch, int num )
 
     TOGGLE_BIT (*ch->pcdata->edit.mod_flags, num);
     for ( t = 1; t < 50; t++ ) {
-      if (*flag_menu[t].text == NULL) {
+      if (flag_menu[t].text == NULL) {
         break;
       }
       if (flag_menu[t].id == num) {
-        flag = *flag_menu[t].context;
+        flag = flag_menu[t].context;
         break;
       }
     }
