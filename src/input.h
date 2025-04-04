@@ -1,6 +1,7 @@
 #ifndef MOOSEHEAD_INPUT_H
 #define MOOSEHEAD_INPUT_H
 
+void string_to_lower(char *str);
 bool is_number(char *arg);
 int number_argument(char *argument, char *arg);
 int mult_argument(char *argument, char *arg);
