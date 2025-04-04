@@ -1243,10 +1243,8 @@ void destroy_flag_menu ( CHAR_DATA *ch )
   ch->pcdata->menu = ch->pcdata->edit.prev_menu;
 }
 
-void build_spec_menu ( CHAR_DATA *ch )
-{
+void build_spec_menu(CHAR_DATA *ch) {
   int count;
-  int t;
   static MENU_DATA *spec_menu = NULL;
 
   if (!spec_menu) {
@@ -1255,32 +1253,31 @@ void build_spec_menu ( CHAR_DATA *ch )
       count++;
     }
 
-    spec_menu = alloc_mem (sizeof(MENU_ITEM)*(count+4));
-    *spec_menu[0].text = "Select Special";
+    spec_menu = GC_MALLOC(sizeof(MENU_ITEM) * (count + 4));
+    spec_menu[0].text = "Select Special";
 
     spec_menu[0].menu_fun = edit_mob_spec_init;
-    *spec_menu[0].context = "";
+    spec_menu[0].context = "";
     spec_menu[0].id = 30;
 
-    for ( t = 0; t < count; t++ )
-    {
-      char buf[MAX_STRING_LENGTH];
-
-      sprintf (buf,"%sSet [%s]",t < 9 ? " ":"",spec_table[t].name);
-      *spec_menu[t+1].text = str_dup (buf);
-      *spec_menu[t+1].context = spec_table[t].name;
-      spec_menu[t+1].id = t;
-      spec_menu[t+1].menu_fun = edit_mob_spec;
+    for(int t = 1; t < count; t++) {
+      spec_menu[t].text = GC_MALLOC(MAX_STRING_LENGTH);
+      sprintf(spec_menu[t].text, "%sSet [%s]", t < 9 ? " ":"", spec_table[t].name);
+      spec_menu[t].context = spec_table[t].name;
+      spec_menu[t].id = t;
+      spec_menu[t].menu_fun = edit_mob_spec;
     }
-    *spec_menu[count+1].text = "[Cancel] Selection";
-    *spec_menu[count+1].context = "cancel";
+    spec_menu[count+1].text = "[Cancel] Selection";
+    spec_menu[count+1].context = "cancel";
     spec_menu[count+1].id = ID_EDIT_DONE;
     spec_menu[count+1].menu_fun = edit_mob_spec;
-    *spec_menu[count+2].text = "[Remove] Special";
-    *spec_menu[count+2].context = "remove";
+
+    spec_menu[count+2].text = "[Remove] Special";
+    spec_menu[count+2].context = "remove";
     spec_menu[count+2].id = ID_SPEC_NONE;
     spec_menu[count+2].menu_fun = edit_mob_spec;
-    *spec_menu[count+3].text = NULL;
+
+    spec_menu[count+3].text = '\0';
     spec_menu[count+3].menu_fun = NULL;
   }
 
@@ -1288,8 +1285,7 @@ void build_spec_menu ( CHAR_DATA *ch )
   ch->pcdata->menu = spec_menu;
 }
 
-void build_race_menu(CHAR_DATA *ch)
-{
+void build_race_menu(CHAR_DATA *ch) {
   int count;
   static MENU_DATA *race_menu = NULL;
 
