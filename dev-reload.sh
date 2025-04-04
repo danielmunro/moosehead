@@ -9,6 +9,6 @@ if [ ! -z "$CONTAINER" ]; then
   docker stop $CONTAINER
 fi
 
-docker build --progress=plain -t mhs:latest . &> build.log
+docker build -t mhs:latest .
 
 ./run.sh mhs latest
