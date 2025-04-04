@@ -1399,19 +1399,19 @@ void edit_flags_init ( CHAR_DATA *ch, int num )
   send_to_char ("\n\r\n\r",ch);
 }
 
-void edit_flags ( CHAR_DATA *ch, int num )
-{
+void edit_flags (CHAR_DATA *ch, int num) {
   char buf[MAX_STRING_LENGTH];
-  int t;
-  MENU_DATA *flag_menu;
+  MENU_DATA *flag_menu = ch->pcdata->menu;
 
-  flag_menu = ch->pcdata->menu;
-
-  if (num != ID_EDIT_DONE) {
+  if (num == ID_EDIT_DONE) {
+      set_previous_menu(ch);
+      do_menu(ch, NULL);
+      return;
+  }
     char *flag = "unknown";
 
     TOGGLE_BIT (*ch->pcdata->edit.mod_flags, num);
-    for ( t = 1; t < 50; t++ ) {
+    for(int t = 1; t < 50; t++ ) {
       if (flag_menu[t].text == NULL) {
         break;
       }
@@ -1423,10 +1423,6 @@ void edit_flags ( CHAR_DATA *ch, int num )
     sprintf (buf,"Flag [%s]:  %s\n\r>  ",flag,IS_SET(*ch->pcdata->edit.mod_flags,num) ?
                  "Set":"Unset");
     send_to_char (buf,ch);
-  } else {
-    set_previous_menu(ch);
-    do_menu (ch, NULL);
-  }
 }
 
 void edit_main        ( CHAR_DATA *ch, int num )
