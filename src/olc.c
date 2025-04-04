@@ -1130,7 +1130,6 @@ void set_previous_menu(CHAR_DATA *ch) {
 bool check_range (CHAR_DATA *ch,int range_type,int vnum)
 {
   VNUM_RANGE_DATA *range;
-  char *type = "unknown";
 
   if (get_trust(ch) >= CREATOR) {
     return TRUE;
@@ -1138,24 +1137,24 @@ bool check_range (CHAR_DATA *ch,int range_type,int vnum)
   if (vnum == -1) {
     switch (range_type) {
       case RANGE_ROOM:
-        if (ch->pcdata->edit.room)
-          vnum = ch->pcdata->edit.room->vnum;
-        type = "room";
+        if (ch->pcdata->edit.room) {
+            vnum = ch->pcdata->edit.room->vnum;
+        }
         break;
       case RANGE_MOB:
-        if (ch->pcdata->edit.mob)
-          vnum = ch->pcdata->edit.mob->vnum;
-        type = "mob";
+        if (ch->pcdata->edit.mob) {
+            vnum = ch->pcdata->edit.mob->vnum;
+        }
         break;
       case RANGE_OBJ:
-        if (ch->pcdata->edit.obj)
-          vnum = ch->pcdata->edit.obj->vnum;
-        type = "object";
+        if (ch->pcdata->edit.obj) {
+            vnum = ch->pcdata->edit.obj->vnum;
+        }
         break;
       case RANGE_AREA:
-        if (ch->pcdata->edit.area)
-          vnum = get_area_min_vnum (ch->pcdata->edit.area);
-        type = "area";
+        if (ch->pcdata->edit.area) {
+            vnum = get_area_min_vnum(ch->pcdata->edit.area);
+        }
         break;
     }
   }
@@ -1200,11 +1199,6 @@ void build_flag_menu(char **flag_table, char *title, CHAR_DATA *ch) {
       }
 
       for(int t = 0; t < count; t++) {
-        char buf[MAX_STRING_LENGTH];
-
-        if (!flag_table[t]) {
-            break;
-        }
         flag_menu[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
         sprintf(flag_menu[t + 1].text, "Toggle Flag [%s]", flag_table[t]);
         flag_menu[t + 1].context = flag_table[t];
