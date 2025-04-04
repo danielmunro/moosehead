@@ -11,4 +11,6 @@ fi
 
 docker build -t mhs:latest .
 
-./run.sh mhs latest
+RUNNING_CONTAINER=$(./run.sh mhs latest)
+
+docker logs -f $RUNNING_CONTAINER
