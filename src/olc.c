@@ -1173,58 +1173,52 @@ bool check_range (CHAR_DATA *ch,int range_type,int vnum)
 }
 
 void build_flag_menu(char **flag_table, char *title, CHAR_DATA *ch) {
-  int idx, count;
-  MENU_DATA *flag_menu;
+  int count = 0;
+  static MENU_DATA *flag_menu = NULL;
 
-  count = 0;
-  for (int t = 0; t < 50; t++) {          /* count flag items */
-    if (!flag_table[t]) {
-        break;
-    }
-    if (strcmp(flag_table[t], "NA") != 0) {
+  if (flag_menu == NULL) {
+      for (int t = 0; t < 50; t++) {
+        if (!flag_table[t]) {
+            break;
+        }
         count++;
-    }
+      }
+
+      flag_menu = GC_MALLOC(sizeof(MENU_ITEM) * (count + 3));
+      if (title) {
+        flag_menu[0].text = title;
+      } else {
+        flag_menu[0].text = "Set Flags";
+      }
+      flag_menu[0].menu_fun = edit_flags_init;
+      flag_menu[0].context = "";
+
+      if (count > 8) {
+          flag_menu[0].id = 30;
+      } else {
+          flag_menu[0].id = 0;
+      }
+
+      for(int t = 0; t < count; t++) {
+        char buf[MAX_STRING_LENGTH];
+
+        if (!flag_table[t]) {
+            break;
+        }
+        flag_menu[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
+        sprintf(flag_menu[t + 1].text, "Toggle Flag [%s]", flag_table[t]);
+        flag_menu[t + 1].context = flag_table[t];
+        flag_menu[t + 1].id = 1 << t;
+        flag_menu[t + 1].menu_fun = edit_flags;
+      }
+      flag_menu[count].text = "[Done] Setting Flags";
+      flag_menu[count].context = "done";
+      flag_menu[count].id = ID_EDIT_DONE;
+      flag_menu[count].menu_fun = edit_flags;
+
+      flag_menu[count + 1].text = '\0';
+      flag_menu[count + 1].menu_fun = NULL;
   }
-
-  flag_menu = GC_MALLOC(sizeof(MENU_ITEM) * (count + 3));
-  if (title) {
-    flag_menu[0].text = title;
-  } else {
-    flag_menu[0].text = "Set Flags";
-  }
-  flag_menu[0].menu_fun = edit_flags_init;
-  flag_menu[0].context = "";
-
-  if (count > 8) {
-      flag_menu[0].id = 30;
-  } else {
-      flag_menu[0].id = 0;
-  }
-
-  idx = 1;
-
-  for(int t = 0;; t++) {
-    char buf[MAX_STRING_LENGTH];
-
-    if (!flag_table[t] || (idx > 45)) {
-        break;
-    }
-    if (str_cmp(flag_table[t],"NA")) {
-      flag_menu[idx].text = GC_MALLOC(MAX_INPUT_LENGTH);
-      sprintf(flag_menu[idx].text, "Toggle Flag [%s]", flag_table[t]);
-      flag_menu[idx].context = flag_table[t];
-      flag_menu[idx].id = 1 << t;
-      flag_menu[idx].menu_fun = edit_flags;
-      idx++;
-    }
-  }
-  flag_menu[idx].text = "[Done] Setting Flags";
-  flag_menu[idx].context = "done";
-  flag_menu[idx].id = ID_EDIT_DONE;
-  flag_menu[idx].menu_fun = edit_flags;
-  idx++;
-  flag_menu[idx].text = '\0';
-  flag_menu[idx].menu_fun = NULL;
 
   ch->pcdata->edit.prev_menu = ch->pcdata->menu;
   ch->pcdata->menu = flag_menu;
