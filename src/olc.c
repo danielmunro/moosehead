@@ -1288,10 +1288,9 @@ void build_spec_menu ( CHAR_DATA *ch )
   ch->pcdata->menu = spec_menu;
 }
 
-void build_race_menu ( CHAR_DATA *ch )
+void build_race_menu(CHAR_DATA *ch)
 {
   int count;
-  int t;
   static MENU_DATA *race_menu = NULL;
 
   if (!race_menu) {
@@ -1300,28 +1299,27 @@ void build_race_menu ( CHAR_DATA *ch )
       count++;
     }
 
-    race_menu = alloc_mem (sizeof(MENU_ITEM)*(count+3));
-    *race_menu[0].text = "Select a Race";
+    race_menu = GC_MALLOC(sizeof(MENU_ITEM) * (count + 3));
 
+    race_menu[0].text = "Select a Race";
     race_menu[0].menu_fun = edit_mob_race_init;
-    *race_menu[0].context = "";
+    race_menu[0].context = "";
     race_menu[0].id = 30;
 
-    for ( t = 0; t < count; t++ )
-    {
-      char buf[MAX_STRING_LENGTH];
-
-      sprintf (buf,"%sSet race to [%s]",t < 9 ? " ":"",race_table[t].name);
-      *race_menu[t+1].text = str_dup (buf);
-      *race_menu[t+1].context = race_table[t].name;
-      race_menu[t+1].id = t;
-      race_menu[t+1].menu_fun = edit_mob_race;
+    for (int t = 1; t < count; t++) {
+      race_menu[t].text = GC_MALLOC(MAX_STRING_LENGTH);
+      sprintf(race_menu[t].text, "%sSet race to [%s]", t < 9 ? " " : "", race_table[t].name);
+      race_menu[t].context = race_table[t].name;
+      race_menu[t].id = t;
+      race_menu[t].menu_fun = edit_mob_race;
     }
-    *race_menu[count+1].text = "[Cancel] Race Selection";
-    *race_menu[count+1].context = "cancel";
+
+    race_menu[count+1].text = "[Cancel] Race Selection";
+    race_menu[count+1].context = "cancel";
     race_menu[count+1].id = ID_EDIT_DONE;
     race_menu[count+1].menu_fun = edit_mob_race;
-    *race_menu[count+2].text = NULL;
+
+    race_menu[count+2].text = '\0';
     race_menu[count+2].menu_fun = NULL;
   }
 
