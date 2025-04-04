@@ -2584,7 +2584,7 @@ void edit_room_clan ( CHAR_DATA *ch, char *arg )
   char buf[MAX_STRING_LENGTH];
 
   ch->pcdata->interp_fun = do_menu;
-  num = ch->pcdata->edit.room->clan = clan_lookup(arg);
+  num = ch->pcdata->edit.room->clan = nonclan_lookup(arg);
   if (num == 0) {
     send_to_char ("Clan not found.  Set to no clan.\n\r>  ",ch);
     return;
