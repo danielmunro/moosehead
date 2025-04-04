@@ -1365,21 +1365,6 @@ void build_average_menu ( char *title, CHAR_DATA *ch, MENU_FUN *call_back )
   ch->pcdata->menu = avg_menu;
 }
 
-void destroy_avg_menu (CHAR_DATA *ch)
-{
-  MENU_DATA *avg_menu;
-  int t;
-
-  avg_menu = ch->pcdata->menu;
-  for ( t = 0; t <= 12; t++) {
-    if (!*avg_menu[t].text) break;
-    free_string ( *avg_menu[t].text );
-  }
-
-  free_mem (avg_menu,sizeof (MENU_ITEM)*13);
-  ch->pcdata->menu = ch->pcdata->edit.prev_menu;
-}
-
 void build_attack_menu (CHAR_DATA *ch, MENU_FUN call_back)
 {
   int t, count;
