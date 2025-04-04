@@ -1329,32 +1329,29 @@ void build_race_menu ( CHAR_DATA *ch )
   ch->pcdata->menu = race_menu;
 }
 
-void build_average_menu ( char *title, CHAR_DATA *ch, MENU_FUN *call_back )
-{
+void build_average_menu(char *title, CHAR_DATA *ch, MENU_FUN *call_back) {
   int t;
   MENU_DATA *avg_menu;
 
-  avg_menu = alloc_mem (sizeof(MENU_ITEM)*13);
+  avg_menu = GC_MALLOC(sizeof(MENU_ITEM) * 13);
   if (title) {
-    *avg_menu[0].text = str_dup (title);
+    avg_menu[0].text = title;
   } else {
-    *avg_menu[0].text = str_dup ("Average Menu");
+    avg_menu[0].text = "Average Menu";
   }
-
   avg_menu[0].menu_fun = call_back;
   avg_menu[0].context = "";
   avg_menu[0].id = 0;
+
   for ( t = 1; t <= 10; t++ )
   {
-    char buf[MAX_STRING_LENGTH];
-
-    sprintf (buf,"%s%s",(t < 10) ? " ":"",capitalize (avg_table[t]));
-    avg_menu[t].text = str_dup (buf);
+    sprintf(avg_menu[t].text, "%s%s", (t < 10) ? " ":"", capitalize(avg_table[t]));
     avg_menu[t].context = avg_table[t];
     avg_menu[t].id = t;
     avg_menu[t].menu_fun = call_back;
   }
-  avg_menu[11].text = str_dup ("[Cancel]");
+
+  avg_menu[11].text = "[Cancel]";
   avg_menu[11].context = "cancel";
   avg_menu[11].id = ID_EDIT_CANCEL;
   avg_menu[11].menu_fun = call_back;
