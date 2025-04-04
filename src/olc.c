@@ -1376,7 +1376,7 @@ void build_attack_menu (CHAR_DATA *ch, MENU_FUN call_back)
     count++;
   }
   count -= 2;
-  att_menu = alloc_mem (sizeof(MENU_ITEM)*(count+3));
+  att_menu = GC_MALLOC(sizeof(MENU_ITEM) * (count + 3));
 
   att_menu[0].text = str_dup ("Attack Type Menu");
 
