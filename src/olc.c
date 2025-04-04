@@ -1172,75 +1172,63 @@ bool check_range (CHAR_DATA *ch,int range_type,int vnum)
   return FALSE;
 }
 
-void build_flag_menu ( char **flag_table, char *title, CHAR_DATA *ch )
-{
-  int idx,count;
-  int t;
+void build_flag_menu(char **flag_table, char *title, CHAR_DATA *ch) {
+  int idx, count;
   MENU_DATA *flag_menu;
 
   count = 0;
-  for (t = 0; t < 50; t++) {          /* count flag items */
-    if (!flag_table[t]) break;
-    if (strcmp (flag_table[t],"NA") != NULL)
-      count++;
+  for (int t = 0; t < 50; t++) {          /* count flag items */
+    if (!flag_table[t]) {
+        break;
+    }
+    if (strcmp(flag_table[t], "NA") != 0) {
+        count++;
+    }
   }
 
-  flag_menu = alloc_mem (sizeof(MENU_ITEM)*(count+3));
+  flag_menu = GC_MALLOC(sizeof(MENU_ITEM) * (count + 3));
   if (title) {
-    *flag_menu[0].text = str_dup (title);
+    flag_menu[0].text = title;
   } else {
-    *flag_menu[0].text = str_dup ("Set Flags");
+    flag_menu[0].text = "Set Flags";
   }
   flag_menu[0].menu_fun = edit_flags_init;
-  *flag_menu[0].context = "";
-  if (count > 8)
-    flag_menu[0].id = 30;
-  else
-    flag_menu[0].id = 0;
+  flag_menu[0].context = "";
+
+  if (count > 8) {
+      flag_menu[0].id = 30;
+  } else {
+      flag_menu[0].id = 0;
+  }
+
   idx = 1;
-  for ( t = 0;; t++ )
-  {
+
+  for(int t = 0;; t++) {
     char buf[MAX_STRING_LENGTH];
 
-    if (!flag_table[t] || (idx > 45)) break;
+    if (!flag_table[t] || (idx > 45)) {
+        break;
+    }
     if (str_cmp(flag_table[t],"NA")) {
-      sprintf (buf,"Toggle Flag [%s]",flag_table[t]);
-      *flag_menu[idx].text = str_dup (buf);
-      *flag_menu[idx].context = flag_table[t];
+      flag_menu[idx].text = GC_MALLOC(MAX_INPUT_LENGTH);
+      sprintf(flag_menu[idx].text, "Toggle Flag [%s]", flag_table[t]);
+      flag_menu[idx].context = flag_table[t];
       flag_menu[idx].id = 1 << t;
       flag_menu[idx].menu_fun = edit_flags;
       idx++;
     }
   }
-  *flag_menu[idx].text = str_dup ("[Done] Setting Flags");
-  *flag_menu[idx].context = "done";
+  flag_menu[idx].text = "[Done] Setting Flags";
+  flag_menu[idx].context = "done";
   flag_menu[idx].id = ID_EDIT_DONE;
   flag_menu[idx].menu_fun = edit_flags;
   idx++;
-  *flag_menu[idx].text = NULL;
+  flag_menu[idx].text = '\0';
   flag_menu[idx].menu_fun = NULL;
 
   ch->pcdata->edit.prev_menu = ch->pcdata->menu;
   ch->pcdata->menu = flag_menu;
   ch->pcdata->edit.flag_table = flag_table;
-
-}
-
-void destroy_flag_menu ( CHAR_DATA *ch )
-{
-  int t,count;
-  MENU_DATA *flag_menu;
-
-  flag_menu = ch->pcdata->menu;
-  count = 0;
-  for ( t = 0; t < 50; t++) {
-    count++;
-    if (!*flag_menu[t].text) break;
-    free_string ( *flag_menu[t].text );
-  }
-
-  free_mem (flag_menu,sizeof (MENU_ITEM)*(count));
-  ch->pcdata->menu = ch->pcdata->edit.prev_menu;
 }
 
 void build_spec_menu(CHAR_DATA *ch) {
@@ -1260,12 +1248,12 @@ void build_spec_menu(CHAR_DATA *ch) {
     spec_menu[0].context = "";
     spec_menu[0].id = 30;
 
-    for(int t = 1; t < count; t++) {
-      spec_menu[t].text = GC_MALLOC(MAX_STRING_LENGTH);
-      sprintf(spec_menu[t].text, "%sSet [%s]", t < 9 ? " ":"", spec_table[t].name);
-      spec_menu[t].context = spec_table[t].name;
-      spec_menu[t].id = t;
-      spec_menu[t].menu_fun = edit_mob_spec;
+    for(int t = 0; t < count; t++) {
+      spec_menu[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
+      sprintf(spec_menu[t + 1].text, "%sSet [%s]", t < 9 ? " ":"", spec_table[t].name);
+      spec_menu[t + 1].context = spec_table[t].name;
+      spec_menu[t + 1].id = t;
+      spec_menu[t + 1].menu_fun = edit_mob_spec;
     }
     spec_menu[count+1].text = "[Cancel] Selection";
     spec_menu[count+1].context = "cancel";
@@ -1302,12 +1290,12 @@ void build_race_menu(CHAR_DATA *ch) {
     race_menu[0].context = "";
     race_menu[0].id = 30;
 
-    for (int t = 1; t < count; t++) {
-      race_menu[t].text = GC_MALLOC(MAX_STRING_LENGTH);
-      sprintf(race_menu[t].text, "%sSet race to [%s]", t < 9 ? " " : "", race_table[t].name);
-      race_menu[t].context = race_table[t].name;
-      race_menu[t].id = t;
-      race_menu[t].menu_fun = edit_mob_race;
+    for (int t = 0; t < count; t++) {
+      race_menu[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
+      sprintf(race_menu[t + 1].text, "%sSet race to [%s]", t < 9 ? " " : "", race_table[t].name);
+      race_menu[t + 1].context = race_table[t].name;
+      race_menu[t + 1].id = t;
+      race_menu[t + 1].menu_fun = edit_mob_race;
     }
 
     race_menu[count+1].text = "[Cancel] Race Selection";
@@ -1337,12 +1325,11 @@ void build_average_menu(char *title, CHAR_DATA *ch, MENU_FUN *call_back) {
   avg_menu[0].context = "";
   avg_menu[0].id = 0;
 
-  for ( t = 1; t <= 10; t++ )
-  {
-    sprintf(avg_menu[t].text, "%s%s", (t < 10) ? " ":"", capitalize(avg_table[t]));
-    avg_menu[t].context = avg_table[t];
-    avg_menu[t].id = t;
-    avg_menu[t].menu_fun = call_back;
+  for(t = 0; t <= 10; t++) {
+    sprintf(avg_menu[t + 1].text, "%s%s", (t < 10) ? " ":"", capitalize(avg_table[t]));
+    avg_menu[t + 1].context = avg_table[t];
+    avg_menu[t + 1].id = t;
+    avg_menu[t + 1].menu_fun = call_back;
   }
 
   avg_menu[11].text = "[Cancel]";
@@ -1449,7 +1436,7 @@ void edit_flags ( CHAR_DATA *ch, int num )
                  "Set":"Unset");
     send_to_char (buf,ch);
   } else {
-    destroy_flag_menu (ch);
+    set_previous_menu(ch);
     do_menu (ch, NULL);
   }
 }
