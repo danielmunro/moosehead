@@ -2402,7 +2402,7 @@ struct edit_data {
   int              per_flags;       /* personal flags */
   long            *mod_flags;       /* pointer to flags to be modified */
   char           **flag_table;  
-  MENU_DATA       *prev_menu;  
+  MENU_ITEM       *prev_menu;  
   VNUM_RANGE_DATA *range;
 };
 
@@ -2424,7 +2424,7 @@ struct line_edit_data {
   LINE_EDIT_DATA *next;
   int         cur_line, mode, flags;
   LINE_DATA   *line;  
-  MENU_DATA   *prev_menu;
+  MENU_ITEM   *prev_menu;
   DO_FUN      *call_back;
 };
 
@@ -2436,7 +2436,7 @@ struct  pc_data
     PC_DATA *           next;
     BUFFER *            buffer;
     DO_FUN  *           interp_fun;    
-    MENU_DATA *         menu;
+    MENU_ITEM *         menu;
     EDIT_DATA           edit;    
     MACRO_DATA *        macro;    
     LINE_EDIT_DATA *    line_edit;

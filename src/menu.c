@@ -26,7 +26,7 @@
 void do_menu ( CHAR_DATA *ch, char *arg )
 {
   int choice, t;
-  MENU_DATA *menu;
+  MENU_ITEM *menu;
   char buf[100];
 
   menu = ch->pcdata->menu;
