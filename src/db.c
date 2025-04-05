@@ -1043,15 +1043,13 @@ void boot_db( void )
   }
   
   area_name_first = NULL;
-  char area_file[MAX_INPUT_LENGTH];
     
   for ( ; ; )
   {
     int min_vnum;
     
       strcpy( strArea, fread_word( fpList ) );
-      sprintf(area_file, "%s/area/%s", DATA_DIR, strArea);
-      sprintf(log_buf, "boot_db: attempting to load area file :: %s", area_file);
+      sprintf(log_buf, "boot_db: attempting to load area file :: %s", strArea);
       log_string(log_buf);
       if ( strArea[0] == '$' )
     break;
@@ -1062,10 +1060,10 @@ void boot_db( void )
       }
       else
       {
-    if ( ( fpArea = fopen( area_file, "r" ) ) == NULL )
+    if ( ( fpArea = fopen( strArea, "r" ) ) == NULL )
     {
         perror(strArea);
-        sprintf(log_buf,"boot_db: error reading area file, skipping :: %s", area_file);
+        sprintf(log_buf,"boot_db: error reading area file, skipping :: %s", strArea);
         log_string(log_buf);
         continue;
     }
@@ -1076,7 +1074,7 @@ void boot_db( void )
 #else /*game version*/
       area_name = GC_MALLOC (sizeof (AREA_NAME_DATA));
 #endif
-      area_name->name = str_dup (area_file);
+      area_name->name = str_dup (strArea);
       if (!area_name_first) {
         area_name_first = area_name_last = area_name;
       } else {
