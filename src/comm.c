@@ -198,19 +198,6 @@ int run(const char *build_version, int port) {
     strcpy( str_boot_time, ctime( &current_time ) );
 
     /*
-     * Set the uid to a hardcoded value (1001).  This probably had a good
-     * historical reason to be set but can probably all be removed.  If
-     * removed, we need to make sure the game can still write to the files
-     * in the docker data volume.
-     */
-    if (seteuid(MUD_UID) == -1) {
-        sprintf(log_buf, "failed to set uid to %d", MUD_UID);
-        log_error(log_buf);
-        exit(1);
-        return 1;
-    }
-
-    /*
      * Run the game.
      */
     control = init_socket(port);
