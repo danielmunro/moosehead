@@ -807,8 +807,7 @@ static char *room_exit_flags[] = {
         "noclose",
         "nolock",
         "concealed",
-        "secret",
-        NULL
+        "secret"
 };
 
 static char *mod_room_flags[] = {
@@ -838,8 +837,7 @@ static char *mod_room_flags[] = {
         "holy_ground",
         "clan_only",
         "isolated",// New isolated code
-        "no_hall",
-        NULL
+        "no_hall"
 };
 
 static char *act_table[] = {
@@ -867,8 +865,7 @@ static char *act_table[] = {
         "healer",
         "gain",
         "update_always",
-        "changer", "notrans",
-        NULL
+        "changer", "notrans"
 };
 
 /* static char *att_table[] = {
@@ -955,8 +952,7 @@ static char *off_table[] = {
         "assist_vnum",
         "off_charge",
         "assist_element",
-        "bane_touch",
-        NULL
+        "bane_touch"
 };
 
 
@@ -979,8 +975,7 @@ static char *irv_table[] = {
         "mental",
         "disease",
         "drowning",
-        "light",
-        NULL
+        "light"
 };
 
 static char *form_table[] = {
@@ -1011,8 +1006,7 @@ static char *form_table[] = {
         "dragon",
         "amphibian",
         "fish",
-        "cold blood",
-        NULL
+        "cold blood"
 };
 
 static char *part_table[] = {
@@ -1038,8 +1032,7 @@ static char *part_table[] = {
         "fangs",
         "horns",
         "scales",
-        "tusks",
-        NULL
+        "tusks"
 };
 
 static char *aff_table[] = {
@@ -1073,8 +1066,7 @@ static char *aff_table[] = {
         "swim",
         "regeneration",
         "NA",
-        "withstand_death",
-        NULL
+        "withstand_death"
 };
 
 static char *obj_extra_flags[] = {
@@ -1107,8 +1099,7 @@ static char *obj_extra_flags[] = {
         "clan_corpse",
         "warped",
         "teleport",
-        "noidentify",
-        NULL
+        "noidentify"
 };
 
 static char *obj_wear_flags[] = {
@@ -1128,8 +1119,7 @@ static char *obj_wear_flags[] = {
         "wield",
         "hold",
         "no_sac",
-        "float",
-        NULL
+        "float"
 };
 
 char *avg_table[] = {
@@ -1143,11 +1133,22 @@ char *avg_table[] = {
         "good",
         "great",
         "superb",
-        "awesome",
-        NULL
+        "awesome"
 };
 
 extern sh_int rev_dir[];
+
+int count_array_pointer(char **array) {
+    int max = 256;
+    for (int i = 0;; i++) {
+        if (i > max) {
+            return -1;
+        }
+        if (!array[i]) {
+            return i + 1;
+        }
+    }
+}
 
 void olc_log_string(CHAR_DATA *ch, char *str) {
     sprintf(log_buf, "OLC %s - %s", ch->name, str);
@@ -1205,47 +1206,35 @@ bool check_range(CHAR_DATA *ch, int range_type, int vnum) {
 }
 
 void build_flag_menu(char **flag_table, char *title, CHAR_DATA *ch) {
-    int count = 0;
-    static MENU_DATA *flag_menu = NULL;
+    int count = count_array_pointer(flag_table);
+    MENU_DATA *flag_menu = NULL;
 
-    if (flag_menu == NULL) {
-        for (int t = 0; t < 50; t++) {
-            if (!flag_table[t]) {
-                break;
-            }
-            count++;
-        }
+    flag_menu = GC_MALLOC(sizeof(MENU_ITEM) * (count + 3));
+    flag_menu[0].text = title ? title : "Set Flags";
+    flag_menu[0].menu_fun = edit_flags_init;
+    flag_menu[0].context = "";
 
-        flag_menu = GC_MALLOC(sizeof(MENU_ITEM) * (count + 3));
-        if (title) {
-            flag_menu[0].text = title;
-        } else {
-            flag_menu[0].text = "Set Flags";
-        }
-        flag_menu[0].menu_fun = edit_flags_init;
-        flag_menu[0].context = "";
-
-        if (count > 8) {
-            flag_menu[0].id = 30;
-        } else {
-            flag_menu[0].id = 0;
-        }
-
-        for (int t = 0; t < count; t++) {
-            flag_menu[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
-            sprintf(flag_menu[t + 1].text, "Toggle Flag [%s]", flag_table[t]);
-            flag_menu[t + 1].context = flag_table[t];
-            flag_menu[t + 1].id = 1 << t;
-            flag_menu[t + 1].menu_fun = edit_flags;
-        }
-        flag_menu[count].text = "[Done] Setting Flags";
-        flag_menu[count].context = "done";
-        flag_menu[count].id = ID_EDIT_DONE;
-        flag_menu[count].menu_fun = edit_flags;
-
-        flag_menu[count + 1].text = '\0';
-        flag_menu[count + 1].menu_fun = NULL;
+    if (count > 8) {
+        flag_menu[0].id = 30;
+    } else {
+        flag_menu[0].id = 0;
     }
+
+    for (int t = 0; t < count; t++) {
+        flag_menu[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
+        sprintf(flag_menu[t + 1].text, "Toggle Flag [%s]", flag_table[t]);
+        flag_menu[t + 1].context = flag_table[t];
+        flag_menu[t + 1].id = 1 << t;
+        flag_menu[t + 1].menu_fun = edit_flags;
+    }
+
+    flag_menu[count].text = "[Done] Setting Flags";
+    flag_menu[count].context = "done";
+    flag_menu[count].id = ID_EDIT_DONE;
+    flag_menu[count].menu_fun = edit_flags;
+
+    flag_menu[count + 1].text = '\0';
+    flag_menu[count + 1].menu_fun = NULL;
 
     ch->pcdata->edit.prev_menu = ch->pcdata->menu;
     ch->pcdata->menu = flag_menu;
