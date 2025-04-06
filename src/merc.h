@@ -2376,10 +2376,10 @@ struct  char_data
  * Menu data structures
  */
 
-enum MenuLayout {
+typedef enum {
     ONE_COLUMN,
     TWO_COLUMNS
-};
+} MenuLayout;
 
 typedef struct {
   char *text;
@@ -2391,7 +2391,7 @@ typedef struct {
 #define MAX_MENU_ITEMS 64
 
 typedef struct {
-    enum MenuLayout layout;
+    MenuLayout layout;
     int column_width;
     MENU_ITEM items[MAX_MENU_ITEMS];
 } MENU_DATA;
