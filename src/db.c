@@ -2300,8 +2300,10 @@ void area_update( void )
 
     for ( pArea = area_first; pArea != NULL; pArea = pArea->next )
     {
-
-  if ( ++pArea->age < 3 )
+        pArea->age += 1;
+        sprintf(log_buf, "area_update :: %s, %d", pArea->name, pArea->age);
+        log_string(log_buf);
+  if (pArea->age < 3)
       continue;
 
   /*
