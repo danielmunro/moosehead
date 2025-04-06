@@ -2294,6 +2294,7 @@ void fix_exits( void )
  */
 void area_update( void )
 {
+    log_string("area_update called");
     AREA_DATA *pArea;
     char buf[MAX_STRING_LENGTH];
 
@@ -2307,10 +2308,16 @@ void area_update( void )
    * Check age and reset.
    * Note: Mud School resets every 3 minutes (not 15).
    */
-   
+
+  sprintf(log_buf,
+          "area evaluate for reset :: %s, %d, %d, %d, %d",
+          pArea->name, pArea->empty, pArea->age, pArea->nplayer, pArea->age);
+  log_string(log_buf);
+
   if ( ((!pArea->empty && (pArea->nplayer == 0 || pArea->age >= 15))
   ||    pArea->age >= 31) && !pArea->freeze) 
   {
+      log_string("resetting area");
       ROOM_INDEX_DATA *pRoomIndex;
       ROOM_INDEX_DATA *honorIndex;
       ROOM_INDEX_DATA *posseIndex;
