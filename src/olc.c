@@ -1217,37 +1217,38 @@ bool check_range(CHAR_DATA *ch, int range_type, int vnum) {
 
 void build_flag_menu(char **flag_table, char *title, CHAR_DATA *ch) {
     int count = count_array_pointer(flag_table);
-    MENU_ITEM *flag_menu = NULL;
+    MENU_DATA *flag_menu = GC_MALLOC(sizeof(MENU_DATA));
+    MENU_ITEM *items = flag_menu->items;
 
-    flag_menu = GC_MALLOC(sizeof(MENU_ITEM) * (count + 3));
-    flag_menu[0].text = title ? title : "Set Flags";
-    flag_menu[0].menu_fun = edit_flags_init;
-    flag_menu[0].context = "";
+    items[0].text = title ? title : "Set Flags";
+    items[0].menu_fun = edit_flags_init;
+    items[0].context = "";
 
     if (count > 8) {
-        flag_menu[0].id = 30;
+        flag_menu->layout = TWO_COLUMNS;
+        flag_menu->column_width = 30;
     } else {
-        flag_menu[0].id = 0;
+        flag_menu->layout = ONE_COLUMN;
     }
 
     for (int t = 0; t < count; t++) {
-        flag_menu[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
-        sprintf(flag_menu[t + 1].text, "Toggle Flag [%s]", flag_table[t]);
-        flag_menu[t + 1].context = flag_table[t];
-        flag_menu[t + 1].id = 1 << t;
-        flag_menu[t + 1].menu_fun = edit_flags;
+        items[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
+        sprintf(items[t + 1].text, "Toggle Flag [%s]", flag_table[t]);
+        items[t + 1].context = flag_table[t];
+        items[t + 1].id = 1 << t;
+        items[t + 1].menu_fun = edit_flags;
     }
 
-    flag_menu[count].text = "[Done] Setting Flags";
-    flag_menu[count].context = "done";
-    flag_menu[count].id = ID_EDIT_DONE;
-    flag_menu[count].menu_fun = edit_flags;
+    items[count].text = "[Done] Setting Flags";
+    items[count].context = "done";
+    items[count].id = ID_EDIT_DONE;
+    items[count].menu_fun = edit_flags;
 
-    flag_menu[count + 1].text = '\0';
-    flag_menu[count + 1].menu_fun = NULL;
+    items[count + 1].text = '\0';
+    items[count + 1].menu_fun = NULL;
 
     ch->pcdata->edit.prev_menu = ch->pcdata->menu;
-    ch->pcdata->menu = flag_menu;
+    ch->pcdata->menu_data = flag_menu;
     ch->pcdata->edit.flag_table = flag_table;
 }
 
@@ -2257,7 +2258,7 @@ void edit_room_flags(CHAR_DATA *ch) {
 
     ch->pcdata->edit.mod_flags = &room->room_flags;
     build_flag_menu(mod_room_flags, "Set Room Flags", ch);
-    do_menu(ch, NULL);
+    do_menu_refactor(ch, NULL);
 }
 
 
@@ -2446,7 +2447,7 @@ void edit_door_flags(CHAR_DATA *ch) {
 
     ch->pcdata->edit.mod_flags = &room->exit[ch->pcdata->edit.exit]->exit_info;
     build_flag_menu(room_exit_flags, "Set Exit Flags", ch);
-    do_menu(ch, NULL);
+    do_menu_refactor(ch, NULL);
 }
 
 
@@ -3397,37 +3398,37 @@ void edit_mob_modify(CHAR_DATA *ch, int num) {
         case ID_MOB_ACT:
             ch->pcdata->edit.mod_flags = &ch->pcdata->edit.mob->act;
             build_flag_menu(act_table, "Set Act Flags", ch);
-            do_menu(ch, NULL);
+            do_menu_refactor(ch, NULL);
             break;
         case ID_MOB_OFF:
             ch->pcdata->edit.mod_flags = &ch->pcdata->edit.mob->off_flags;
             build_flag_menu(off_table, "Set Offensive Flags", ch);
-            do_menu(ch, NULL);
+            do_menu_refactor(ch, NULL);
             break;
         case ID_MOB_IMM:
             ch->pcdata->edit.mod_flags = &ch->pcdata->edit.mob->imm_flags;
             build_flag_menu(irv_table, "Set Immune Flags", ch);
-            do_menu(ch, NULL);
+            do_menu_refactor(ch, NULL);
             break;
         case ID_MOB_RES:
             ch->pcdata->edit.mod_flags = &ch->pcdata->edit.mob->res_flags;
             build_flag_menu(irv_table, "Set Resistant Flags", ch);
-            do_menu(ch, NULL);
+            do_menu_refactor(ch, NULL);
             break;
         case ID_MOB_VULN:
             ch->pcdata->edit.mod_flags = &ch->pcdata->edit.mob->vuln_flags;
             build_flag_menu(irv_table, "Set Vulnerable Flags", ch);
-            do_menu(ch, NULL);
+            do_menu_refactor(ch, NULL);
             break;
         case ID_MOB_PARTS:
             ch->pcdata->edit.mod_flags = &ch->pcdata->edit.mob->parts;
             build_flag_menu(part_table, "Set Part Flags", ch);
-            do_menu(ch, NULL);
+            do_menu_refactor(ch, NULL);
             break;
         case ID_MOB_FORM:
             ch->pcdata->edit.mod_flags = &ch->pcdata->edit.mob->form;
             build_flag_menu(form_table, "Set Form Flags", ch);
-            do_menu(ch, NULL);
+            do_menu_refactor(ch, NULL);
             break;
         case ID_MOB_RACE:
             build_race_menu(ch);
@@ -3456,7 +3457,7 @@ void edit_mob_modify(CHAR_DATA *ch, int num) {
         case ID_MOB_AFF:
             ch->pcdata->edit.mod_flags = &ch->pcdata->edit.mob->affected_by;
             build_flag_menu(aff_table, "Set Affect Flags", ch);
-            do_menu(ch, NULL);
+            do_menu_refactor(ch, NULL);
             break;
         case ID_MOB_SPEC:
             build_spec_menu(ch);
@@ -4717,7 +4718,7 @@ void edit_obj_add_aff(CHAR_DATA *ch, int num) {
 
         ch->pcdata->edit.mod_flags = &paf->bitvector;
         build_flag_menu(aff_table, "Set Affect Flags", ch);
-        do_menu(ch, NULL);
+        do_menu_refactor(ch, NULL);
         return;
     }
 
@@ -4856,12 +4857,12 @@ void edit_obj_modify(CHAR_DATA *ch, int num) {
         case ID_OBJ_FLAGS:
             ch->pcdata->edit.mod_flags = &ch->pcdata->edit.obj->extra_flags;
             build_flag_menu(obj_extra_flags, "Set Extra Flags", ch);
-            do_menu(ch, NULL);
+            do_menu_refactor(ch, NULL);
             break;
         case ID_OBJ_WEAR:
             ch->pcdata->edit.mod_flags = &ch->pcdata->edit.obj->wear_flags;
             build_flag_menu(obj_wear_flags, "Set Wear Flags", ch);
-            do_menu(ch, NULL);
+            do_menu_refactor(ch, NULL);
             break;
         case ID_OBJ_COND:
             send_to_char("Enter condition percentage [1-100]:  ", ch);
