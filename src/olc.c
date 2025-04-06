@@ -422,66 +422,74 @@ MENU_DATA _area_menu = {
         }
 };
 
-MENU_ITEM reset_menu[] = {
-        {"Reset Menu",                "", 0,                          edit_reset_init},
-        {"Reload [Mob] Resets",       "mob",    ID_EDIT_RESET_MOB,    edit_reset_main},
-        {"Reload [Object] Resets",    "object", ID_EDIT_RESET_OBJECT, edit_reset_main},
-        {"Reload [Door] Resets",      "door",   ID_EDIT_RESET_DOOR,   edit_reset_main},
-        {"Reload [All] Resets",       "all",    ID_EDIT_RESET_ALL,    edit_reset_main},
-        {"Add Current [Room] Resets", "room",   ID_EDIT_RESET_ROOM,   edit_reset_main},
-        {"Goto [Main]",               "main",   ID_EDIT_GOTO_MAIN,    edit_goto_main},
-        {"[Exit] OLC",                "exit",   ID_EDIT_EXIT,         edit_exit},
-        {NULL,                        "", 0,                          NULL}
+MENU_DATA _reset_menu = {
+        ONE_COLUMN, -1,
+        {
+                {"Reset Menu",                "", 0,                          edit_reset_init},
+                {"Reload [Mob] Resets",       "mob",    ID_EDIT_RESET_MOB,    edit_reset_main},
+                {"Reload [Object] Resets",    "object", ID_EDIT_RESET_OBJECT, edit_reset_main},
+                {"Reload [Door] Resets",      "door",   ID_EDIT_RESET_DOOR,   edit_reset_main},
+                {"Reload [All] Resets",       "all",    ID_EDIT_RESET_ALL,    edit_reset_main},
+                {"Add Current [Room] Resets", "room",   ID_EDIT_RESET_ROOM,   edit_reset_main},
+                {"Goto [Main]",               "main",   ID_EDIT_GOTO_MAIN,    edit_goto_main},
+                {"[Exit] OLC",                "exit",   ID_EDIT_EXIT,         edit_exit}
+        }
 };
 
-MENU_ITEM room_menu[] = {
-        {"Room Menu",            "", 0,                       edit_room_init},
-        {"[Select] Room Vnum",   "select", ID_EDIT_VNUM,      edit_room},
-        {"[List] Rooms in Area", "list",   ID_EDIT_LIST,      edit_room},
-        {"Room [Info]",          "info",   ID_EDIT_INFO,      edit_room},
-        {"[Create] New Room",    "create", ID_EDIT_CREATE,    edit_room},
-        {"[Copy] Room",          "copy",   ID_EDIT_CLONE,     edit_room},
-        {"[Modify] Room",        "modify", ID_EDIT_MODIFY,    edit_room},
-        {"Goto [Main]",          "main",   ID_EDIT_GOTO_MAIN, edit_goto_main},
-        {"[Exit] OLC",           "exit",   ID_EDIT_EXIT,      edit_exit},
-        {NULL,                   "", 0,                       NULL}
+MENU_DATA _room_menu = {
+        ONE_COLUMN, -1,
+        {
+                {"Room Menu",            "", 0,                       edit_room_init},
+                {"[Select] Room Vnum",   "select", ID_EDIT_VNUM,      edit_room},
+                {"[List] Rooms in Area", "list",   ID_EDIT_LIST,      edit_room},
+                {"Room [Info]",          "info",   ID_EDIT_INFO,      edit_room},
+                {"[Create] New Room",    "create", ID_EDIT_CREATE,    edit_room},
+                {"[Copy] Room",          "copy",   ID_EDIT_CLONE,     edit_room},
+                {"[Modify] Room",        "modify", ID_EDIT_MODIFY,    edit_room},
+                {"Goto [Main]",          "main",   ID_EDIT_GOTO_MAIN, edit_goto_main},
+                {"[Exit] OLC",           "exit",   ID_EDIT_EXIT,      edit_exit}
+        }
 };
 
-MENU_ITEM room_modify_menu[] = {
-        {" Modify Room Menu",           "", 0,                             edit_room_init},
-        {" Modify [Name]",              "name",        ID_ROOM_NAME,       edit_room_modify},
-        {" Modify [Description]",       "description", ID_ROOM_DESC,       edit_room_modify},
-        {" Add [Extended] Descrip",     "extended",    ID_ROOM_EXTENDED,   edit_room_modify},
-        {" [Remove] Extended Desrip",   "remove",      ID_ROOM_REM_EXTEND, edit_room_modify},
-        {" Modify [Flags]",             "flags",       ID_ROOM_FLAGS,      edit_room_modify},
-        {" Modify [Door]",              "door",        ID_ROOM_DOOR,       edit_room_modify},
-        {" Modify [Sector]",            "sector",      ID_ROOM_TERRAIN,    edit_room_modify},
-        {" Modify [Heal] Rate",         "heal",        ID_ROOM_HEAL,       edit_room_modify},
-        {" Modify [Mana] Rate",         "mana",        ID_ROOM_MANA,       edit_room_modify},
-        {"Modify [Clan]",               "clan",        ID_ROOM_CLAN,       edit_room_modify},
-        {"Modify [Observation] Target", "observation", ID_ROOM_OBS,        edit_room_modify},
-        {"Modify [Owner]",              "owner",       ID_ROOM_OWNER,      edit_room_modify},
-        {"[Done] Modifying Room",       "done",        ID_EDIT_PREVIOUS,   edit_room_modify},
-        {"[Main] Menu",                 "main",        ID_EDIT_GOTO_MAIN,  edit_goto_main},
-        {"[Exit] OLC",                  "exit",        ID_EDIT_EXIT,       edit_exit},
-        {NULL,                          "", 0,                             NULL}
+MENU_DATA _room_modify_menu = {
+        ONE_COLUMN, -1,
+        {
+                {" Modify Room Menu",           "", 0,                             edit_room_init},
+                {" Modify [Name]",              "name",        ID_ROOM_NAME,       edit_room_modify},
+                {" Modify [Description]",       "description", ID_ROOM_DESC,       edit_room_modify},
+                {" Add [Extended] Descrip",     "extended",    ID_ROOM_EXTENDED,   edit_room_modify},
+                {" [Remove] Extended Desrip",   "remove",      ID_ROOM_REM_EXTEND, edit_room_modify},
+                {" Modify [Flags]",             "flags",       ID_ROOM_FLAGS,      edit_room_modify},
+                {" Modify [Door]",              "door",        ID_ROOM_DOOR,       edit_room_modify},
+                {" Modify [Sector]",            "sector",      ID_ROOM_TERRAIN,    edit_room_modify},
+                {" Modify [Heal] Rate",         "heal",        ID_ROOM_HEAL,       edit_room_modify},
+                {" Modify [Mana] Rate",         "mana",        ID_ROOM_MANA,       edit_room_modify},
+                {"Modify [Clan]",               "clan",        ID_ROOM_CLAN,       edit_room_modify},
+                {"Modify [Observation] Target", "observation", ID_ROOM_OBS,        edit_room_modify},
+                {"Modify [Owner]",              "owner",       ID_ROOM_OWNER,      edit_room_modify},
+                {"[Done] Modifying Room",       "done",        ID_EDIT_PREVIOUS,   edit_room_modify},
+                {"[Main] Menu",                 "main",        ID_EDIT_GOTO_MAIN,  edit_goto_main},
+                {"[Exit] OLC",                  "exit",        ID_EDIT_EXIT,       edit_exit}
+        }
 };
 
-MENU_ITEM exit_modify_menu[] = {
-        {"Modify Door Menu",                   "", 0,                            edit_exit_init},
-        {"Toggle Door [Mode] (Double/Single)", "mode",        ID_SETTINGS_DOOR,  edit_settings},
-        {"[Select] Door",                      "select",      ID_DOOR_SELECT,    edit_room_exits},
-        {"Door [Info]",                        "info",        ID_DOOR_INFO,      edit_room_exits},
-        {"Modify [Destination]",               "destination", ID_DOOR_VNUM,      edit_room_exits},
-        {"Modify [Name]",                      "name",        ID_DOOR_KEYWORD,   edit_room_exits},
-        {"Modify [Key]",                       "key",         ID_DOOR_KEY,       edit_room_exits},
-        {"Modify [Flags]",                     "flags",       ID_DOOR_FLAGS,     edit_room_exits},
-        {"[Copy] to Other Side",               "copy",        ID_DOOR_COPY,      edit_room_exits},
-        {"[Remove] Exit",                      "remove",      ID_DOOR_REMOVE,    edit_room_exits},
-        {"[Done] Modifying Door",              "done",        ID_EDIT_PREVIOUS,  edit_room_exits},
-        {"[Main] Menu",                        "main",        ID_EDIT_GOTO_MAIN, edit_goto_main},
-        {"[Exit] OLC",                         "exit",        ID_EDIT_EXIT,      edit_exit},
-        {NULL,                                 "", 0,                            NULL}
+MENU_DATA _exit_modify_menu = {
+        ONE_COLUMN, -1,
+        {
+                {"Modify Door Menu",                   "", 0,                            edit_exit_init},
+                {"Toggle Door [Mode] (Double/Single)", "mode",        ID_SETTINGS_DOOR,  edit_settings},
+                {"[Select] Door",                      "select",      ID_DOOR_SELECT,    edit_room_exits},
+                {"Door [Info]",                        "info",        ID_DOOR_INFO,      edit_room_exits},
+                {"Modify [Destination]",               "destination", ID_DOOR_VNUM,      edit_room_exits},
+                {"Modify [Name]",                      "name",        ID_DOOR_KEYWORD,   edit_room_exits},
+                {"Modify [Key]",                       "key",         ID_DOOR_KEY,       edit_room_exits},
+                {"Modify [Flags]",                     "flags",       ID_DOOR_FLAGS,     edit_room_exits},
+                {"[Copy] to Other Side",               "copy",        ID_DOOR_COPY,      edit_room_exits},
+                {"[Remove] Exit",                      "remove",      ID_DOOR_REMOVE,    edit_room_exits},
+                {"[Done] Modifying Door",              "done",        ID_EDIT_PREVIOUS,  edit_room_exits},
+                {"[Main] Menu",                        "main",        ID_EDIT_GOTO_MAIN, edit_goto_main},
+                {"[Exit] OLC",                         "exit",        ID_EDIT_EXIT,      edit_exit}
+        }
 };
 
 MENU_ITEM sector_menu[] = {
@@ -1455,8 +1463,9 @@ void edit_main(CHAR_DATA *ch, int num) {
             do_menu_refactor(ch, NULL);
             return;
         case ID_EDIT_ROOM:
-            ch->pcdata->menu = (MENU_ITEM *) &room_menu;
-            break;
+            ch->pcdata->menu_data = &_room_menu;
+            do_menu_refactor(ch, NULL);
+            return;
         case ID_EDIT_MOB:
             ch->pcdata->menu = (MENU_ITEM *) &mob_menu;
             break;
@@ -1464,8 +1473,9 @@ void edit_main(CHAR_DATA *ch, int num) {
             ch->pcdata->menu = (MENU_ITEM *) &object_menu;
             break;
         case ID_EDIT_RESETS:
-            ch->pcdata->menu = (MENU_ITEM *) &reset_menu;
-            break;
+            ch->pcdata->menu_data = &_reset_menu;
+            do_menu_refactor(ch, NULL);
+            return;
     }
     do_menu(ch, NULL);
 }
@@ -2176,8 +2186,8 @@ void edit_room(CHAR_DATA *ch, int num) {
             if (check_range(ch, RANGE_ROOM, -1)) {
                 sprintf(buf, "Modify room [%d].", ch->pcdata->edit.room->vnum);
                 olc_log_string(ch, buf);
-                ch->pcdata->menu = (MENU_ITEM *) &room_modify_menu;
-                do_menu(ch, NULL);
+                ch->pcdata->menu_data = &_room_modify_menu;
+                do_menu_refactor(ch, NULL);
             }
             break;
         case ID_EDIT_INFO:
@@ -2224,9 +2234,9 @@ void edit_sector_init(CHAR_DATA *ch, int num) {
 void edit_sector(CHAR_DATA *ch, int num) {
     char buf[MAX_STRING_LENGTH];
 
-    ch->pcdata->menu = (MENU_ITEM *) &room_modify_menu;
+    ch->pcdata->menu_data = &_room_modify_menu;
     if (num == ID_EDIT_PREVIOUS) {
-        do_menu(ch, NULL);
+        do_menu_refactor(ch, NULL);
         return;
     }
 
@@ -2234,7 +2244,7 @@ void edit_sector(CHAR_DATA *ch, int num) {
     sprintf(buf, "Sector set to '%s'.\n\r",
             sector_table[ch->pcdata->edit.room->sector_type]);
     send_to_char(buf, ch);
-    do_menu(ch, NULL);
+    do_menu_refactor(ch, NULL);
 }
 
 void edit_room_flags(CHAR_DATA *ch) {
@@ -2273,8 +2283,8 @@ void edit_room_door_select(CHAR_DATA *ch, char *arg) {
             ch->pcdata->edit.exit = t;
             sprintf(buf, "Selected:  %s\n\r", dir_table[t]);
             send_to_char(buf, ch);
-            ch->pcdata->interp_fun = do_menu;
-            do_menu(ch, NULL);
+            ch->pcdata->interp_fun = do_menu_refactor;
+            do_menu_refactor(ch, NULL);
             return;
         }
     }
@@ -2538,8 +2548,8 @@ void edit_room_exits(CHAR_DATA *ch, int num) {
             edit_door_remove(ch);
             break;
         case ID_EDIT_PREVIOUS:
-            ch->pcdata->menu = (MENU_ITEM *) &room_modify_menu;
-            do_menu(ch, NULL);
+            ch->pcdata->menu_data = &_room_modify_menu;
+            do_menu_refactor(ch, NULL);
             break;
     }
 }
@@ -2725,7 +2735,7 @@ void edit_room_modify(CHAR_DATA *ch, int num) {
             ch->pcdata->interp_fun = edit_room_mana;
             break;
         case ID_ROOM_DOOR:
-            ch->pcdata->menu = (MENU_ITEM *) &exit_modify_menu;
+            ch->pcdata->menu_data = &_exit_modify_menu;
             send_to_char("Which exit [north,east,south,west,up,down]:  ", ch);
             ch->pcdata->interp_fun = edit_room_door_select;
             break;
@@ -2746,8 +2756,8 @@ void edit_room_modify(CHAR_DATA *ch, int num) {
             ch->pcdata->interp_fun = edit_room_extend_rem;
             break;
         case ID_EDIT_PREVIOUS:
-            ch->pcdata->menu = (MENU_ITEM *) &room_menu;
-            do_menu(ch, NULL);
+            ch->pcdata->menu_data = &_room_menu;
+            do_menu_refactor(ch, NULL);
             break;
     }
 }
