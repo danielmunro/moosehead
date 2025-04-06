@@ -387,6 +387,22 @@ MENU_DATA _edit_menu = {
         }
 };
 
+MENU_DATA _settings_menu = {
+        ONE_COLUMN, 0,
+        {
+                {"Personal Settings",                                     "", 0,                          NULL},
+                {"Toggle [Room]   - Default to current room",             "room",   ID_SETTINGS_DEF_ROOM, edit_settings},
+                {"Toggle [Mob]    - Default to first mob in room",        "mob",    ID_SETTINGS_DEF_MOB,  edit_settings},
+                {"Toggle [Object] - Default to first object in inv.",     "object", ID_SETTINGS_DEF_OBJ,  edit_settings},
+                {"Toggle [Auto]   - Create rooms when walking",           "auto",   ID_SETTINGS_AUTO,     edit_settings},
+                {"Toggle [Door]   - Double/Single door mode",             "door",   ID_SETTINGS_DOOR,     edit_settings},
+                {"[Brief] Menus   - Toggle between brief and full menus", "brief",  ID_SETTINGS_BRIEF,    edit_settings},
+                {"[Help] on the Above Options",                           "help",   ID_SETTINGS_HELP,     edit_settings},
+                {"Goto [Main]",                                           "main",   ID_EDIT_GOTO_MAIN,    edit_goto_main},
+                {"[Exit] OLC",                                            "exit",   ID_EDIT_EXIT,         edit_exit},
+        }
+};
+
 MENU_ITEM settings_menu[] = {
         {"Personal Settings",                                     "", 0,                          NULL},
         {"Toggle [Room]   - Default to current room",             "room",   ID_SETTINGS_DEF_ROOM, edit_settings},
@@ -1443,8 +1459,9 @@ void edit_flags(CHAR_DATA *ch, int num) {
 void edit_main(CHAR_DATA *ch, int num) {
     switch (num) {
         case ID_EDIT_SETTINGS:
-            ch->pcdata->menu = (MENU_ITEM *) &settings_menu;
-            break;
+            ch->pcdata->menu_data = &_settings_menu;
+            do_menu_refactor(ch, NULL);
+            return;
         case ID_EDIT_AREA:
             ch->pcdata->menu = (MENU_ITEM *) &area_menu;
             break;
