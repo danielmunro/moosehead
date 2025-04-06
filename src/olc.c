@@ -403,20 +403,6 @@ MENU_DATA _settings_menu = {
         }
 };
 
-MENU_ITEM settings_menu[] = {
-        {"Personal Settings",                                     "", 0,                          NULL},
-        {"Toggle [Room]   - Default to current room",             "room",   ID_SETTINGS_DEF_ROOM, edit_settings},
-        {"Toggle [Mob]    - Default to first mob in room",        "mob",    ID_SETTINGS_DEF_MOB,  edit_settings},
-        {"Toggle [Object] - Default to first object in inv.",     "object", ID_SETTINGS_DEF_OBJ,  edit_settings},
-        {"Toggle [Auto]   - Create rooms when walking",           "auto",   ID_SETTINGS_AUTO,     edit_settings},
-        {"Toggle [Door]   - Double/Single door mode",             "door",   ID_SETTINGS_DOOR,     edit_settings},
-        {"[Brief] Menus   - Toggle between brief and full menus", "brief",  ID_SETTINGS_BRIEF,    edit_settings},
-        {"[Help] on the Above Options",                           "help",   ID_SETTINGS_HELP,     edit_settings},
-        {"Goto [Main]",                                           "main",   ID_EDIT_GOTO_MAIN,    edit_goto_main},
-        {"[Exit] OLC",                                            "exit",   ID_EDIT_EXIT,         edit_exit},
-        {NULL,                                                    "", 0,                          NULL}
-};
-
 MENU_ITEM area_menu[] = {
         {"Area Menu",                   "", 20,                           edit_area_init},
         {"[Select] New Area",           "select", ID_EDIT_AREA_SELECT,    edit_area},
