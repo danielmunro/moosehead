@@ -374,9 +374,9 @@ void edit_obj_type(CHAR_DATA *ch, int num);
 void edit_obj_add_aff(CHAR_DATA *ch, int num);
 
 MENU_DATA _edit_menu = {
-        ONE_COLUMN, 0,
+        ONE_COLUMN, -1,
         {
-                {"Edit Menu",           "", 0,                        NULL},
+                {"Edit Menu",           "",         -1,               NULL},
                 {"Personal [Settings]", "settings", ID_EDIT_SETTINGS, edit_main},
                 {"Edit [Area]",         "area",     ID_EDIT_AREA,     edit_main},
                 {"Edit [Room]",         "room",     ID_EDIT_ROOM,     edit_main},
@@ -388,9 +388,9 @@ MENU_DATA _edit_menu = {
 };
 
 MENU_DATA _settings_menu = {
-        ONE_COLUMN, 0,
+        ONE_COLUMN, -1,
         {
-                {"Personal Settings",                                     "", 0,                          NULL},
+                {"Personal Settings",                                     "",       -1,                   NULL},
                 {"Toggle [Room]   - Default to current room",             "room",   ID_SETTINGS_DEF_ROOM, edit_settings},
                 {"Toggle [Mob]    - Default to first mob in room",        "mob",    ID_SETTINGS_DEF_MOB,  edit_settings},
                 {"Toggle [Object] - Default to first object in inv.",     "object", ID_SETTINGS_DEF_OBJ,  edit_settings},
@@ -403,21 +403,23 @@ MENU_DATA _settings_menu = {
         }
 };
 
-MENU_ITEM area_menu[] = {
-        {"Area Menu",                   "", 20,                           edit_area_init},
-        {"[Select] New Area",           "select", ID_EDIT_AREA_SELECT,    edit_area},
-        {"Area [Info]",                 "info",   ID_EDIT_AREA_INFO,      edit_area},
-        {"[Purge] Area]",               "purge",  ID_EDIT_AREA_PURGE,     edit_area},
-        {"[Reset] Area",                "reset",  ID_EDIT_AREA_RESET,     edit_area},
-        {"[New] Area",                  "new",    ID_EDIT_AREA_NEW,       edit_area},
+MENU_DATA _area_menu = {
+        TWO_COLUMNS, 20,
+        {
+                {"Area Menu",                   "",       -1,                     edit_area_init},
+                {"[Select] New Area",           "select", ID_EDIT_AREA_SELECT,    edit_area},
+                {"Area [Info]",                 "info",   ID_EDIT_AREA_INFO,      edit_area},
+                {"[Purge] Area]",               "purge",  ID_EDIT_AREA_PURGE,     edit_area},
+                {"[Reset] Area",                "reset",  ID_EDIT_AREA_RESET,     edit_area},
+                {"[New] Area",                  "new",    ID_EDIT_AREA_NEW,       edit_area},
 /*  {"[Load] Area","load",ID_EDIT_AREA_LOAD,edit_area}, */
-        {"[Save] Area",                 "save",   ID_EDIT_AREA_SAVE,      edit_area},
-        {"[Rename] Area",               "rename", ID_EDIT_AREA_RENAME,    edit_area},
-        {"Toggle [Freeze] Area",        "freeze", ID_EDIT_AREA_FREEZE,    edit_area},
-        {"Toggle [Under] Construction", "under",  ID_EDIT_AREA_UNDER_DEV, edit_area},
-        {"Goto [Main]",                 "main",   ID_EDIT_GOTO_MAIN,      edit_goto_main},
-        {"[Exit] OLC",                  "exit",   ID_EDIT_EXIT,           edit_exit},
-        {NULL,                          "", 0,                            NULL}
+                {"[Save] Area",                 "save",   ID_EDIT_AREA_SAVE,      edit_area},
+                {"[Rename] Area",               "rename", ID_EDIT_AREA_RENAME,    edit_area},
+                {"Toggle [Freeze] Area",        "freeze", ID_EDIT_AREA_FREEZE,    edit_area},
+                {"Toggle [Under] Construction", "under",  ID_EDIT_AREA_UNDER_DEV, edit_area},
+                {"Goto [Main]",                 "main",   ID_EDIT_GOTO_MAIN,      edit_goto_main},
+                {"[Exit] OLC",                  "exit",   ID_EDIT_EXIT,           edit_exit}
+        }
 };
 
 MENU_ITEM reset_menu[] = {
@@ -1449,8 +1451,9 @@ void edit_main(CHAR_DATA *ch, int num) {
             do_menu_refactor(ch, NULL);
             return;
         case ID_EDIT_AREA:
-            ch->pcdata->menu = (MENU_ITEM *) &area_menu;
-            break;
+            ch->pcdata->menu_data = &_area_menu;
+            do_menu_refactor(ch, NULL);
+            return;
         case ID_EDIT_ROOM:
             ch->pcdata->menu = (MENU_ITEM *) &room_menu;
             break;
