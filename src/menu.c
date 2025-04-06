@@ -21,7 +21,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
 #include "merc.h"
+#include "menu.h"
 
 void do_menu ( CHAR_DATA *ch, char *arg )
 {

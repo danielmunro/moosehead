@@ -29,7 +29,6 @@ typedef void DO_FUN     args( ( CHAR_DATA *ch, char *argument ) );
 typedef bool SPEC_FUN   args( ( CHAR_DATA *ch ) );
 typedef void SPELL_FUN  args( ( int sn, int level, CHAR_DATA *ch, void *vo,
         int target ) );
-typedef void MENU_FUN   args( ( CHAR_DATA *ch, int menu_id ) );        
 /*
  *  Accommodate old non-Ansi compilers.
  */
@@ -2371,30 +2370,7 @@ struct  char_data
     DAMAGE_DATA *damaged;
 };
 
-
-/*
- * Menu data structures
- */
-
-typedef enum {
-    ONE_COLUMN,
-    TWO_COLUMNS
-} MenuLayout;
-
-typedef struct {
-  char *text;
-  char *context;
-  int id;
-  MENU_FUN *menu_fun;
-} MENU_ITEM;
-
-#define MAX_MENU_ITEMS 64
-
-typedef struct {
-    MenuLayout layout;
-    int column_width;
-    MENU_ITEM items[MAX_MENU_ITEMS];
-} MENU_DATA;
+#include "menu.h"
 
 #define EDIT_DEFAULT_ROOM     1   /* Default to current or use old */
 #define EDIT_DEFAULT_OBJ      2
