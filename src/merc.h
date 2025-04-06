@@ -2381,12 +2381,12 @@ enum MenuLayout {
     TWO_COLUMNS
 };
 
-struct menu_item {
+typedef struct {
   char *text;
   char *context;
   int id;
   MENU_FUN *menu_fun;
-};
+} MENU_ITEM;
 
 #define MAX_MENU_ITEMS 64
 

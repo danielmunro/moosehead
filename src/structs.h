@@ -32,7 +32,6 @@ typedef struct  room_index_data         ROOM_INDEX_DATA;
 typedef struct  shop_data               SHOP_DATA;
 typedef struct  time_info_data          TIME_INFO_DATA;
 typedef struct  weather_data            WEATHER_DATA;
-typedef struct  menu_item               MENU_ITEM;
 typedef struct  edit_data               EDIT_DATA;
 typedef struct  macro_data              MACRO_DATA;
 typedef struct  line_data               LINE_DATA;
