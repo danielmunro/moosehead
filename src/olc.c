@@ -31,12 +31,6 @@
 #include "input.h"
 #include "menu.h"
 
-#ifdef GAME_VERSION
-#define str_dup_perm str_dup
-#define alloc_mem GC_MALLOC
-#define alloc_perm GC_MALLOC
-#endif
-
 /* What may appear to be memory leaks are not necessarily leaks, but safeguards.
    MOBs/Objects share the same strings as their indexes, so freeing that permanent
    string may have drastic results.. hence, the string is just left in memory.
@@ -1965,7 +1959,7 @@ bool create_room(CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir, int move_char) {
 
     if (vnum > ch->pcdata->edit.area->max_vnum_room)
         ch->pcdata->edit.area->max_vnum_room = vnum;
-    pRoomIndex = alloc_perm(sizeof(*pRoomIndex));
+    pRoomIndex = GC_MALLOC(sizeof(*pRoomIndex));
     *pRoomIndex = zero_room;
     pRoomIndex->owner = str_dup("");
     pRoomIndex->people = NULL;
@@ -1973,8 +1967,8 @@ bool create_room(CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir, int move_char) {
     pRoomIndex->extra_descr = NULL;
     pRoomIndex->area = ch->pcdata->edit.area;
     pRoomIndex->vnum = vnum;
-    pRoomIndex->name = str_dup_perm("Generic room name");
-    pRoomIndex->description = str_dup_perm("Generic room description.\n\r");
+    pRoomIndex->name = str_dup("Generic room name");
+    pRoomIndex->description = str_dup("Generic room description.\n\r");
     pRoomIndex->room_flags = 0;
     pRoomIndex->sector_type = ch->pcdata->edit.room->sector_type;
     pRoomIndex->light = 0;
@@ -2097,12 +2091,12 @@ void edit_room_clone(CHAR_DATA *ch, char *arg) {
             ed_last->next = new_extra_descr();
             ed_last = ed_last->next;
         }
-        ed_last->keyword = str_dup_perm(ed_copy->keyword);
-        ed_last->description = str_dup_perm(ed_copy->description);
+        ed_last->keyword = str_dup(ed_copy->keyword);
+        ed_last->description = str_dup(ed_copy->description);
         ed_last->next = NULL;
     }
-    pRoomIndex->name = str_dup_perm(src->name);
-    pRoomIndex->description = str_dup_perm(src->description);
+    pRoomIndex->name = str_dup(src->name);
+    pRoomIndex->description = str_dup(src->description);
     pRoomIndex->room_flags = src->room_flags;
     pRoomIndex->sector_type = src->sector_type;
     pRoomIndex->light = src->light;
@@ -2202,7 +2196,7 @@ void edit_room_name(CHAR_DATA *ch, char *arg) {
     }
 
     free_string(room->name);
-    room->name = str_dup_perm(arg);
+    room->name = str_dup(arg);
     sprintf(buf, "Room name set to '%s'\n\r>  ", room->name);
     send_to_char(buf, ch);
 }
@@ -2392,7 +2386,7 @@ void edit_room_door_keyword(CHAR_DATA *ch, char *arg) {
     }
 
     free_string(room->exit[ch->pcdata->edit.exit]->keyword);
-    room->exit[ch->pcdata->edit.exit]->keyword = str_dup_perm(arg);
+    room->exit[ch->pcdata->edit.exit]->keyword = str_dup(arg);
     sprintf(buf, "Exit %s keyword set to %s.\n\r>  ", dir_table[ch->pcdata->edit.exit], arg);
     send_to_char(buf, ch);
 }
@@ -2545,7 +2539,7 @@ void edit_room_exits(CHAR_DATA *ch, int num) {
 }
 
 void edit_room_desc(CHAR_DATA *ch, char *buf) {
-    ch->pcdata->edit.room->description = str_dup_perm(buf);
+    ch->pcdata->edit.room->description = str_dup(buf);
     send_to_char(">  ", ch);
 }
 
@@ -2595,7 +2589,7 @@ void edit_room_extend_add(CHAR_DATA *ch, char *arg) {
     if (ed == NULL) {
         ed = new_extra_descr();
         ed->keyword = str_dup(arg);
-        ed->description = str_dup_perm("Generic extended description.\n\r");
+        ed->description = str_dup("Generic extended description.\n\r");
         ed->next = first_ed;
         ch->pcdata->edit.room->extra_descr = ed;
         send_to_char("Creating new extended.\n\r", ch);
@@ -2846,17 +2840,17 @@ void edit_mob_create(CHAR_DATA *ch) {
     if (vnum > ch->pcdata->edit.area->max_vnum_mob)
         ch->pcdata->edit.area->max_vnum_mob = vnum;
 
-    mob = alloc_perm(sizeof(MOB_INDEX_DATA));
+    mob = GC_MALLOC(sizeof(MOB_INDEX_DATA));
     mob->new_format = TRUE;
     mob->vnum = vnum;
     mob->spec_fun = NULL;
     mob->pShop = NULL;
     mob->count = 0;
     mob->killed = 0;
-    mob->player_name = str_dup_perm("generic mob");
-    mob->short_descr = str_dup_perm("Generic short description");
-    mob->long_descr = str_dup_perm("Generic long description");
-    mob->description = str_dup_perm("Generic description.");
+    mob->player_name = str_dup("generic mob");
+    mob->short_descr = str_dup("Generic short description");
+    mob->long_descr = str_dup("Generic long description");
+    mob->description = str_dup("Generic description.");
     mob->spec_words[0] = NULL;
     mob->spec_words[1] = NULL;
     mob->spec_words[2] = NULL;
@@ -2906,7 +2900,7 @@ void edit_mob_name(CHAR_DATA *ch, char *arg) {
     }
 
     free_string(mob->player_name);
-    mob->player_name = str_dup_perm(arg);
+    mob->player_name = str_dup(arg);
     sprintf(buf, "Name set to '%s'.\n\r>", mob->player_name);
     send_to_char(buf, ch);
 }
@@ -2923,7 +2917,7 @@ void edit_mob_short(CHAR_DATA *ch, char *arg) {
     }
 
     free_string(mob->short_descr);
-    mob->short_descr = str_dup_perm(arg);
+    mob->short_descr = str_dup(arg);
     sprintf(buf, "Short set to '%s'.\n\r> ", mob->short_descr);
     send_to_char(buf, ch);
 }
@@ -2941,7 +2935,7 @@ void edit_mob_long(CHAR_DATA *ch, char *arg) {
 
     strcat(arg, "\n\r");
     free_string(mob->long_descr);
-    mob->long_descr = str_dup_perm(arg);
+    mob->long_descr = str_dup(arg);
     sprintf(buf, "Long:  %s> ", mob->long_descr);
     send_to_char(buf, ch);
 }
@@ -2966,7 +2960,7 @@ void edit_mob_spec_words(CHAR_DATA *ch, char *arg) {
     }
 
     free_string(mob->spec_words[v]);
-    mob->spec_words[v] = str_dup_perm(arg);
+    mob->spec_words[v] = str_dup(arg);
     sprintf(buf, "Spec Words[%d]:  %s> ", v, mob->spec_words[v]);
     send_to_char(buf, ch);
 }
@@ -3017,7 +3011,7 @@ void edit_mob_align(CHAR_DATA *ch, char *arg) {
 
 void edit_mob_desc(CHAR_DATA *ch, char *buf) {
     /* free_string (ch->pcdata->edit.mob->description); */
-    ch->pcdata->edit.mob->description = str_dup_perm(buf);
+    ch->pcdata->edit.mob->description = str_dup(buf);
     send_to_char(">  ", ch);
 }
 
@@ -3491,7 +3485,7 @@ void edit_mob_copy(CHAR_DATA *ch, char *arg) {
         extern SHOP_DATA *shop_first, *shop_last;
         extern int top_shop;
 
-        pShop = alloc_perm(sizeof(*pShop));
+        pShop = GC_MALLOC(sizeof(*pShop));
         *pShop = *victim->pShop;
         pShop->keeper = mob->vnum;
         mob->pShop = pShop;
@@ -3506,13 +3500,13 @@ void edit_mob_copy(CHAR_DATA *ch, char *arg) {
     mob->count = 0;
     mob->killed = 0;
     free_string(mob->player_name);
-    mob->player_name = str_dup_perm(victim->player_name);
+    mob->player_name = str_dup(victim->player_name);
     free_string(mob->short_descr);
-    mob->short_descr = str_dup_perm(victim->short_descr);
+    mob->short_descr = str_dup(victim->short_descr);
     free_string(mob->long_descr);
-    mob->long_descr = str_dup_perm(victim->long_descr);
+    mob->long_descr = str_dup(victim->long_descr);
     free_string(mob->description);
-    mob->description = str_dup_perm(victim->description);
+    mob->description = str_dup(victim->description);
     mob->act = victim->act;
     mob->affected_by = victim->affected_by;
     mob->alignment = victim->alignment;
@@ -3639,7 +3633,7 @@ void edit_mob_conf_shop(CHAR_DATA *ch, char *arg) {
         int iTrade;
 
         mob = ch->pcdata->edit.mob;
-        pShop = alloc_perm(sizeof(*pShop));
+        pShop = GC_MALLOC(sizeof(*pShop));
         pShop->keeper = mob->vnum;
         for (iTrade = 0; iTrade < MAX_TRADE; iTrade++)
             pShop->buy_type[iTrade] = 0;
@@ -4246,7 +4240,7 @@ void edit_obj_create(CHAR_DATA *ch) {
     if (vnum > ch->pcdata->edit.area->max_vnum_obj)
         ch->pcdata->edit.area->max_vnum_obj = vnum;
 
-    obj = alloc_perm(sizeof(OBJ_INDEX_DATA));
+    obj = GC_MALLOC(sizeof(OBJ_INDEX_DATA));
     obj->new_format = TRUE;
     obj->vnum = vnum;
     obj->area = ch->pcdata->edit.area;
@@ -4375,7 +4369,7 @@ void edit_obj_name(CHAR_DATA *ch, char *arg) {
     }
 
     free_string(obj->name);
-    obj->name = str_dup_perm(arg);
+    obj->name = str_dup(arg);
     sprintf(buf, "Name set to '%s'.\n\r>", obj->name);
     send_to_char(buf, ch);
 }
@@ -4391,7 +4385,7 @@ void edit_obj_material(CHAR_DATA *ch, char *arg) {
         return;
     }
 
-    obj->material = str_dup_perm(arg);
+    obj->material = str_dup(arg);
     sprintf(buf, "Material set to '%s'.\n\r> ", obj->material);
     send_to_char(buf, ch);
 }
@@ -4407,7 +4401,7 @@ void edit_obj_short(CHAR_DATA *ch, char *arg) {
         return;
     }
 
-    obj->short_descr = str_dup_perm(arg);
+    obj->short_descr = str_dup(arg);
     sprintf(buf, "Short set to '%s'.\n\r> ", obj->short_descr);
     send_to_char(buf, ch);
 }
@@ -4421,7 +4415,7 @@ void edit_obj_long(CHAR_DATA *ch, char *arg) {
         return;
     }
 
-    ch->pcdata->edit.obj->description = str_dup_perm(arg);
+    ch->pcdata->edit.obj->description = str_dup(arg);
     sprintf(buf, "Long set to '%s'.\n\r>  ", arg);
     send_to_char(buf, ch);
 }
@@ -4634,7 +4628,7 @@ void edit_obj_extend_add(CHAR_DATA *ch, char *arg) {
     if (ed == NULL) {
         ed = new_extra_descr();
         ed->keyword = str_dup(arg);
-        ed->description = str_dup_perm("Generic extended description.\n\r");
+        ed->description = str_dup("Generic extended description.\n\r");
         ed->next = first_ed;
         ch->pcdata->edit.obj->extra_descr = ed;
         send_to_char("Creating new extended.\n\r", ch);
