@@ -393,18 +393,6 @@ MENU_DATA _edit_menu = {
         }
 };
 
-MENU_ITEM edit_menu[] = {
-        {"Edit Menu",           "", 0,                        NULL},
-        {"Personal [Settings]", "settings", ID_EDIT_SETTINGS, edit_main},
-        {"Edit [Area]",         "area",     ID_EDIT_AREA,     edit_main},
-        {"Edit [Room]",         "room",     ID_EDIT_ROOM,     edit_main},
-        {"Edit [Mob]",          "mob",      ID_EDIT_MOB,      edit_main},
-        {"Edit [Object]",       "object",   ID_EDIT_OBJECT,   edit_main},
-        {"Edit [Resets]",       "resets",   ID_EDIT_RESETS,   edit_main},
-        {"[Exit] OLC",          "exit",     ID_EDIT_EXIT,     edit_exit},
-        {NULL,                  "", 0,                        NULL}
-};
-
 MENU_ITEM settings_menu[] = {
         {"Personal Settings",                                     "", 0,                          NULL},
         {"Toggle [Room]   - Default to current room",             "room",   ID_SETTINGS_DEF_ROOM, edit_settings},
