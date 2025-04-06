@@ -2321,6 +2321,7 @@ void area_update( void )
 
       reset_area( pArea );
       sprintf(buf,"%s has just been reset.",pArea->name);
+      log_string(buf);
       wiznet(buf,NULL,NULL,WIZ_RESETS,0,0);
 
       pArea->age = number_range( 0, 3 );
