@@ -2372,15 +2372,29 @@ struct  char_data
 };
 
 
-/* edit flags */
+/*
+ * Menu data structures
+ */
 
-struct menu_item 
-{
+enum MenuLayout {
+    SINGLE_COLUMN,
+    TWO_COLUMNS
+};
+
+struct menu_item {
   char *text;
   char *context;
   int id;
   MENU_FUN *menu_fun;
 };
+
+#define MAX_MENU_ITEMS 64
+
+typedef struct {
+    int column_width;
+    enum MenuLayout layout;
+    MENU_ITEM items[MAX_MENU_ITEMS];
+} MENU_DATA;
 
 #define EDIT_DEFAULT_ROOM     1   /* Default to current or use old */
 #define EDIT_DEFAULT_OBJ      2
@@ -2437,6 +2451,7 @@ struct  pc_data
     BUFFER *            buffer;
     DO_FUN  *           interp_fun;    
     MENU_ITEM *         menu;
+    MENU_DATA *         menu_data;
     EDIT_DATA           edit;    
     MACRO_DATA *        macro;    
     LINE_EDIT_DATA *    line_edit;
@@ -3921,9 +3936,7 @@ bool spawn_rainbow args((void));
 void    advance_level   args( ( CHAR_DATA *ch ) );
 void    gain_exp        args( ( CHAR_DATA *ch, long gain ) );
 void    gain_condition  args( ( CHAR_DATA *ch, int iCond, int value ) );
-void    update_handler  args( ( void ) ); 
-/* menu.c */
-void do_menu ( CHAR_DATA *ch, char *arg );
+void    update_handler  args( ( void ) );
 /* editor.c */
 void do_line_editor       args( ( CHAR_DATA *ch, char *arg, DO_FUN *call_back ) );
 void insert_line_callback args ( (CHAR_DATA *ch, char *arg) );

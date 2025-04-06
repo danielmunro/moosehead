@@ -29,6 +29,7 @@
 #include "tables.h"
 #include "gc.h"
 #include "input.h"
+#include "menu.h"
 
 #ifdef GAME_VERSION
 #define str_dup_perm str_dup
@@ -377,6 +378,20 @@ void edit_obj_modify(CHAR_DATA *ch, int num);
 void edit_obj_type(CHAR_DATA *ch, int num);
 
 void edit_obj_add_aff(CHAR_DATA *ch, int num);
+
+MENU_DATA _edit_menu = {
+        0, SINGLE_COLUMN,
+        {
+                {"Edit Menu",           "", 0,                        NULL},
+                {"Personal [Settings]", "settings", ID_EDIT_SETTINGS, edit_main},
+                {"Edit [Area]",         "area",     ID_EDIT_AREA,     edit_main},
+                {"Edit [Room]",         "room",     ID_EDIT_ROOM,     edit_main},
+                {"Edit [Mob]",          "mob",      ID_EDIT_MOB,      edit_main},
+                {"Edit [Object]",       "object",   ID_EDIT_OBJECT,   edit_main},
+                {"Edit [Resets]",       "resets",   ID_EDIT_RESETS,   edit_main},
+                {"[Exit] OLC",          "exit",     ID_EDIT_EXIT,     edit_exit}
+        }
+};
 
 MENU_ITEM edit_menu[] = {
         {"Edit Menu",           "", 0,                        NULL},
@@ -5320,12 +5335,13 @@ void edit_reset_main(CHAR_DATA *ch, int num) {
 
 
 void edit_goto_main(CHAR_DATA *ch, int num) {
-    ch->pcdata->menu = (MENU_ITEM *) &edit_menu;
-    do_menu(ch, NULL);
+    ch->pcdata->menu_data = &_edit_menu;
+    do_menu_refactor(ch, NULL);
 }
 
 void edit_exit(CHAR_DATA *ch, int num) {
     ch->pcdata->menu = NULL;
+    ch->pcdata->menu_data = NULL;
     ch->pcdata->interp_fun = NULL;
     REMOVE_BIT (ch->comm, COMM_IN_OLC);
 }
@@ -5350,7 +5366,7 @@ void do_edit(CHAR_DATA *ch, char *argument) {
     }
 
     SET_BIT (ch->comm, COMM_IN_OLC);
-    ch->pcdata->menu = (MENU_ITEM *) &edit_menu;
+    ch->pcdata->menu_data = &_edit_menu;
     ch->pcdata->interp_fun = do_menu;
     if (ch->pcdata->edit.area == NULL) {
         ch->pcdata->edit.per_flags = EDIT_DEFAULT_ROOM | EDIT_DEFAULT_OBJ | EDIT_DEFAULT_MOB |
@@ -5387,6 +5403,6 @@ void do_edit(CHAR_DATA *ch, char *argument) {
         if (pData != NULL)
             ch->pcdata->edit.mob = pData;
     }
-    do_menu(ch, argument);
+    do_menu_refactor(ch, argument);
 }
 

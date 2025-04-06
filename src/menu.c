@@ -119,3 +119,11 @@ void do_menu ( CHAR_DATA *ch, char *arg )
   else
     bug ("NULL for menu fuction in do_menu",0);
 }
+
+void do_menu_refactor(CHAR_DATA *ch, char *arg) {
+    if (ch->pcdata->menu_data->layout == TWO_COLUMNS) {
+        ch->pcdata->menu_data->items[0].id = ch->pcdata->menu_data->column_width;
+    }
+    ch->pcdata->menu = ch->pcdata->menu_data->items;
+    do_menu(ch, arg);
+}

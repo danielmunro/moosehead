@@ -23,7 +23,7 @@
 #include <time.h>
 #include "merc.h"
 #include "recycle.h"
-
+#include "menu.h"
 
 #define ID_LINE_CLEAR     1
 #define ID_LINE_SHOW      2
