@@ -380,7 +380,7 @@ void edit_obj_type(CHAR_DATA *ch, int num);
 void edit_obj_add_aff(CHAR_DATA *ch, int num);
 
 MENU_DATA _edit_menu = {
-        0, SINGLE_COLUMN,
+        ONE_COLUMN, 0,
         {
                 {"Edit Menu",           "", 0,                        NULL},
                 {"Personal [Settings]", "settings", ID_EDIT_SETTINGS, edit_main},
