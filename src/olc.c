@@ -1168,8 +1168,14 @@ void olc_log_string(CHAR_DATA *ch, char *str) {
     return;
 }
 
-void set_previous_menu(CHAR_DATA *ch) {
+void set_from_previous_menu(CHAR_DATA *ch) {
     ch->pcdata->menu = ch->pcdata->edit.prev_menu;
+    ch->pcdata->menu_data = ch->pcdata->edit.prev_menu_data;
+}
+
+void set_previous_menu(CHAR_DATA *ch) {
+    ch->pcdata->edit.prev_menu = ch->pcdata->menu;
+    ch->pcdata->edit.prev_menu_data = ch->pcdata->menu_data;
 }
 
 bool check_range(CHAR_DATA *ch, int range_type, int vnum) {
@@ -1247,7 +1253,7 @@ void build_flag_menu(char **flag_table, char *title, CHAR_DATA *ch) {
     items[count + 1].text = '\0';
     items[count + 1].menu_fun = NULL;
 
-    ch->pcdata->edit.prev_menu = ch->pcdata->menu;
+    set_previous_menu(ch);
     ch->pcdata->menu_data = flag_menu;
     ch->pcdata->edit.flag_table = flag_table;
 }
@@ -1290,7 +1296,7 @@ void build_spec_menu(CHAR_DATA *ch) {
         spec_menu[count + 3].menu_fun = NULL;
     }
 
-    ch->pcdata->edit.prev_menu = ch->pcdata->menu;
+    set_previous_menu(ch);
     ch->pcdata->menu = spec_menu;
 }
 
@@ -1328,7 +1334,7 @@ void build_race_menu(CHAR_DATA *ch) {
         race_menu[count + 2].menu_fun = NULL;
     }
 
-    ch->pcdata->edit.prev_menu = ch->pcdata->menu;
+    set_previous_menu(ch);
     ch->pcdata->menu = race_menu;
 }
 
@@ -1360,7 +1366,7 @@ void build_average_menu(char *title, CHAR_DATA *ch, MENU_FUN *call_back) {
     avg_menu[12].text = NULL;
     avg_menu[12].menu_fun = NULL;
 
-    ch->pcdata->edit.prev_menu = ch->pcdata->menu;
+    set_previous_menu(ch);
     ch->pcdata->menu = avg_menu;
 }
 
@@ -1397,7 +1403,7 @@ void build_attack_menu(CHAR_DATA *ch, MENU_FUN call_back) {
     att_menu[count + 2].text = '\0';
     att_menu[count + 2].menu_fun = NULL;
 
-    ch->pcdata->edit.prev_menu = ch->pcdata->menu;
+    set_previous_menu(ch);
     ch->pcdata->menu = att_menu;
 }
 
@@ -1433,8 +1439,8 @@ void edit_flags(CHAR_DATA *ch, int num) {
     MENU_ITEM *flag_menu = ch->pcdata->menu;
 
     if (num == ID_EDIT_DONE) {
-        set_previous_menu(ch);
-        do_menu(ch, NULL);
+        set_from_previous_menu(ch);
+        do_menu_refactor(ch, NULL);
         return;
     }
     char *flag = "unknown";
@@ -3195,12 +3201,12 @@ void edit_mob_attack(CHAR_DATA *ch, int num) {
         sprintf(buf, "Attack type now %s.\n\r>  ",
                 capitalize(attack_table[mob->dam_type].name));
         send_to_char(buf, ch);
-        set_previous_menu(ch);
+        set_from_previous_menu(ch);
         return;
 
     }
     send_to_char("Operation canceled.\n\r>  ", ch);
-    set_previous_menu(ch);
+    set_from_previous_menu(ch);
     do_menu(ch, NULL);
     return;
 }
