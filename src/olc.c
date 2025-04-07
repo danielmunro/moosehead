@@ -1332,6 +1332,7 @@ void build_race_menu(CHAR_DATA *ch) {
     set_previous_menu(ch);
 }
 
+/*
 void build_average_menu(char *title, CHAR_DATA *ch, MENU_FUN *call_back) {
     int t;
     MENU_ITEM *avg_menu;
@@ -1363,42 +1364,39 @@ void build_average_menu(char *title, CHAR_DATA *ch, MENU_FUN *call_back) {
     set_previous_menu(ch);
     ch->pcdata->menu = avg_menu;
 }
+ */
 
 void build_attack_menu(CHAR_DATA *ch, MENU_FUN call_back) {
-    int t, count;
-    MENU_ITEM *att_menu;
-
-    count = 0;
-    for (t = 0;; t++) {
+    MENU_DATA *menu_data = GC_MALLOC(sizeof(MENU_DATA));
+    menu_data->layout = TWO_COLUMNS;
+    menu_data->column_width = 20;
+    MENU_ITEM *items = menu_data->items;
+    int count = 0;
+    for (int t = 0;; t++) {
         if (!attack_table[t].name) break;
         count++;
     }
     count -= 2;
-    att_menu = GC_MALLOC(sizeof(MENU_ITEM) * (count + 3));
 
-    att_menu[0].text = str_dup("Attack Type Menu");
+    items[0].text = str_dup("Attack Type Menu");
+    items[0].menu_fun = call_back;
+    items[0].context = "";
+    items[0].id = -1;
 
-    att_menu[0].menu_fun = call_back;
-    att_menu[0].context = "";
-    att_menu[0].id = 20;
-    for (t = 1; t <= count; t++) {
-        char buf[MAX_STRING_LENGTH];
-
-        sprintf(buf, "%s%s", (t < 10) ? " " : "", capitalize(attack_table[t].name));
-        att_menu[t].text = str_dup(buf);
-        att_menu[t].context = attack_table[t].name;
-        att_menu[t].id = t;
-        att_menu[t].menu_fun = call_back;
+    for (int t = 1; t <= count; t++) {
+        items[t].text = GC_MALLOC(MAX_INPUT_LENGTH);
+        sprintf(items[t].text, "%s%s", (t < 10) ? " " : "", capitalize(attack_table[t].name));
+        items[t].context = attack_table[t].name;
+        items[t].id = t;
+        items[t].menu_fun = call_back;
     }
-    att_menu[count + 1].text = "[Cancel]";
-    att_menu[count + 1].context = "cancel";
-    att_menu[count + 1].id = ID_EDIT_CANCEL;
-    att_menu[count + 1].menu_fun = call_back;
-    att_menu[count + 2].text = '\0';
-    att_menu[count + 2].menu_fun = NULL;
+    items[count + 1].text = "[Cancel]";
+    items[count + 1].context = "cancel";
+    items[count + 1].id = ID_EDIT_CANCEL;
+    items[count + 1].menu_fun = call_back;
 
+    ch->pcdata->menu_data = menu_data;
     set_previous_menu(ch);
-    ch->pcdata->menu = att_menu;
 }
 
 void show_flags(int flags, char **flag_table, CHAR_DATA *ch) {
@@ -3385,7 +3383,7 @@ void edit_mob_modify(CHAR_DATA *ch, int num) {
             break;
         case ID_MOB_DAMTYPE:
             build_attack_menu(ch, edit_mob_attack);
-            do_menu(ch, NULL);
+            do_menu_refactor(ch, NULL);
             break;
         case ID_MOB_DAMAGE:
             send_to_char("Enter Damage Dice (ndn+n):  ", ch);
