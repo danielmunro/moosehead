@@ -1378,7 +1378,7 @@ void build_attack_menu(CHAR_DATA *ch, MENU_FUN call_back) {
     }
     count -= 2;
 
-    items[0].text = str_dup("Attack Type Menu");
+    items[0].text = "Attack Type Menu";
     items[0].menu_fun = call_back;
     items[0].context = "";
     items[0].id = -1;
