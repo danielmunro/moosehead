@@ -1418,7 +1418,8 @@ void edit_flags_init(CHAR_DATA *ch, int num) {
 
 void edit_flags(CHAR_DATA *ch, int num) {
     char buf[MAX_STRING_LENGTH];
-    MENU_ITEM *flag_menu = ch->pcdata->menu;
+    MENU_DATA *flag_menu = ch->pcdata->menu_data;
+    MENU_ITEM *items = flag_menu->items;
 
     if (num == ID_EDIT_DONE) {
         set_from_previous_menu(ch);
@@ -1429,11 +1430,11 @@ void edit_flags(CHAR_DATA *ch, int num) {
 
     TOGGLE_BIT (*ch->pcdata->edit.mod_flags, num);
     for (int t = 1; t < 50; t++) {
-        if (flag_menu[t].text == NULL) {
+        if (items[t].text == NULL) {
             break;
         }
-        if (flag_menu[t].id == num) {
-            flag = flag_menu[t].context;
+        if (items[t].id == num) {
+            flag = items[t].context;
             break;
         }
     }
