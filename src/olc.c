@@ -1168,16 +1168,6 @@ void olc_log_string(CHAR_DATA *ch, char *str) {
     return;
 }
 
-void set_from_previous_menu(CHAR_DATA *ch) {
-    ch->pcdata->menu = ch->pcdata->edit.prev_menu;
-    ch->pcdata->menu_data = ch->pcdata->edit.prev_menu_data;
-}
-
-void set_previous_menu(CHAR_DATA *ch) {
-    ch->pcdata->edit.prev_menu = ch->pcdata->menu;
-    ch->pcdata->edit.prev_menu_data = ch->pcdata->menu_data;
-}
-
 bool check_range(CHAR_DATA *ch, int range_type, int vnum) {
     VNUM_RANGE_DATA *range;
 

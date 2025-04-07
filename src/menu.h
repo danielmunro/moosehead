@@ -24,6 +24,11 @@ typedef struct {
 } MENU_DATA;
 
 void do_menu(CHAR_DATA *ch, char *arg);
+
 void do_menu_refactor(CHAR_DATA *ch, char *arg);
+
+void set_from_previous_menu(CHAR_DATA *ch);
+
+void set_previous_menu(CHAR_DATA *ch);
 
 #endif //MOOSEHEAD_MENU_H
