@@ -1300,40 +1300,36 @@ void build_spec_menu(CHAR_DATA *ch) {
 
 void build_race_menu(CHAR_DATA *ch) {
     int count;
-    static MENU_ITEM *race_menu = NULL;
+    MENU_DATA *menu_data = GC_MALLOC(sizeof(MENU_DATA));
+    menu_data->layout = TWO_COLUMNS;
+    menu_data->column_width = 30;
+    MENU_ITEM *items = menu_data->items;
 
-    if (!race_menu) {
-        count = 0;
-        while (race_table[count].name) {
-            count++;
-        }
-
-        race_menu = GC_MALLOC(sizeof(MENU_ITEM) * (count + 3));
-
-        race_menu[0].text = "Select a Race";
-        race_menu[0].menu_fun = edit_mob_race_init;
-        race_menu[0].context = "";
-        race_menu[0].id = 30;
-
-        for (int t = 0; t < count; t++) {
-            race_menu[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
-            sprintf(race_menu[t + 1].text, "%sSet race to [%s]", t < 9 ? " " : "", race_table[t].name);
-            race_menu[t + 1].context = race_table[t].name;
-            race_menu[t + 1].id = t;
-            race_menu[t + 1].menu_fun = edit_mob_race;
-        }
-
-        race_menu[count + 1].text = "[Cancel] Race Selection";
-        race_menu[count + 1].context = "cancel";
-        race_menu[count + 1].id = ID_EDIT_DONE;
-        race_menu[count + 1].menu_fun = edit_mob_race;
-
-        race_menu[count + 2].text = '\0';
-        race_menu[count + 2].menu_fun = NULL;
+    count = 0;
+    while (race_table[count].name) {
+        count++;
     }
 
+    items[0].text = "Select a Race";
+    items[0].menu_fun = edit_mob_race_init;
+    items[0].context = "";
+    items[0].id = -1;
+
+    for (int t = 0; t < count; t++) {
+        items[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
+        sprintf(items[t + 1].text, "%sSet race to [%s]", t < 9 ? " " : "", race_table[t].name);
+        items[t + 1].context = race_table[t].name;
+        items[t + 1].id = t;
+        items[t + 1].menu_fun = edit_mob_race;
+    }
+
+    items[count + 1].text = "[Cancel] Race Selection";
+    items[count + 1].context = "cancel";
+    items[count + 1].id = ID_EDIT_DONE;
+    items[count + 1].menu_fun = edit_mob_race;
+
+    ch->pcdata->menu_data = menu_data;
     set_previous_menu(ch);
-    ch->pcdata->menu = race_menu;
 }
 
 void build_average_menu(char *title, CHAR_DATA *ch, MENU_FUN *call_back) {
@@ -3436,7 +3432,7 @@ void edit_mob_modify(CHAR_DATA *ch, int num) {
             break;
         case ID_MOB_RACE:
             build_race_menu(ch);
-            do_menu(ch, NULL);
+            do_menu_refactor(ch, NULL);
             break;
         case ID_MOB_SEX:
             send_to_char("Enter Sex [male,female,nosex]:  ", ch);
