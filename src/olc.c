@@ -1605,7 +1605,7 @@ void edit_area_new_vnum(CHAR_DATA *ch, char *arg) {
         /* Area is permanent.. no need to free. Let's just
        forget about it */
         ch->pcdata->edit.area = ch->pcdata->edit.room->area;
-        ch->pcdata->interp_fun = do_menu;
+        ch->pcdata->interp_fun = do_menu_refactor;
     }
     pArea = ch->pcdata->edit.area;
     pArea->min_vnum_room =
@@ -1632,7 +1632,7 @@ void edit_area_new_vnum(CHAR_DATA *ch, char *arg) {
     update_area_list(ch, pArea->file_name);
     save_area(ch, pArea);
     send_to_char("Area created.\n\r>  ", ch);
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
 }
 
 void edit_area_new_file(CHAR_DATA *ch, char *arg) {
@@ -1643,7 +1643,7 @@ void edit_area_new_file(CHAR_DATA *ch, char *arg) {
         send_to_char("Invalid filename.  Operation canceled.\n\r>  ", ch);
         /* no use de-allocing area, it's perm */
         ch->pcdata->edit.area = ch->pcdata->edit.room->area;
-        ch->pcdata->interp_fun = do_menu;
+        ch->pcdata->interp_fun = do_menu_refactor;
         return;
     }
 
@@ -1661,7 +1661,7 @@ void edit_area_new_file(CHAR_DATA *ch, char *arg) {
         send_to_char("Filename '%s' already exists.\n\r>  ", ch);
         /* no use de-allocing area, it's perm */
         ch->pcdata->edit.area = ch->pcdata->edit.room->area;
-        ch->pcdata->interp_fun = do_menu;
+        ch->pcdata->interp_fun = do_menu_refactor;
         return;
     }
 
@@ -1696,7 +1696,7 @@ void edit_area_rename(CHAR_DATA *ch, char *arg) {
     if (strlen(arg) > 16) {
         area = ch->pcdata->edit.area;
         strcpy(buf2, area->name);
-        ch->pcdata->interp_fun = do_menu;
+        ch->pcdata->interp_fun = do_menu_refactor;
         free_string(area->credits);
         area->credits = str_dup(arg);
         free_string(area->name);
@@ -1715,7 +1715,7 @@ void edit_area_select(CHAR_DATA *ch, char *arg) {
     AREA_DATA *area;
     char buf[MAX_STRING_LENGTH];
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (is_number(arg)) {
         vnum = atoi(arg);
         area = area_first;
@@ -1880,7 +1880,7 @@ void edit_room_vnum(CHAR_DATA *ch, char *arg) {
         sprintf(buf, "Selected Room:  %s [%d]\n\r>  ", room->name, vnum);
     }
     send_to_char(buf, ch);
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
 }
 
 void edit_room_info(CHAR_DATA *ch) {
@@ -2025,7 +2025,7 @@ void edit_room_create_dir(CHAR_DATA *ch, char *arg) {
             ch->pcdata->edit.exit = t;
             sprintf(buf, "Selected:  %s\n\r", dir_table[t]);
             send_to_char(buf, ch);
-            ch->pcdata->interp_fun = do_menu;
+            ch->pcdata->interp_fun = do_menu_refactor;
             if (create_room(ch, ch->pcdata->edit.room, t)) {
                 sprintf(buf, "Room [%d] created.\n\r>  ", ch->pcdata->edit.room->vnum);
                 send_to_char(buf, ch);
@@ -2037,7 +2037,7 @@ void edit_room_create_dir(CHAR_DATA *ch, char *arg) {
     }
 
     if (!str_prefix(arg, "none")) {
-        ch->pcdata->interp_fun = do_menu;
+        ch->pcdata->interp_fun = do_menu_refactor;
         send_to_char("Selected:  None\n\r", ch);
         if (create_room(ch, NULL, 0)) {
             sprintf(buf, "Room [%d] created.\n\r>  ", ch->pcdata->edit.room->vnum);
@@ -2067,7 +2067,7 @@ void edit_room_create(CHAR_DATA *ch) {
             send_to_char("\n\r>  ", ch);
         }
 
-        ch->pcdata->interp_fun = do_menu;
+        ch->pcdata->interp_fun = do_menu_refactor;
     }
 }
 
@@ -2078,7 +2078,7 @@ void edit_room_clone(CHAR_DATA *ch, char *arg) {
     EXTRA_DESCR_DATA *ed_copy, *ed_last;
 
     vnum = atoi(arg);
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     src = get_room_index(vnum);
     if (!src) {
         sprintf(buf, "Room index %d does not exist.\n\r>  ", vnum);
@@ -2193,7 +2193,7 @@ void edit_room_name(CHAR_DATA *ch, char *arg) {
     char buf[MAX_STRING_LENGTH];
 
     room = ch->pcdata->edit.room;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (!room) {
         send_to_char("Invalid room selected.\n\r>  ", ch);
         return;
@@ -2242,7 +2242,7 @@ void edit_sector(CHAR_DATA *ch, int num) {
 void edit_room_flags(CHAR_DATA *ch) {
     ROOM_INDEX_DATA *room;
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
 
     room = ch->pcdata->edit.room;
     if (!room) {
@@ -2331,7 +2331,7 @@ void edit_room_door_connect(CHAR_DATA *ch, char *arg) {
 
     vnum = atoi(arg);
     room2 = get_room_index(vnum);
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (room2) {
         room = ch->pcdata->edit.room;
         if (room) {
@@ -2376,7 +2376,7 @@ void edit_room_door_keyword(CHAR_DATA *ch, char *arg) {
     ROOM_INDEX_DATA *room;
     char buf[MAX_STRING_LENGTH];
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (!arg || !arg[0]) {
         send_to_char("Invalid keyword.\n\r>  ", ch);
         return;
@@ -2404,7 +2404,7 @@ void edit_room_door_key(CHAR_DATA *ch, char *arg) {
     ROOM_INDEX_DATA *room;
     char buf[MAX_STRING_LENGTH];
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
 
     room = ch->pcdata->edit.room;
     if (!room) {
@@ -2426,7 +2426,7 @@ void edit_room_door_key(CHAR_DATA *ch, char *arg) {
 void edit_door_flags(CHAR_DATA *ch) {
     ROOM_INDEX_DATA *room;
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
 
     room = ch->pcdata->edit.room;
     if (!room) {
@@ -2561,7 +2561,7 @@ void edit_room_clan(CHAR_DATA *ch, char *arg) {
     int num;
     char buf[MAX_STRING_LENGTH];
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     num = ch->pcdata->edit.room->clan = nonclan_lookup(arg);
     if (num == 0) {
         send_to_char("Clan not found.  Set to no clan.\n\r>  ", ch);
@@ -2613,7 +2613,7 @@ void edit_room_extend_rem(CHAR_DATA *ch, char *arg) {
     bool found = FALSE;
 
     prev_ed = NULL;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     ed = ch->pcdata->edit.room->extra_descr;
     while (ed) {
         if (!str_prefix(arg, ed->keyword)) {
@@ -2640,7 +2640,7 @@ void edit_room_extend_rem(CHAR_DATA *ch, char *arg) {
 void edit_room_owner(CHAR_DATA *ch, char *arg) {
     char buf[MAX_STRING_LENGTH];
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (!strcmp(arg, "clear")) {
         ch->pcdata->edit.room->owner = NULL;
         send_to_char("Owner cleared.\n\r>  ", ch);
@@ -2655,7 +2655,7 @@ void edit_room_owner(CHAR_DATA *ch, char *arg) {
 void edit_room_heal(CHAR_DATA *ch, char *arg) {
     int num;
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (is_number(arg)) {
         num = atoi(arg);
         ch->pcdata->edit.room->heal_rate = num;
@@ -2668,7 +2668,7 @@ void edit_room_heal(CHAR_DATA *ch, char *arg) {
 void edit_room_mana(CHAR_DATA *ch, char *arg) {
     int num;
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (is_number(arg)) {
         num = atoi(arg);
         ch->pcdata->edit.room->mana_rate = num;
@@ -2681,7 +2681,7 @@ void edit_room_mana(CHAR_DATA *ch, char *arg) {
 void edit_room_obs(CHAR_DATA *ch, char *arg) {
     int num;
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (is_number(arg)) {
         num = atoi(arg);
         ch->pcdata->edit.room->obs_target = num;
@@ -2780,7 +2780,7 @@ void edit_mob_vnum(CHAR_DATA *ch, char *arg) {
         sprintf(buf, "Selected Mob:  %s [%d]\n\r>  ", mob->short_descr, vnum);
     }
     send_to_char(buf, ch);
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
 }
 
 void edit_mob_list(CHAR_DATA *ch) {
@@ -2901,7 +2901,7 @@ void edit_mob_name(CHAR_DATA *ch, char *arg) {
     char buf[MAX_STRING_LENGTH];
 
     mob = ch->pcdata->edit.mob;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (!arg[0]) {
         send_to_char("Name not changed.\n\r>  ", ch);
         return;
@@ -2918,7 +2918,7 @@ void edit_mob_short(CHAR_DATA *ch, char *arg) {
     char buf[MAX_STRING_LENGTH];
 
     mob = ch->pcdata->edit.mob;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (!arg[0]) {
         send_to_char("Short description not changed.\n\r>  ", ch);
         return;
@@ -2935,7 +2935,7 @@ void edit_mob_long(CHAR_DATA *ch, char *arg) {
     char buf[MAX_STRING_LENGTH];
 
     mob = ch->pcdata->edit.mob;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (!arg[0]) {
         send_to_char("Long description not changed.\n\r>  ", ch);
         return;
@@ -2955,7 +2955,7 @@ void edit_mob_spec_words(CHAR_DATA *ch, char *arg) {
     int v;
 
     mob = ch->pcdata->edit.mob;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (!arg[0]) {
         send_to_char("Spec words not changed.\n\r>  ", ch);
         return;
@@ -2979,7 +2979,7 @@ void edit_mob_level(CHAR_DATA *ch, char *arg) {
     int level;
 
     mob = ch->pcdata->edit.mob;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (!arg[0]) {
         send_to_char("Level not changed.\n\r>  ", ch);
         return;
@@ -3001,7 +3001,7 @@ void edit_mob_align(CHAR_DATA *ch, char *arg) {
     int align;
 
     mob = ch->pcdata->edit.mob;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (!arg[0]) {
         send_to_char("Alignment not changed.\n\r>  ", ch);
         return;
@@ -3034,7 +3034,7 @@ void edit_mob_ac_magic(CHAR_DATA *ch, char *arg) {
     ch->pcdata->edit.mob->ac[AC_EXOTIC] = num;
     sprintf(buf, "Magic AC set to %d.\n\r>  ", num);
     send_to_char(buf, ch);
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
 }
 
 void edit_mob_ac_slash(CHAR_DATA *ch, char *arg) {
@@ -3084,7 +3084,7 @@ void edit_mob_hp(CHAR_DATA *ch, char *arg) {
     MOB_INDEX_DATA *mob;
     int hit0, hit1, hit2;
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
 
     mob = ch->pcdata->edit.mob;
     if (sscanf(arg, "%dd%d+%d", &hit0, &hit1, &hit2) != 3) {
@@ -3105,7 +3105,7 @@ void edit_mob_mana(CHAR_DATA *ch, char *arg) {
     MOB_INDEX_DATA *mob;
     int hit0, hit1, hit2;
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
 
     mob = ch->pcdata->edit.mob;
     if (sscanf(arg, "%dd%d+%d", &hit0, &hit1, &hit2) != 3) {
@@ -3126,7 +3126,7 @@ void edit_mob_dam(CHAR_DATA *ch, char *arg) {
     MOB_INDEX_DATA *mob;
     int hit0, hit1, hit2;
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
 
     mob = ch->pcdata->edit.mob;
     if (sscanf(arg, "%dd%d+%d", &hit0, &hit1, &hit2) != 3) {
@@ -3148,7 +3148,7 @@ void edit_mob_hit(CHAR_DATA *ch, char *arg) {
     int hit;
 
     mob = ch->pcdata->edit.mob;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (!arg[0]) {
         send_to_char("Hitroll not changed.\n\r>  ", ch);
         return;
@@ -3200,7 +3200,7 @@ void edit_mob_attack(CHAR_DATA *ch, int num) {
 }
 
 void edit_mob_sex(CHAR_DATA *ch, char *arg) {
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (!str_prefix(arg, "male")) {
         send_to_char("Sex set to male.\n\r>  ", ch);
         ch->pcdata->edit.mob->sex = SEX_MALE;
@@ -3225,7 +3225,7 @@ void edit_mob_wealth(CHAR_DATA *ch, char *arg) {
     char buf[MAX_STRING_LENGTH];
 
     wealth = atoi(arg);
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     sprintf(buf, "Mob wealth set to %d.\n\r>  ", wealth);
     ch->pcdata->edit.mob->wealth = wealth;
     send_to_char(buf, ch);
@@ -3471,7 +3471,7 @@ void edit_mob_copy(CHAR_DATA *ch, char *arg) {
     int vnum, t;
     char buf[MAX_STRING_LENGTH];
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     mob = ch->pcdata->edit.mob;
     if (!mob) {
         send_to_char("No mob selected to copy to.\n\r>  ", ch);
@@ -3630,7 +3630,7 @@ void edit_mob_info(CHAR_DATA *ch) {
 }
 
 void edit_mob_conf_shop(CHAR_DATA *ch, char *arg) {
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (arg[0] == 'y' || arg[0] == 'Y') {
         MOB_INDEX_DATA *mob;
         SHOP_DATA *pShop;
@@ -3673,7 +3673,7 @@ void edit_shop_clone(CHAR_DATA *ch, char *arg) {
     char buf[MAX_STRING_LENGTH];
 
     pShop = ch->pcdata->edit.mob->pShop;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     vnum = atoi(arg);
     mob = get_mob_index(vnum);
     if (mob == NULL) {
@@ -3698,7 +3698,7 @@ void edit_shop_buy_type(CHAR_DATA *ch, char *arg) {
     char buf[MAX_STRING_LENGTH];
     int num, iTrade;
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (strcmp(arg, "clear") == 0) {
         for (iTrade = 0; iTrade < MAX_TRADE; iTrade++) {
             ch->pcdata->edit.mob->pShop->buy_type[iTrade] = 0;
@@ -3728,7 +3728,7 @@ void edit_shop_sell_profit(CHAR_DATA *ch, char *arg) {
     char buf[MAX_STRING_LENGTH];
 
     profit = atoi(arg);
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     ch->pcdata->edit.mob->pShop->profit_sell = profit;
     sprintf(buf, "Sell profit set to %d.\n\r>  ", profit);
     send_to_char(buf, ch);
@@ -3750,7 +3750,7 @@ void edit_shop_close(CHAR_DATA *ch, char *arg) {
     char buf[MAX_STRING_LENGTH];
 
     hour = atoi(arg);
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     ch->pcdata->edit.mob->pShop->close_hour = hour;
     sprintf(buf, "Closing hour set to %d.\n\r>  ", hour);
     send_to_char(buf, ch);
@@ -3938,7 +3938,7 @@ void edit_obj_vnum(CHAR_DATA *ch, char *arg) {
         sprintf(buf, "Selected Object:  %s [%d]\n\r>  ", obj->short_descr, vnum);
     }
     send_to_char(buf, ch);
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
 }
 
 void edit_obj_info(CHAR_DATA *ch) {
@@ -4285,7 +4285,7 @@ void edit_obj_copy(CHAR_DATA *ch, char *arg) {
     int vnum, t;
     char buf[MAX_STRING_LENGTH];
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     obj = ch->pcdata->edit.obj;
     if (!obj) {
         send_to_char("No object selected to copy to.\n\r>  ", ch);
@@ -4368,7 +4368,7 @@ void edit_obj_name(CHAR_DATA *ch, char *arg) {
     char buf[MAX_STRING_LENGTH];
 
     obj = ch->pcdata->edit.obj;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (!arg[0]) {
         send_to_char("Name not changed.\n\r>  ", ch);
         return;
@@ -4385,7 +4385,7 @@ void edit_obj_material(CHAR_DATA *ch, char *arg) {
     char buf[MAX_STRING_LENGTH];
 
     obj = ch->pcdata->edit.obj;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (!arg[0]) {
         send_to_char("Material not changed.\n\r>  ", ch);
         return;
@@ -4401,7 +4401,7 @@ void edit_obj_short(CHAR_DATA *ch, char *arg) {
     char buf[MAX_STRING_LENGTH];
 
     obj = ch->pcdata->edit.obj;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (!arg[0]) {
         send_to_char("Short description not changed.\n\r>  ", ch);
         return;
@@ -4415,7 +4415,7 @@ void edit_obj_short(CHAR_DATA *ch, char *arg) {
 void edit_obj_long(CHAR_DATA *ch, char *arg) {
     char buf[MAX_STRING_LENGTH];
 
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (!arg[0]) {
         send_to_char("Long description not changed.\n\r>  ", ch);
         return;
@@ -4432,7 +4432,7 @@ void edit_obj_level(CHAR_DATA *ch, char *arg) {
     int level;
 
     obj = ch->pcdata->edit.obj;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (!arg[0]) {
         send_to_char("Level not changed.\n\r>  ", ch);
         return;
@@ -4499,7 +4499,7 @@ void obj_value_4(CHAR_DATA *ch, char *arg) {
     num = atoi(arg);
     if (arg[0]) ch->pcdata->edit.obj->value[4] = num;
     send_to_char("Ok.\n\r>  ", ch);
-    ch->pcdata->interp_fun = &do_menu;
+    ch->pcdata->interp_fun = &do_menu_refactor;
 }
 
 void obj_value_3(CHAR_DATA *ch, char *arg) {
@@ -4566,7 +4566,7 @@ void edit_obj_cond(CHAR_DATA *ch, char *arg) {
         sprintf(buf, "%d is not a valid condition.  Must be 1 to 100.\n\r>  ", num);
         send_to_char(buf, ch);
     }
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
 }
 
 void edit_obj_weight(CHAR_DATA *ch, char *arg) {
@@ -4577,7 +4577,7 @@ void edit_obj_weight(CHAR_DATA *ch, char *arg) {
     sprintf(buf, "Weight is %d.%d pounds.\n\r>  ", num / 10, num % 10);
     send_to_char(buf, ch);
     ch->pcdata->edit.obj->weight = num;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
 }
 
 void edit_obj_wear_timer(CHAR_DATA *ch, char *arg) {
@@ -4588,7 +4588,7 @@ void edit_obj_wear_timer(CHAR_DATA *ch, char *arg) {
     sprintf(buf, "Wear Timer is %d.\n\r>  ", num);
     send_to_char(buf, ch);
     ch->pcdata->edit.obj->wear_timer = num;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
 }
 
 void edit_obj_cost(CHAR_DATA *ch, char *arg) {
@@ -4599,7 +4599,7 @@ void edit_obj_cost(CHAR_DATA *ch, char *arg) {
     sprintf(buf, "Cost set to %d.\n\r>  ", num);
     send_to_char(buf, ch);
     ch->pcdata->edit.obj->cost = num;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
 }
 
 void edit_obj_extend_desc(CHAR_DATA *ch, char *arg) {
@@ -4650,7 +4650,7 @@ void edit_obj_extend_rem(CHAR_DATA *ch, char *arg) {
     bool found = FALSE;
 
     prev_ed = NULL;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     ed = ch->pcdata->edit.obj->extra_descr;
     while (ed) {
         if (!str_prefix(arg, ed->keyword)) {
@@ -4678,7 +4678,7 @@ void edit_obj_add_mod(CHAR_DATA *ch, char *arg) {
     int num;
 
     num = atoi(arg);
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (ch->pcdata->edit.obj->affected)
         ch->pcdata->edit.obj->affected->modifier = num;
     else {
@@ -4796,7 +4796,7 @@ void edit_obj_rem_aff(CHAR_DATA *ch, char *arg) {
     obj = ch->pcdata->edit.obj;
     paf = obj->affected;
     prev_paf = NULL;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     while (paf) {
         if (num == ++idx) {
             if (prev_paf) {
@@ -5355,7 +5355,7 @@ void do_edit(CHAR_DATA *ch, char *argument) {
 
     SET_BIT (ch->comm, COMM_IN_OLC);
     ch->pcdata->menu_data = &_edit_menu;
-    ch->pcdata->interp_fun = do_menu;
+    ch->pcdata->interp_fun = do_menu_refactor;
     if (ch->pcdata->edit.area == NULL) {
         ch->pcdata->edit.per_flags = EDIT_DEFAULT_ROOM | EDIT_DEFAULT_OBJ | EDIT_DEFAULT_MOB |
                                      EDIT_CREATE_MINIMAL |
