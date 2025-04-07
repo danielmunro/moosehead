@@ -1259,45 +1259,43 @@ void build_flag_menu(char **flag_table, char *title, CHAR_DATA *ch) {
 }
 
 void build_spec_menu(CHAR_DATA *ch) {
-    int count;
-    static MENU_ITEM *spec_menu = NULL;
+    int count = 0;
+    MENU_DATA *spec_menu_data = GC_MALLOC(sizeof(MENU_DATA));
+    spec_menu_data->layout = TWO_COLUMNS;
+    spec_menu_data->column_width = 30;
+    MENU_ITEM *items = spec_menu_data->items;
 
-    if (!spec_menu) {
-        count = 0;
-        while (spec_table[count].name) {
-            count++;
-        }
-
-        spec_menu = GC_MALLOC(sizeof(MENU_ITEM) * (count + 4));
-        spec_menu[0].text = "Select Special";
-
-        spec_menu[0].menu_fun = edit_mob_spec_init;
-        spec_menu[0].context = "";
-        spec_menu[0].id = 30;
-
-        for (int t = 0; t < count; t++) {
-            spec_menu[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
-            sprintf(spec_menu[t + 1].text, "%sSet [%s]", t < 9 ? " " : "", spec_table[t].name);
-            spec_menu[t + 1].context = spec_table[t].name;
-            spec_menu[t + 1].id = t;
-            spec_menu[t + 1].menu_fun = edit_mob_spec;
-        }
-        spec_menu[count + 1].text = "[Cancel] Selection";
-        spec_menu[count + 1].context = "cancel";
-        spec_menu[count + 1].id = ID_EDIT_DONE;
-        spec_menu[count + 1].menu_fun = edit_mob_spec;
-
-        spec_menu[count + 2].text = "[Remove] Special";
-        spec_menu[count + 2].context = "remove";
-        spec_menu[count + 2].id = ID_SPEC_NONE;
-        spec_menu[count + 2].menu_fun = edit_mob_spec;
-
-        spec_menu[count + 3].text = '\0';
-        spec_menu[count + 3].menu_fun = NULL;
+    while (spec_table[count].name) {
+        count++;
     }
 
+    items[0].text = "Select Special";
+    items[0].menu_fun = edit_mob_spec_init;
+    items[0].context = "";
+    items[0].id = -1;
+
+    for (int t = 0; t < count; t++) {
+        items[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
+        sprintf(items[t + 1].text, "%sSet [%s]", t < 9 ? " " : "", spec_table[t].name);
+        items[t + 1].context = spec_table[t].name;
+        items[t + 1].id = t;
+        items[t + 1].menu_fun = edit_mob_spec;
+    }
+    items[count + 1].text = "[Cancel] Selection";
+    items[count + 1].context = "cancel";
+    items[count + 1].id = ID_EDIT_DONE;
+    items[count + 1].menu_fun = edit_mob_spec;
+
+    items[count + 2].text = "[Remove] Special";
+    items[count + 2].context = "remove";
+    items[count + 2].id = ID_SPEC_NONE;
+    items[count + 2].menu_fun = edit_mob_spec;
+
+    items[count + 3].text = '\0';
+    items[count + 3].menu_fun = NULL;
+
+    ch->pcdata->menu_data = spec_menu_data;
     set_previous_menu(ch);
-    ch->pcdata->menu = spec_menu;
 }
 
 void build_race_menu(CHAR_DATA *ch) {
@@ -3467,7 +3465,7 @@ void edit_mob_modify(CHAR_DATA *ch, int num) {
             break;
         case ID_MOB_SPEC:
             build_spec_menu(ch);
-            do_menu(ch, NULL);
+            do_menu_refactor(ch, NULL);
             break;
         case ID_EDIT_PREVIOUS:
             ch->pcdata->menu_data = &_mob_menu;
