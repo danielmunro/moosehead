@@ -304,7 +304,7 @@ void move_char( CHAR_DATA *ch, int door, bool follow )
       && !IS_NPC(ch) && IS_IMMORTAL(ch) &&
       IS_SET (ch->pcdata->edit.per_flags,EDIT_AUTO_CREATE) ) 
    {      
-        if (create_room (ch,ch->in_room,door,TRUE))
+        if (create_room (ch,ch->in_room,door))
           do_look( ch, "auto" );
         return;
    }

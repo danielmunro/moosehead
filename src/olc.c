@@ -1628,7 +1628,7 @@ void edit_area_new_vnum(CHAR_DATA *ch, char *arg) {
     pArea->next = NULL;
     top_area++;
 
-    create_room(ch, NULL, 0, TRUE);
+    create_room(ch, NULL, 0);
     update_area_list(ch, pArea->file_name);
     save_area(ch, pArea);
     send_to_char("Area created.\n\r>  ", ch);
@@ -1940,7 +1940,7 @@ EXIT_DATA *create_exit() {
     return exit;
 }
 
-bool create_room(CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir, int move_char) {
+bool create_room(CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir) {
     int vnum, t;
     ROOM_INDEX_DATA *pRoomIndex;
     static ROOM_INDEX_DATA zero_room;
@@ -2009,13 +2009,9 @@ bool create_room(CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir, int move_char) {
         send_to_char(buf, ch);
     }
 
-    if (move_char) {
-        char_from_room(ch);
-        char_to_room(ch, pRoomIndex);
-        ch->pcdata->edit.room = pRoomIndex;
-    } else {
-        do_menu(ch, NULL);
-    }
+    char_from_room(ch);
+    char_to_room(ch, pRoomIndex);
+    ch->pcdata->edit.room = pRoomIndex;
 
     return TRUE;
 }
@@ -2030,7 +2026,7 @@ void edit_room_create_dir(CHAR_DATA *ch, char *arg) {
             sprintf(buf, "Selected:  %s\n\r", dir_table[t]);
             send_to_char(buf, ch);
             ch->pcdata->interp_fun = do_menu;
-            if (create_room(ch, ch->pcdata->edit.room, t, TRUE)) {
+            if (create_room(ch, ch->pcdata->edit.room, t)) {
                 sprintf(buf, "Room [%d] created.\n\r>  ", ch->pcdata->edit.room->vnum);
                 send_to_char(buf, ch);
             } else {
@@ -2043,7 +2039,7 @@ void edit_room_create_dir(CHAR_DATA *ch, char *arg) {
     if (!str_prefix(arg, "none")) {
         ch->pcdata->interp_fun = do_menu;
         send_to_char("Selected:  None\n\r", ch);
-        if (create_room(ch, NULL, 0, TRUE)) {
+        if (create_room(ch, NULL, 0)) {
             sprintf(buf, "Room [%d] created.\n\r>  ", ch->pcdata->edit.room->vnum);
             send_to_char(buf, ch);
         } else {
@@ -2064,7 +2060,7 @@ void edit_room_create(CHAR_DATA *ch) {
         send_to_char("Which direction [north,east,south,west,up,down,none]:  ", ch);
         return;
     } else {
-        if (create_room(ch, NULL, 0, TRUE)) {
+        if (create_room(ch, NULL, 0)) {
             sprintf(buf, "Room [%d] created.\n\r>  ", ch->pcdata->edit.room->vnum);
             send_to_char(buf, ch);
         } else {
@@ -3199,7 +3195,7 @@ void edit_mob_attack(CHAR_DATA *ch, int num) {
     }
     send_to_char("Operation canceled.\n\r>  ", ch);
     set_from_previous_menu(ch);
-    do_menu(ch, NULL);
+    do_menu_refactor(ch, NULL);
     return;
 }
 
@@ -3269,17 +3265,17 @@ void edit_mob_race(CHAR_DATA *ch, int num) {
     char buf[MAX_STRING_LENGTH];
 
     if (num == ID_EDIT_CANCEL) {
-        ch->pcdata->menu = ch->pcdata->edit.prev_menu;
+        set_from_previous_menu(ch);
         send_to_char("Operation Cancelled.\n\r", ch);
-        do_menu(ch, NULL);
+        do_menu_refactor(ch, NULL);
         return;
     }
 
     ch->pcdata->edit.mob->race = num;
     sprintf(buf, "Race set to '%s'\n\r", race_table[ch->pcdata->edit.mob->race].name);
     send_to_char(buf, ch);
-    ch->pcdata->menu = ch->pcdata->edit.prev_menu;
-    do_menu(ch, NULL);
+    set_from_previous_menu(ch);
+    do_menu_refactor(ch, NULL);
 }
 
 void edit_mob_spec_init(CHAR_DATA *ch, int num) {
@@ -3297,9 +3293,9 @@ void edit_mob_spec(CHAR_DATA *ch, int num) {
     char buf[MAX_STRING_LENGTH];
 
     if (num == ID_EDIT_CANCEL) {
-        ch->pcdata->menu = ch->pcdata->edit.prev_menu;
+        set_from_previous_menu(ch);
         send_to_char("Operation Cancelled.\n\r", ch);
-        do_menu(ch, NULL);
+        do_menu_refactor(ch, NULL);
         return;
     }
 
@@ -3312,8 +3308,8 @@ void edit_mob_spec(CHAR_DATA *ch, int num) {
     }
 
     send_to_char(buf, ch);
-    ch->pcdata->menu = ch->pcdata->edit.prev_menu;
-    do_menu(ch, NULL);
+    set_from_previous_menu(ch);
+    do_menu_refactor(ch, NULL);
 }
 
 void edit_mob_pos_init(CHAR_DATA *ch, int num) {

@@ -3921,7 +3921,7 @@ void insert_line_callback args ( (CHAR_DATA *ch, char *arg) );
 void clear_macro_marks args ( ( CHAR_DATA *ch ) );
 bool check_macro       args ( ( CHAR_DATA *ch, char *argument ) );
 /* olc.c    */
-bool create_room      ( CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir, int move_char );
+bool create_room      ( CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir );
 
 #undef  CD
 #undef  MID
