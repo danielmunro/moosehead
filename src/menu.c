@@ -26,12 +26,10 @@
 #include "menu.h"
 
 void set_from_previous_menu(CHAR_DATA *ch) {
-    ch->pcdata->menu = ch->pcdata->edit.prev_menu;
     ch->pcdata->menu_data = ch->pcdata->edit.prev_menu_data;
 }
 
 void set_previous_menu(CHAR_DATA *ch) {
-    ch->pcdata->edit.prev_menu = ch->pcdata->menu;
     ch->pcdata->edit.prev_menu_data = ch->pcdata->menu_data;
 }
 

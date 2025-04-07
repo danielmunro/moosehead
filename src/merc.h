@@ -2391,8 +2391,7 @@ struct edit_data {
   sh_int           exit;
   int              per_flags;       /* personal flags */
   long            *mod_flags;       /* pointer to flags to be modified */
-  char           **flag_table;  
-  MENU_ITEM       *prev_menu;
+  char           **flag_table;
   MENU_DATA       *prev_menu_data;
   VNUM_RANGE_DATA *range;
 };
