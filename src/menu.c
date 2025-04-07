@@ -25,8 +25,7 @@
 #include "merc.h"
 #include "menu.h"
 
-void do_menu ( CHAR_DATA *ch, char *arg )
-{
+void do_menu(CHAR_DATA *ch, char *arg) {
   int choice, t;
   MENU_ITEM *menu;
   char buf[100];
