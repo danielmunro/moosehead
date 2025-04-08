@@ -2293,7 +2293,6 @@ void fix_exits( void )
  */
 void area_update( void )
 {
-    log_string("area_update called");
     AREA_DATA *pArea;
     char buf[MAX_STRING_LENGTH];
 
@@ -2320,8 +2319,6 @@ void area_update( void )
       ROOM_INDEX_DATA *zealot2Index;
 
       reset_area( pArea );
-      sprintf(buf,"%s has just been reset.",pArea->name);
-      log_debug(buf);
       wiznet(buf,NULL,NULL,WIZ_RESETS,0,0);
 
       pArea->age = number_range( 0, 3 );
@@ -2361,6 +2358,8 @@ void area_update( void )
  */
 void reset_area( AREA_DATA *pArea )
 {
+    sprintf(log_buf, "resetting area :: %s", pArea->name);
+    log_debug(log_buf);
     RESET_DATA *pReset;
     CHAR_DATA *mob;
     bool last;
