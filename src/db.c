@@ -35,6 +35,7 @@
 #include "clan.h"
 #include "live_edit.h"
 #include "act_obj.h"
+#include "log.h"
 
 extern int bounty_available[];
 extern int bounty_vnum;
@@ -1049,8 +1050,6 @@ void boot_db( void )
     int min_vnum;
     
       strcpy( strArea, fread_word( fpList ) );
-      sprintf(log_buf, "boot_db: attempting to load area file :: %s", strArea);
-      log_string(log_buf);
       if ( strArea[0] == '$' )
     break;
 
@@ -1063,8 +1062,8 @@ void boot_db( void )
     if ( ( fpArea = fopen( strArea, "r" ) ) == NULL )
     {
         perror(strArea);
-        sprintf(log_buf,"boot_db: error reading area file, skipping :: %s", strArea);
-        log_string(log_buf);
+        sprintf(log_buf, "boot_db: error reading area file, skipping :: %s", strArea);
+        log_error(log_buf);
         continue;
     }
       }      
@@ -2322,7 +2321,7 @@ void area_update( void )
 
       reset_area( pArea );
       sprintf(buf,"%s has just been reset.",pArea->name);
-      log_string(buf);
+      log_debug(buf);
       wiznet(buf,NULL,NULL,WIZ_RESETS,0,0);
 
       pArea->age = number_range( 0, 3 );
