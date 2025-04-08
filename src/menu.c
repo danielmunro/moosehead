@@ -26,15 +26,15 @@
 #include "menu.h"
 
 void set_from_previous_menu(CHAR_DATA *ch) {
-    ch->pcdata->menu_data = ch->pcdata->edit.prev_menu_data;
+    ch->pcdata->menu = ch->pcdata->edit.prev_menu;
 }
 
 void set_previous_menu(CHAR_DATA *ch) {
-    ch->pcdata->edit.prev_menu_data = ch->pcdata->menu_data;
+    ch->pcdata->edit.prev_menu = ch->pcdata->menu;
 }
 
 void do_menu(CHAR_DATA *ch, char *arg) {
-  MENU_DATA *menu = ch->pcdata->menu_data;
+  MENU_DATA *menu = ch->pcdata->menu;
 
   if (menu == NULL) {
       ch->pcdata->interp_fun = NULL;
@@ -128,8 +128,4 @@ void do_menu(CHAR_DATA *ch, char *arg) {
     (**items[choice].menu_fun) (ch, items[choice].id);
   else
     bug ("NULL for menu fuction in do_menu",0);
-}
-
-void do_menu_refactor(CHAR_DATA *ch, char *arg) {
-    do_menu(ch, arg);
 }
