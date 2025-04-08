@@ -1,7 +1,8 @@
 CC      = gcc
 PROF    = -O2 -ggdb
-OLC	= -DGAME_VERSION -DLOG_FAILED_BOOT=0 -DROM
-C_FLAGS =  -Dmoose -Wall -Werror $(PROF) $(OLC) -I/usr/local/include
+OLC	= -DGAME_VERSION -DROM
+GAME_FLAGS = -DLOG_FAILED_BOOT=0 -DLOG_LEVEL=1
+C_FLAGS =  -Dmoose -Wall -Werror $(PROF) $(OLC) $(GAME_FLAGS) -I/usr/local/include
 L_FLAGS =  -lm -lcrypt -lpthread -ldl -latomic_ops -lgc
 
 O_FILES = act_comm.o act_enter.o act_info.o act_move.o act_obj.o\
