@@ -104,13 +104,17 @@ void dump_obj_csv() {
             switch (reset->command) {
                 case 'M': // mob reset
                     mob = get_mob_index(reset->arg1);
+                    if (!mob) {
+                        sprintf(log_buf, "error with mob reset :: area: %s, mob: %d",
+                                area->name, reset->arg1);
+                    }
                     break;
                 case 'O': // object in room
                     obj = get_obj_index(reset->arg1);
                     room = get_room_index(reset->arg3);
                     if (!obj || !room) {
-                        sprintf(log_buf, "error with object reset :: %s, %d, %d",
-                                area->name, !!obj, !!room);
+                        sprintf(log_buf, "error with object reset :: area: %s, obj: %d (%d), room: %d (%d)",
+                                area->name, reset->arg1, !!obj, reset->arg3, !!room);
                         log_error(log_buf);
                     } else if (should_include(obj)) {
                         sprintf(where_buf, "in room %s", room->name);
@@ -121,8 +125,8 @@ void dump_obj_csv() {
                     obj = get_obj_index(reset->arg1);
                     container = get_obj_index(reset->arg3);
                     if (!obj || !container) {
-                        sprintf(log_buf, "error with object in object reset :: %s, %d, %d",
-                                area->name, !!obj, !!container);
+                        sprintf(log_buf, "error with object in object reset :: area: %s, obj: %d (%d), room: %d (%d)",
+                                area->name, reset->arg1, !!obj, reset->arg3, !!container);
                         log_error(log_buf);
                     } else if (should_include(obj)) {
                         sprintf(where_buf, "in container %s", container->short_descr);
@@ -132,8 +136,8 @@ void dump_obj_csv() {
                 case 'G': // give object to mobile
                     obj = get_obj_index(reset->arg1);
                     if (!obj || !mob) {
-                        sprintf(log_buf, "error with object in inventory reset :: %s, %d, %d",
-                                area->name, !!obj, !!mob);
+                        sprintf(log_buf, "error with object in inventory reset :: area: %s, obj: %d (%d), mob: %d",
+                                area->name, reset->arg1, !!obj, !!mob);
                         log_error(log_buf);
                     } else if (should_include(obj)) {
                         sprintf(where_buf, "inventory of %s", mob->short_descr);
@@ -143,8 +147,8 @@ void dump_obj_csv() {
                 case 'E': // equip object to mobile
                     obj = get_obj_index(reset->arg1);
                     if (!obj || !mob) {
-                        sprintf(log_buf, "error with object in equipment reset :: %s, %d, %d",
-                                area->name, !!obj, !!mob);
+                        sprintf(log_buf, "error with object in equipment reset :: area: %s, obj: %d (%d), mob: %d",
+                                area->name, reset->arg1, !!obj, !!mob);
                         log_error(log_buf);
                     } else if (should_include(obj)) {
                         sprintf(where_buf, "equipped by %s", mob->short_descr);
@@ -159,5 +163,4 @@ void dump_obj_csv() {
         area = area->next;
     }
     fclose(fp);
-    log_string("done dumping objects");
 }
