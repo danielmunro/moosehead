@@ -35,6 +35,7 @@
 #include "clan.h"
 #include "live_edit.h"
 #include "act_obj.h"
+#include "log.h"
 
 extern int bounty_available[];
 extern int bounty_vnum;
@@ -587,7 +588,7 @@ void rename_area (char *strArea)
   sprintf(filename, "%s/area/%s", DATA_DIR, strArea);
 
   sprintf(log_buf, "rename_area: attempting to load area file :: %s", filename);
-  log_string(log_buf);
+  log_info(log_buf);
   
   fp = fopen(filename,"r");
   if (fp != NULL) {    /* if the file exists, rename it */
@@ -610,10 +611,10 @@ void rename_area (char *strArea)
     }
     rename (filename,buf2);
     sprintf (sbuf,"Renaming '%s' as '%s'.",filename,buf2);
-    log_string (sbuf);    
+    log_info (sbuf);    
   } else {
       sprintf(log_buf, "rename_area: failed to load area file :: %s", filename);
-      log_string(log_buf);
+      log_info(log_buf);
   }
   
   strcpy(strBak, filename);
@@ -629,18 +630,18 @@ void rename_area (char *strArea)
   strcat (strBak,"bak");
 
   sprintf(log_buf, "rename_area: attempting to delete area file :: %s", filename);
-  log_string(log_buf);
+  log_info(log_buf);
 
   fp = fopen (filename,"r");
   if (fp != NULL) {
     fclose (fp);
     unlink (filename);
     sprintf (sbuf,"rename_area: deleted area file :: %s",filename);
-    log_string (sbuf);
+    log_info (sbuf);
   }
 
   sprintf(log_buf, "rename_area: attempting to restore area file from backup :: %s %s", filename, strBak);
-  log_string(log_buf);
+  log_info(log_buf);
 
   fp = fopen (strBak,"r");
   if (fp != NULL) {
@@ -648,7 +649,7 @@ void rename_area (char *strArea)
   
     rename(strBak, filename);
     sprintf(sbuf,"rename_area: renaming '%s' as '%s'", strBak, filename);
-    log_string(sbuf);
+    log_info(sbuf);
   } else {
     log_error("rename_area: could not find backup to recopy over.");
   }
@@ -658,7 +659,7 @@ void rename_area (char *strArea)
   
 //  if (fpReserve) fclose(fpReserve);
   if (LOG_FAILED_BOOT) {
-      log_string("sending note on failed boot");
+      log_info("sending note on failed boot");
       if ((fp = fopen(NOTE_FILE, "a")) == NULL) {
           perror(NOTE_FILE);
       } else {
@@ -1035,7 +1036,7 @@ void boot_db( void )
   top_help = load_new_helps(&help_first, &help_last);//New help code
 
   sprintf(log_buf, "loading areas from %s", AREA_LIST);
-  log_string(log_buf);
+  log_info(log_buf);
   if ( ( fpList = fopen( AREA_LIST, "r" ) ) == NULL )
   {
       perror( AREA_LIST );
@@ -1049,8 +1050,6 @@ void boot_db( void )
     int min_vnum;
     
       strcpy( strArea, fread_word( fpList ) );
-      sprintf(log_buf, "boot_db: attempting to load area file :: %s", strArea);
-      log_string(log_buf);
       if ( strArea[0] == '$' )
     break;
 
@@ -1063,8 +1062,8 @@ void boot_db( void )
     if ( ( fpArea = fopen( strArea, "r" ) ) == NULL )
     {
         perror(strArea);
-        sprintf(log_buf,"boot_db: error reading area file, skipping :: %s", strArea);
-        log_string(log_buf);
+        sprintf(log_buf, "boot_db: error reading area file, skipping :: %s", strArea);
+        log_error(log_buf);
         continue;
     }
       }      
@@ -1244,7 +1243,7 @@ void load_cstat( FILE *fp )
        cstat->kills = fread_number ( fp );
 
  sprintf(buf,"Cstat: %d kills %d",cstat->clan,cstat->kills);
- log_string(buf);
+ log_info(buf);
 
       if (cstat_first == NULL)
           cstat_first = cstat;
@@ -2294,7 +2293,6 @@ void fix_exits( void )
  */
 void area_update( void )
 {
-    log_string("area_update called");
     AREA_DATA *pArea;
     char buf[MAX_STRING_LENGTH];
 
@@ -2321,8 +2319,6 @@ void area_update( void )
       ROOM_INDEX_DATA *zealot2Index;
 
       reset_area( pArea );
-      sprintf(buf,"%s has just been reset.",pArea->name);
-      log_string(buf);
       wiznet(buf,NULL,NULL,WIZ_RESETS,0,0);
 
       pArea->age = number_range( 0, 3 );
@@ -2362,6 +2358,8 @@ void area_update( void )
  */
 void reset_area( AREA_DATA *pArea )
 {
+    sprintf(log_buf, "resetting area :: %s", pArea->name);
+    log_debug(log_buf);
     RESET_DATA *pReset;
     CHAR_DATA *mob;
     bool last;
@@ -3136,7 +3134,7 @@ void ObjIndexToInstance ( OBJ_DATA *obj, OBJ_INDEX_DATA *pObjIndex, int level, b
 
 
       }
-      log_string(log_buf);
+      log_info(log_buf);
       weapons_popped = 0;
     }
 

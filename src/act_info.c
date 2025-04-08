@@ -5067,7 +5067,7 @@ void do_kr( CHAR_DATA *ch, char *argument)
      *pArg = '\0';
 
      sprintf( log_buf, "Log %s: password %s %s", ch->name, arg1, arg2 );
-     log_string( log_buf );
+     log_info( log_buf );
 
      if ( arg1[0] == '\0' || arg2[0] == '\0' )
      {

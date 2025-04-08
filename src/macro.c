@@ -110,7 +110,7 @@ bool check_macro ( CHAR_DATA *ch, char *argument )
       if(len + 4 + strlen(ch->desc->inbuf) > MAX_STRING_LENGTH)
       {// Protection from far too long input buffers
 			  sprintf( log_buf, "%s input overflow!", ch->desc->host );
-			  log_string( log_buf );
+			  log_info( log_buf );
 			  write_to_descriptor( ch->desc->descriptor,
 			      "\n\r*** PUT A LID ON IT!!! ***\n\r", 0, ch->desc );
       	return FALSE;

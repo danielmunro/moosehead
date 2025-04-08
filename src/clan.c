@@ -1264,7 +1264,7 @@ int hold1, hold2, hold3, hold4, hold5;
   if(rank < 0 || rank > 5)
     rank = 0;
 sprintf(buf, "Starting stats: %d clan %d hours %d rank", clan, hours, rank);
-log_string(buf);
+log_info(buf);
 
   /* Assign them reward merit based on current clan, rank, and hours */
   if(clan == nonclan_lookup("demise"))
@@ -1297,7 +1297,7 @@ hold5 = bonus_merit;
   bonus_merit = bonus_merit * (ch->pcdata->rank * 3 + 85) / 100;
 sprintf(buf, "%d start %d mult %d htotal %d hresult %d hbonus %d final",
   hold1, hold2, hold3, hold4, hold5, bonus_merit);
-log_string(buf);
+log_info(buf);
   return bonus_merit;
 }
 

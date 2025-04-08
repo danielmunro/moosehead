@@ -551,7 +551,7 @@ void do_level( CHAR_DATA *ch, char *argument )
     save_char_obj(ch);
 		 
     sprintf(buf,"%s has attained level %d",ch->name,ch->level);
-    log_string(buf);
+    log_info(buf);
     sprintf(buf,"$N has attained level %d!",ch->level);
     wiznet(buf,ch,NULL,WIZ_LEVELS,0,0);
     pnet(buf,ch,NULL,PNET_LEVELS,0,0);
@@ -585,7 +585,7 @@ void gain_exp( CHAR_DATA *ch, long gain )
 	do_help(ch, "twentywarning");
    /*
        sprintf(buf,"%s qualifies for level %d",ch->name,ch->level+count);
-        log_string(buf);
+        log_info(buf);
         sprintf(buf,"$N qualifies for level %d!",ch->level+count);
         wiznet(buf,ch,NULL,WIZ_LEVELS,0,0);
 	*/

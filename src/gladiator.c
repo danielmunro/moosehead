@@ -150,7 +150,7 @@ void do_startgladiator(CHAR_DATA *ch, char *argument)
   gladiator_info.total_wins = 0;
   gladiator_info.num_of_glads = 0;
 
-   log_string(arg5);
+   log_info(arg5);
    if (!str_prefix(arg5,"blind"))
    {
       gladiator_info.blind = TRUE;
@@ -185,7 +185,7 @@ void do_startgladiator(CHAR_DATA *ch, char *argument)
    (gladiator_info.type/2?"team":"single"),
    arg5);
    do_echo(ch,buf);
-   log_string(buf);
+   log_info(buf);
    for (d = descriptor_list; d != NULL; d = d->next)
    {
       if (d->character != NULL && !IS_NPC(d->character))
@@ -754,7 +754,7 @@ void do_gbet ( CHAR_DATA *ch , char *argument )
   sprintf(buf, "You have placed a bet of %d gold on %s.\n\r", amount, victim->name);
   send_to_char(buf,ch);
   sprintf(buf, "%s bet %d on %s", ch->name, amount, victim->name);
-  log_string(buf);
+  log_info(buf);
   return;
 }
 
@@ -809,7 +809,7 @@ void gladiator_bet_resolve( CHAR_DATA *winner, CHAR_DATA *bettor )
 
  send_to_char(buf,bettor);
    sprintf(buf, "Paid out %d to %s, on bet of %d, winner: %s", payout, bettor->name, bettor->pcdata->glad_bet_amt, winner->name);
-   log_string(buf);
+   log_info(buf);
  return;
 }
 
