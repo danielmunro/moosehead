@@ -29,7 +29,6 @@ typedef void DO_FUN     args( ( CHAR_DATA *ch, char *argument ) );
 typedef bool SPEC_FUN   args( ( CHAR_DATA *ch ) );
 typedef void SPELL_FUN  args( ( int sn, int level, CHAR_DATA *ch, void *vo,
         int target ) );
-typedef void MENU_FUN   args( ( CHAR_DATA *ch, int menu_id ) );        
 /*
  *  Accommodate old non-Ansi compilers.
  */
@@ -2371,16 +2370,7 @@ struct  char_data
     DAMAGE_DATA *damaged;
 };
 
-
-/* edit flags */
-
-struct menu_item 
-{
-  char *text;
-  char *context;
-  int id;
-  MENU_FUN *menu_fun;
-};
+#include "menu.h"
 
 #define EDIT_DEFAULT_ROOM     1   /* Default to current or use old */
 #define EDIT_DEFAULT_OBJ      2
@@ -2401,8 +2391,8 @@ struct edit_data {
   sh_int           exit;
   int              per_flags;       /* personal flags */
   long            *mod_flags;       /* pointer to flags to be modified */
-  char           **flag_table;  
-  MENU_ITEM       *prev_menu;  
+  char           **flag_table;
+  MENU_DATA       *prev_menu;
   VNUM_RANGE_DATA *range;
 };
 
@@ -2423,8 +2413,8 @@ struct line_data {
 struct line_edit_data {
   LINE_EDIT_DATA *next;
   int         cur_line, mode, flags;
-  LINE_DATA   *line;  
-  MENU_ITEM   *prev_menu;
+  LINE_DATA   *line;
+  MENU_DATA   *prev_menu;
   DO_FUN      *call_back;
 };
 
@@ -2435,8 +2425,8 @@ struct  pc_data
 {
     PC_DATA *           next;
     BUFFER *            buffer;
-    DO_FUN  *           interp_fun;    
-    MENU_ITEM *         menu;
+    DO_FUN  *           interp_fun;
+    MENU_DATA *         menu;
     EDIT_DATA           edit;    
     MACRO_DATA *        macro;    
     LINE_EDIT_DATA *    line_edit;
@@ -3921,9 +3911,7 @@ bool spawn_rainbow args((void));
 void    advance_level   args( ( CHAR_DATA *ch ) );
 void    gain_exp        args( ( CHAR_DATA *ch, long gain ) );
 void    gain_condition  args( ( CHAR_DATA *ch, int iCond, int value ) );
-void    update_handler  args( ( void ) ); 
-/* menu.c */
-void do_menu ( CHAR_DATA *ch, char *arg );
+void    update_handler  args( ( void ) );
 /* editor.c */
 void do_line_editor       args( ( CHAR_DATA *ch, char *arg, DO_FUN *call_back ) );
 void insert_line_callback args ( (CHAR_DATA *ch, char *arg) );
@@ -3931,7 +3919,7 @@ void insert_line_callback args ( (CHAR_DATA *ch, char *arg) );
 void clear_macro_marks args ( ( CHAR_DATA *ch ) );
 bool check_macro       args ( ( CHAR_DATA *ch, char *argument ) );
 /* olc.c    */
-bool create_room      ( CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir, int move_char );
+bool create_room      ( CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir );
 
 #undef  CD
 #undef  MID

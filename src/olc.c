@@ -29,12 +29,7 @@
 #include "tables.h"
 #include "gc.h"
 #include "input.h"
-
-#ifdef GAME_VERSION
-#define str_dup_perm str_dup
-#define alloc_mem GC_MALLOC
-#define alloc_perm GC_MALLOC
-#endif
+#include "menu.h"
 
 /* What may appear to be memory leaks are not necessarily leaks, but safeguards.
    MOBs/Objects share the same strings as their indexes, so freeing that permanent
@@ -378,364 +373,379 @@ void edit_obj_type(CHAR_DATA *ch, int num);
 
 void edit_obj_add_aff(CHAR_DATA *ch, int num);
 
-MENU_ITEM edit_menu[] = {
-        {"Edit Menu",           "", 0,                        NULL},
-        {"Personal [Settings]", "settings", ID_EDIT_SETTINGS, edit_main},
-        {"Edit [Area]",         "area",     ID_EDIT_AREA,     edit_main},
-        {"Edit [Room]",         "room",     ID_EDIT_ROOM,     edit_main},
-        {"Edit [Mob]",          "mob",      ID_EDIT_MOB,      edit_main},
-        {"Edit [Object]",       "object",   ID_EDIT_OBJECT,   edit_main},
-        {"Edit [Resets]",       "resets",   ID_EDIT_RESETS,   edit_main},
-        {"[Exit] OLC",          "exit",     ID_EDIT_EXIT,     edit_exit},
-        {NULL,                  "", 0,                        NULL}
+MENU_DATA _edit_menu = {
+        ONE_COLUMN, -1,
+        {
+                {"Edit Menu",           "",         -1,               NULL},
+                {"Personal [Settings]", "settings", ID_EDIT_SETTINGS, edit_main},
+                {"Edit [Area]",         "area",     ID_EDIT_AREA,     edit_main},
+                {"Edit [Room]",         "room",     ID_EDIT_ROOM,     edit_main},
+                {"Edit [Mob]",          "mob",      ID_EDIT_MOB,      edit_main},
+                {"Edit [Object]",       "object",   ID_EDIT_OBJECT,   edit_main},
+                {"Edit [Resets]",       "resets",   ID_EDIT_RESETS,   edit_main},
+                {"[Exit] OLC",          "exit",     ID_EDIT_EXIT,     edit_exit}
+        }
 };
 
-MENU_ITEM settings_menu[] = {
-        {"Personal Settings",                                     "", 0,                          NULL},
-        {"Toggle [Room]   - Default to current room",             "room",   ID_SETTINGS_DEF_ROOM, edit_settings},
-        {"Toggle [Mob]    - Default to first mob in room",        "mob",    ID_SETTINGS_DEF_MOB,  edit_settings},
-        {"Toggle [Object] - Default to first object in inv.",     "object", ID_SETTINGS_DEF_OBJ,  edit_settings},
-        {"Toggle [Auto]   - Create rooms when walking",           "auto",   ID_SETTINGS_AUTO,     edit_settings},
-        {"Toggle [Door]   - Double/Single door mode",             "door",   ID_SETTINGS_DOOR,     edit_settings},
-        {"[Brief] Menus   - Toggle between brief and full menus", "brief",  ID_SETTINGS_BRIEF,    edit_settings},
-        {"[Help] on the Above Options",                           "help",   ID_SETTINGS_HELP,     edit_settings},
-        {"Goto [Main]",                                           "main",   ID_EDIT_GOTO_MAIN,    edit_goto_main},
-        {"[Exit] OLC",                                            "exit",   ID_EDIT_EXIT,         edit_exit},
-        {NULL,                                                    "", 0,                          NULL}
+MENU_DATA _settings_menu = {
+        ONE_COLUMN, -1,
+        {
+                {"Personal Settings",                                     "",       -1,                   NULL},
+                {"Toggle [Room]   - Default to current room",             "room",   ID_SETTINGS_DEF_ROOM, edit_settings},
+                {"Toggle [Mob]    - Default to first mob in room",        "mob",    ID_SETTINGS_DEF_MOB,  edit_settings},
+                {"Toggle [Object] - Default to first object in inv.",     "object", ID_SETTINGS_DEF_OBJ,  edit_settings},
+                {"Toggle [Auto]   - Create rooms when walking",           "auto",   ID_SETTINGS_AUTO,     edit_settings},
+                {"Toggle [Door]   - Double/Single door mode",             "door",   ID_SETTINGS_DOOR,     edit_settings},
+                {"[Brief] Menus   - Toggle between brief and full menus", "brief",  ID_SETTINGS_BRIEF,    edit_settings},
+                {"[Help] on the Above Options",                           "help",   ID_SETTINGS_HELP,     edit_settings},
+                {"Goto [Main]",                                           "main",   ID_EDIT_GOTO_MAIN,    edit_goto_main},
+                {"[Exit] OLC",                                            "exit",   ID_EDIT_EXIT,         edit_exit},
+        }
 };
 
-MENU_ITEM area_menu[] = {
-        {"Area Menu",                   "", 20,                           edit_area_init},
-        {"[Select] New Area",           "select", ID_EDIT_AREA_SELECT,    edit_area},
-        {"Area [Info]",                 "info",   ID_EDIT_AREA_INFO,      edit_area},
-        {"[Purge] Area]",               "purge",  ID_EDIT_AREA_PURGE,     edit_area},
-        {"[Reset] Area",                "reset",  ID_EDIT_AREA_RESET,     edit_area},
-        {"[New] Area",                  "new",    ID_EDIT_AREA_NEW,       edit_area},
+MENU_DATA _area_menu = {
+        TWO_COLUMNS, 20,
+        {
+                {"Area Menu",                   "",       -1,                     edit_area_init},
+                {"[Select] New Area",           "select", ID_EDIT_AREA_SELECT,    edit_area},
+                {"Area [Info]",                 "info",   ID_EDIT_AREA_INFO,      edit_area},
+                {"[Purge] Area]",               "purge",  ID_EDIT_AREA_PURGE,     edit_area},
+                {"[Reset] Area",                "reset",  ID_EDIT_AREA_RESET,     edit_area},
+                {"[New] Area",                  "new",    ID_EDIT_AREA_NEW,       edit_area},
 /*  {"[Load] Area","load",ID_EDIT_AREA_LOAD,edit_area}, */
-        {"[Save] Area",                 "save",   ID_EDIT_AREA_SAVE,      edit_area},
-        {"[Rename] Area",               "rename", ID_EDIT_AREA_RENAME,    edit_area},
-        {"Toggle [Freeze] Area",        "freeze", ID_EDIT_AREA_FREEZE,    edit_area},
-        {"Toggle [Under] Construction", "under",  ID_EDIT_AREA_UNDER_DEV, edit_area},
-        {"Goto [Main]",                 "main",   ID_EDIT_GOTO_MAIN,      edit_goto_main},
-        {"[Exit] OLC",                  "exit",   ID_EDIT_EXIT,           edit_exit},
-        {NULL,                          "", 0,                            NULL}
+                {"[Save] Area",                 "save",   ID_EDIT_AREA_SAVE,      edit_area},
+                {"[Rename] Area",               "rename", ID_EDIT_AREA_RENAME,    edit_area},
+                {"Toggle [Freeze] Area",        "freeze", ID_EDIT_AREA_FREEZE,    edit_area},
+                {"Toggle [Under] Construction", "under",  ID_EDIT_AREA_UNDER_DEV, edit_area},
+                {"Goto [Main]",                 "main",   ID_EDIT_GOTO_MAIN,      edit_goto_main},
+                {"[Exit] OLC",                  "exit",   ID_EDIT_EXIT,           edit_exit}
+        }
 };
 
-MENU_ITEM reset_menu[] = {
-        {"Reset Menu",                "", 0,                          edit_reset_init},
-        {"Reload [Mob] Resets",       "mob",    ID_EDIT_RESET_MOB,    edit_reset_main},
-        {"Reload [Object] Resets",    "object", ID_EDIT_RESET_OBJECT, edit_reset_main},
-        {"Reload [Door] Resets",      "door",   ID_EDIT_RESET_DOOR,   edit_reset_main},
-        {"Reload [All] Resets",       "all",    ID_EDIT_RESET_ALL,    edit_reset_main},
-        {"Add Current [Room] Resets", "room",   ID_EDIT_RESET_ROOM,   edit_reset_main},
-        {"Goto [Main]",               "main",   ID_EDIT_GOTO_MAIN,    edit_goto_main},
-        {"[Exit] OLC",                "exit",   ID_EDIT_EXIT,         edit_exit},
-        {NULL,                        "", 0,                          NULL}
+MENU_DATA _reset_menu = {
+        ONE_COLUMN, -1,
+        {
+                {"Reset Menu",                "",       -1,                   edit_reset_init},
+                {"Reload [Mob] Resets",       "mob",    ID_EDIT_RESET_MOB,    edit_reset_main},
+                {"Reload [Object] Resets",    "object", ID_EDIT_RESET_OBJECT, edit_reset_main},
+                {"Reload [Door] Resets",      "door",   ID_EDIT_RESET_DOOR,   edit_reset_main},
+                {"Reload [All] Resets",       "all",    ID_EDIT_RESET_ALL,    edit_reset_main},
+                {"Add Current [Room] Resets", "room",   ID_EDIT_RESET_ROOM,   edit_reset_main},
+                {"Goto [Main]",               "main",   ID_EDIT_GOTO_MAIN,    edit_goto_main},
+                {"[Exit] OLC",                "exit",   ID_EDIT_EXIT,         edit_exit}
+        }
 };
 
-MENU_ITEM room_menu[] = {
-        {"Room Menu",            "", 0,                       edit_room_init},
-        {"[Select] Room Vnum",   "select", ID_EDIT_VNUM,      edit_room},
-        {"[List] Rooms in Area", "list",   ID_EDIT_LIST,      edit_room},
-        {"Room [Info]",          "info",   ID_EDIT_INFO,      edit_room},
-        {"[Create] New Room",    "create", ID_EDIT_CREATE,    edit_room},
-        {"[Copy] Room",          "copy",   ID_EDIT_CLONE,     edit_room},
-        {"[Modify] Room",        "modify", ID_EDIT_MODIFY,    edit_room},
-        {"Goto [Main]",          "main",   ID_EDIT_GOTO_MAIN, edit_goto_main},
-        {"[Exit] OLC",           "exit",   ID_EDIT_EXIT,      edit_exit},
-        {NULL,                   "", 0,                       NULL}
+MENU_DATA _room_menu = {
+        ONE_COLUMN, -1,
+        {
+                {"Room Menu",            "",       -1,                edit_room_init},
+                {"[Select] Room Vnum",   "select", ID_EDIT_VNUM,      edit_room},
+                {"[List] Rooms in Area", "list",   ID_EDIT_LIST,      edit_room},
+                {"Room [Info]",          "info",   ID_EDIT_INFO,      edit_room},
+                {"[Create] New Room",    "create", ID_EDIT_CREATE,    edit_room},
+                {"[Copy] Room",          "copy",   ID_EDIT_CLONE,     edit_room},
+                {"[Modify] Room",        "modify", ID_EDIT_MODIFY,    edit_room},
+                {"Goto [Main]",          "main",   ID_EDIT_GOTO_MAIN, edit_goto_main},
+                {"[Exit] OLC",           "exit",   ID_EDIT_EXIT,      edit_exit}
+        }
 };
 
-MENU_ITEM room_modify_menu[] = {
-        {" Modify Room Menu",           "", 0,                             edit_room_init},
-        {" Modify [Name]",              "name",        ID_ROOM_NAME,       edit_room_modify},
-        {" Modify [Description]",       "description", ID_ROOM_DESC,       edit_room_modify},
-        {" Add [Extended] Descrip",     "extended",    ID_ROOM_EXTENDED,   edit_room_modify},
-        {" [Remove] Extended Desrip",   "remove",      ID_ROOM_REM_EXTEND, edit_room_modify},
-        {" Modify [Flags]",             "flags",       ID_ROOM_FLAGS,      edit_room_modify},
-        {" Modify [Door]",              "door",        ID_ROOM_DOOR,       edit_room_modify},
-        {" Modify [Sector]",            "sector",      ID_ROOM_TERRAIN,    edit_room_modify},
-        {" Modify [Heal] Rate",         "heal",        ID_ROOM_HEAL,       edit_room_modify},
-        {" Modify [Mana] Rate",         "mana",        ID_ROOM_MANA,       edit_room_modify},
-        {"Modify [Clan]",               "clan",        ID_ROOM_CLAN,       edit_room_modify},
-        {"Modify [Observation] Target", "observation", ID_ROOM_OBS,        edit_room_modify},
-        {"Modify [Owner]",              "owner",       ID_ROOM_OWNER,      edit_room_modify},
-        {"[Done] Modifying Room",       "done",        ID_EDIT_PREVIOUS,   edit_room_modify},
-        {"[Main] Menu",                 "main",        ID_EDIT_GOTO_MAIN,  edit_goto_main},
-        {"[Exit] OLC",                  "exit",        ID_EDIT_EXIT,       edit_exit},
-        {NULL,                          "", 0,                             NULL}
+MENU_DATA _room_modify_menu = {
+        ONE_COLUMN, -1,
+        {
+                {" Modify Room Menu",           "",            -1,                 edit_room_init},
+                {" Modify [Name]",              "name",        ID_ROOM_NAME,       edit_room_modify},
+                {" Modify [Description]",       "description", ID_ROOM_DESC,       edit_room_modify},
+                {" Add [Extended] Descrip",     "extended",    ID_ROOM_EXTENDED,   edit_room_modify},
+                {" [Remove] Extended Desrip",   "remove",      ID_ROOM_REM_EXTEND, edit_room_modify},
+                {" Modify [Flags]",             "flags",       ID_ROOM_FLAGS,      edit_room_modify},
+                {" Modify [Door]",              "door",        ID_ROOM_DOOR,       edit_room_modify},
+                {" Modify [Sector]",            "sector",      ID_ROOM_TERRAIN,    edit_room_modify},
+                {" Modify [Heal] Rate",         "heal",        ID_ROOM_HEAL,       edit_room_modify},
+                {" Modify [Mana] Rate",         "mana",        ID_ROOM_MANA,       edit_room_modify},
+                {"Modify [Clan]",               "clan",        ID_ROOM_CLAN,       edit_room_modify},
+                {"Modify [Observation] Target", "observation", ID_ROOM_OBS,        edit_room_modify},
+                {"Modify [Owner]",              "owner",       ID_ROOM_OWNER,      edit_room_modify},
+                {"[Done] Modifying Room",       "done",        ID_EDIT_PREVIOUS,   edit_room_modify},
+                {"[Main] Menu",                 "main",        ID_EDIT_GOTO_MAIN,  edit_goto_main},
+                {"[Exit] OLC",                  "exit",        ID_EDIT_EXIT,       edit_exit}
+        }
 };
 
-MENU_ITEM exit_modify_menu[] = {
-        {"Modify Door Menu",                   "", 0,                            edit_exit_init},
-        {"Toggle Door [Mode] (Double/Single)", "mode",        ID_SETTINGS_DOOR,  edit_settings},
-        {"[Select] Door",                      "select",      ID_DOOR_SELECT,    edit_room_exits},
-        {"Door [Info]",                        "info",        ID_DOOR_INFO,      edit_room_exits},
-        {"Modify [Destination]",               "destination", ID_DOOR_VNUM,      edit_room_exits},
-        {"Modify [Name]",                      "name",        ID_DOOR_KEYWORD,   edit_room_exits},
-        {"Modify [Key]",                       "key",         ID_DOOR_KEY,       edit_room_exits},
-        {"Modify [Flags]",                     "flags",       ID_DOOR_FLAGS,     edit_room_exits},
-        {"[Copy] to Other Side",               "copy",        ID_DOOR_COPY,      edit_room_exits},
-        {"[Remove] Exit",                      "remove",      ID_DOOR_REMOVE,    edit_room_exits},
-        {"[Done] Modifying Door",              "done",        ID_EDIT_PREVIOUS,  edit_room_exits},
-        {"[Main] Menu",                        "main",        ID_EDIT_GOTO_MAIN, edit_goto_main},
-        {"[Exit] OLC",                         "exit",        ID_EDIT_EXIT,      edit_exit},
-        {NULL,                                 "", 0,                            NULL}
+MENU_DATA _exit_modify_menu = {
+        ONE_COLUMN, -1,
+        {
+                {"Modify Door Menu",                   "",            -1,                edit_exit_init},
+                {"Toggle Door [Mode] (Double/Single)", "mode",        ID_SETTINGS_DOOR,  edit_settings},
+                {"[Select] Door",                      "select",      ID_DOOR_SELECT,    edit_room_exits},
+                {"Door [Info]",                        "info",        ID_DOOR_INFO,      edit_room_exits},
+                {"Modify [Destination]",               "destination", ID_DOOR_VNUM,      edit_room_exits},
+                {"Modify [Name]",                      "name",        ID_DOOR_KEYWORD,   edit_room_exits},
+                {"Modify [Key]",                       "key",         ID_DOOR_KEY,       edit_room_exits},
+                {"Modify [Flags]",                     "flags",       ID_DOOR_FLAGS,     edit_room_exits},
+                {"[Copy] to Other Side",               "copy",        ID_DOOR_COPY,      edit_room_exits},
+                {"[Remove] Exit",                      "remove",      ID_DOOR_REMOVE,    edit_room_exits},
+                {"[Done] Modifying Door",              "done",        ID_EDIT_PREVIOUS,  edit_room_exits},
+                {"[Main] Menu",                        "main",        ID_EDIT_GOTO_MAIN, edit_goto_main},
+                {"[Exit] OLC",                         "exit",        ID_EDIT_EXIT,      edit_exit}
+        }
 };
 
-MENU_ITEM sector_menu[] = {
-        {"Select Sector",                        "", 0,                                     edit_sector_init},
-        {"Set Sector to [Inside]",               "inside",       SECT_INSIDE,               edit_sector},
-        {"Set Sector to [City]",                 "city",         SECT_CITY,                 edit_sector},
-        {"Set Sector to [Field]",                "field",        SECT_FIELD,                edit_sector},
-        {"Set Sector to [Forest]",               "forest",       SECT_FOREST,               edit_sector},
-        {"Set Sector to [Hills]",                "hills",        SECT_HILLS,                edit_sector},
-        {"Set Sector to [Mountain]",             "mountain",     SECT_MOUNTAIN,             edit_sector},
-        {"Set Sector to [Water_swim]",           "water_swim",   SECT_WATER_SWIM,           edit_sector},
-        {"Set Sector to [Water_noswim]",         "water_noswim", SECT_WATER_NOSWIM,         edit_sector},
-        {"Set Sector to [Air]",                  "air",          SECT_AIR,                  edit_sector},
-        {"Set Sector to [Desert]",               "desert",       SECT_DESERT,               edit_sector},
-        {"Set Sector to [Simple] Magelab",       "simple",       SECT_MAGELAB_SIMPLE,       edit_sector},
-        {"Set Sector to [Intermediate] Magelab", "intermediate", SECT_MAGELAB_INTERMEDIATE, edit_sector},
-        {"Set Sector to [Advanced] Magelab",     "advanced",     SECT_MAGELAB_ADVANCED,     edit_sector},
-        {"Set Sector to [Superior] Magelab",     "superior",     SECT_MAGELAB_SUPERIOR,     edit_sector},
-        {"Set Sector to [Basic] Altar",          "basic",        SECT_ALTAR_BASIC,          edit_sector},
-        {"Set Sector to [Blessed] Altar",        "blessed",      SECT_ALTAR_BLESSED,        edit_sector},
-        {"Set Sector to [Annointed] Altar",      "annointed",    SECT_ALTAR_ANNOINTED,      edit_sector},
-        {"Set Sector to [HolyGround] Altar",     "holyground",   SECT_ALTAR_HOLY_GROUND,    edit_sector},
-        {"Set Sector to [Fire Plane]",           "fire plane",   SECT_FIRE_PLANE,           edit_sector},
-        {"Set Sector to [Water Plane]",          "water plane",  SECT_WATER_PLANE,          edit_sector},
-        {"Set Sector to [Observation] Room",     "observation",  SECT_OBS_ROOM,             edit_sector},
-        {"[Done] Modifying Sector",              "done",         ID_EDIT_PREVIOUS,          edit_sector},
-        {"[Main] Menu",                          "main",         ID_EDIT_GOTO_MAIN,         edit_goto_main},
-        {"[Exit] OLC",                           "exit",         ID_EDIT_EXIT,              edit_exit},
-        {NULL,                                   "", 0,                                     NULL}
+MENU_DATA _sector_menu = {
+        ONE_COLUMN, -1,
+        {
+                {"Select Sector",                        "",             -1,                        edit_sector_init},
+                {"Set Sector to [Inside]",               "inside",       SECT_INSIDE,               edit_sector},
+                {"Set Sector to [City]",                 "city",         SECT_CITY,                 edit_sector},
+                {"Set Sector to [Field]",                "field",        SECT_FIELD,                edit_sector},
+                {"Set Sector to [Forest]",               "forest",       SECT_FOREST,               edit_sector},
+                {"Set Sector to [Hills]",                "hills",        SECT_HILLS,                edit_sector},
+                {"Set Sector to [Mountain]",             "mountain",     SECT_MOUNTAIN,             edit_sector},
+                {"Set Sector to [Water_swim]",           "water_swim",   SECT_WATER_SWIM,           edit_sector},
+                {"Set Sector to [Water_noswim]",         "water_noswim", SECT_WATER_NOSWIM,         edit_sector},
+                {"Set Sector to [Air]",                  "air",          SECT_AIR,                  edit_sector},
+                {"Set Sector to [Desert]",               "desert",       SECT_DESERT,               edit_sector},
+                {"Set Sector to [Simple] Magelab",       "simple",       SECT_MAGELAB_SIMPLE,       edit_sector},
+                {"Set Sector to [Intermediate] Magelab", "intermediate", SECT_MAGELAB_INTERMEDIATE, edit_sector},
+                {"Set Sector to [Advanced] Magelab",     "advanced",     SECT_MAGELAB_ADVANCED,     edit_sector},
+                {"Set Sector to [Superior] Magelab",     "superior",     SECT_MAGELAB_SUPERIOR,     edit_sector},
+                {"Set Sector to [Basic] Altar",          "basic",        SECT_ALTAR_BASIC,          edit_sector},
+                {"Set Sector to [Blessed] Altar",        "blessed",      SECT_ALTAR_BLESSED,        edit_sector},
+                {"Set Sector to [Annointed] Altar",      "annointed",    SECT_ALTAR_ANNOINTED,      edit_sector},
+                {"Set Sector to [HolyGround] Altar",     "holyground",   SECT_ALTAR_HOLY_GROUND,    edit_sector},
+                {"Set Sector to [Fire Plane]",           "fire plane",   SECT_FIRE_PLANE,           edit_sector},
+                {"Set Sector to [Water Plane]",          "water plane",  SECT_WATER_PLANE,          edit_sector},
+                {"Set Sector to [Observation] Room",     "observation",  SECT_OBS_ROOM,             edit_sector},
+                {"[Done] Modifying Sector",              "done",         ID_EDIT_PREVIOUS,          edit_sector},
+                {"[Main] Menu",                          "main",         ID_EDIT_GOTO_MAIN,         edit_goto_main},
+                {"[Exit] OLC",                           "exit",         ID_EDIT_EXIT,              edit_exit}
+        }
 };
 
-
-MENU_ITEM mob_menu[] = {
-        {"Mob Menu",                       "", 0,                          edit_mob_init},
-        {" [Select] Mob Vnum",             "select",    ID_EDIT_VNUM,      edit_mob},
-        {" [List] Mobs in Area",           "list",      ID_EDIT_LIST,      edit_mob},
-        {" [Create] New Mob",              "create",    ID_EDIT_CREATE,    edit_mob},
-        {" [Copy] Mob",                    "copy",      ID_EDIT_CLONE,     edit_mob},
-        {" [Modify] Mob",                  "modify",    ID_EDIT_MODIFY,    edit_mob},
-        {" Mob [Info]",                    "info",      ID_EDIT_INFO,      edit_mob},
-        {" Update [Instances] of the Mob", "instances", ID_EDIT_INSTANCE,  edit_mob},
-        {" Modify [Shop] Info",            "shop",      ID_EDIT_SHOP,      edit_mob},
-        {" Goto [Main]",                   "main",      ID_EDIT_GOTO_MAIN, edit_goto_main},
-        {"[Exit] OLC",                     "exit",      ID_EDIT_EXIT,      edit_exit},
-        {NULL,                             "", 0,                          NULL}
+MENU_DATA _mob_menu = {
+        ONE_COLUMN, -1,
+        {
+                {"Mob Menu",                       "",          -1,                edit_mob_init},
+                {" [Select] Mob Vnum",             "select",    ID_EDIT_VNUM,      edit_mob},
+                {" [List] Mobs in Area",           "list",      ID_EDIT_LIST,      edit_mob},
+                {" [Create] New Mob",              "create",    ID_EDIT_CREATE,    edit_mob},
+                {" [Copy] Mob",                    "copy",      ID_EDIT_CLONE,     edit_mob},
+                {" [Modify] Mob",                  "modify",    ID_EDIT_MODIFY,    edit_mob},
+                {" Mob [Info]",                    "info",      ID_EDIT_INFO,      edit_mob},
+                {" Update [Instances] of the Mob", "instances", ID_EDIT_INSTANCE,  edit_mob},
+                {" Modify [Shop] Info",            "shop",      ID_EDIT_SHOP,      edit_mob},
+                {" Goto [Main]",                   "main",      ID_EDIT_GOTO_MAIN, edit_goto_main},
+                {"[Exit] OLC",                     "exit",      ID_EDIT_EXIT,      edit_exit}
+        }
 };
 
-MENU_ITEM mob_modify_menu[] = {
-        {"Modify Mob Menu",             "", 30,                               edit_mob_init},
-        {" Modify [Name]",              "name",            ID_MOB_NAME,       edit_mob_modify},
-        {" Modify [Level]",             "level",           ID_MOB_LEVEL,      edit_mob_modify},
-        {" Modify [Short] Description", "short",           ID_MOB_SHORT,      edit_mob_modify},
-        {" Modify [Long] Description",  "long",            ID_MOB_LONG,       edit_mob_modify},
-        {" Modify [Description]",       "description",     ID_MOB_DESC,       edit_mob_modify},
-        {" Modify [Hp]",                "hp",              ID_MOB_HP,         edit_mob_modify},
-        {" Modify [Mana]",              "mana",            ID_MOB_MANA,       edit_mob_modify},
-        {" Modify [Ac]",                "ac",              ID_MOB_AC,         edit_mob_modify},
-        {" Modify [Attack] Type",       "attack",          ID_MOB_DAMTYPE,    edit_mob_modify},
-        {"Modify [Damage]",             "damage",          ID_MOB_DAMAGE,     edit_mob_modify},
-        {"Modify [Hitroll]",            "hitroll",         ID_MOB_HITROLL,    edit_mob_modify},
-        {"Modify [Act] Flags",          "act",             ID_MOB_ACT,        edit_mob_modify},
-        {"Modify [Offensive] Flags",    "offensive",       ID_MOB_OFF,        edit_mob_modify},
-        {"Modify [Immunities]",         "immunities",      ID_MOB_IMM,        edit_mob_modify},
-        {"Modify [Resistances]",        "resistances",     ID_MOB_RES,        edit_mob_modify},
-        {"Modify [Vulnerabilties]",     "vulnerabilities", ID_MOB_VULN,       edit_mob_modify},
-        {"Modify [Parts]",              "parts",           ID_MOB_PARTS,      edit_mob_modify},
-        {"Modify [Form]",               "form",            ID_MOB_FORM,       edit_mob_modify},
-        {"Modify [Race]",               "race",            ID_MOB_RACE,       edit_mob_modify},
-        {"Modify [Sex]",                "sex",             ID_MOB_SEX,        edit_mob_modify},
-        {"Modify [Position]",           "position",        ID_MOB_POS,        edit_mob_modify},
-        {"Modify [Wealth]",             "wealth",          ID_MOB_WEALTH,     edit_mob_modify},
-        {"Modify [Size]",               "size",            ID_MOB_SIZE,       edit_mob_modify},
-        {"Modify [Alignment]",          "alignment",       ID_MOB_ALIGN,      edit_mob_modify},
-        {"Modify [Affects]",            "affects",         ID_MOB_AFF,        edit_mob_modify},
-        {"Modify [Special]",            "special",         ID_MOB_SPEC,       edit_mob_modify},
-        {"Modify Spec [Words]",         "words",           ID_MOB_SPEC_WORDS, edit_mob_modify},
-        {"[Done] Modifying Mob",        "done",            ID_EDIT_PREVIOUS,  edit_mob_modify},
-        {"Goto [Main]",                 "main",            ID_EDIT_GOTO_MAIN, edit_goto_main},
-        {"[Exit] OLC",                  "exit",            ID_EDIT_EXIT,      edit_exit},
-        {NULL,                          "", 0,                                NULL}
+MENU_DATA _mob_modify_menu = {
+        TWO_COLUMNS, 30,
+        {
+                {"Modify Mob Menu",             "",                -1,                edit_mob_init},
+                {" Modify [Name]",              "name",            ID_MOB_NAME,       edit_mob_modify},
+                {" Modify [Level]",             "level",           ID_MOB_LEVEL,      edit_mob_modify},
+                {" Modify [Short] Description", "short",           ID_MOB_SHORT,      edit_mob_modify},
+                {" Modify [Long] Description",  "long",            ID_MOB_LONG,       edit_mob_modify},
+                {" Modify [Description]",       "description",     ID_MOB_DESC,       edit_mob_modify},
+                {" Modify [Hp]",                "hp",              ID_MOB_HP,         edit_mob_modify},
+                {" Modify [Mana]",              "mana",            ID_MOB_MANA,       edit_mob_modify},
+                {" Modify [Ac]",                "ac",              ID_MOB_AC,         edit_mob_modify},
+                {" Modify [Attack] Type",       "attack",          ID_MOB_DAMTYPE,    edit_mob_modify},
+                {"Modify [Damage]",             "damage",          ID_MOB_DAMAGE,     edit_mob_modify},
+                {"Modify [Hitroll]",            "hitroll",         ID_MOB_HITROLL,    edit_mob_modify},
+                {"Modify [Act] Flags",          "act",             ID_MOB_ACT,        edit_mob_modify},
+                {"Modify [Offensive] Flags",    "offensive",       ID_MOB_OFF,        edit_mob_modify},
+                {"Modify [Immunities]",         "immunities",      ID_MOB_IMM,        edit_mob_modify},
+                {"Modify [Resistances]",        "resistances",     ID_MOB_RES,        edit_mob_modify},
+                {"Modify [Vulnerabilties]",     "vulnerabilities", ID_MOB_VULN,       edit_mob_modify},
+                {"Modify [Parts]",              "parts",           ID_MOB_PARTS,      edit_mob_modify},
+                {"Modify [Form]",               "form",            ID_MOB_FORM,       edit_mob_modify},
+                {"Modify [Race]",               "race",            ID_MOB_RACE,       edit_mob_modify},
+                {"Modify [Sex]",                "sex",             ID_MOB_SEX,        edit_mob_modify},
+                {"Modify [Position]",           "position",        ID_MOB_POS,        edit_mob_modify},
+                {"Modify [Wealth]",             "wealth",          ID_MOB_WEALTH,     edit_mob_modify},
+                {"Modify [Size]",               "size",            ID_MOB_SIZE,       edit_mob_modify},
+                {"Modify [Alignment]",          "alignment",       ID_MOB_ALIGN,      edit_mob_modify},
+                {"Modify [Affects]",            "affects",         ID_MOB_AFF,        edit_mob_modify},
+                {"Modify [Special]",            "special",         ID_MOB_SPEC,       edit_mob_modify},
+                {"Modify Spec [Words]",         "words",           ID_MOB_SPEC_WORDS, edit_mob_modify},
+                {"[Done] Modifying Mob",        "done",            ID_EDIT_PREVIOUS,  edit_mob_modify},
+                {"Goto [Main]",                 "main",            ID_EDIT_GOTO_MAIN, edit_goto_main},
+                {"[Exit] OLC",                  "exit",            ID_EDIT_EXIT,      edit_exit}
+        }
 };
 
-MENU_ITEM mob_shop_menu[] = {
-        {"Mob Shop Menu",           "", 0,                        NULL},
-        {"[Copy] Shop",             "copy",    ID_SHOP_CLONE,     edit_mob_shop},
-        {"Modify Shop [Buy] Types", "buy",     ID_SHOP_BUY,       edit_mob_shop},
-        {"Modify Shop [Profits]",   "profits", ID_SHOP_PROFIT,    edit_mob_shop},
-        {"Modify Shop [Hours]",     "hours",   ID_SHOP_HOURS,     edit_mob_shop},
-        {"Shop [Info]",             "info",    ID_SHOP_INFO,      edit_mob_shop},
-        {"[Remove] Shop",           "remove",  ID_SHOP_REMOVE,    edit_mob_shop},
-        {"[Done] Modifing Shop",    "done",    ID_EDIT_PREVIOUS,  edit_mob_shop},
-        {"Goto [Main]",             "main",    ID_EDIT_GOTO_MAIN, edit_goto_main},
-        {"[Exit] OLC",              "exit",    ID_EDIT_EXIT,      edit_exit},
-        {NULL,                      "", 0,                        NULL}
+MENU_DATA _mob_shop_menu = {
+        ONE_COLUMN, -1,
+        {
+                {"Mob Shop Menu",           "",        -1,                NULL},
+                {"[Copy] Shop",             "copy",    ID_SHOP_CLONE,     edit_mob_shop},
+                {"Modify Shop [Buy] Types", "buy",     ID_SHOP_BUY,       edit_mob_shop},
+                {"Modify Shop [Profits]",   "profits", ID_SHOP_PROFIT,    edit_mob_shop},
+                {"Modify Shop [Hours]",     "hours",   ID_SHOP_HOURS,     edit_mob_shop},
+                {"Shop [Info]",             "info",    ID_SHOP_INFO,      edit_mob_shop},
+                {"[Remove] Shop",           "remove",  ID_SHOP_REMOVE,    edit_mob_shop},
+                {"[Done] Modifing Shop",    "done",    ID_EDIT_PREVIOUS,  edit_mob_shop},
+                {"Goto [Main]",             "main",    ID_EDIT_GOTO_MAIN, edit_goto_main},
+                {"[Exit] OLC",              "exit",    ID_EDIT_EXIT,      edit_exit}
+        }
 };
 
-MENU_ITEM mob_size_menu[] = {
-        {"Modify Mob Size Menu", "", 0,                    edit_mob_size_init},
-        {"Set Size to [Tiny]",   "tiny",   SIZE_TINY,      edit_mob_size},
-        {"Set Size to [Small]",  "small",  SIZE_SMALL,     edit_mob_size},
-        {"Set Size to [Medium]", "medium", SIZE_MEDIUM,    edit_mob_size},
-        {"Set Size to [Large]",  "large",  SIZE_LARGE,     edit_mob_size},
-        {"Set Size to [Huge]",   "huge",   SIZE_HUGE,      edit_mob_size},
-        {"Set Size to [Giant]",  "giant",  SIZE_GIANT,     edit_mob_size},
-        {"[Cancel] Operation",   "cancel", ID_EDIT_CANCEL, edit_mob_size},
-        {NULL,                   "", 0,                    NULL}
+MENU_DATA _mob_size_menu = {
+        ONE_COLUMN, -1,
+        {
+                {"Modify Mob Size Menu", "",       -1,             edit_mob_size_init},
+                {"Set Size to [Tiny]",   "tiny",   SIZE_TINY,      edit_mob_size},
+                {"Set Size to [Small]",  "small",  SIZE_SMALL,     edit_mob_size},
+                {"Set Size to [Medium]", "medium", SIZE_MEDIUM,    edit_mob_size},
+                {"Set Size to [Large]",  "large",  SIZE_LARGE,     edit_mob_size},
+                {"Set Size to [Huge]",   "huge",   SIZE_HUGE,      edit_mob_size},
+                {"Set Size to [Giant]",  "giant",  SIZE_GIANT,     edit_mob_size},
+                {"[Cancel] Operation",   "cancel", ID_EDIT_CANCEL, edit_mob_size}
+        }
 };
 
-MENU_ITEM mob_position_menu[] = {
-        {"Modify Mob Position", "", 0,                      edit_mob_pos_init},
-        {"Position [Sleeping]", "sleeping", POS_SLEEPING,   edit_mob_position},
-        {"Position [Resting]",  "resting",  POS_RESTING,    edit_mob_position},
-        {"Position [Sitting]",  "sitting",  POS_SITTING,    edit_mob_position},
-        {"Position [Standing]", "standing", POS_STANDING,   edit_mob_position},
-        {"[Cancel] Operation",  "cancel",   ID_EDIT_CANCEL, edit_mob_position},
-        {NULL,                  "", 0,                      NULL}
+MENU_DATA _mob_position_menu = {
+        ONE_COLUMN, -1,
+        {
+                {"Modify Mob Position", "",         -1,             edit_mob_pos_init},
+                {"Position [Sleeping]", "sleeping", POS_SLEEPING,   edit_mob_position},
+                {"Position [Resting]",  "resting",  POS_RESTING,    edit_mob_position},
+                {"Position [Sitting]",  "sitting",  POS_SITTING,    edit_mob_position},
+                {"Position [Standing]", "standing", POS_STANDING,   edit_mob_position},
+                {"[Cancel] Operation",  "cancel",   ID_EDIT_CANCEL, edit_mob_position}
+        }
 };
 
-MENU_ITEM *mob_modify_att_menu;
+MENU_DATA *mob_modify_att_menu; // not implemented?
 
-MENU_ITEM object_menu[] = {
-        {"Object Menu",                      "", 0,                          edit_obj_init},
-        {"[Select] Object Vnum",             "select",    ID_EDIT_VNUM,      edit_object},
-        {"[List] Objects in Area",           "list",      ID_EDIT_LIST,      edit_object},
-        {"[Create] New Object",              "create",    ID_EDIT_CREATE,    edit_object},
-        {"[Copy] Object",                    "copy",      ID_EDIT_CLONE,     edit_object},
-        {"[Modify] Object",                  "modify",    ID_EDIT_MODIFY,    edit_object},
-        {"Object [Info]",                    "info",      ID_EDIT_INFO,      edit_object},
-        {"Update [Instances] of the Object", "instances", ID_EDIT_INSTANCE,  edit_object},
-        {"Goto [Main]",                      "main",      ID_EDIT_GOTO_MAIN, edit_goto_main},
-        {"[Exit] OLC",                       "exit",      ID_EDIT_EXIT,      edit_exit},
-        {NULL,                               "", 0,                          NULL}
+MENU_DATA _object_menu = {
+        ONE_COLUMN, -1,
+        {
+                {"Object Menu",                      "",          -1,                edit_obj_init},
+                {"[Select] Object Vnum",             "select",    ID_EDIT_VNUM,      edit_object},
+                {"[List] Objects in Area",           "list",      ID_EDIT_LIST,      edit_object},
+                {"[Create] New Object",              "create",    ID_EDIT_CREATE,    edit_object},
+                {"[Copy] Object",                    "copy",      ID_EDIT_CLONE,     edit_object},
+                {"[Modify] Object",                  "modify",    ID_EDIT_MODIFY,    edit_object},
+                {"Object [Info]",                    "info",      ID_EDIT_INFO,      edit_object},
+                {"Update [Instances] of the Object", "instances", ID_EDIT_INSTANCE,  edit_object},
+                {"Goto [Main]",                      "main",      ID_EDIT_GOTO_MAIN, edit_goto_main},
+                {"[Exit] OLC",                       "exit",      ID_EDIT_EXIT,      edit_exit}
+        }
 };
 
-
-MENU_ITEM obj_modify_menu[] = {
-        {"Object Modify Menu",          "", 30,                         NULL},
-        {" Modify [Name]",              "name",      ID_OBJ_NAME,       edit_obj_modify},
-        {" Modify [Level]",             "level",     ID_OBJ_LEVEL,      edit_obj_modify},
-        {" Modify [Short] Description", "short",     ID_OBJ_SHORT,      edit_obj_modify},
-        {" Modify [Long] Description",  "long",      ID_OBJ_DESCR,      edit_obj_modify},
-        {" Add [Extended] Descrip",     "extended",  ID_OBJ_EXTENDED,   edit_obj_modify},
-        {" [Remove] Extended Desrip",   "remove",    ID_OBJ_REM_EXTEND, edit_obj_modify},
-        {" Modify [Material]",          "material",  ID_OBJ_MATERIAL,   edit_obj_modify},
-        {" Modify Item [Type]",         "type",      ID_OBJ_TYPE,       edit_obj_modify},
-        {" Modify Extra [Flags]",       "flags",     ID_OBJ_FLAGS,      edit_obj_modify},
-        {"Modify [Wear] Flags",         "wear",      ID_OBJ_WEAR,       edit_obj_modify},
-        {"Modify [Condition]",          "condition", ID_OBJ_COND,       edit_obj_modify},
-        {"Modify [Weight]",             "weight",    ID_OBJ_WEIGHT,     edit_obj_modify},
-        {"Modify [Cost]",               "cost",      ID_OBJ_COST,       edit_obj_modify},
-        {"Modify [Values]",             "values",    ID_OBJ_VALUE,      edit_obj_modify},
-        {"[Add] Affect",                "add",       ID_OBJ_AFF_ADD,    edit_obj_modify},
-        {"[Delete] Affect",             "delete",    ID_OBJ_AFF_REMOVE, edit_obj_modify},
-        {"Modify Wear [Timer]",         "timer",     ID_OBJ_WEAR_TIMER, edit_obj_modify},
-        {"[Done] Modifying Object",     "done",      ID_EDIT_PREVIOUS,  edit_obj_modify},
-        {"Goto [Main]",                 "main",      ID_EDIT_GOTO_MAIN, edit_goto_main},
-        {"[Exit] OLC",                  "exit",      ID_EDIT_EXIT,      edit_exit},
-        {NULL,                          "", 0,                          NULL}
+MENU_DATA _obj_modify_menu = {
+        TWO_COLUMNS, 30,
+        {
+                {"Object Modify Menu",          "",          -1,                NULL},
+                {" Modify [Name]",              "name",      ID_OBJ_NAME,       edit_obj_modify},
+                {" Modify [Level]",             "level",     ID_OBJ_LEVEL,      edit_obj_modify},
+                {" Modify [Short] Description", "short",     ID_OBJ_SHORT,      edit_obj_modify},
+                {" Modify [Long] Description",  "long",      ID_OBJ_DESCR,      edit_obj_modify},
+                {" Add [Extended] Descrip",     "extended",  ID_OBJ_EXTENDED,   edit_obj_modify},
+                {" [Remove] Extended Desrip",   "remove",    ID_OBJ_REM_EXTEND, edit_obj_modify},
+                {" Modify [Material]",          "material",  ID_OBJ_MATERIAL,   edit_obj_modify},
+                {" Modify Item [Type]",         "type",      ID_OBJ_TYPE,       edit_obj_modify},
+                {" Modify Extra [Flags]",       "flags",     ID_OBJ_FLAGS,      edit_obj_modify},
+                {"Modify [Wear] Flags",         "wear",      ID_OBJ_WEAR,       edit_obj_modify},
+                {"Modify [Condition]",          "condition", ID_OBJ_COND,       edit_obj_modify},
+                {"Modify [Weight]",             "weight",    ID_OBJ_WEIGHT,     edit_obj_modify},
+                {"Modify [Cost]",               "cost",      ID_OBJ_COST,       edit_obj_modify},
+                {"Modify [Values]",             "values",    ID_OBJ_VALUE,      edit_obj_modify},
+                {"[Add] Affect",                "add",       ID_OBJ_AFF_ADD,    edit_obj_modify},
+                {"[Delete] Affect",             "delete",    ID_OBJ_AFF_REMOVE, edit_obj_modify},
+                {"Modify Wear [Timer]",         "timer",     ID_OBJ_WEAR_TIMER, edit_obj_modify},
+                {"[Done] Modifying Object",     "done",      ID_EDIT_PREVIOUS,  edit_obj_modify},
+                {"Goto [Main]",                 "main",      ID_EDIT_GOTO_MAIN, edit_goto_main},
+                {"[Exit] OLC",                  "exit",      ID_EDIT_EXIT,      edit_exit}
+        }
 };
 
-MENU_ITEM obj_affect_menu[] = {
-        {"Add Affect Menu",          "", 30,                            NULL},
-        {"Apply [Str]",              "str",       APPLY_STR,            edit_obj_add_aff},
-        {"Apply [Dex]",              "dex",       APPLY_DEX,            edit_obj_add_aff},
-        {"Apply [Int]",              "int",       APPLY_INT,            edit_obj_add_aff},
-        {"Apply [Wis]",              "wis",       APPLY_WIS,            edit_obj_add_aff},
-        {"Apply [Con]",              "con",       APPLY_CON,            edit_obj_add_aff},
+MENU_DATA _obj_affect_menu = {
+        TWO_COLUMNS, 30,
+        {
+                {"Add Affect Menu",          "",          -1,                   NULL},
+                {"Apply [Str]",              "str",       APPLY_STR,            edit_obj_add_aff},
+                {"Apply [Dex]",              "dex",       APPLY_DEX,            edit_obj_add_aff},
+                {"Apply [Int]",              "int",       APPLY_INT,            edit_obj_add_aff},
+                {"Apply [Wis]",              "wis",       APPLY_WIS,            edit_obj_add_aff},
+                {"Apply [Con]",              "con",       APPLY_CON,            edit_obj_add_aff},
 //  {"Apply [Agt]","agt",APPLY_AGT,edit_obj_add_aff},
 //  {"Apply [End]","end",APPLY_END,edit_obj_add_aff},
-        {"Apply [Cha]",              "cha",       APPLY_SOC,            edit_obj_add_aff},
-        {"Apply [Sex]",              "sex",       APPLY_SEX,            edit_obj_add_aff},
+                {"Apply [Cha]",              "cha",       APPLY_SOC,            edit_obj_add_aff},
+                {"Apply [Sex]",              "sex",       APPLY_SEX,            edit_obj_add_aff},
 /*  {"Apply [Class]","class",APPLY_CLASS,edit_obj_add_aff},
   {"Apply [Level]","level",APPLY_LEVEL,edit_obj_add_aff},
   {"Apply [Age]","age",APPLY_AGE,edit_obj_add_aff},
   {"Apply [Height]","height",APPLY_HEIGHT,edit_obj_add_aff},
   {"Apply [Weight]","weight",APPLY_WEIGHT,edit_obj_add_aff}, */
-        {"Apply [Mana]",             "mana",      APPLY_MANA,           edit_obj_add_aff},
-        {"Apply [Hit] Points",       "hit",       APPLY_HIT,            edit_obj_add_aff},
-        {"Apply [Move]",             "move",      APPLY_MOVE,           edit_obj_add_aff},
+                {"Apply [Mana]",             "mana",      APPLY_MANA,           edit_obj_add_aff},
+                {"Apply [Hit] Points",       "hit",       APPLY_HIT,            edit_obj_add_aff},
+                {"Apply [Move]",             "move",      APPLY_MOVE,           edit_obj_add_aff},
 /*  {"Apply [Gold]","gold",APPLY_GOLD,edit_obj_add_aff},
   {"Apply [Exp]","exp",APPLY_EXP,edit_obj_add_aff}, */
-        {"Apply [Ac]",               "ac",        APPLY_AC,             edit_obj_add_aff},
-        {"Apply [Hitroll]",          "hitroll",   APPLY_HITROLL,        edit_obj_add_aff},
-        {"Apply [Damroll]",          "damroll",   APPLY_DAMROLL,        edit_obj_add_aff},
-        {"Apply [Saving] Spell",     "saving",    APPLY_SAVES,          edit_obj_add_aff},
-        {"Apply [Spell] Affect",     "spell",     APPLY_SPELL_AFFECT,   edit_obj_add_aff},
-        {"Apply [Reflex] Save",      "reflex",    APPLY_REFLEX_SAVE,    edit_obj_add_aff},
-        {"Apply [Will] Save",        "will",      APPLY_WILLPOWER_SAVE, edit_obj_add_aff},
-        {"Apply [Fortitude] Save",   "fortitude", APPLY_FORTITUDE_SAVE, edit_obj_add_aff},
-        {"[Done] Modifying Affects", "done",      ID_EDIT_PREVIOUS,     edit_obj_add_aff},
-        {"Goto [Main]",              "main",      ID_EDIT_GOTO_MAIN,    edit_goto_main},
-        {"[Exit] OLC",               "exit",      ID_EDIT_EXIT,         edit_exit},
-        {NULL,                       "", 0,                             NULL}
+                {"Apply [Ac]",               "ac",        APPLY_AC,             edit_obj_add_aff},
+                {"Apply [Hitroll]",          "hitroll",   APPLY_HITROLL,        edit_obj_add_aff},
+                {"Apply [Damroll]",          "damroll",   APPLY_DAMROLL,        edit_obj_add_aff},
+                {"Apply [Saving] Spell",     "saving",    APPLY_SAVES,          edit_obj_add_aff},
+                {"Apply [Spell] Affect",     "spell",     APPLY_SPELL_AFFECT,   edit_obj_add_aff},
+                {"Apply [Reflex] Save",      "reflex",    APPLY_REFLEX_SAVE,    edit_obj_add_aff},
+                {"Apply [Will] Save",        "will",      APPLY_WILLPOWER_SAVE, edit_obj_add_aff},
+                {"Apply [Fortitude] Save",   "fortitude", APPLY_FORTITUDE_SAVE, edit_obj_add_aff},
+                {"[Done] Modifying Affects", "done",      ID_EDIT_PREVIOUS,     edit_obj_add_aff},
+                {"Goto [Main]",              "main",      ID_EDIT_GOTO_MAIN,    edit_goto_main},
+                {"[Exit] OLC",               "exit",      ID_EDIT_EXIT,         edit_exit}
+        }
 };
 
-
-/* name
-   level
-   short
-   long
-   cost
-   weight
-   type
-   apply
-   extra
-   extended
-   wear
-   - food, liquid, armor, furniture, container, portal, spell, use
-   valuesfs
-*/
-
-MENU_ITEM obj_type_menu[] = {
-        {"Object Type Menu",             "", 30,                         NULL},
-        {" Type [Light]",                "light",     ITEM_LIGHT,        edit_obj_type},
-        {" Type [Scroll]",               "scroll",    ITEM_SCROLL,       edit_obj_type},
-        {" Type [Wand]",                 "wand",      ITEM_WAND,         edit_obj_type},
-        {" Type [Staff]",                "staff",     ITEM_STAFF,        edit_obj_type},
-        {" Type [Weapon]",               "weapon",    ITEM_WEAPON,       edit_obj_type},
+MENU_DATA _obj_type_menu = {
+        TWO_COLUMNS, 30,
+        {
+                {"Object Type Menu",             "",          -1,                NULL},
+                {" Type [Light]",                "light",     ITEM_LIGHT,        edit_obj_type},
+                {" Type [Scroll]",               "scroll",    ITEM_SCROLL,       edit_obj_type},
+                {" Type [Wand]",                 "wand",      ITEM_WAND,         edit_obj_type},
+                {" Type [Staff]",                "staff",     ITEM_STAFF,        edit_obj_type},
+                {" Type [Weapon]",               "weapon",    ITEM_WEAPON,       edit_obj_type},
 /*  {"Type [Treasure]","treasure",ITEM_TREASURE,edit_obj_type}, */
-        {" Type [Armor]",                "armor",     ITEM_ARMOR,        edit_obj_type},
-        {" Type [Potion]",               "potion",    ITEM_POTION,       edit_obj_type},
-        {" Type [Clothing]",             "clothing",  ITEM_CLOTHING,     edit_obj_type},
-        {" Type [Furniture]",            "furniture", ITEM_FURNITURE,    edit_obj_type},
-        {"Type [Trash]",                 "trash",     ITEM_TRASH,        edit_obj_type},
-        {"Type [Container]",             "container", ITEM_CONTAINER,    edit_obj_type},
-        {"Type [Drink] Container",       "drink",     ITEM_DRINK_CON,    edit_obj_type},
-        {"Type [Key]",                   "key",       ITEM_KEY,          edit_obj_type},
-        {"Type [Food]",                  "food",      ITEM_FOOD,         edit_obj_type},
-        {"Type [Money]",                 "money",     ITEM_MONEY,        edit_obj_type},
-        {"Type [Boat]",                  "boat",      ITEM_BOAT,         edit_obj_type},
-        {"Type [Corpse]",                "corpse",    ITEM_CORPSE_NPC,   edit_obj_type},
-        {"Type [Fountain]",              "fountain",  ITEM_FOUNTAIN,     edit_obj_type},
-        {"Type [Pill]",                  "pill",      ITEM_PILL,         edit_obj_type},
-        {"Type [Protect]",               "protect",   ITEM_PROTECT,      edit_obj_type},
-        {"Type [Map]",                   "map",       ITEM_MAP,          edit_obj_type},
-        {"Type [Portal]",                "portal",    ITEM_PORTAL,       edit_obj_type},
-        {"Type [Warp] Stone",            "warp",      ITEM_WARP_STONE,   edit_obj_type},
-        {"Type [Room] Key",              "room",      ITEM_ROOM_KEY,     edit_obj_type},
-        {"Type [Gem]",                   "gem",       ITEM_GEM,          edit_obj_type},
-        {"Type [Jewelry]",               "jewelry",   ITEM_JEWELRY,      edit_obj_type},
-        {"Type [Jukebox]",               "jukebox",   ITEM_JUKEBOX,      edit_obj_type},
-        {"Type [Trap]",                  "trap",      ITEM_TRAP,         edit_obj_type},
-        {"Type [Mixer]",                 "mixer",     ITEM_MIXER,        edit_obj_type},
-        {"Type [Grenade]",               "grenade",   ITEM_GRENADE,      edit_obj_type},
-        {"Type [Page]",                  "page",      ITEM_SPELL_PAGE,   edit_obj_type},
-        {"Type [Part]",                  "part",      ITEM_PART,         edit_obj_type},
-        {"Type [Forge]",                 "forge",     ITEM_FORGE,        edit_obj_type},
-        {"Type [Herb]",                  "herb",      ITEM_HERB,         edit_obj_type},
-        {"Type [Capsule]",               "capsule",   ITEM_CAPSULE,      edit_obj_type},
-        {"[Cancel] Setting Object Type", "cancel",    ID_EDIT_PREVIOUS,  edit_obj_type},
-        {"Goto [Main]",                  "main",      ID_EDIT_GOTO_MAIN, edit_goto_main},
-        {"[Exit] OLC",                   "exit",      ID_EDIT_EXIT,      edit_exit},
-        {NULL,                           "", 0,                          NULL}
+                {" Type [Armor]",                "armor",     ITEM_ARMOR,        edit_obj_type},
+                {" Type [Potion]",               "potion",    ITEM_POTION,       edit_obj_type},
+                {" Type [Clothing]",             "clothing",  ITEM_CLOTHING,     edit_obj_type},
+                {" Type [Furniture]",            "furniture", ITEM_FURNITURE,    edit_obj_type},
+                {"Type [Trash]",                 "trash",     ITEM_TRASH,        edit_obj_type},
+                {"Type [Container]",             "container", ITEM_CONTAINER,    edit_obj_type},
+                {"Type [Drink] Container",       "drink",     ITEM_DRINK_CON,    edit_obj_type},
+                {"Type [Key]",                   "key",       ITEM_KEY,          edit_obj_type},
+                {"Type [Food]",                  "food",      ITEM_FOOD,         edit_obj_type},
+                {"Type [Money]",                 "money",     ITEM_MONEY,        edit_obj_type},
+                {"Type [Boat]",                  "boat",      ITEM_BOAT,         edit_obj_type},
+                {"Type [Corpse]",                "corpse",    ITEM_CORPSE_NPC,   edit_obj_type},
+                {"Type [Fountain]",              "fountain",  ITEM_FOUNTAIN,     edit_obj_type},
+                {"Type [Pill]",                  "pill",      ITEM_PILL,         edit_obj_type},
+                {"Type [Protect]",               "protect",   ITEM_PROTECT,      edit_obj_type},
+                {"Type [Map]",                   "map",       ITEM_MAP,          edit_obj_type},
+                {"Type [Portal]",                "portal",    ITEM_PORTAL,       edit_obj_type},
+                {"Type [Warp] Stone",            "warp",      ITEM_WARP_STONE,   edit_obj_type},
+                {"Type [Room] Key",              "room",      ITEM_ROOM_KEY,     edit_obj_type},
+                {"Type [Gem]",                   "gem",       ITEM_GEM,          edit_obj_type},
+                {"Type [Jewelry]",               "jewelry",   ITEM_JEWELRY,      edit_obj_type},
+                {"Type [Jukebox]",               "jukebox",   ITEM_JUKEBOX,      edit_obj_type},
+                {"Type [Trap]",                  "trap",      ITEM_TRAP,         edit_obj_type},
+                {"Type [Mixer]",                 "mixer",     ITEM_MIXER,        edit_obj_type},
+                {"Type [Grenade]",               "grenade",   ITEM_GRENADE,      edit_obj_type},
+                {"Type [Page]",                  "page",      ITEM_SPELL_PAGE,   edit_obj_type},
+                {"Type [Part]",                  "part",      ITEM_PART,         edit_obj_type},
+                {"Type [Forge]",                 "forge",     ITEM_FORGE,        edit_obj_type},
+                {"Type [Herb]",                  "herb",      ITEM_HERB,         edit_obj_type},
+                {"Type [Capsule]",               "capsule",   ITEM_CAPSULE,      edit_obj_type},
+                {"[Cancel] Setting Object Type", "cancel",    ID_EDIT_PREVIOUS,  edit_obj_type},
+                {"Goto [Main]",                  "main",      ID_EDIT_GOTO_MAIN, edit_goto_main},
+                {"[Exit] OLC",                   "exit",      ID_EDIT_EXIT,      edit_exit}
+        }
 };
-
 
 struct val_type {
     int num;
@@ -1158,10 +1168,6 @@ void olc_log_string(CHAR_DATA *ch, char *str) {
     return;
 }
 
-void set_previous_menu(CHAR_DATA *ch) {
-    ch->pcdata->menu = ch->pcdata->edit.prev_menu;
-}
-
 bool check_range(CHAR_DATA *ch, int range_type, int vnum) {
     VNUM_RANGE_DATA *range;
 
@@ -1207,120 +1213,116 @@ bool check_range(CHAR_DATA *ch, int range_type, int vnum) {
 
 void build_flag_menu(char **flag_table, char *title, CHAR_DATA *ch) {
     int count = count_array_pointer(flag_table);
-    MENU_ITEM *flag_menu = NULL;
+    MENU_DATA *flag_menu = GC_MALLOC(sizeof(MENU_DATA));
+    MENU_ITEM *items = flag_menu->items;
 
-    flag_menu = GC_MALLOC(sizeof(MENU_ITEM) * (count + 3));
-    flag_menu[0].text = title ? title : "Set Flags";
-    flag_menu[0].menu_fun = edit_flags_init;
-    flag_menu[0].context = "";
+    items[0].text = title ? title : "Set Flags";
+    items[0].menu_fun = edit_flags_init;
+    items[0].context = "";
 
     if (count > 8) {
-        flag_menu[0].id = 30;
+        flag_menu->layout = TWO_COLUMNS;
+        flag_menu->column_width = 30;
     } else {
-        flag_menu[0].id = 0;
+        flag_menu->layout = ONE_COLUMN;
     }
 
     for (int t = 0; t < count; t++) {
-        flag_menu[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
-        sprintf(flag_menu[t + 1].text, "Toggle Flag [%s]", flag_table[t]);
-        flag_menu[t + 1].context = flag_table[t];
-        flag_menu[t + 1].id = 1 << t;
-        flag_menu[t + 1].menu_fun = edit_flags;
+        items[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
+        sprintf(items[t + 1].text, "Toggle Flag [%s]", flag_table[t]);
+        items[t + 1].context = flag_table[t];
+        items[t + 1].id = 1 << t;
+        items[t + 1].menu_fun = edit_flags;
     }
 
-    flag_menu[count].text = "[Done] Setting Flags";
-    flag_menu[count].context = "done";
-    flag_menu[count].id = ID_EDIT_DONE;
-    flag_menu[count].menu_fun = edit_flags;
+    items[count].text = "[Done] Setting Flags";
+    items[count].context = "done";
+    items[count].id = ID_EDIT_DONE;
+    items[count].menu_fun = edit_flags;
 
-    flag_menu[count + 1].text = '\0';
-    flag_menu[count + 1].menu_fun = NULL;
+    items[count + 1].text = '\0';
+    items[count + 1].menu_fun = NULL;
 
-    ch->pcdata->edit.prev_menu = ch->pcdata->menu;
+    set_previous_menu(ch);
     ch->pcdata->menu = flag_menu;
     ch->pcdata->edit.flag_table = flag_table;
 }
 
 void build_spec_menu(CHAR_DATA *ch) {
-    int count;
-    static MENU_ITEM *spec_menu = NULL;
+    int count = 0;
+    MENU_DATA *spec_menu = GC_MALLOC(sizeof(MENU_DATA));
+    spec_menu->layout = TWO_COLUMNS;
+    spec_menu->column_width = 30;
+    MENU_ITEM *items = spec_menu->items;
 
-    if (!spec_menu) {
-        count = 0;
-        while (spec_table[count].name) {
-            count++;
-        }
-
-        spec_menu = GC_MALLOC(sizeof(MENU_ITEM) * (count + 4));
-        spec_menu[0].text = "Select Special";
-
-        spec_menu[0].menu_fun = edit_mob_spec_init;
-        spec_menu[0].context = "";
-        spec_menu[0].id = 30;
-
-        for (int t = 0; t < count; t++) {
-            spec_menu[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
-            sprintf(spec_menu[t + 1].text, "%sSet [%s]", t < 9 ? " " : "", spec_table[t].name);
-            spec_menu[t + 1].context = spec_table[t].name;
-            spec_menu[t + 1].id = t;
-            spec_menu[t + 1].menu_fun = edit_mob_spec;
-        }
-        spec_menu[count + 1].text = "[Cancel] Selection";
-        spec_menu[count + 1].context = "cancel";
-        spec_menu[count + 1].id = ID_EDIT_DONE;
-        spec_menu[count + 1].menu_fun = edit_mob_spec;
-
-        spec_menu[count + 2].text = "[Remove] Special";
-        spec_menu[count + 2].context = "remove";
-        spec_menu[count + 2].id = ID_SPEC_NONE;
-        spec_menu[count + 2].menu_fun = edit_mob_spec;
-
-        spec_menu[count + 3].text = '\0';
-        spec_menu[count + 3].menu_fun = NULL;
+    while (spec_table[count].name) {
+        count++;
     }
 
-    ch->pcdata->edit.prev_menu = ch->pcdata->menu;
+    items[0].text = "Select Special";
+    items[0].menu_fun = edit_mob_spec_init;
+    items[0].context = "";
+    items[0].id = -1;
+
+    for (int t = 0; t < count; t++) {
+        items[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
+        sprintf(items[t + 1].text, "%sSet [%s]", t < 9 ? " " : "", spec_table[t].name);
+        items[t + 1].context = spec_table[t].name;
+        items[t + 1].id = t;
+        items[t + 1].menu_fun = edit_mob_spec;
+    }
+    items[count + 1].text = "[Cancel] Selection";
+    items[count + 1].context = "cancel";
+    items[count + 1].id = ID_EDIT_DONE;
+    items[count + 1].menu_fun = edit_mob_spec;
+
+    items[count + 2].text = "[Remove] Special";
+    items[count + 2].context = "remove";
+    items[count + 2].id = ID_SPEC_NONE;
+    items[count + 2].menu_fun = edit_mob_spec;
+
+    items[count + 3].text = '\0';
+    items[count + 3].menu_fun = NULL;
+
     ch->pcdata->menu = spec_menu;
+    set_previous_menu(ch);
 }
 
 void build_race_menu(CHAR_DATA *ch) {
     int count;
-    static MENU_ITEM *race_menu = NULL;
+    MENU_DATA *menu = GC_MALLOC(sizeof(MENU_DATA));
+    menu->layout = TWO_COLUMNS;
+    menu->column_width = 30;
+    MENU_ITEM *items = menu->items;
 
-    if (!race_menu) {
-        count = 0;
-        while (race_table[count].name) {
-            count++;
-        }
-
-        race_menu = GC_MALLOC(sizeof(MENU_ITEM) * (count + 3));
-
-        race_menu[0].text = "Select a Race";
-        race_menu[0].menu_fun = edit_mob_race_init;
-        race_menu[0].context = "";
-        race_menu[0].id = 30;
-
-        for (int t = 0; t < count; t++) {
-            race_menu[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
-            sprintf(race_menu[t + 1].text, "%sSet race to [%s]", t < 9 ? " " : "", race_table[t].name);
-            race_menu[t + 1].context = race_table[t].name;
-            race_menu[t + 1].id = t;
-            race_menu[t + 1].menu_fun = edit_mob_race;
-        }
-
-        race_menu[count + 1].text = "[Cancel] Race Selection";
-        race_menu[count + 1].context = "cancel";
-        race_menu[count + 1].id = ID_EDIT_DONE;
-        race_menu[count + 1].menu_fun = edit_mob_race;
-
-        race_menu[count + 2].text = '\0';
-        race_menu[count + 2].menu_fun = NULL;
+    count = 0;
+    while (race_table[count].name) {
+        count++;
     }
 
-    ch->pcdata->edit.prev_menu = ch->pcdata->menu;
-    ch->pcdata->menu = race_menu;
+    items[0].text = "Select a Race";
+    items[0].menu_fun = edit_mob_race_init;
+    items[0].context = "";
+    items[0].id = -1;
+
+    for (int t = 0; t < count; t++) {
+        items[t + 1].text = GC_MALLOC(MAX_INPUT_LENGTH);
+        sprintf(items[t + 1].text, "%sSet race to [%s]", t < 9 ? " " : "", race_table[t].name);
+        items[t + 1].context = race_table[t].name;
+        items[t + 1].id = t;
+        items[t + 1].menu_fun = edit_mob_race;
+    }
+
+    items[count + 1].text = "[Cancel] Race Selection";
+    items[count + 1].context = "cancel";
+    items[count + 1].id = ID_EDIT_DONE;
+    items[count + 1].menu_fun = edit_mob_race;
+
+    ch->pcdata->menu = menu;
+    set_previous_menu(ch);
 }
 
+/*
 void build_average_menu(char *title, CHAR_DATA *ch, MENU_FUN *call_back) {
     int t;
     MENU_ITEM *avg_menu;
@@ -1349,45 +1351,42 @@ void build_average_menu(char *title, CHAR_DATA *ch, MENU_FUN *call_back) {
     avg_menu[12].text = NULL;
     avg_menu[12].menu_fun = NULL;
 
-    ch->pcdata->edit.prev_menu = ch->pcdata->menu;
+    set_previous_menu(ch);
     ch->pcdata->menu = avg_menu;
 }
+ */
 
 void build_attack_menu(CHAR_DATA *ch, MENU_FUN call_back) {
-    int t, count;
-    MENU_ITEM *att_menu;
-
-    count = 0;
-    for (t = 0;; t++) {
+    MENU_DATA *menu = GC_MALLOC(sizeof(MENU_DATA));
+    menu->layout = TWO_COLUMNS;
+    menu->column_width = 20;
+    MENU_ITEM *items = menu->items;
+    int count = 0;
+    for (int t = 0;; t++) {
         if (!attack_table[t].name) break;
         count++;
     }
     count -= 2;
-    att_menu = GC_MALLOC(sizeof(MENU_ITEM) * (count + 3));
 
-    att_menu[0].text = str_dup("Attack Type Menu");
+    items[0].text = "Attack Type Menu";
+    items[0].menu_fun = call_back;
+    items[0].context = "";
+    items[0].id = -1;
 
-    att_menu[0].menu_fun = call_back;
-    att_menu[0].context = "";
-    att_menu[0].id = 20;
-    for (t = 1; t <= count; t++) {
-        char buf[MAX_STRING_LENGTH];
-
-        sprintf(buf, "%s%s", (t < 10) ? " " : "", capitalize(attack_table[t].name));
-        att_menu[t].text = str_dup(buf);
-        att_menu[t].context = attack_table[t].name;
-        att_menu[t].id = t;
-        att_menu[t].menu_fun = call_back;
+    for (int t = 1; t <= count; t++) {
+        items[t].text = GC_MALLOC(MAX_INPUT_LENGTH);
+        sprintf(items[t].text, "%s%s", (t < 10) ? " " : "", capitalize(attack_table[t].name));
+        items[t].context = attack_table[t].name;
+        items[t].id = t;
+        items[t].menu_fun = call_back;
     }
-    att_menu[count + 1].text = "[Cancel]";
-    att_menu[count + 1].context = "cancel";
-    att_menu[count + 1].id = ID_EDIT_CANCEL;
-    att_menu[count + 1].menu_fun = call_back;
-    att_menu[count + 2].text = '\0';
-    att_menu[count + 2].menu_fun = NULL;
+    items[count + 1].text = "[Cancel]";
+    items[count + 1].context = "cancel";
+    items[count + 1].id = ID_EDIT_CANCEL;
+    items[count + 1].menu_fun = call_back;
 
-    ch->pcdata->edit.prev_menu = ch->pcdata->menu;
-    ch->pcdata->menu = att_menu;
+    ch->pcdata->menu = menu;
+    set_previous_menu(ch);
 }
 
 void show_flags(int flags, char **flag_table, CHAR_DATA *ch) {
@@ -1419,10 +1418,11 @@ void edit_flags_init(CHAR_DATA *ch, int num) {
 
 void edit_flags(CHAR_DATA *ch, int num) {
     char buf[MAX_STRING_LENGTH];
-    MENU_ITEM *flag_menu = ch->pcdata->menu;
+    MENU_DATA *flag_menu = ch->pcdata->menu;
+    MENU_ITEM *items = flag_menu->items;
 
     if (num == ID_EDIT_DONE) {
-        set_previous_menu(ch);
+        set_from_previous_menu(ch);
         do_menu(ch, NULL);
         return;
     }
@@ -1430,11 +1430,11 @@ void edit_flags(CHAR_DATA *ch, int num) {
 
     TOGGLE_BIT (*ch->pcdata->edit.mod_flags, num);
     for (int t = 1; t < 50; t++) {
-        if (flag_menu[t].text == NULL) {
+        if (items[t].text == NULL) {
             break;
         }
-        if (flag_menu[t].id == num) {
-            flag = flag_menu[t].context;
+        if (items[t].id == num) {
+            flag = items[t].context;
             break;
         }
     }
@@ -1446,22 +1446,22 @@ void edit_flags(CHAR_DATA *ch, int num) {
 void edit_main(CHAR_DATA *ch, int num) {
     switch (num) {
         case ID_EDIT_SETTINGS:
-            ch->pcdata->menu = (MENU_ITEM *) &settings_menu;
+            ch->pcdata->menu = &_settings_menu;
             break;
         case ID_EDIT_AREA:
-            ch->pcdata->menu = (MENU_ITEM *) &area_menu;
+            ch->pcdata->menu = &_area_menu;
             break;
         case ID_EDIT_ROOM:
-            ch->pcdata->menu = (MENU_ITEM *) &room_menu;
+            ch->pcdata->menu = &_room_menu;
             break;
         case ID_EDIT_MOB:
-            ch->pcdata->menu = (MENU_ITEM *) &mob_menu;
+            ch->pcdata->menu = &_mob_menu;
             break;
         case ID_EDIT_OBJECT:
-            ch->pcdata->menu = (MENU_ITEM *) &object_menu;
+            ch->pcdata->menu = &_object_menu;
             break;
         case ID_EDIT_RESETS:
-            ch->pcdata->menu = (MENU_ITEM *) &reset_menu;
+            ch->pcdata->menu = &_reset_menu;
             break;
     }
     do_menu(ch, NULL);
@@ -1619,7 +1619,7 @@ void edit_area_new_vnum(CHAR_DATA *ch, char *arg) {
     pArea->next = NULL;
     top_area++;
 
-    create_room(ch, NULL, 0, TRUE);
+    create_room(ch, NULL, 0);
     update_area_list(ch, pArea->file_name);
     save_area(ch, pArea);
     send_to_char("Area created.\n\r>  ", ch);
@@ -1931,7 +1931,7 @@ EXIT_DATA *create_exit() {
     return exit;
 }
 
-bool create_room(CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir, int move_char) {
+bool create_room(CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir) {
     int vnum, t;
     ROOM_INDEX_DATA *pRoomIndex;
     static ROOM_INDEX_DATA zero_room;
@@ -1962,7 +1962,7 @@ bool create_room(CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir, int move_char) {
 
     if (vnum > ch->pcdata->edit.area->max_vnum_room)
         ch->pcdata->edit.area->max_vnum_room = vnum;
-    pRoomIndex = alloc_perm(sizeof(*pRoomIndex));
+    pRoomIndex = GC_MALLOC(sizeof(*pRoomIndex));
     *pRoomIndex = zero_room;
     pRoomIndex->owner = str_dup("");
     pRoomIndex->people = NULL;
@@ -1970,8 +1970,8 @@ bool create_room(CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir, int move_char) {
     pRoomIndex->extra_descr = NULL;
     pRoomIndex->area = ch->pcdata->edit.area;
     pRoomIndex->vnum = vnum;
-    pRoomIndex->name = str_dup_perm("Generic room name");
-    pRoomIndex->description = str_dup_perm("Generic room description.\n\r");
+    pRoomIndex->name = str_dup("Generic room name");
+    pRoomIndex->description = str_dup("Generic room description.\n\r");
     pRoomIndex->room_flags = 0;
     pRoomIndex->sector_type = ch->pcdata->edit.room->sector_type;
     pRoomIndex->light = 0;
@@ -2000,13 +2000,9 @@ bool create_room(CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir, int move_char) {
         send_to_char(buf, ch);
     }
 
-    if (move_char) {
-        char_from_room(ch);
-        char_to_room(ch, pRoomIndex);
-        ch->pcdata->edit.room = pRoomIndex;
-    } else {
-        do_menu(ch, NULL);
-    }
+    char_from_room(ch);
+    char_to_room(ch, pRoomIndex);
+    ch->pcdata->edit.room = pRoomIndex;
 
     return TRUE;
 }
@@ -2021,7 +2017,7 @@ void edit_room_create_dir(CHAR_DATA *ch, char *arg) {
             sprintf(buf, "Selected:  %s\n\r", dir_table[t]);
             send_to_char(buf, ch);
             ch->pcdata->interp_fun = do_menu;
-            if (create_room(ch, ch->pcdata->edit.room, t, TRUE)) {
+            if (create_room(ch, ch->pcdata->edit.room, t)) {
                 sprintf(buf, "Room [%d] created.\n\r>  ", ch->pcdata->edit.room->vnum);
                 send_to_char(buf, ch);
             } else {
@@ -2034,7 +2030,7 @@ void edit_room_create_dir(CHAR_DATA *ch, char *arg) {
     if (!str_prefix(arg, "none")) {
         ch->pcdata->interp_fun = do_menu;
         send_to_char("Selected:  None\n\r", ch);
-        if (create_room(ch, NULL, 0, TRUE)) {
+        if (create_room(ch, NULL, 0)) {
             sprintf(buf, "Room [%d] created.\n\r>  ", ch->pcdata->edit.room->vnum);
             send_to_char(buf, ch);
         } else {
@@ -2055,7 +2051,7 @@ void edit_room_create(CHAR_DATA *ch) {
         send_to_char("Which direction [north,east,south,west,up,down,none]:  ", ch);
         return;
     } else {
-        if (create_room(ch, NULL, 0, TRUE)) {
+        if (create_room(ch, NULL, 0)) {
             sprintf(buf, "Room [%d] created.\n\r>  ", ch->pcdata->edit.room->vnum);
             send_to_char(buf, ch);
         } else {
@@ -2094,12 +2090,12 @@ void edit_room_clone(CHAR_DATA *ch, char *arg) {
             ed_last->next = new_extra_descr();
             ed_last = ed_last->next;
         }
-        ed_last->keyword = str_dup_perm(ed_copy->keyword);
-        ed_last->description = str_dup_perm(ed_copy->description);
+        ed_last->keyword = str_dup(ed_copy->keyword);
+        ed_last->description = str_dup(ed_copy->description);
         ed_last->next = NULL;
     }
-    pRoomIndex->name = str_dup_perm(src->name);
-    pRoomIndex->description = str_dup_perm(src->description);
+    pRoomIndex->name = str_dup(src->name);
+    pRoomIndex->description = str_dup(src->description);
     pRoomIndex->room_flags = src->room_flags;
     pRoomIndex->sector_type = src->sector_type;
     pRoomIndex->light = src->light;
@@ -2173,7 +2169,7 @@ void edit_room(CHAR_DATA *ch, int num) {
             if (check_range(ch, RANGE_ROOM, -1)) {
                 sprintf(buf, "Modify room [%d].", ch->pcdata->edit.room->vnum);
                 olc_log_string(ch, buf);
-                ch->pcdata->menu = (MENU_ITEM *) &room_modify_menu;
+                ch->pcdata->menu = &_room_modify_menu;
                 do_menu(ch, NULL);
             }
             break;
@@ -2199,7 +2195,7 @@ void edit_room_name(CHAR_DATA *ch, char *arg) {
     }
 
     free_string(room->name);
-    room->name = str_dup_perm(arg);
+    room->name = str_dup(arg);
     sprintf(buf, "Room name set to '%s'\n\r>  ", room->name);
     send_to_char(buf, ch);
 }
@@ -2221,7 +2217,7 @@ void edit_sector_init(CHAR_DATA *ch, int num) {
 void edit_sector(CHAR_DATA *ch, int num) {
     char buf[MAX_STRING_LENGTH];
 
-    ch->pcdata->menu = (MENU_ITEM *) &room_modify_menu;
+    ch->pcdata->menu = &_room_modify_menu;
     if (num == ID_EDIT_PREVIOUS) {
         do_menu(ch, NULL);
         return;
@@ -2389,7 +2385,7 @@ void edit_room_door_keyword(CHAR_DATA *ch, char *arg) {
     }
 
     free_string(room->exit[ch->pcdata->edit.exit]->keyword);
-    room->exit[ch->pcdata->edit.exit]->keyword = str_dup_perm(arg);
+    room->exit[ch->pcdata->edit.exit]->keyword = str_dup(arg);
     sprintf(buf, "Exit %s keyword set to %s.\n\r>  ", dir_table[ch->pcdata->edit.exit], arg);
     send_to_char(buf, ch);
 }
@@ -2535,14 +2531,14 @@ void edit_room_exits(CHAR_DATA *ch, int num) {
             edit_door_remove(ch);
             break;
         case ID_EDIT_PREVIOUS:
-            ch->pcdata->menu = (MENU_ITEM *) &room_modify_menu;
+            ch->pcdata->menu = &_room_modify_menu;
             do_menu(ch, NULL);
             break;
     }
 }
 
 void edit_room_desc(CHAR_DATA *ch, char *buf) {
-    ch->pcdata->edit.room->description = str_dup_perm(buf);
+    ch->pcdata->edit.room->description = str_dup(buf);
     send_to_char(">  ", ch);
 }
 
@@ -2592,7 +2588,7 @@ void edit_room_extend_add(CHAR_DATA *ch, char *arg) {
     if (ed == NULL) {
         ed = new_extra_descr();
         ed->keyword = str_dup(arg);
-        ed->description = str_dup_perm("Generic extended description.\n\r");
+        ed->description = str_dup("Generic extended description.\n\r");
         ed->next = first_ed;
         ch->pcdata->edit.room->extra_descr = ed;
         send_to_char("Creating new extended.\n\r", ch);
@@ -2722,12 +2718,12 @@ void edit_room_modify(CHAR_DATA *ch, int num) {
             ch->pcdata->interp_fun = edit_room_mana;
             break;
         case ID_ROOM_DOOR:
-            ch->pcdata->menu = (MENU_ITEM *) &exit_modify_menu;
+            ch->pcdata->menu = &_exit_modify_menu;
             send_to_char("Which exit [north,east,south,west,up,down]:  ", ch);
             ch->pcdata->interp_fun = edit_room_door_select;
             break;
         case ID_ROOM_TERRAIN:
-            ch->pcdata->menu = (MENU_ITEM *) &sector_menu;
+            ch->pcdata->menu = &_sector_menu;
             do_menu(ch, NULL);
             break;
         case ID_ROOM_CLAN:
@@ -2743,7 +2739,7 @@ void edit_room_modify(CHAR_DATA *ch, int num) {
             ch->pcdata->interp_fun = edit_room_extend_rem;
             break;
         case ID_EDIT_PREVIOUS:
-            ch->pcdata->menu = (MENU_ITEM *) &room_menu;
+            ch->pcdata->menu = &_room_menu;
             do_menu(ch, NULL);
             break;
     }
@@ -2843,17 +2839,17 @@ void edit_mob_create(CHAR_DATA *ch) {
     if (vnum > ch->pcdata->edit.area->max_vnum_mob)
         ch->pcdata->edit.area->max_vnum_mob = vnum;
 
-    mob = alloc_perm(sizeof(MOB_INDEX_DATA));
+    mob = GC_MALLOC(sizeof(MOB_INDEX_DATA));
     mob->new_format = TRUE;
     mob->vnum = vnum;
     mob->spec_fun = NULL;
     mob->pShop = NULL;
     mob->count = 0;
     mob->killed = 0;
-    mob->player_name = str_dup_perm("generic mob");
-    mob->short_descr = str_dup_perm("Generic short description");
-    mob->long_descr = str_dup_perm("Generic long description");
-    mob->description = str_dup_perm("Generic description.");
+    mob->player_name = str_dup("generic mob");
+    mob->short_descr = str_dup("Generic short description");
+    mob->long_descr = str_dup("Generic long description");
+    mob->description = str_dup("Generic description.");
     mob->spec_words[0] = NULL;
     mob->spec_words[1] = NULL;
     mob->spec_words[2] = NULL;
@@ -2903,7 +2899,7 @@ void edit_mob_name(CHAR_DATA *ch, char *arg) {
     }
 
     free_string(mob->player_name);
-    mob->player_name = str_dup_perm(arg);
+    mob->player_name = str_dup(arg);
     sprintf(buf, "Name set to '%s'.\n\r>", mob->player_name);
     send_to_char(buf, ch);
 }
@@ -2920,7 +2916,7 @@ void edit_mob_short(CHAR_DATA *ch, char *arg) {
     }
 
     free_string(mob->short_descr);
-    mob->short_descr = str_dup_perm(arg);
+    mob->short_descr = str_dup(arg);
     sprintf(buf, "Short set to '%s'.\n\r> ", mob->short_descr);
     send_to_char(buf, ch);
 }
@@ -2938,7 +2934,7 @@ void edit_mob_long(CHAR_DATA *ch, char *arg) {
 
     strcat(arg, "\n\r");
     free_string(mob->long_descr);
-    mob->long_descr = str_dup_perm(arg);
+    mob->long_descr = str_dup(arg);
     sprintf(buf, "Long:  %s> ", mob->long_descr);
     send_to_char(buf, ch);
 }
@@ -2963,7 +2959,7 @@ void edit_mob_spec_words(CHAR_DATA *ch, char *arg) {
     }
 
     free_string(mob->spec_words[v]);
-    mob->spec_words[v] = str_dup_perm(arg);
+    mob->spec_words[v] = str_dup(arg);
     sprintf(buf, "Spec Words[%d]:  %s> ", v, mob->spec_words[v]);
     send_to_char(buf, ch);
 }
@@ -3014,7 +3010,7 @@ void edit_mob_align(CHAR_DATA *ch, char *arg) {
 
 void edit_mob_desc(CHAR_DATA *ch, char *buf) {
     /* free_string (ch->pcdata->edit.mob->description); */
-    ch->pcdata->edit.mob->description = str_dup_perm(buf);
+    ch->pcdata->edit.mob->description = str_dup(buf);
     send_to_char(">  ", ch);
 }
 
@@ -3184,12 +3180,12 @@ void edit_mob_attack(CHAR_DATA *ch, int num) {
         sprintf(buf, "Attack type now %s.\n\r>  ",
                 capitalize(attack_table[mob->dam_type].name));
         send_to_char(buf, ch);
-        set_previous_menu(ch);
+        set_from_previous_menu(ch);
         return;
 
     }
     send_to_char("Operation canceled.\n\r>  ", ch);
-    set_previous_menu(ch);
+    set_from_previous_menu(ch);
     do_menu(ch, NULL);
     return;
 }
@@ -3241,13 +3237,11 @@ void edit_mob_size_init(CHAR_DATA *ch, int num) {
 void edit_mob_size(CHAR_DATA *ch, int num) {
     if (num == ID_EDIT_CANCEL) {
         send_to_char("Operation Cancelled.\n\r", ch);
-        ch->pcdata->menu = (MENU_ITEM *) &mob_modify_menu;
-        do_menu(ch, NULL);
-        return;
+    } else {
+        ch->pcdata->edit.mob->size = num;
+        send_to_char("Ok.\n\r", ch);
     }
-    ch->pcdata->edit.mob->size = num;
-    send_to_char("Ok.\n\r", ch);
-    ch->pcdata->menu = (MENU_ITEM *) &mob_modify_menu;
+    ch->pcdata->menu = &_mob_modify_menu;
     do_menu(ch, NULL);
 }
 
@@ -3262,7 +3256,7 @@ void edit_mob_race(CHAR_DATA *ch, int num) {
     char buf[MAX_STRING_LENGTH];
 
     if (num == ID_EDIT_CANCEL) {
-        ch->pcdata->menu = ch->pcdata->edit.prev_menu;
+        set_from_previous_menu(ch);
         send_to_char("Operation Cancelled.\n\r", ch);
         do_menu(ch, NULL);
         return;
@@ -3271,7 +3265,7 @@ void edit_mob_race(CHAR_DATA *ch, int num) {
     ch->pcdata->edit.mob->race = num;
     sprintf(buf, "Race set to '%s'\n\r", race_table[ch->pcdata->edit.mob->race].name);
     send_to_char(buf, ch);
-    ch->pcdata->menu = ch->pcdata->edit.prev_menu;
+    set_from_previous_menu(ch);
     do_menu(ch, NULL);
 }
 
@@ -3290,7 +3284,7 @@ void edit_mob_spec(CHAR_DATA *ch, int num) {
     char buf[MAX_STRING_LENGTH];
 
     if (num == ID_EDIT_CANCEL) {
-        ch->pcdata->menu = ch->pcdata->edit.prev_menu;
+        set_from_previous_menu(ch);
         send_to_char("Operation Cancelled.\n\r", ch);
         do_menu(ch, NULL);
         return;
@@ -3305,7 +3299,7 @@ void edit_mob_spec(CHAR_DATA *ch, int num) {
     }
 
     send_to_char(buf, ch);
-    ch->pcdata->menu = ch->pcdata->edit.prev_menu;
+    set_from_previous_menu(ch);
     do_menu(ch, NULL);
 }
 
@@ -3320,7 +3314,7 @@ void edit_mob_pos_init(CHAR_DATA *ch, int num) {
 void edit_mob_position(CHAR_DATA *ch, int num) {
     char buf[MAX_STRING_LENGTH];
 
-    ch->pcdata->menu = (MENU_ITEM *) &mob_modify_menu;
+    ch->pcdata->menu = &_mob_modify_menu;
     switch (num) {
         case ID_EDIT_CANCEL:
             send_to_char("Operation cancelled.\n\r>  ", ch);
@@ -3430,7 +3424,7 @@ void edit_mob_modify(CHAR_DATA *ch, int num) {
             ch->pcdata->interp_fun = edit_mob_sex;
             break;
         case ID_MOB_POS:
-            ch->pcdata->menu = (MENU_ITEM *) &mob_position_menu;
+            ch->pcdata->menu = &_mob_position_menu;
             do_menu(ch, NULL);
             break;
         case ID_MOB_WEALTH:
@@ -3438,7 +3432,7 @@ void edit_mob_modify(CHAR_DATA *ch, int num) {
             ch->pcdata->interp_fun = edit_mob_wealth;
             break;
         case ID_MOB_SIZE:
-            ch->pcdata->menu = (MENU_ITEM *) &mob_size_menu;
+            ch->pcdata->menu = &_mob_size_menu;
             do_menu(ch, NULL);
             break;
         case ID_MOB_ALIGN:
@@ -3455,7 +3449,7 @@ void edit_mob_modify(CHAR_DATA *ch, int num) {
             do_menu(ch, NULL);
             break;
         case ID_EDIT_PREVIOUS:
-            ch->pcdata->menu = (MENU_ITEM *) &mob_menu;
+            ch->pcdata->menu = &_mob_menu;
             do_menu(ch, NULL);
             break;
     }
@@ -3488,7 +3482,7 @@ void edit_mob_copy(CHAR_DATA *ch, char *arg) {
         extern SHOP_DATA *shop_first, *shop_last;
         extern int top_shop;
 
-        pShop = alloc_perm(sizeof(*pShop));
+        pShop = GC_MALLOC(sizeof(*pShop));
         *pShop = *victim->pShop;
         pShop->keeper = mob->vnum;
         mob->pShop = pShop;
@@ -3503,13 +3497,13 @@ void edit_mob_copy(CHAR_DATA *ch, char *arg) {
     mob->count = 0;
     mob->killed = 0;
     free_string(mob->player_name);
-    mob->player_name = str_dup_perm(victim->player_name);
+    mob->player_name = str_dup(victim->player_name);
     free_string(mob->short_descr);
-    mob->short_descr = str_dup_perm(victim->short_descr);
+    mob->short_descr = str_dup(victim->short_descr);
     free_string(mob->long_descr);
-    mob->long_descr = str_dup_perm(victim->long_descr);
+    mob->long_descr = str_dup(victim->long_descr);
     free_string(mob->description);
-    mob->description = str_dup_perm(victim->description);
+    mob->description = str_dup(victim->description);
     mob->act = victim->act;
     mob->affected_by = victim->affected_by;
     mob->alignment = victim->alignment;
@@ -3636,7 +3630,7 @@ void edit_mob_conf_shop(CHAR_DATA *ch, char *arg) {
         int iTrade;
 
         mob = ch->pcdata->edit.mob;
-        pShop = alloc_perm(sizeof(*pShop));
+        pShop = GC_MALLOC(sizeof(*pShop));
         pShop->keeper = mob->vnum;
         for (iTrade = 0; iTrade < MAX_TRADE; iTrade++)
             pShop->buy_type[iTrade] = 0;
@@ -3659,7 +3653,7 @@ void edit_mob_conf_shop(CHAR_DATA *ch, char *arg) {
         return;
     }
 
-    ch->pcdata->menu = (MENU_ITEM *) &mob_shop_menu;
+    ch->pcdata->menu = &_mob_shop_menu;
     do_menu(ch, NULL);
 }
 
@@ -3788,7 +3782,7 @@ void edit_shop_info(CHAR_DATA *ch) {
 void edit_shop_remove(CHAR_DATA *ch) {
     ch->pcdata->edit.mob->pShop = NULL;
     send_to_char("Shop removed.\n\r", ch);
-    ch->pcdata->menu = (MENU_ITEM *) &mob_menu;
+    ch->pcdata->menu = &_mob_menu;
     ch->pcdata->interp_fun = do_menu;
     do_menu(ch, NULL);
 }
@@ -3818,7 +3812,7 @@ void edit_mob_shop(CHAR_DATA *ch, int num) {
             edit_shop_info(ch);
             break;
         case ID_EDIT_PREVIOUS:
-            ch->pcdata->menu = (MENU_ITEM *) &mob_menu;
+            ch->pcdata->menu = &_mob_menu;
             do_menu(ch, NULL);
             break;
     }
@@ -3867,7 +3861,7 @@ void edit_mob(CHAR_DATA *ch, int num) {
                 if (check_range(ch, RANGE_MOB, -1)) {
                     sprintf(buf, "Modify mob [%d].", ch->pcdata->edit.mob->vnum);
                     olc_log_string(ch, buf);
-                    ch->pcdata->menu = (MENU_ITEM *) &mob_modify_menu;
+                    ch->pcdata->menu = &_mob_modify_menu;
                     do_menu(ch, NULL);
                 }
             }
@@ -3891,7 +3885,7 @@ void edit_mob(CHAR_DATA *ch, int num) {
                     send_to_char("Mob is not a shopkeeper, make it one (Y/N)?  ", ch);
                     ch->pcdata->interp_fun = edit_mob_conf_shop;
                 } else {
-                    ch->pcdata->menu = (MENU_ITEM *) &mob_shop_menu;
+                    ch->pcdata->menu = &_mob_shop_menu;
                     do_menu(ch, NULL);
                 }
             }
@@ -4243,7 +4237,7 @@ void edit_obj_create(CHAR_DATA *ch) {
     if (vnum > ch->pcdata->edit.area->max_vnum_obj)
         ch->pcdata->edit.area->max_vnum_obj = vnum;
 
-    obj = alloc_perm(sizeof(OBJ_INDEX_DATA));
+    obj = GC_MALLOC(sizeof(OBJ_INDEX_DATA));
     obj->new_format = TRUE;
     obj->vnum = vnum;
     obj->area = ch->pcdata->edit.area;
@@ -4372,7 +4366,7 @@ void edit_obj_name(CHAR_DATA *ch, char *arg) {
     }
 
     free_string(obj->name);
-    obj->name = str_dup_perm(arg);
+    obj->name = str_dup(arg);
     sprintf(buf, "Name set to '%s'.\n\r>", obj->name);
     send_to_char(buf, ch);
 }
@@ -4388,7 +4382,7 @@ void edit_obj_material(CHAR_DATA *ch, char *arg) {
         return;
     }
 
-    obj->material = str_dup_perm(arg);
+    obj->material = str_dup(arg);
     sprintf(buf, "Material set to '%s'.\n\r> ", obj->material);
     send_to_char(buf, ch);
 }
@@ -4404,7 +4398,7 @@ void edit_obj_short(CHAR_DATA *ch, char *arg) {
         return;
     }
 
-    obj->short_descr = str_dup_perm(arg);
+    obj->short_descr = str_dup(arg);
     sprintf(buf, "Short set to '%s'.\n\r> ", obj->short_descr);
     send_to_char(buf, ch);
 }
@@ -4418,7 +4412,7 @@ void edit_obj_long(CHAR_DATA *ch, char *arg) {
         return;
     }
 
-    ch->pcdata->edit.obj->description = str_dup_perm(arg);
+    ch->pcdata->edit.obj->description = str_dup(arg);
     sprintf(buf, "Long set to '%s'.\n\r>  ", arg);
     send_to_char(buf, ch);
 }
@@ -4468,7 +4462,7 @@ void edit_obj_type(CHAR_DATA *ch, int num) {
         send_to_char(buf, ch);
     }
 
-    ch->pcdata->menu = (MENU_ITEM *) &obj_modify_menu;
+    ch->pcdata->menu = &_obj_modify_menu;
     do_menu(ch, NULL);
     return;
 }
@@ -4631,7 +4625,7 @@ void edit_obj_extend_add(CHAR_DATA *ch, char *arg) {
     if (ed == NULL) {
         ed = new_extra_descr();
         ed->keyword = str_dup(arg);
-        ed->description = str_dup_perm("Generic extended description.\n\r");
+        ed->description = str_dup("Generic extended description.\n\r");
         ed->next = first_ed;
         ch->pcdata->edit.obj->extra_descr = ed;
         send_to_char("Creating new extended.\n\r", ch);
@@ -4690,7 +4684,7 @@ void edit_obj_add_aff(CHAR_DATA *ch, int num) {
     AFFECT_DATA *paf;
 
     if (num == ID_EDIT_PREVIOUS) {
-        ch->pcdata->menu = (MENU_ITEM *) &obj_modify_menu;
+        ch->pcdata->menu = &_obj_modify_menu;
         do_menu(ch, NULL);
         return;
     }
@@ -4842,7 +4836,7 @@ void edit_obj_modify(CHAR_DATA *ch, int num) {
             ch->pcdata->interp_fun = edit_obj_material;
             break;
         case ID_OBJ_TYPE:
-            ch->pcdata->menu = (MENU_ITEM *) &obj_type_menu;
+            ch->pcdata->menu = &_obj_type_menu;
             do_menu(ch, NULL);
             break;
         case ID_OBJ_FLAGS:
@@ -4886,7 +4880,7 @@ void edit_obj_modify(CHAR_DATA *ch, int num) {
             ch->pcdata->interp_fun = edit_obj_extend_rem;
             break;
         case ID_OBJ_AFF_ADD:
-            ch->pcdata->menu = (MENU_ITEM *) &obj_affect_menu;
+            ch->pcdata->menu = &_obj_affect_menu;
             do_menu(ch, NULL);
             break;
         case ID_OBJ_AFF_REMOVE:
@@ -4897,7 +4891,7 @@ void edit_obj_modify(CHAR_DATA *ch, int num) {
                 send_to_char("No affects to remove.\n\r>  ", ch);
             break;
         case ID_EDIT_PREVIOUS:
-            ch->pcdata->menu = (MENU_ITEM *) &object_menu;
+            ch->pcdata->menu = &_object_menu;
             do_menu(ch, NULL);
             break;
     }
@@ -4948,7 +4942,7 @@ void edit_object(CHAR_DATA *ch, int num) {
                 if (check_range(ch, RANGE_OBJ, -1)) {
                     sprintf(buf, "Modify object [%d].", ch->pcdata->edit.obj->vnum);
                     olc_log_string(ch, buf);
-                    ch->pcdata->menu = (MENU_ITEM *) &obj_modify_menu;
+                    ch->pcdata->menu = &_obj_modify_menu;
                     do_menu(ch, NULL);
                 }
             }
@@ -5320,7 +5314,7 @@ void edit_reset_main(CHAR_DATA *ch, int num) {
 
 
 void edit_goto_main(CHAR_DATA *ch, int num) {
-    ch->pcdata->menu = (MENU_ITEM *) &edit_menu;
+    ch->pcdata->menu = &_edit_menu;
     do_menu(ch, NULL);
 }
 
@@ -5350,7 +5344,7 @@ void do_edit(CHAR_DATA *ch, char *argument) {
     }
 
     SET_BIT (ch->comm, COMM_IN_OLC);
-    ch->pcdata->menu = (MENU_ITEM *) &edit_menu;
+    ch->pcdata->menu = &_edit_menu;
     ch->pcdata->interp_fun = do_menu;
     if (ch->pcdata->edit.area == NULL) {
         ch->pcdata->edit.per_flags = EDIT_DEFAULT_ROOM | EDIT_DEFAULT_OBJ | EDIT_DEFAULT_MOB |
