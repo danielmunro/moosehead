@@ -79,7 +79,7 @@ void output_row(FILE *fp, OBJ_INDEX_DATA *obj, const char *area_name, const char
 void dump_obj_csv() {
     char filename[MAX_INPUT_LENGTH];
     sprintf(filename, "%s/items.csv", DATA_DIR);
-    sprintf(log_buf, "generate latest items list csv to %s", filename);
+    sprintf(log_buf, "generating latest object list CSV to %s", filename);
     log_string(log_buf);
     FILE *fp = fopen(filename, "w");
     if (fp == NULL) {
@@ -99,17 +99,13 @@ void dump_obj_csv() {
     ROOM_INDEX_DATA *room = NULL;
     OBJ_INDEX_DATA *container = NULL;
     while (area != NULL) {
-        sprintf(log_buf, "dumping objects for area :: %s", area->name);
-        log_string(log_buf);
         reset = area->reset_first;
         while (reset != NULL) {
             switch (reset->command) {
                 case 'M': // mob reset
-                    log_string("M");
                     mob = get_mob_index(reset->arg1);
                     break;
                 case 'O': // object in room
-                    log_string("O");
                     obj = get_obj_index(reset->arg1);
                     room = get_room_index(reset->arg3);
                     if (should_include(obj)) {
@@ -118,7 +114,6 @@ void dump_obj_csv() {
                     }
                     break;
                 case 'P': // object in object
-                    log_string("P");
                     obj = get_obj_index(reset->arg1);
                     container = get_obj_index(reset->arg3);
                     if (should_include(obj)) {
@@ -127,7 +122,6 @@ void dump_obj_csv() {
                     }
                     break;
                 case 'G': // give object to mobile
-                    log_string("G");
                     obj = get_obj_index(reset->arg1);
                     if (should_include(obj)) {
                         sprintf(where_buf, "inventory of %s", mob->short_descr);
@@ -135,7 +129,6 @@ void dump_obj_csv() {
                     }
                     break;
                 case 'E': // equip object to mobile
-                    log_string("E");
                     obj = get_obj_index(reset->arg1);
                     if (should_include(obj)) {
                         sprintf(where_buf, "equipped by %s", mob->short_descr);
@@ -146,12 +139,9 @@ void dump_obj_csv() {
                     break;
             }
             reset = reset->next;
-            log_string("done with resets");
         }
         area = area->next;
-        log_string("done with area");
     }
-    log_string("test");
     fclose(fp);
     log_string("done dumping objects");
 }
