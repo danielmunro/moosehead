@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include "log.h"
 
+/*
+ * Writes a string to stdout if LOG_LEVEL is set to the highest level, LOG_DEBUG.
+ */
 void log_debug(const char *str) {
     if (LOG_LEVEL >= LOG_DEBUG) {
         printf("[debug] %s\n", str);
@@ -8,7 +11,7 @@ void log_debug(const char *str) {
 }
 
 /*
- * Writes a string to stdout.  No specific log level.
+ * Writes a string to stdout if LOG_LEVEL is set to at least LOG_INFO.
  */
 void log_info(const char *str) {
     if (LOG_LEVEL >= LOG_INFO) {
