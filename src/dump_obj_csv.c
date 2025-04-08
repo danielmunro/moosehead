@@ -108,7 +108,11 @@ void dump_obj_csv() {
                 case 'O': // object in room
                     obj = get_obj_index(reset->arg1);
                     room = get_room_index(reset->arg3);
-                    if (should_include(obj)) {
+                    if (!obj || !room) {
+                        sprintf(log_buf, "error with object reset :: %s, %d, %d",
+                                area->name, !!obj, !!room);
+                        log_error(log_buf);
+                    } else if (should_include(obj)) {
                         sprintf(where_buf, "in room %s", room->name);
                         output_row(fp, obj, area->name, where_buf);
                     }
@@ -116,21 +120,33 @@ void dump_obj_csv() {
                 case 'P': // object in object
                     obj = get_obj_index(reset->arg1);
                     container = get_obj_index(reset->arg3);
-                    if (should_include(obj)) {
+                    if (!obj || !container) {
+                        sprintf(log_buf, "error with object in object reset :: %s, %d, %d",
+                                area->name, !!obj, !!container);
+                        log_error(log_buf);
+                    } else if (should_include(obj)) {
                         sprintf(where_buf, "in container %s", container->short_descr);
                         output_row(fp, obj, area->name, where_buf);
                     }
                     break;
                 case 'G': // give object to mobile
                     obj = get_obj_index(reset->arg1);
-                    if (should_include(obj)) {
+                    if (!obj || !mob) {
+                        sprintf(log_buf, "error with object in inventory reset :: %s, %d, %d",
+                                area->name, !!obj, !!mob);
+                        log_error(log_buf);
+                    } else if (should_include(obj)) {
                         sprintf(where_buf, "inventory of %s", mob->short_descr);
                         output_row(fp, obj, area->name, where_buf);
                     }
                     break;
                 case 'E': // equip object to mobile
                     obj = get_obj_index(reset->arg1);
-                    if (should_include(obj)) {
+                    if (!obj || !mob) {
+                        sprintf(log_buf, "error with object in equipment reset :: %s, %d, %d",
+                                area->name, !!obj, !!mob);
+                        log_error(log_buf);
+                    } else if (should_include(obj)) {
                         sprintf(where_buf, "equipped by %s", mob->short_descr);
                         output_row(fp, obj, area->name, where_buf);
                     }
