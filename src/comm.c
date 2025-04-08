@@ -55,6 +55,7 @@
 #include "handler.h"
 #include "act_comm.h"
 #include "clan.h"
+#include "log.h"
 
 /* command procedures needed */
 DECLARE_DO_FUN	( action_wraithform );
