@@ -5319,7 +5319,6 @@ void edit_goto_main(CHAR_DATA *ch, int num) {
 }
 
 void edit_exit(CHAR_DATA *ch, int num) {
-    ch->pcdata->menu = NULL;
     ch->pcdata->menu_data = NULL;
     ch->pcdata->interp_fun = NULL;
     REMOVE_BIT (ch->comm, COMM_IN_OLC);

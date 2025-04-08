@@ -114,9 +114,8 @@ void do_line_editor ( CHAR_DATA *ch, char *arg, DO_FUN *call_back )
       }      
     }
     editor->cur_line   = 0;    
-    editor->prev_menu  = ch->pcdata->menu;
-    /* ch->pcdata->menu = &line_menu;  */
-    editor->call_back  = call_back;    
+    editor->prev_menu_data = ch->pcdata->menu_data;
+    editor->call_back  = call_back;
     ch->pcdata->no_out = TRUE;
     SET_BIT(editor->flags,FLA_LINE_NUM);
     ch->pcdata->line_edit = editor;        
@@ -362,7 +361,7 @@ void insert_line_callback (CHAR_DATA *ch, char *arg)
         line = line->next;
       } 
       (*ch->pcdata->line_edit->call_back) (ch,bigbuf);
-      ch->pcdata->menu = ch->pcdata->line_edit->prev_menu;      
+      ch->pcdata->menu_data = ch->pcdata->line_edit->prev_menu_data;
       clear_buffer (ch);
       free_edit (ch->pcdata->line_edit);
       ch->pcdata->line_edit = NULL;
@@ -417,7 +416,7 @@ void insert_line_callback (CHAR_DATA *ch, char *arg)
       char_to_room (ch,ch->was_in_room);
       act("$N comes back from the line editor.",ch,NULL,NULL,TO_ROOM,TRUE);
     
-      ch->pcdata->menu = ch->pcdata->line_edit->prev_menu;      
+      ch->pcdata->menu_data = ch->pcdata->line_edit->prev_menu_data;
       clear_buffer (ch);
       free_edit (ch->pcdata->line_edit);
       ch->pcdata->line_edit = NULL;

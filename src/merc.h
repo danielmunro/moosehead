@@ -2413,8 +2413,8 @@ struct line_data {
 struct line_edit_data {
   LINE_EDIT_DATA *next;
   int         cur_line, mode, flags;
-  LINE_DATA   *line;  
-  MENU_ITEM   *prev_menu;
+  LINE_DATA   *line;
+  MENU_DATA   *prev_menu_data;
   DO_FUN      *call_back;
 };
 
@@ -2425,8 +2425,7 @@ struct  pc_data
 {
     PC_DATA *           next;
     BUFFER *            buffer;
-    DO_FUN  *           interp_fun;    
-    MENU_ITEM *         menu;
+    DO_FUN  *           interp_fun;
     MENU_DATA *         menu_data;
     EDIT_DATA           edit;    
     MACRO_DATA *        macro;    
