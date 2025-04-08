@@ -210,10 +210,8 @@ int run(const char *build_version, int port) {
     dump_obj_csv();
 
     sprintf(greeting_message, help_greeting, build_version);
-    sprintf(log_buf, "Build version is %-6.6s", build_version);
-    log_string(log_buf);
 
-    sprintf(log_buf, "MHS is ready on port %d.", port);
+    sprintf(log_buf, "MHS is ready :: port %d, build %-6.6s", port, build_version);
     log_string(log_buf);
 
     game_loop_unix(control);
