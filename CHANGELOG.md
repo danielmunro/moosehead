@@ -1,5 +1,31 @@
 # Changelog
 
+## 2025-04-08
+
+* Add log levels, default to `info`.
+
+## 2025-04-07
+
+* Switch to `main` for the default branch to match the prevailing convention for git and the maintainer's preferred name for the default branch.
+* Refactor OLC menus to add a top level MENU_DATA struct, which contains the below properties.  The menu layout and column width were previously encoded within the id of the header menu item, which overloaded this variable for multiple different purposes and was confusing.
+  * A layout style (ONE_COLUMN, TWO_COLUMNS)
+  * A column width -- for use when the layout is set to TWO_COLUMNS
+  * Menu items -- an array of selections that make up the menu
+
+## 2025-04-06
+
+* Fix a bug introduced when adding `dump_obj_csv.c`, where `area_first` was getting set to NULL (whoops).  Among other things, this was breaking resets.
+
+## 2025-04-05
+
+* Don't set the UID in the game anymore.  I'm sure this was the right call at the time, but especially now with docker builds the code should always run as root within its container.
+
+## 2025-04-04
+
+* Finish fixing all compiler warning.
+* Add `-Werror` to compiler flags, now all compiler warnings will be treated as errors.
+* Add `dev-reload.sh` helper script for easier dev-test loops.  Running `dev-reload.sh` will build the code, stop and remove the running game container, run the newly built container, and tail its logs.  
+
 ## 2025-03-30
 
 * Add build version to the greeting screen.
