@@ -80,7 +80,7 @@ void dump_obj_csv() {
     char filename[MAX_INPUT_LENGTH];
     sprintf(filename, "%s/items.csv", DATA_DIR);
     sprintf(log_buf, "generating latest object list CSV to %s", filename);
-    log_string(log_buf);
+    log_info(log_buf);
     FILE *fp = fopen(filename, "w");
     if (fp == NULL) {
         log_error("cannot write items.csv to data directory");

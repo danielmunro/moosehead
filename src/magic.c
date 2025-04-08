@@ -789,7 +789,7 @@ void do_quicken (CHAR_DATA *ch, char *argument)
    }
 
    sprintf(buf,"%s is quickening %s at %s",ch->name,skill_table[sn].name,victim->name);
-   log_string(buf);
+   log_info(buf);
 
    if (sn != skill_lookup("haste") &&
        sn != skill_lookup("giant strength") &&
@@ -5974,7 +5974,7 @@ void spell_lightning_bolt(int sn,int level,CHAR_DATA *ch,void *vo,int target)
     if ( level == 1 )
     { 
 	sprintf(log_buf,"%s casting lightning bolt",ch->name);
-	log_string(log_buf);
+	log_info(log_buf);
     }
 
     damage( ch, victim, dam, sn, DAM_LIGHTNING ,TRUE,TRUE);
@@ -7183,7 +7183,7 @@ void spell_summon( int sn, int level, CHAR_DATA *ch, void *vo,int target )
     if (!IS_NPC(victim))
     {
     sprintf(log_buf, "%s has summoned %s to Room [%d]", ch->name, victim->name, ch->in_room->vnum);
-    log_string(log_buf);
+    log_info(log_buf);
     }
 
     do_look( victim, "auto" );

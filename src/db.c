@@ -588,7 +588,7 @@ void rename_area (char *strArea)
   sprintf(filename, "%s/area/%s", DATA_DIR, strArea);
 
   sprintf(log_buf, "rename_area: attempting to load area file :: %s", filename);
-  log_string(log_buf);
+  log_info(log_buf);
   
   fp = fopen(filename,"r");
   if (fp != NULL) {    /* if the file exists, rename it */
@@ -611,10 +611,10 @@ void rename_area (char *strArea)
     }
     rename (filename,buf2);
     sprintf (sbuf,"Renaming '%s' as '%s'.",filename,buf2);
-    log_string (sbuf);    
+    log_info (sbuf);    
   } else {
       sprintf(log_buf, "rename_area: failed to load area file :: %s", filename);
-      log_string(log_buf);
+      log_info(log_buf);
   }
   
   strcpy(strBak, filename);
@@ -630,18 +630,18 @@ void rename_area (char *strArea)
   strcat (strBak,"bak");
 
   sprintf(log_buf, "rename_area: attempting to delete area file :: %s", filename);
-  log_string(log_buf);
+  log_info(log_buf);
 
   fp = fopen (filename,"r");
   if (fp != NULL) {
     fclose (fp);
     unlink (filename);
     sprintf (sbuf,"rename_area: deleted area file :: %s",filename);
-    log_string (sbuf);
+    log_info (sbuf);
   }
 
   sprintf(log_buf, "rename_area: attempting to restore area file from backup :: %s %s", filename, strBak);
-  log_string(log_buf);
+  log_info(log_buf);
 
   fp = fopen (strBak,"r");
   if (fp != NULL) {
@@ -649,7 +649,7 @@ void rename_area (char *strArea)
   
     rename(strBak, filename);
     sprintf(sbuf,"rename_area: renaming '%s' as '%s'", strBak, filename);
-    log_string(sbuf);
+    log_info(sbuf);
   } else {
     log_error("rename_area: could not find backup to recopy over.");
   }
@@ -659,7 +659,7 @@ void rename_area (char *strArea)
   
 //  if (fpReserve) fclose(fpReserve);
   if (LOG_FAILED_BOOT) {
-      log_string("sending note on failed boot");
+      log_info("sending note on failed boot");
       if ((fp = fopen(NOTE_FILE, "a")) == NULL) {
           perror(NOTE_FILE);
       } else {
@@ -1036,7 +1036,7 @@ void boot_db( void )
   top_help = load_new_helps(&help_first, &help_last);//New help code
 
   sprintf(log_buf, "loading areas from %s", AREA_LIST);
-  log_string(log_buf);
+  log_info(log_buf);
   if ( ( fpList = fopen( AREA_LIST, "r" ) ) == NULL )
   {
       perror( AREA_LIST );
@@ -1243,7 +1243,7 @@ void load_cstat( FILE *fp )
        cstat->kills = fread_number ( fp );
 
  sprintf(buf,"Cstat: %d kills %d",cstat->clan,cstat->kills);
- log_string(buf);
+ log_info(buf);
 
       if (cstat_first == NULL)
           cstat_first = cstat;
@@ -3134,7 +3134,7 @@ void ObjIndexToInstance ( OBJ_DATA *obj, OBJ_INDEX_DATA *pObjIndex, int level, b
 
 
       }
-      log_string(log_buf);
+      log_info(log_buf);
       weapons_popped = 0;
     }
 

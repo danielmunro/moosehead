@@ -152,7 +152,7 @@ if(ch->pcdata->clan_info)
   do_save_clan(ch->pcdata->clan_info->clan);
 
     sprintf(buf,"SCO Saving: %s.",ch->name);
-    log_string(buf);
+    log_info(buf);
 
     if ( (ch->desc != NULL) && (ch->desc->original != NULL) )
     ch = ch->desc->original;
@@ -661,7 +661,7 @@ void fwrite_obj( CHAR_DATA *ch, OBJ_DATA *obj, FILE *fp, int iNest )
 
           sprintf (buf,"Item [%d] under construction saving %s.",
             obj->pIndexData->vnum, capitalize (ch->name));
-          log_string ( buf );
+          log_info ( buf );
       }
       return;
     }
@@ -1145,7 +1145,7 @@ void fread_char( CHAR_DATA *ch, FILE *fp )
     int percent, count = 0;
 
     sprintf(buf,"Loading %s.",ch->name);
-    log_string(buf);
+    log_info(buf);
 
     for ( ; ; )
     {

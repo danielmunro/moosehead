@@ -494,7 +494,7 @@ void multi_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
 /* commented out to stop the useless log spam
  *
    sprintf(log_buf,"%s attacking %s",ch->name,victim->name);
-   log_string(log_buf);
+   log_info(log_buf);
  */
 
     /* decrement the wait */
@@ -1943,10 +1943,10 @@ bool damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt, int dam_type, boo
        )
     {
 //   sprintf(log_buf,"bef-buf:%s hit/dam:%d/%d dam: %d to %s",ch->name,ch->hitroll,ch->damroll,dam,victim->name);
-//   log_string(log_buf);
+//   log_info(log_buf);
         dam += (( ( 125 + (ch->level/2) ) * base_dam / 100) - base_dam );
 //   sprintf(log_buf,"aft-buf:%s hit/dam:%d/%d dam: %d to %s",ch->name,ch->hitroll,ch->damroll,dam,victim->name);
-//   log_string(log_buf);
+//   log_info(log_buf);
     }
 #endif
 
@@ -2593,7 +2593,7 @@ bool damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt, int dam_type, boo
                         (IS_NPC(victim) ? victim->short_descr : victim->name),
                         (IS_NPC(ch) ? ch->short_descr : ch->name),
                         died_in_room->name, died_in_room->vnum);
-                log_string(log_buf);
+                log_info(log_buf);
                 if (IS_NPC(victim))
                     wiznet(log_buf, NULL, NULL, WIZ_MOBDEATHS, 0, 0);
                 else {
@@ -2743,7 +2743,7 @@ bool damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt, int dam_type, boo
                                             victim->name, kch->in_room->vnum);
                                 }
                             }
-                            log_string(cdbuf);
+                            log_info(cdbuf);
 
                             kch->pcdata->last_kill = str_dup(victim->name);
                             victim->pcdata->last_killed_by = str_dup(kch->name);
@@ -2800,7 +2800,7 @@ bool damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt, int dam_type, boo
                                         kch->name, victim->pcdata->bounty, victim->name);
                                 wiznet(log_buf, NULL, NULL, WIZ_DEATHS, 0, 0);
                                 pnet(log_buf, NULL, NULL, PNET_BOUNTY, 0, 0);
-                                log_string(log_buf);
+                                log_info(log_buf);
                                 victim->pcdata->bounty = 0;
                             }
                         }
@@ -3002,7 +3002,7 @@ bool damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt, int dam_type, boo
                 died_in_room->name, died_in_room->vnum);
 
 
-        log_string(log_buf);
+        log_info(log_buf);
         if (IS_NPC(victim))
             wiznet(log_buf, NULL, NULL, WIZ_MOBDEATHS, 0, 0);
         else {
@@ -3013,7 +3013,7 @@ bool damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt, int dam_type, boo
         }
 
         sprintf(cdbuf, "before return: %s, ch: %s", victim->name, ch->name);
-        log_string(cdbuf);
+        log_info(cdbuf);
 
         return TRUE;
     } /* If victim position = DEAD */
@@ -3531,7 +3531,7 @@ void check_killer(CHAR_DATA *ch, CHAR_DATA *victim) {
        SET_BIT(victim->act,PLR_THIEF);
        sprintf( log_buf, "%s got a THIEF caught by %s infiltrating %d",
                 victim->name,ch->name,victim->in_room->vnum );
-        log_string( log_buf );
+        log_info( log_buf );
           sprintf(buf,"$N got a THIEF caught infiltrating by %s",ch->name);
           wiznet(buf,victim,NULL,WIZ_TRANSGRESSION,0,0);
      }
@@ -3571,7 +3571,7 @@ we'll find another solution to it -corey */
                     ch->pcdata->ruffT = 500;
                     sprintf(log_buf, "%s got a RUFFIAN attacking %s at %d", ch->name,
                             victim->name, ch->in_room->vnum);
-                    log_string(log_buf);
+                    log_info(log_buf);
                     sprintf(buf, "$N got a RUFFIAN by attacking %s", victim->name);
                     wiznet(buf, ch, NULL, WIZ_TRANSGRESSION, 0, 0);
                     //}
@@ -4587,7 +4587,7 @@ void highlander_die(CHAR_DATA *ch, CHAR_DATA *victim) {
             ch->max_hit, ch->max_mana, ch->max_move,
             ch->pcdata->highlander_data[ALL_KILLS],
             ch->pcdata->highlander_data[REAL_KILLS]);
-    log_string(buf);
+    log_info(buf);
     /* Add Victims Kills to ALL_KILLS */
     ch->pcdata->highlander_data[ALL_KILLS] += victim->pcdata->highlander_data[ALL_KILLS];
 
@@ -4614,7 +4614,7 @@ void highlander_die(CHAR_DATA *ch, CHAR_DATA *victim) {
             ch->max_hit, ch->max_mana, ch->max_move,
             ch->pcdata->highlander_data[ALL_KILLS],
             ch->pcdata->highlander_data[REAL_KILLS]);
-    log_string(buf);
+    log_info(buf);
 
     return;
 }
@@ -7535,10 +7535,10 @@ void do_rescue(CHAR_DATA *ch, char *argument) {
     one_argument(argument, arg2);
     if (!strcmp(arg2, "xvx2")) {
         sprintf(buf, "%s attempted to cheat rescue.", ch->name);
-        log_string(buf);
+        log_info(buf);
         if (ch->master) {
             sprintf(buf, "%s's ally attempted to cheat rescue.", ch->master->name);
-            log_string(buf);
+            log_info(buf);
         }
     }
     if (number_percent() > get_skill(ch, gsn_rescue) && strcmp(arg2, "~")) {

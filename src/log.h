@@ -2,7 +2,7 @@
 #define MOOSEHEAD_LOG_H
 
 void log_debug(const char *str);
-void log_string(const char *str);
+void log_info(const char *str);
 void log_error(const char *str);
 
 enum LogLevel {

@@ -146,7 +146,7 @@ void do_changepassword(CHAR_DATA *ch, char *argument) {
 
 	sprintf(buf, "Log %s: %s changing password to %s", victim->name, ch->name,
 			arg);
-	log_string(buf);
+	log_info(buf);
 
 	free_string(victim->pcdata->pwd);
 	victim->pcdata->pwd = str_dup(pwdnew);
@@ -684,7 +684,7 @@ void wiznet(char *string, CHAR_DATA *ch, OBJ_DATA *obj, long flag,
 		} else {
 			if (d->character->name != NULL)
 				sprintf(buf, "%s had a NULL descriptor", d->character->name);
-			log_string(buf);
+			log_info(buf);
 		}
 	}
 
@@ -712,7 +712,7 @@ void pnet(char *string, CHAR_DATA *ch, OBJ_DATA *obj, long flag, long flag_skip,
 		} else {
 			if (d->character->name != NULL)
 				sprintf(buf, "%s had a NULL descriptor", d->character->name);
-			log_string(buf);
+			log_info(buf);
 		}
 	}
 
@@ -735,7 +735,7 @@ void do_matlog( CHAR_DATA *ch, char *argument )
 		if ( ( pObjIndex = get_obj_index( vnum ) ) != NULL )
 		{
 			sprintf( buf, "%d %s", pObjIndex->vnum, pObjIndex->material );
-			log_string(buf);
+			log_info(buf);
 		}
 	}
 	send_to_char("Done sending all material types to the logfile.\n\r",ch);
@@ -1470,7 +1470,7 @@ void do_highlander(CHAR_DATA *ch, char *argument) {
 					victim->max_hit, victim->max_mana, victim->max_move,
 					victim->pcdata->highlander_data[ALL_KILLS],
 					victim->pcdata->highlander_data[REAL_KILLS]);
-			log_string(buf);
+			log_info(buf);
 			return;
 		}
 	}
@@ -1488,7 +1488,7 @@ void remove_highlander(CHAR_DATA *ch, CHAR_DATA *victim) {
 			victim->max_hit, victim->max_mana, victim->max_move,
 			victim->pcdata->highlander_data[ALL_KILLS],
 			victim->pcdata->highlander_data[REAL_KILLS]);
-	log_string(buf);
+	log_info(buf);
 
 	victim->pcdata->perm_hit -= (victim->pcdata->highlander_data[ALL_KILLS])
 			* 100;
@@ -1513,7 +1513,7 @@ void remove_highlander(CHAR_DATA *ch, CHAR_DATA *victim) {
 			victim->max_hit, victim->max_mana, victim->max_move,
 			victim->pcdata->highlander_data[ALL_KILLS],
 			victim->pcdata->highlander_data[REAL_KILLS]);
-	log_string(buf);
+	log_info(buf);
 
 	return;
 }
@@ -5808,7 +5808,7 @@ void do_sockets(CHAR_DATA *ch, char *argument) {
 									connect_table[d->connected] : "NULL",
 							(d->host != NULL) ? d->host : "NULL",
 							d->port);
-					log_string(cdbuf);
+					log_info(cdbuf);
 				}
 
 			} else if (d->character != NULL && can_see(ch, d->character, TRUE)

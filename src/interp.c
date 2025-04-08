@@ -684,13 +684,13 @@ void interpret( CHAR_DATA *ch, char *argument )
 if (cmd_table[cmd].log != LOG_NEVER) {
     wiznet(log_buf, ch, NULL, WIZ_SECURE, 0, get_trust(ch));
 }
-  log_string( log_buf );
+  log_info( log_buf );
     }
 /* Disabling the "temporary" log all
     else
     {
         sprintf( log_buf, "Log %s: %s", ch->name, logline );
-        log_string( log_buf );
+        log_info( log_buf );
     } */
 
     if ( ch->desc != NULL && ch->desc->snoop_by != NULL )

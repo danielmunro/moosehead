@@ -212,7 +212,7 @@ int run(const char *build_version, int port) {
     sprintf(greeting_message, help_greeting, build_version);
 
     sprintf(log_buf, "MHS is ready :: port %d, build %-6.6s", port, build_version);
-    log_string(log_buf);
+    log_info(log_buf);
 
     game_loop_unix(control);
 
@@ -221,7 +221,7 @@ int run(const char *build_version, int port) {
     /*
      * That's all, folks.
      */
-    log_string( "Normal termination of game." );
+    log_info( "Normal termination of game." );
     exit( 0 );
     return 0;
 }
@@ -296,7 +296,7 @@ void dummy()
 {
 	char log_buf[MAX_STRING_LENGTH];
 	sprintf( log_buf, "Alarm set off");
-	log_string( log_buf );
+	log_info( log_buf );
 	dns_site(NULL,dns_buf);
 	return;
 }
@@ -616,7 +616,7 @@ void init_descriptor(int control) {
                 (addr >> 8) & 0xFF, (addr) & 0xFF
         );
         sprintf(log_buf, "Sock.sinaddr:  %s", buf);
-        log_string(log_buf);
+        log_info(log_buf);
 
         dnew->port = ntohs(sock.sin_port);
         dnew->host = str_dup(from ? from->h_name : buf);
@@ -632,7 +632,7 @@ void init_descriptor(int control) {
      */
     if (check_ban(dnew->host, BAN_ALL)) {
         sprintf(log_buf, "Ban denied %s.", dnew->host);
-        log_string(log_buf);
+        log_info(log_buf);
         write_to_descriptor(desc,
                             "Your site has been banned from this Sled.\n\r", 0, dnew);
         write_to_descriptor(desc,
@@ -687,7 +687,7 @@ void close_socket( DESCRIPTOR_DATA *dclose )
     if ( ( ch = dclose->character ) != NULL )
     {
   sprintf( log_buf, "Closing link to %s.", ch->name );
-  log_string( log_buf );
+  log_info( log_buf );
   if ( dclose->connected == CON_PLAYING && !merc_down)
   {
       act( "$n has lost $s link.", ch, NULL, NULL, TO_ROOM ,FALSE);
@@ -736,7 +736,7 @@ bool read_from_descriptor( DESCRIPTOR_DATA *d )
     if ( iStart >= sizeof(d->inbuf) - 10 )
     {
   sprintf( log_buf, "%s input overflow!", d->host );
-  log_string( log_buf );
+  log_info( log_buf );
   write_to_descriptor( d->descriptor,
       "\n\r*** PUT A LID ON IT!!! ***\n\r", 0, d );
   return FALSE;
@@ -756,7 +756,7 @@ bool read_from_descriptor( DESCRIPTOR_DATA *d )
   }
   else if ( nRead == 0 )
   {
-      log_string( "EOF encountered on read." );
+      log_info( "EOF encountered on read." );
       return FALSE;
   }
   else if ( errno == EWOULDBLOCK )
@@ -1114,20 +1114,20 @@ void read_from_buffer( DESCRIPTOR_DATA *d )
       if ( ++d->repeat >= 25 && d->character && d->connected == CON_PLAYING)
       {
     sprintf( log_buf, "%s@%s input spamming!", d->character->name, d->host );
-    log_string( log_buf );
+    log_info( log_buf );
     wiznet("Spam spam spam $N spam spam spam spam spam!",
            d->character,NULL,WIZ_SPAM,0,get_trust(d->character));
     if (d->incomm[0] == '!')
     {
         wiznet(d->inlast,d->character,NULL,WIZ_SPAM,0,get_trust(d->character));
     sprintf( log_buf, "%s", d->inlast );
-    log_string( log_buf );
+    log_info( log_buf );
     }
     else
     {
         wiznet(d->incomm,d->character,NULL,WIZ_SPAM,0,get_trust(d->character));
     sprintf( log_buf, "%s", d->incomm );
-    log_string( log_buf );
+    log_info( log_buf );
     }
 
     d->repeat = 0;
@@ -2224,7 +2224,7 @@ void creation_finalize(DESCRIPTOR_DATA *d, bool def)
   if (!IS_SET(ch->mhs,MHS_PREFRESHED) && !IS_SET(ch->act,PLR_RECLASS))
   {
      sprintf( log_buf, "%s@%s new player.", ch->name, d->host );
-     log_string( log_buf );
+     log_info( log_buf );
      wiznet("Newbie alert!  $N sighted.",ch,NULL,WIZ_NEWBIE,0,0);
      wiznet(log_buf,NULL,NULL,WIZ_SITES,0,get_trust(ch));
 
@@ -2243,7 +2243,7 @@ void creation_finalize(DESCRIPTOR_DATA *d, bool def)
   {
      int newLevel;
      sprintf( log_buf, "%s@%s pfresh player.", ch->name, d->host );
-     log_string( log_buf );
+     log_info( log_buf );
      wiznet("Pfresh alert!  $N sighted.",ch,NULL,WIZ_NEWBIE,0,0);
      wiznet(log_buf,NULL,NULL,WIZ_SITES,0,get_trust(ch));
       /* calculate number of debit levels to give refresh chars */
@@ -2888,7 +2888,7 @@ void do_version_up(CHAR_DATA *ch)
     if(IS_SET(ch->act, PLR_DENY))
     {
       sprintf(buf, "Removing deny on %s", ch->name);
-      log_string(buf);
+      log_info(buf);
       REMOVE_BIT(ch->act, PLR_DENY);
     }
     REMOVE_BIT(ch->act, PLR_FREEZE);
@@ -2958,7 +2958,7 @@ void nanny( DESCRIPTOR_DATA *d, char *argument )
   if (IS_SET(ch->act, PLR_DENY) && (ch->version > 32 || IS_IMMORTAL(ch)))
   {
       sprintf( log_buf, "Denying access to %s@%s.", argument, d->host );
-      log_string( log_buf );
+      log_info( log_buf );
       write_to_buffer( d, "You are denied access.\n\r", 0 );
       close_socket( d );
       return;
@@ -2967,7 +2967,7 @@ void nanny( DESCRIPTOR_DATA *d, char *argument )
   if (check_ban(d->host,BAN_PERMIT) && !IS_SET(ch->act,PLR_PERMIT))
   {
       sprintf( log_buf, "Permit ban, denied %s@%s.", argument, d->host );
-      log_string( log_buf );
+      log_info( log_buf );
       write_to_buffer(d,"Your site has been banned from this Sled.\n\r",0);
       close_socket(d);
       return;
@@ -3066,7 +3066,7 @@ void nanny( DESCRIPTOR_DATA *d, char *argument )
       return;
 
   sprintf( log_buf, "%s@%s has connected.", ch->name, d->host );
-  log_string( log_buf );
+  log_info( log_buf );
   wiznet(log_buf,NULL,NULL,WIZ_SITES,0,get_trust(ch));
 
   if (ch->race == race_lookup("smurf"))
@@ -3085,7 +3085,7 @@ void nanny( DESCRIPTOR_DATA *d, char *argument )
          group_remove(ch,kit_table[ch->kit].skills[i]);
 
        sprintf(log_buf,"Taking buffy kit from %s and giving them 100 pracs .",ch->name);
-       log_string(log_buf);
+       log_info(log_buf);
 
     ch->kit = 0;
     ch->practice += 100;
@@ -3148,7 +3148,7 @@ if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
       {
        log_buf[0]='\0';
        sprintf(log_buf,"Taking %d from %s .",obj2->pIndexData->vnum,ch->name);
-       log_string(log_buf);
+       log_info(log_buf);
        extract_obj(obj2);
       }
       }
@@ -3174,7 +3174,7 @@ if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
       {
        log_buf[0]='\0';
        sprintf(log_buf,"Taking %d from %s and giving them two shards.",obj->pIndexData->vnum,ch->name);
-       log_string(log_buf);
+       log_info(log_buf);
        extract_obj(obj);
        obj_to_char(create_object(get_obj_index(OBJ_VNUM_SHARD),0,FALSE),ch);
        obj_to_char(create_object(get_obj_index(OBJ_VNUM_SHARD),0,FALSE),ch);
@@ -3573,10 +3573,10 @@ if( !IS_SET(ch->mhs,MHS_KAETH_CLEAN) && !IS_IMMORTAL(ch) )
          ch->gold = number_range( 20,40 );
          ch->silver = number_range( 300,600 );
        sprintf (buf,"SMURF: %s outfit",ch->name);
-       log_string(buf); 
+       log_info(buf); 
          do_outfit(ch,"");
        sprintf (buf,"SMURF: %s after outfit",ch->name);
-       log_string(buf); 
+       log_info(buf); 
          obj_to_char(create_object(get_obj_index(OBJ_VNUM_MAP),0,FALSE),ch);
          obj_to_char(create_object(get_obj_index(OBJ_VNUM_MAP_BOINGA),0,FALSE),ch);
       }
@@ -3872,7 +3872,7 @@ bool check_mob_name (char *name,bool old_char)
 
           sprintf (buf,"Warning:  name conflict for name '%s'",
             name);
-          log_string (buf);
+          log_info (buf);
         }
         return FALSE;
     }
@@ -3930,7 +3930,7 @@ bool check_reconnect( DESCRIPTOR_DATA *d, char *name, bool fConn )
     {
       sprintf( log_buf, "%s not found in char_list on reconnect",
 		d->character->name );
-      log_string( log_buf );
+      log_info( log_buf );
       d->character->next = char_list;
       char_list = d->character;
     }
@@ -3942,7 +3942,7 @@ bool check_reconnect( DESCRIPTOR_DATA *d, char *name, bool fConn )
         --ch->in_room->light;
 
     sprintf( log_buf, "%s@%s reconnected.", ch->name, d->host );
-    log_string( log_buf );
+    log_info( log_buf );
     wiznet("$N groks the fullness of $S link.",
         ch,NULL,WIZ_LINKS,0,get_trust(ch));
    if(!IS_IMMORTAL(ch))

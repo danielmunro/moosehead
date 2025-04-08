@@ -477,7 +477,7 @@ void save_area ( CHAR_DATA *ch, AREA_DATA *pArea )
       case 'D':
     room = get_room_index(reset->arg1);
 	sprintf(log_buf,"Reset: %d %d %d",reset->arg1,reset->arg2,reset->arg3);
-	log_string(log_buf);
+	log_info(log_buf);
     fprintf(fp,"D 0 %4d %3d %4d\t* %s %s\n",
         reset->arg1,reset->arg2,(reset->arg3|EX_NEW_FORMAT),
         room->name,dir_name[reset->arg2]);

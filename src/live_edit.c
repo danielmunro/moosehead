@@ -2226,7 +2226,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
   if(IS_IMMORTAL(ch))
   {
     sprintf(buf, "Imm hall edit (%s clan): %s", argument, ch->pcdata->clan_info ? ch->pcdata->clan_info->clan->name : "None");
-    log_string(buf);
+    log_info(buf);
   }
   /* Using nested ifs because switches get too cluttered for nesting */
   argument = one_argument(argument, arg);

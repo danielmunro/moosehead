@@ -10,7 +10,7 @@ void log_debug(const char *str) {
 /*
  * Writes a string to stdout.  No specific log level.
  */
-void log_string(const char *str) {
+void log_info(const char *str) {
     if (LOG_LEVEL >= LOG_INFO) {
         printf("[info ] %s\n", str);
     }

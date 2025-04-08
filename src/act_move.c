@@ -1514,7 +1514,7 @@ void do_open( CHAR_DATA *ch, char *argument )
       {
         sprintf(logbuf, "Error: Bad award vnum %d in capsule %d.",
           obj->value[3], obj->pIndexData->vnum);
-        log_string(logbuf);
+        log_info(logbuf);
       }
     }
     if(awarded)

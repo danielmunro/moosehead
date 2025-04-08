@@ -79,12 +79,12 @@ void do_ident( CHAR_DATA *ch, char *argument )
 	fport = 4000;
 /* Uncomment for debugging *
   sprintf( stder, "IdentInfo: %s %s %d %d", name,host,lport,fport);
-  log_string( stder );
+  log_info( stder );
 */
     fd = socket(AF_INET, SOCK_STREAM, 0);
     if (fd == -1) {
       sprintf (stder,"Ident:  socket_error");
-      log_string( stder );
+      log_info( stder );
       return;
     }
 
@@ -106,7 +106,7 @@ void do_ident( CHAR_DATA *ch, char *argument )
 
     if (connect(fd, (struct sockaddr *)&addr, addrlen) < 0) {
     sprintf(stder, "Connection failed for host: %s\n\r",host);
-    log_string(stder);
+    log_info(stder);
     send_to_char( stder, ch);
     return;
     }     
@@ -147,7 +147,7 @@ void do_ident( CHAR_DATA *ch, char *argument )
     sprintf(buf,"%s\n\r@%s",name,host);
 
     sprintf(stder, "%s = %s@%s\n\r",victim->name,name,host);
-    log_string(stder);
+    log_info(stder);
 
     strcat(buf,"\n\r");
     send_to_char(buf, ch);

@@ -651,7 +651,7 @@ void spell_knock(int sn,int level,CHAR_DATA *ch,void *vo,int target)
     int door;
 
     one_argument( target_name,  arg );
-    log_string( arg );
+    log_info( arg );
 
     if ( arg[0] == '\0' )
     {
@@ -2305,7 +2305,7 @@ void do_shapemorph( CHAR_DATA *ch, char *argument)
 
 
     sprintf(log_buf,"%s shapemorphing into %s",ch->name,argument);
-    log_string(log_buf);
+    log_info(log_buf);
 
    if( IS_NPC(ch) || !HAS_KIT(ch,"shapeshifter"))
    {
@@ -3065,7 +3065,7 @@ act("You feel as though you are being watched.",victim,NULL,NULL,TO_CHAR,FALSE);
     }
 
     sprintf(log_buf,"%s casting seer to find %s",ch->name,victim->name);
-    log_string(log_buf);
+    log_info(log_buf);
  sprintf(buf,"%s is at %s\n\r",IS_NPC(victim)?victim->short_descr:victim->name
 	,victim->in_room->name);
  send_to_char(buf,ch);
@@ -3079,7 +3079,7 @@ void spell_tsunami(int sn, int level, CHAR_DATA *ch, void *vo, int targ)
     CHAR_DATA *vch_next;
 
     sprintf(log_buf,"%s casting tsunami in room %d %s",ch->name,ch->in_room->vnum,ch->in_room->name);
-    log_string(log_buf);
+    log_info(log_buf);
 
     send_to_char( "You summon forth a wall of water!\n\r", ch );
     act( "$n summons forth a wall of water.", ch, NULL, NULL, TO_ROOM ,FALSE);

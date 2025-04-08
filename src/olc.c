@@ -1160,9 +1160,9 @@ int count_array_pointer(char **array) {
     }
 }
 
-void olc_log_string(CHAR_DATA *ch, char *str) {
+void olc_log_info(CHAR_DATA *ch, char *str) {
     sprintf(log_buf, "OLC %s - %s", ch->name, str);
-    log_string(log_buf);
+    log_info(log_buf);
     wiznet(log_buf, ch, NULL, WIZ_OLC, 0, get_trust(ch));
 
     return;
@@ -1695,7 +1695,7 @@ void edit_area_rename(CHAR_DATA *ch, char *arg) {
         send_to_char("Area renamed.\n\r>  ", ch);
 
         sprintf(buf, "Renamed area %s to %s.", buf2, area->name);
-        olc_log_string(ch, buf);
+        olc_log_info(ch, buf);
     } else {
         send_to_char("String must be at lest 16 characters.\n\r>  ", ch);
     }
@@ -1760,7 +1760,7 @@ void edit_area(CHAR_DATA *ch, int num) {
                     save_area(ch, ch->pcdata->edit.area);
                     send_to_char("Area saved.\n\r", ch);
                     sprintf(buf, "Saved area %s.", ch->pcdata->edit.area->name);
-                    olc_log_string(ch, buf);
+                    olc_log_info(ch, buf);
                 } else {
                     return;
                 }
@@ -1785,7 +1785,7 @@ void edit_area(CHAR_DATA *ch, int num) {
                     ch->pcdata->edit.area->freeze = temp;
                     send_to_char("Area reset.\n\r", ch);
                     sprintf(buf, "Reset area %s.", ch->pcdata->edit.area->name);
-                    olc_log_string(ch, buf);
+                    olc_log_info(ch, buf);
                 }
             } else {
                 return;
@@ -1795,7 +1795,7 @@ void edit_area(CHAR_DATA *ch, int num) {
             if (check_range(ch, RANGE_AREA, -1)) {
                 edit_area_purge(ch);
                 sprintf(buf, "Purged area %s.", ch->pcdata->edit.area->name);
-                olc_log_string(ch, buf);
+                olc_log_info(ch, buf);
             } else {
                 return;
             }
@@ -1809,11 +1809,11 @@ void edit_area(CHAR_DATA *ch, int num) {
                     if (ch->pcdata->edit.area->freeze) {
                         send_to_char("Area frozen.\n\r", ch);
                         sprintf(buf, "Froze area %s.", ch->pcdata->edit.area->name);
-                        olc_log_string(ch, buf);
+                        olc_log_info(ch, buf);
                     } else {
                         send_to_char("Area unfrozen.\n\r", ch);
                         sprintf(buf, "Unfroze area %s.", ch->pcdata->edit.area->name);
-                        olc_log_string(ch, buf);
+                        olc_log_info(ch, buf);
                     }
                 } else {
                     return;
@@ -1830,11 +1830,11 @@ void edit_area(CHAR_DATA *ch, int num) {
                     if (ch->pcdata->edit.area->freeze) {
                         send_to_char("Area marked under contruction.\n\r", ch);
                         sprintf(buf, "Construction on for area %s.", ch->pcdata->edit.area->name);
-                        olc_log_string(ch, buf);
+                        olc_log_info(ch, buf);
                     } else {
                         send_to_char("Under construction removed.\n\r", ch);
                         sprintf(buf, "Construction off for area %s.", ch->pcdata->edit.area->name);
-                        olc_log_string(ch, buf);
+                        olc_log_info(ch, buf);
                     }
                 } else {
                     return;
@@ -1957,7 +1957,7 @@ bool create_room(CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir) {
     }
 
     sprintf(buf, "Created room [%d].", vnum);
-    olc_log_string(ch, buf);
+    olc_log_info(ch, buf);
 
 
     if (vnum > ch->pcdata->edit.area->max_vnum_room)
@@ -2159,7 +2159,7 @@ void edit_room(CHAR_DATA *ch, int num) {
                 send_to_char("Enter vnum to copy from:  ", ch);
                 ch->pcdata->interp_fun = edit_room_clone;
                 sprintf(buf, "Copied to room [%d].", ch->pcdata->edit.room->vnum);
-                olc_log_string(ch, buf);
+                olc_log_info(ch, buf);
             }
             break;
         case ID_EDIT_LIST:
@@ -2168,7 +2168,7 @@ void edit_room(CHAR_DATA *ch, int num) {
         case ID_EDIT_MODIFY:
             if (check_range(ch, RANGE_ROOM, -1)) {
                 sprintf(buf, "Modify room [%d].", ch->pcdata->edit.room->vnum);
-                olc_log_string(ch, buf);
+                olc_log_info(ch, buf);
                 ch->pcdata->menu = &_room_modify_menu;
                 do_menu(ch, NULL);
             }
@@ -2834,7 +2834,7 @@ void edit_mob_create(CHAR_DATA *ch) {
     }
 
     sprintf(buf, "Created mob [%d].", vnum);
-    olc_log_string(ch, buf);
+    olc_log_info(ch, buf);
 
     if (vnum > ch->pcdata->edit.area->max_vnum_mob)
         ch->pcdata->edit.area->max_vnum_mob = vnum;
@@ -3851,7 +3851,7 @@ void edit_mob(CHAR_DATA *ch, int num) {
                 send_to_char("Enter vnum to copy from:  ", ch);
                 ch->pcdata->interp_fun = edit_mob_copy;
                 sprintf(buf, "Copied to mob [%d].", ch->pcdata->edit.mob->vnum);
-                olc_log_string(ch, buf);
+                olc_log_info(ch, buf);
             }
             break;
         case ID_EDIT_MODIFY:
@@ -3860,7 +3860,7 @@ void edit_mob(CHAR_DATA *ch, int num) {
             } else {
                 if (check_range(ch, RANGE_MOB, -1)) {
                     sprintf(buf, "Modify mob [%d].", ch->pcdata->edit.mob->vnum);
-                    olc_log_string(ch, buf);
+                    olc_log_info(ch, buf);
                     ch->pcdata->menu = &_mob_modify_menu;
                     do_menu(ch, NULL);
                 }
@@ -3880,7 +3880,7 @@ void edit_mob(CHAR_DATA *ch, int num) {
             }
             if (check_range(ch, RANGE_MOB, -1)) {
                 sprintf(buf, "Modify shop on mob [%d].", ch->pcdata->edit.mob->vnum);
-                olc_log_string(ch, buf);
+                olc_log_info(ch, buf);
                 if (!ch->pcdata->edit.mob->pShop) {
                     send_to_char("Mob is not a shopkeeper, make it one (Y/N)?  ", ch);
                     ch->pcdata->interp_fun = edit_mob_conf_shop;
@@ -4232,7 +4232,7 @@ void edit_obj_create(CHAR_DATA *ch) {
     }
 
     sprintf(buf, "Created object [%d].", vnum);
-    olc_log_string(ch, buf);
+    olc_log_info(ch, buf);
 
     if (vnum > ch->pcdata->edit.area->max_vnum_obj)
         ch->pcdata->edit.area->max_vnum_obj = vnum;
@@ -4931,7 +4931,7 @@ void edit_object(CHAR_DATA *ch, int num) {
                     send_to_char("Enter vnum to copy from:  ", ch);
                     ch->pcdata->interp_fun = edit_obj_copy;
                     sprintf(buf, "Copied to object [%d].", ch->pcdata->edit.obj->vnum);
-                    olc_log_string(ch, buf);
+                    olc_log_info(ch, buf);
                 }
             }
             break;
@@ -4941,7 +4941,7 @@ void edit_object(CHAR_DATA *ch, int num) {
             } else {
                 if (check_range(ch, RANGE_OBJ, -1)) {
                     sprintf(buf, "Modify object [%d].", ch->pcdata->edit.obj->vnum);
-                    olc_log_string(ch, buf);
+                    olc_log_info(ch, buf);
                     ch->pcdata->menu = &_obj_modify_menu;
                     do_menu(ch, NULL);
                 }
@@ -5120,7 +5120,7 @@ int add_door_resets_room(ROOM_INDEX_DATA *pRoom, AREA_DATA *area) {
                 ++reset_count;
                 add_reset(area, 'D', pRoom->vnum, dir, exit->exit_info, -1);
                 sprintf(log_buf, "door reset: %d %d %ld", pRoom->vnum, dir, exit->exit_info);
-                log_string(log_buf);
+                log_info(log_buf);
             }
         }
     }
@@ -5254,7 +5254,7 @@ void edit_reset_main(CHAR_DATA *ch, int num) {
             edit_reset_room(ch);
             send_to_char("\n\r>  ", ch);
             sprintf(buf, "Room resets for room [%d].", ch->pcdata->edit.room->vnum);
-            olc_log_string(ch, buf);
+            olc_log_info(ch, buf);
             break;
         case ID_EDIT_RESET_MOB:
             if (!check_range(ch, RANGE_AREA, -1)) return;
@@ -5265,7 +5265,7 @@ void edit_reset_main(CHAR_DATA *ch, int num) {
             sprintf(buf, "Added %d mob resets.\n\r>  ", count);
             send_to_char(buf, ch);
             sprintf(buf, "Mob resets for area %s.", ch->pcdata->edit.area->name);
-            olc_log_string(ch, buf);
+            olc_log_info(ch, buf);
             break;
         case ID_EDIT_RESET_OBJECT:
             if (!check_range(ch, RANGE_AREA, -1)) return;
@@ -5275,7 +5275,7 @@ void edit_reset_main(CHAR_DATA *ch, int num) {
             sprintf(buf, "Added %d object resets.\n\r>  ", count);
             send_to_char(buf, ch);
             sprintf(buf, "Object resets for area %s.", ch->pcdata->edit.area->name);
-            olc_log_string(ch, buf);
+            olc_log_info(ch, buf);
             break;
         case ID_EDIT_RESET_DOOR:
             if (!check_range(ch, RANGE_AREA, -1)) return;
@@ -5284,7 +5284,7 @@ void edit_reset_main(CHAR_DATA *ch, int num) {
             sprintf(buf, "Added %d door resets.\n\r>  ", count);
             send_to_char(buf, ch);
             sprintf(buf, "Door resets for area %s.", ch->pcdata->edit.area->name);
-            olc_log_string(ch, buf);
+            olc_log_info(ch, buf);
             break;
         case ID_EDIT_RESET_ALL:
             if (!check_range(ch, RANGE_AREA, -1)) return;
@@ -5307,7 +5307,7 @@ void edit_reset_main(CHAR_DATA *ch, int num) {
             send_to_char(buf, ch);
 
             sprintf(buf, "All resets for area %s.", ch->pcdata->edit.area->name);
-            olc_log_string(ch, buf);
+            olc_log_info(ch, buf);
             break;
     }
 }

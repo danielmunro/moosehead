@@ -1200,7 +1200,7 @@ void do_deposit( CHAR_DATA *ch, char *argument )
 
     sprintf(buf, "%s deposited %d eggs %d bricks for a new balance of %d eggs %d bricks.",
       ch->name, egg_deposit, brick_deposit, ch->pcdata->bank_eggs, ch->pcdata->bank_bricks);
-    log_string(buf);
+    log_info(buf);
 
     sprintf(buf,"Your balance is %d egg%s and %d platinum brick%s.\n\r",
       ch->pcdata->bank_eggs,ch->pcdata->bank_eggs == 1 ? "" : "s",
@@ -1332,7 +1332,7 @@ void do_withdraw( CHAR_DATA *ch, char *argument )
 
     sprintf(buf, "%s withdrew %d eggs %d bricks for a new balance of %d eggs %d bricks.",
       ch->name, egg_withdraw, brick_withdraw, ch->pcdata->bank_eggs, ch->pcdata->bank_bricks);
-    log_string(buf);
+    log_info(buf);
 
     for(; egg_withdraw > 0; egg_withdraw--)
     {
@@ -5970,7 +5970,7 @@ void do_snatch( CHAR_DATA *ch, char *argument )
      */
    sprintf(log_buf,"steal-bef:%s race %d cls %d lvl %d dex %d percent:%d victim %s lvl %d dex %d",ch->name,ch->race,ch->class,ch->level,
 get_curr_stat(ch,STAT_DEX),percent,victim->name,victim->level,get_curr_stat(victim,STAT_DEX));
-   log_string(log_buf);
+   log_info(log_buf);
     if (get_skill(ch,gsn_snatch) > 1)
     {
        percent  += ( IS_AWAKE(victim) ? 10 : -50 );
@@ -5992,7 +5992,7 @@ get_curr_stat(ch,STAT_DEX),percent,victim->name,victim->level,get_curr_stat(vict
     }
 
    sprintf(log_buf,"snatch-aft:%s skill %d percent:%d victim %s ",ch->name,(get_skill(ch,gsn_snatch)*9/10),percent,victim->name);
-   log_string(log_buf);
+   log_info(log_buf);
     if ( ((ch->level -7 > victim->level)
           && !IS_NPC(victim) && !IS_NPC(ch) )
        || ( !IS_NPC(ch) && percent > get_skill(ch,gsn_snatch) * 9 / 10 )
@@ -6055,7 +6055,7 @@ get_curr_stat(ch,STAT_DEX),percent,victim->name,victim->level,get_curr_stat(vict
                   send_to_char( "***{Y You are now a THIEF!!{x ***\n\r", ch );
                   sprintf(buf,"%s got THIEF on %s in room %d",ch->name,
                   victim->name,ch->in_room->vnum);
-                  log_string(buf);
+                  log_info(buf);
                   save_char_obj( ch );
              }
           }
@@ -6533,7 +6533,7 @@ return;
     return;
   }
  sprintf(log_buf,"steal-bef:%s race %d cls %d lvl %d dex %d percent:%d victim %s lvl %d dex %d",ch->name,ch->race,ch->class,ch->level,get_curr_stat(ch,STAT_DEX),percent,victim->name,victim->level,get_curr_stat(victim,STAT_DEX));
- log_string(log_buf);
+ log_info(log_buf);
   if (get_skill(ch,gsn_steal) > 1)
   {
     if(IS_AWAKE(victim))
@@ -6607,7 +6607,7 @@ return;
   }
 
  sprintf(log_buf,"steal-aft:%s skill %d percent:%d victim %s ",ch->name,(get_skill(ch,gsn_steal)*9/10),percent,victim->name);
- log_string(log_buf);
+ log_info(log_buf);
   if (
       ( !IS_NPC(ch) && percent > get_skill(ch,gsn_steal) * 9 / 10 )
      || ( !IS_NPC(victim) && !is_clan(ch)) )
@@ -6674,7 +6674,7 @@ return;
                 send_to_char( "*** You are now a THIEF!! ***\n\r", ch );
                 sprintf(buf,"%s got THIEF on %s in room %d",ch->name,
                 victim->name,ch->in_room->vnum);
-                log_string(buf);
+                log_info(buf);
                 save_char_obj( ch );
            }
         }

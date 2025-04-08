@@ -3624,7 +3624,7 @@ char *  capitalize      args( ( const char *str ) );
 void    append_file     args( ( CHAR_DATA *ch, char *file, char *str ) );
 
 void    bug             args( ( const char *str, int param ) );
-void    log_string      args( ( const char *str ) );
+void    log_info      args( ( const char *str ) );
 void    log_error       args( ( const char *str ) );
 int     get_area_min_vnum  args( (AREA_DATA *area) );
 int     get_area_max_vnum  args( (AREA_DATA *area) );

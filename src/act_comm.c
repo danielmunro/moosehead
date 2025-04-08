@@ -2661,7 +2661,7 @@ void do_quit( CHAR_DATA *ch, char *argument )
 	"Alas, all good things must come to an end.\n\r",ch);
     act( "$n has left the game.", ch, NULL, NULL, TO_ROOM, FALSE );
     sprintf( log_buf, "%s has quit.", ch->name );
-  log_string( log_buf );
+  log_info( log_buf );
   if (ch->desc == NULL) {
       strcpy(host, "linkdead");
   } else {
@@ -3713,7 +3713,7 @@ void gladiator_talk_ooc(char *txt)
          send_to_char(buf, victim);
       }
    }
-   log_string(buf);
+   log_info(buf);
 }
 
 void gladiator_talk(char *txt)
@@ -3736,7 +3736,7 @@ void gladiator_talk(char *txt)
          send_to_char(buf, victim);
       }
    }
-   log_string(buf);
+   log_info(buf);
 }
 
 void do_die( CHAR_DATA *ch, char *argument )
@@ -4091,7 +4091,7 @@ void do_bounty( CHAR_DATA *ch, char *argument )
     if ( !IS_SET(victim->comm,COMM_SILENCE) )
         act("The bounty on your head has been raised.",ch,NULL,victim,TO_VICT,FALSE);
     sprintf(log_buf,"%s sets a bounty of %ld on %s.",ch->name,amt,victim->name);
-    log_string(log_buf);
+    log_info(log_buf);
     wiznet(log_buf,NULL,NULL,WIZ_SECURE,0,0);
     sprintf(log_buf,"A bounty of %ld has been placed on %s.",amt,victim->name);
     pnet(log_buf,NULL,NULL,PNET_BOUNTY,0,0);
