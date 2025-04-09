@@ -23,12 +23,9 @@
 #include <time.h>
 #include "merc.h"
 #include "interp.h"
-#include "lookup.h"
 #include "tables.h"
-/*
- #include "imc-mercbase.h"
- #include "icec-mercbase.h"
- */
+#include "lookup.h"
+#include "flags.h"
 
 
 bool  check_social  args( ( CHAR_DATA *ch, char *command,

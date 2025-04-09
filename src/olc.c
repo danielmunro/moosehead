@@ -21,13 +21,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <gc.h>
 #include "merc.h"
 #include "recycle.h"
 #include "db.h"
 #include "ctype.h"
 #include "lookup.h"
-#include "tables.h"
-#include "gc.h"
 #include "input.h"
 #include "menu.h"
 

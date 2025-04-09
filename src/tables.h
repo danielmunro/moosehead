@@ -1,4 +1,5 @@
-/* $Id: tables.h,v 1.10 2000/08/17 14:29:30 mud Exp $" */
+#ifndef MOOSEHEAD_TABLES_H
+#define MOOSEHEAD_TABLES_H
 
 struct flag_type
 {
@@ -78,3 +79,4 @@ extern	const	struct	flag_type	room_flags[];
 extern	const	struct	flag_type	exit_flags[];
 extern  const   struct  flag_type       clan_flags[];
 
+#endif //MOOSEHEAD_TABLES_H
