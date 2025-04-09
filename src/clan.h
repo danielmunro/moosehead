@@ -1,8 +1,6 @@
 #ifndef MOOSEHEAD_CLAN_H
 #define MOOSEHEAD_CLAN_H
 
-#include "structs.h"
-
 void calculate_award_tribute(CLAN_DATA *clan);
 void notify_clan(char *string, CLAN_DATA *clan);
 bool notify_clan_leaders(char *string, CLAN_DATA *clan, bool offline);
