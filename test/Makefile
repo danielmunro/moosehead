@@ -1,7 +1,24 @@
-CC      = gcc
-PROF    = -O2 -ggdb
-OLC	= -DGAME_VERSION -DLOG_FAILED_BOOT=0 -DROM
-C_FLAGS =  -Dmoose -Wall $(PROF) $(OLC) -I/usr/local/include
+CC = gcc
+
+# add to C_FLAGS for profiling
+PROF = -ggdb
+
+# report all warnings, treat them as errors
+WARNINGS = -Wall -Werror
+
+# either GAME_VERSION or OLC_VERSION
+VERSION = -DGAME_VERSION
+
+# log behavior
+LOGS = -DLOG_FAILED_BOOT=0 -DLOG_LEVEL=1
+
+# include dirs for libraries
+INCLUDE = -I/usr/local/include
+
+# how much optimization gcc performs
+OPTIMIZATION_LEVEL = -O2
+
+C_FLAGS =  -Dmoose $(OPTIMIZATION_LEVEL) $(WARNINGS) $(VERSION) $(LOGS) $(INCLUDE)
 L_FLAGS =  -lm -lcrypt -lpthread -ldl -latomic_ops -lgc -ltap
 
 O_FILES = ../src/act_comm.o ../src/act_enter.o ../src/act_info.o ../src/act_move.o ../src/act_obj.o\
