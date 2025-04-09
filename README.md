@@ -25,3 +25,5 @@ $ ./run.sh mhs:latest
 * GitHub pages
 * Clean up duplicate code/functions
   * str_dup/str_dup_perm
+* Implement stdbool.h, remove `typedef unsigned char bool` in merc.h
+* Remove profiling from regular builds
