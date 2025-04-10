@@ -3,7 +3,8 @@
 set -e
 set -o xtrace
 
-TAG=$1
+IMAGE_REPO=$1
+TAG=$2
 
 docker pull $IMAGE_REPO:$TAG
 
