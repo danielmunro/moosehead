@@ -14,7 +14,7 @@ Requires docker to run locally. Use the helper `run.sh`:
 
 ```
 $ docker build . -t mhs:latest
-$ ./run.sh mhs:latest
+$ ./bin/run.sh mhs:latest
 ```
 
 ## Unordered Todos
@@ -26,4 +26,3 @@ $ ./run.sh mhs:latest
 * Clean up duplicate code/functions
   * str_dup/str_dup_perm
 * Implement stdbool.h, remove `typedef unsigned char bool` in merc.h
-* Remove profiling from regular builds
