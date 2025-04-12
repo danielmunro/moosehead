@@ -1,5 +1,8 @@
-#include <stdio.h>
 #include "merc.h"
+
+bool is_immortal(int level) {
+    return level > MAX_LEVEL - 8;
+}
 
 const char *get_immortal_role(int level) {
     switch (level) {

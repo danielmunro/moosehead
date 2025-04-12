@@ -88,7 +88,7 @@ char *build_players() {
         json_auto_t *name = json_string(full_name);
         json_object_set(player, "name", name);
 
-        if (wch->level > MAX_LEVEL - 8) {
+        if (is_immortal(wch->level)) {
             const char *imm = get_immortal_role(wch->level);
             json_auto_t *json_imm = json_string(imm);
             json_object_set(player, "level", json_imm);

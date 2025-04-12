@@ -4027,7 +4027,7 @@ if(wch->pcdata && wch->pcdata->clan_info)
    * Format it up.
    */
 
-  if (wch->level >= MAX_LEVEL - 8)
+  if (is_immortal(wch->level))
         {
 
     if ( wch->pcdata->who_name && (wch->pcdata->who_name[0] != '\0')) {
