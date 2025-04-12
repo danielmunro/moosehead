@@ -8,7 +8,9 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <gc.h>
+#include <jansson.h>
 
+#include "merc.h"
 #include "log.h"
 
 int server_fd;
@@ -66,6 +68,21 @@ void build_response(
     free(header);
 }
 
+char *build_players() {
+    json_auto_t *all_players = json_array();
+    DESCRIPTOR_DATA *d;
+    for (d = descriptor_list; d != NULL; d = d->next) {
+        if (d->connected != CON_PLAYING) {
+            continue;
+        }
+        json_auto_t *player = json_object();
+        json_auto_t *name = json_string(d->character->name);
+        json_object_set(player, "name", name);
+        json_array_append(all_players, player);
+    }
+    return json_dumps(all_players, JSON_INDENT(4));
+}
+
 void *handle_client(void *arg) {
     int client_fd = *((int *)arg);
     char *buffer = (char *) malloc(BUFFER_SIZE * sizeof(char));
@@ -76,6 +93,7 @@ void *handle_client(void *arg) {
         size_t response_len;
         char *output = "";
         if (strncmp(buffer, "GET /players ", 13) == 0) {
+            output = build_players();
             build_response("200 OK", output, response, &response_len);
         } else if (strncmp(buffer, "GET / ", 6) == 0) {
             build_response("200 OK", "I'm a teapot", response, &response_len);
