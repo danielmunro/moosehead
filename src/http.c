@@ -139,16 +139,13 @@ void *handle_client(void *arg) {
 void poll_http() {
     struct sockaddr_in client_addr;
     socklen_t client_addr_len = sizeof(client_addr);
-    int *client_fd = GC_MALLOC(sizeof(int));
-
-    if ((*client_fd = accept4(server_fd,
-                             (struct sockaddr *) &client_addr,
-                             &client_addr_len,
-                             SOCK_NONBLOCK)) < 0) {
-        return;
+    int client_fd = accept4(server_fd,
+                            (struct sockaddr *) &client_addr,
+                            &client_addr_len,
+                            SOCK_NONBLOCK);
+    if (client_fd > -1) {
+        pthread_t thread_id;
+        pthread_create(&thread_id, NULL, handle_client, (void *) &client_fd);
+        pthread_detach(thread_id);
     }
-
-    pthread_t thread_id;
-    pthread_create(&thread_id, NULL, handle_client, (void *) client_fd);
-    pthread_detach(thread_id);
 }
