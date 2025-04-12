@@ -79,7 +79,13 @@ char *build_players() {
         }
         wch = d->character;
         json_auto_t *player = json_object();
-        json_auto_t *name = json_string(wch->name);
+        char full_name[MAX_INPUT_LENGTH];
+        if (wch->pcdata->surname) {
+            sprintf(full_name, "%s %s", wch->name, wch->pcdata->surname);
+        } else {
+            sprintf(full_name, "%s", wch->name);
+        }
+        json_auto_t *name = json_string(full_name);
         json_object_set(player, "name", name);
 
         if (wch->level > MAX_LEVEL - 8) {
