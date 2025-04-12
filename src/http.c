@@ -71,13 +71,46 @@ void build_response(
 char *build_players() {
     json_auto_t *all_players = json_array();
     DESCRIPTOR_DATA *d;
+    CHAR_DATA *wch;
     for (d = descriptor_list; d != NULL; d = d->next) {
         if (d->connected != CON_PLAYING) {
             continue;
         }
+        wch = d->character;
         json_auto_t *player = json_object();
-        json_auto_t *name = json_string(d->character->name);
+        json_auto_t *name = json_string(wch->name);
         json_object_set(player, "name", name);
+
+        if (wch->level > MAX_LEVEL - 8) {
+            char *imm = "";
+            switch (wch->level) {
+                default: break;
+                    {
+                        case MAX_LEVEL - 0 : imm = "IMPLEMENTOR";    break;
+                        case MAX_LEVEL - 1 : imm = "CREATOR";    break;
+                        case MAX_LEVEL - 2 : imm = "SUPREMACY";    break;
+                        case MAX_LEVEL - 3 : imm = "DEITY";    break;
+                        case MAX_LEVEL - 4 : imm = "GOD";    break;
+                        case MAX_LEVEL - 5 : imm = "IMMORTAL";    break;
+                        case MAX_LEVEL - 6 : imm = "DEMIGOD";    break;
+                        case MAX_LEVEL - 7 : imm = "ANGEL";    break;
+                        case MAX_LEVEL - 8 : imm = "AVATAR";    break;
+                    }
+            }
+            json_auto_t *json_imm = json_string(imm);
+            json_object_set(player, "level", json_imm);
+        } else {
+            char *class = class_table[wch->class].name;
+            json_auto_t *json_class = json_string(class);
+            json_object_set(player, "class", json_class);
+
+            json_auto_t *race = json_string(race_table[wch->race].name);
+            json_object_set(player, "race", race);
+
+            json_auto_t *level = json_integer(wch->level);
+            json_object_set(player, "level", level);
+        }
+
         json_array_append(all_players, player);
     }
     return json_dumps(all_players, JSON_INDENT(4));
