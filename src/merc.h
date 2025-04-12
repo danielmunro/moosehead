@@ -16,9 +16,10 @@
  ***************************************************************************/
 
 #include <sys/time.h>
+#include <stdio.h>
+#include <stdbool.h>
 
 typedef short int     sh_int;
-typedef unsigned char bool;
 
 /*
  * Function types.
@@ -48,17 +49,9 @@ typedef void SPELL_FUN  args( ( int sn, int level, CHAR_DATA *ch, void *vo,
 int unlink();
 int system();
 
-/*
- * Short scalar types.
- * Diavolo reports AIX compiler has bugs with short types.
- */
-#if     !defined(FALSE)
-#define FALSE    0
-#endif
-
-#if     !defined(TRUE)
-#define TRUE     1
-#endif
+/* bc with existing code */
+#define FALSE    false
+#define TRUE     true
 
 typedef struct plan_exit_data           PLAN_EXIT_DATA;
 typedef struct alliance_data            ALLIANCE_DATA;
