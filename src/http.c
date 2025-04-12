@@ -52,8 +52,8 @@ void build_response(
         const char *buffer,
         char *response,
         size_t *response_len) {
-    char *header = (char *) malloc(BUFFER_SIZE * sizeof(char));
-    snprintf(header, BUFFER_SIZE,
+    snprintf(response,
+             BUFFER_SIZE,
              "HTTP/1.1 %s\r\n"
              "Content-Type: application/json\r\n"
              "\r\n"
@@ -61,11 +61,7 @@ void build_response(
              "%s",
              status,
              buffer);
-
-    *response_len = 0;
-    memcpy(response, header, strlen(header));
-    *response_len += strlen(header);
-    free(header);
+    *response_len = strlen(response);
 }
 
 const char *players_endpoint() {
