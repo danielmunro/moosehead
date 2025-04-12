@@ -56,6 +56,7 @@
 #include "act_comm.h"
 #include "clan.h"
 #include "log.h"
+#include "http.h"
 
 /* command procedures needed */
 DECLARE_DO_FUN	( action_wraithform );
@@ -204,6 +205,8 @@ int run(const char *build_version, int port) {
     control = init_socket(port);
     boot_db();
 
+    init_http_socket();
+
     /*
      * Get a fresh CSV dump of objects on every game startup.
      */
@@ -217,6 +220,7 @@ int run(const char *build_version, int port) {
     game_loop_unix(control);
 
     close(control);
+    close_http_socket();
 
     /*
      * That's all, folks.
@@ -533,6 +537,11 @@ void game_loop_unix(int control)
 
   gettimeofday( &last_time, NULL );
   current_time = (time_t) last_time.tv_sec;
+
+  /*
+   * Handle http requests
+   */
+  poll_http();
     }
     
     signal ( SIGSEGV, SIG_DFL );
@@ -542,7 +551,7 @@ void game_loop_unix(int control)
     signal ( SIGILL,  SIG_DFL );
     signal ( SIGIOT,  SIG_DFL );
     signal ( SIGKILL,  SIG_DFL );
-    signal ( SIGTERM,  SIG_DFL );    
+    signal ( SIGTERM,  SIG_DFL );
 
     return;
 }
