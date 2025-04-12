@@ -30,6 +30,7 @@
  #include "tables.h"
  #include "lookup.h"
  #include "gladiator.h"
+ #include "character.h"
 
  /* command procedures needed */
  DECLARE_DO_FUN( do_exits        );
@@ -3955,22 +3956,16 @@ void do_who( CHAR_DATA *ch, char *argument )
         /*
          * Figure out what to print for class.
    */
-  class = class_table[wch->class].who_name;
-
-  switch ( wch->level )
-  {
-  default: break;
-            {
-                case MAX_LEVEL - 0 : class = "IMPLEMENTOR ";    break;
-                case MAX_LEVEL - 1 : class = "  CREATOR   ";    break;
-                case MAX_LEVEL - 2 : class = " SUPREMACY  ";    break;
-                case MAX_LEVEL - 3 : class = "   DEITY    ";    break;
-                case MAX_LEVEL - 4 : class = "    GOD     ";    break;
-                case MAX_LEVEL - 5 : class = "  IMMORTAL  ";    break;
-                case MAX_LEVEL - 6 : class = "  DEMIGOD   ";    break;
-                case MAX_LEVEL - 7 : class = "   ANGEL    ";    break;
-                case MAX_LEVEL - 8 : class = "  AVATAR    ";    break;
-            }
+  if (wch->level >= MAX_LEVEL - 8) {
+      const int col_width = 12;
+      const char *imm_role = get_immortal_role(wch->level);
+      const int left_pad = (col_width - strlen(imm_role)) / 2;
+      const int right_pad = col_width - strlen(imm_role) - left_pad;
+      char buf[13];
+      sprintf(buf, "%*s%s%*s", left_pad, "", imm_role, right_pad, "");
+      class = (const char *)buf;
+  } else {
+      class = class_table[wch->class].who_name;
   }
 
     /*

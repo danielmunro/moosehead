@@ -12,6 +12,7 @@
 
 #include "merc.h"
 #include "log.h"
+#include "character.h"
 
 int server_fd;
 struct sockaddr_in server_addr;
@@ -82,25 +83,11 @@ char *build_players() {
         json_object_set(player, "name", name);
 
         if (wch->level > MAX_LEVEL - 8) {
-            char *imm = "";
-            switch (wch->level) {
-                default: break;
-                    {
-                        case MAX_LEVEL - 0 : imm = "IMPLEMENTOR";    break;
-                        case MAX_LEVEL - 1 : imm = "CREATOR";    break;
-                        case MAX_LEVEL - 2 : imm = "SUPREMACY";    break;
-                        case MAX_LEVEL - 3 : imm = "DEITY";    break;
-                        case MAX_LEVEL - 4 : imm = "GOD";    break;
-                        case MAX_LEVEL - 5 : imm = "IMMORTAL";    break;
-                        case MAX_LEVEL - 6 : imm = "DEMIGOD";    break;
-                        case MAX_LEVEL - 7 : imm = "ANGEL";    break;
-                        case MAX_LEVEL - 8 : imm = "AVATAR";    break;
-                    }
-            }
+            const char *imm = get_immortal_role(wch->level);
             json_auto_t *json_imm = json_string(imm);
             json_object_set(player, "level", json_imm);
         } else {
-            char *class = class_table[wch->class].name;
+            const char *class = class_table[wch->class].name;
             json_auto_t *json_class = json_string(class);
             json_object_set(player, "class", json_class);
 
