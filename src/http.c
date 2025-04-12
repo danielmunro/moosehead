@@ -68,7 +68,7 @@ void build_response(
     free(header);
 }
 
-char *build_players() {
+const char *players_endpoint() {
     json_auto_t *all_players = json_array();
     DESCRIPTOR_DATA *d;
     CHAR_DATA *wch;
@@ -108,6 +108,13 @@ char *build_players() {
     return json_dumps(all_players, JSON_INDENT(4));
 }
 
+const char *build_endpoint() {
+    json_auto_t *resp = json_object();
+    json_auto_t *build = json_string(build_version);
+    json_object_set(resp, "build", build);
+    return json_dumps(resp, JSON_INDENT(4));
+}
+
 void *handle_client(void *arg) {
     int client_fd = *((int *)arg);
     char *buffer = (char *) malloc(BUFFER_SIZE * sizeof(char));
@@ -116,20 +123,14 @@ void *handle_client(void *arg) {
     if (bytes_received > 0) {
         char *response = (char *) malloc(BUFFER_SIZE * 2 * sizeof(char));
         size_t response_len;
-        char *output = "";
         if (strncmp(buffer, "GET /players ", 13) == 0) {
-            output = build_players();
-            build_response("200 OK", output, response, &response_len);
+            build_response("200 OK", players_endpoint(), response, &response_len);
         } else if (strncmp(buffer, "GET /build ", 11) == 0) {
-            json_auto_t *resp = json_object();
-            json_auto_t *build = json_string(build_version);
-            json_object_set(resp, "build", build);
-            output = (char *) json_dumps(resp, JSON_INDENT(4));
-            build_response("200 OK", output, response, &response_len);
+            build_response("200 OK", build_endpoint(), response, &response_len);
         } else if (strncmp(buffer, "GET / ", 6) == 0) {
             build_response("200 OK", "", response, &response_len);
         } else {
-            build_response("404 Not Found", output, response, &response_len);
+            build_response("404 Not Found", "", response, &response_len);
         }
         send(client_fd, response, response_len, 0);
         free(response);
