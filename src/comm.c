@@ -146,8 +146,6 @@ sh_int		    posse_thug_kills;
 sh_int		    posse_ruffian_kills;
 const char *        build_version;
 
-
-#define PERMS  0666
 key_t msg_key;
 int   msg_id;
 
