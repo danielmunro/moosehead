@@ -16,10 +16,9 @@
 
 int server_fd;
 struct sockaddr_in server_addr;
-const int PORT = 4080;
 const int BUFFER_SIZE = 104857600;
 
-void init_http_socket() {
+void init_http_socket(const int port) {
     server_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
 
     if (server_fd < 0) {
@@ -29,7 +28,7 @@ void init_http_socket() {
 
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = INADDR_ANY;
-    server_addr.sin_port = htons(PORT);
+    server_addr.sin_port = htons(port);
 
     if (bind(server_fd,
              (struct sockaddr *) &server_addr,
@@ -121,8 +120,14 @@ void *handle_client(void *arg) {
         if (strncmp(buffer, "GET /players ", 13) == 0) {
             output = build_players();
             build_response("200 OK", output, response, &response_len);
+        } else if (strncmp(buffer, "GET /build ", 11) == 0) {
+            json_auto_t *resp = json_object();
+            json_auto_t *build = json_string(build_version);
+            json_object_set(resp, "build", build);
+            output = (char *) json_dumps(resp, JSON_INDENT(4));
+            build_response("200 OK", output, response, &response_len);
         } else if (strncmp(buffer, "GET / ", 6) == 0) {
-            build_response("200 OK", "I'm a teapot", response, &response_len);
+            build_response("200 OK", "", response, &response_len);
         } else {
             build_response("404 Not Found", output, response, &response_len);
         }

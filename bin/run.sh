@@ -12,4 +12,4 @@ docker run --publish 4000:4000 \
            --detach \
            --label mhs=true \
            --tty \
-           $IMAGE:$TAG $TAG 4000
+           $IMAGE:$TAG $TAG 4000 4080

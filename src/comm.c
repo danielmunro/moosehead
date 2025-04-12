@@ -144,6 +144,7 @@ sh_int		    posse_killer_kills;
 sh_int		    posse_thief_kills;
 sh_int		    posse_thug_kills;
 sh_int		    posse_ruffian_kills;
+const char *        build_version;
 
 
 #define PERMS  0666
@@ -181,7 +182,7 @@ void creation_message(DESCRIPTOR_DATA *d, bool forward);
 int creation_step(DESCRIPTOR_DATA *d, bool forward, bool accept);
 bool is_creation(DESCRIPTOR_DATA *d);
 
-int run(const char *build_version, int port) {
+int run(const int mud_port, const int http_port) {
     struct timeval now_time;
     int control = -1;
 
@@ -202,10 +203,10 @@ int run(const char *build_version, int port) {
     /*
      * Run the game.
      */
-    control = init_socket(port);
+    control = init_socket(mud_port);
     boot_db();
 
-    init_http_socket();
+    init_http_socket(http_port);
 
     /*
      * Get a fresh CSV dump of objects on every game startup.
@@ -214,7 +215,8 @@ int run(const char *build_version, int port) {
 
     sprintf(greeting_message, help_greeting, build_version);
 
-    sprintf(log_buf, "MHS is ready :: port %d, build %-6.6s", port, build_version);
+    sprintf(log_buf, "MHS is ready :: mud port %d, http port %d, build %-6.6s",
+            mud_port, http_port, build_version);
     log_info(log_buf);
 
     game_loop_unix(control);

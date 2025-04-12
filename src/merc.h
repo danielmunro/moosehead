@@ -92,9 +92,6 @@ typedef struct  vnum_range_data         VNUM_RANGE_DATA;
 typedef struct  card_data		        CARD_DATA;
 typedef struct  recipe_data             RECIPE_DATA;
 
-/* UID of the user that the game runs as */
-#define MUD_UID	1001
-
 /*
  * String and memory management parameters.
  */
