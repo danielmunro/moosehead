@@ -113,7 +113,7 @@ const char *build_endpoint() {
 
 const char *races_endpoint() {
     json_auto_t *resp = json_array();
-    for (int i = 1;; i++) {
+    for (int i = 0;; i++) {
         if (pc_race_table[i].name == NULL) {
             break;
         }
