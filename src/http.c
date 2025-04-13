@@ -20,7 +20,7 @@ struct sockaddr_in server_addr;
 const int BUFFER_SIZE = 104857600;
 
 void init_http_socket(const int port) {
-    server_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
+    server_fd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (server_fd < 0) {
         log_error("failed to set up web socket");
@@ -160,8 +160,7 @@ const char *races_endpoint() {
     return json_dumps(resp, JSON_INDENT(4));
 }
 
-void *handle_client(void *arg) {
-    int client_fd = *((int *)arg);
+void handle_client(int client_fd) {
     char *buffer = (char *) malloc(BUFFER_SIZE * sizeof(char));
 
     ssize_t bytes_received = recv(client_fd, buffer, BUFFER_SIZE, 0);
@@ -192,19 +191,18 @@ void *handle_client(void *arg) {
     }
     close(client_fd);
     free(buffer);
-    return NULL;
 }
 
-void poll_http() {
-    struct sockaddr_in client_addr;
-    socklen_t client_addr_len = sizeof(client_addr);
-    int client_fd = accept4(server_fd,
-                            (struct sockaddr *) &client_addr,
-                            &client_addr_len,
-                            SOCK_NONBLOCK);
-    if (client_fd > -1) {
-        pthread_t thread_id;
-        pthread_create(&thread_id, NULL, handle_client, (void *) &client_fd);
-        pthread_detach(thread_id);
+void *poll_http(void *arg) {
+    while (true) {
+        struct sockaddr_in client_addr;
+        socklen_t client_addr_len = sizeof(client_addr);
+        int client_fd = accept(server_fd,
+                                (struct sockaddr *) &client_addr,
+                                &client_addr_len);
+        if (client_fd > -1) {
+            handle_client(client_fd);
+        }
     }
+    return NULL;
 }

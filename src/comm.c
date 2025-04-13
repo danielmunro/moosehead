@@ -47,6 +47,8 @@
 #include <netdb.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <pthread.h>
+
 #include "merc.h"
 #include "recycle.h"
 #include "gladiator.h"
@@ -216,6 +218,10 @@ int run(const int mud_port, const int http_port) {
     sprintf(log_buf, "MHS is ready :: mud port %d, http port %d, build %-6.6s",
             mud_port, http_port, build_version);
     log_info(log_buf);
+
+    pthread_t http_thread;
+    pthread_create(&http_thread, NULL, poll_http, NULL);
+    pthread_detach(http_thread);
 
     game_loop_unix(control);
 
@@ -538,10 +544,6 @@ void game_loop_unix(int control)
   gettimeofday( &last_time, NULL );
   current_time = (time_t) last_time.tv_sec;
 
-  /*
-   * Handle http requests
-   */
-  poll_http();
     }
     
     signal ( SIGSEGV, SIG_DFL );
