@@ -111,6 +111,45 @@ const char *build_endpoint() {
     return json_dumps(resp, JSON_INDENT(4));
 }
 
+const char *races_endpoint() {
+    json_auto_t *resp = json_array();
+    for (int i = 1;; i++) {
+        if (pc_race_table[i].name == NULL) {
+            break;
+        }
+        json_auto_t *race = json_object();
+        json_auto_t *name = json_string(pc_race_table[i].name);
+        json_object_set(race, "name", name);
+        json_auto_t *cp = json_integer(pc_race_table[i].points);
+        json_object_set(race, "creationPoints", cp);
+        json_auto_t *skills = json_array();
+        int skill_count = sizeof(pc_race_table[i].skills) / sizeof(pc_race_table[i].skills[0]);
+        for (int j = 0; j < skill_count; j++) {
+            json_auto_t *skill = json_string(pc_race_table[i].skills[j]);
+            json_array_append(skills, skill);
+        }
+        json_object_set(race, "skills", skills);
+        json_auto_t *size = json_string(get_race_size(pc_race_table[i].size));
+        json_object_set(race, "size", size);
+        json_auto_t *stats = json_object();
+        json_auto_t *stat_str = json_integer(pc_race_table[i].stats[0]);
+        json_object_set(stats, "str", stat_str);
+        json_auto_t *stat_int = json_integer(pc_race_table[i].stats[1]);
+        json_object_set(stats, "int", stat_int);
+        json_auto_t *stat_wis = json_integer(pc_race_table[i].stats[2]);
+        json_object_set(stats, "wis", stat_wis);
+        json_auto_t *stat_dex = json_integer(pc_race_table[i].stats[3]);
+        json_object_set(stats, "dex", stat_dex);
+        json_auto_t *stat_con = json_integer(pc_race_table[i].stats[4]);
+        json_object_set(stats, "con", stat_con);
+        json_auto_t *stat_cha = json_integer(pc_race_table[i].stats[5]);
+        json_object_set(stats, "cha", stat_cha);
+        json_object_set(race, "stats", stats);
+        json_array_append(resp, race);
+    }
+    return json_dumps(resp, JSON_INDENT(4));
+}
+
 void *handle_client(void *arg) {
     int client_fd = *((int *)arg);
     char *buffer = (char *) malloc(BUFFER_SIZE * sizeof(char));
@@ -123,6 +162,8 @@ void *handle_client(void *arg) {
             build_response("200 OK", players_endpoint(), response, &response_len);
         } else if (strncmp(buffer, "GET /build ", 11) == 0) {
             build_response("200 OK", build_endpoint(), response, &response_len);
+        } else if (strncmp(buffer, "GET /races ", 11) == 0) {
+            build_response("200 OK", races_endpoint(), response, &response_len);
         } else if (strncmp(buffer, "GET / ", 6) == 0) {
             build_response("200 OK", "", response, &response_len);
         } else {

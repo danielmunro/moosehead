@@ -18,3 +18,22 @@ const char *get_immortal_role(int level) {
         default: return "";
     }
 }
+
+const char *get_race_size(int size) {
+    switch (size) {
+        case SIZE_TINY:
+            return "tiny";
+        case SIZE_SMALL:
+            return "small";
+        case SIZE_MEDIUM:
+            return "medium";
+        case SIZE_LARGE:
+            return "large";
+        case SIZE_HUGE:
+            return "huge";
+        case SIZE_GIANT:
+            return "gigantic";
+        default:
+            return "unknown";
+    }
+}
