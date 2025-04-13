@@ -13,6 +13,7 @@
 #include "merc.h"
 #include "log.h"
 #include "character.h"
+#include "string_ext.h"
 
 int server_fd;
 struct sockaddr_in server_addr;
@@ -145,6 +146,15 @@ const char *races_endpoint() {
         json_auto_t *stat_cha = json_integer(pc_race_table[i].stats[5]);
         json_object_set(stats, "cha", stat_cha);
         json_object_set(race, "stats", stats);
+        HELP_TRACKER *pTrack = help_tracks[0];
+        while (pTrack != NULL) {
+            if (str_cmp(pc_race_table[i].name, pTrack->keyword) == 0) {
+                json_auto_t *help_text = json_string(replace_str(pTrack->help->text, "\n\r", ""));
+                json_object_set(race, "description", help_text);
+                break;
+            }
+            pTrack = pTrack->next;
+        }
         json_array_append(resp, race);
     }
     return json_dumps(resp, JSON_INDENT(4));
