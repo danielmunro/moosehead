@@ -168,17 +168,25 @@ void *handle_client(void *arg) {
     if (bytes_received > 0) {
         char *response = (char *) malloc(BUFFER_SIZE * 2 * sizeof(char));
         size_t response_len;
+        const char *status;
+        const char *output;
         if (strncmp(buffer, "GET /players ", 13) == 0) {
-            build_response("200 OK", players_endpoint(), response, &response_len);
+            status = "200 OK";
+            output = players_endpoint();
         } else if (strncmp(buffer, "GET /build ", 11) == 0) {
-            build_response("200 OK", build_endpoint(), response, &response_len);
+            status = "200 OK";
+            output = build_endpoint();
         } else if (strncmp(buffer, "GET /races ", 11) == 0) {
-            build_response("200 OK", races_endpoint(), response, &response_len);
+            status = "200 OK";
+            output = races_endpoint();
         } else if (strncmp(buffer, "GET / ", 6) == 0) {
-            build_response("200 OK", "", response, &response_len);
+            status = "200 OK";
+            output = "";
         } else {
-            build_response("404 Not Found", "", response, &response_len);
+            status = "404 Not Found";
+            output = "";
         }
+        build_response(status, output, response, &response_len);
         send(client_fd, response, response_len, 0);
         free(response);
     }
