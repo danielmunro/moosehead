@@ -57,7 +57,7 @@ void build_response(
              BUFFER_SIZE,
              "HTTP/1.1 %s\r\n"
              "Content-Type: application/json\r\n"
-             "\r\n"
+             "Cache-Control: max-age=60\r\n"
              "\r\n"
              "%s",
              status,
