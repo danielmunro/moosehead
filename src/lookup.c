@@ -147,7 +147,26 @@ int size_lookup (const char *name)
    return -1;
 }
 
-char *stat_lookup (sh_int stat) {
+const char *size_name_lookup(int size) {
+    switch (size) {
+        case SIZE_TINY:
+            return "tiny";
+        case SIZE_SMALL:
+            return "small";
+        case SIZE_MEDIUM:
+            return "medium";
+        case SIZE_LARGE:
+            return "large";
+        case SIZE_HUGE:
+            return "huge";
+        case SIZE_GIANT:
+            return "gigantic";
+        default:
+            return "unknown";
+    }
+}
+
+char *stat_name_lookup (sh_int stat) {
     switch (stat) {
         case STAT_STR:
             return "strength";
@@ -188,5 +207,24 @@ char *weapon_name_lookup (int weapon) {
             return "polearm";
         default:
             return "unknown";
+    }
+}
+
+bool is_immortal(int level) {
+    return level > MAX_LEVEL - 8;
+}
+
+const char *immortal_role_name_lookup(int level) {
+    switch (level) {
+        case MAX_LEVEL - 0 : return "IMPLEMENTOR";
+        case MAX_LEVEL - 1 : return "CREATOR";
+        case MAX_LEVEL - 2 : return "SUPREMACY";
+        case MAX_LEVEL - 3 : return "DEITY";
+        case MAX_LEVEL - 4 : return "GOD";
+        case MAX_LEVEL - 5 : return "IMMORTAL";
+        case MAX_LEVEL - 6 : return "DEMIGOD";
+        case MAX_LEVEL - 7 : return "ANGEL";
+        case MAX_LEVEL - 8 : return "AVATAR";
+        default: return "";
     }
 }

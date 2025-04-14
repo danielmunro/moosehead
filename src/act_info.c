@@ -30,7 +30,6 @@
  #include "tables.h"
  #include "lookup.h"
  #include "gladiator.h"
- #include "character.h"
 
  /* command procedures needed */
  DECLARE_DO_FUN( do_exits        );
@@ -3958,7 +3957,7 @@ void do_who( CHAR_DATA *ch, char *argument )
    */
   if (wch->level >= MAX_LEVEL - 8) {
       const int col_width = 12;
-      const char *imm_role = get_immortal_role(wch->level);
+      const char *imm_role = immortal_role_name_lookup(wch->level);
       const int left_pad = (col_width - strlen(imm_role)) / 2;
       const int right_pad = col_width - strlen(imm_role) - left_pad;
       char buf[13];

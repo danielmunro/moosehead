@@ -13,9 +13,7 @@
 
 #include "merc.h"
 #include "log.h"
-#include "character.h"
 #include "lookup.h"
-#include "string_ext.h"
 
 int server_fd;
 struct sockaddr_in server_addr;
@@ -100,9 +98,9 @@ char *classes_endpoint() {
         json_auto_t *class = json_object();
         json_auto_t *name = json_string(class_table[i].name);
         json_object_set(class, "name", name);
-        json_auto_t *primary = json_string(stat_lookup(class_table[i].attr_prime));
+        json_auto_t *primary = json_string(stat_name_lookup(class_table[i].attr_prime));
         json_object_set(class, "primary_attribute", primary);
-        json_auto_t *secondary = json_string(stat_lookup(class_table[i].attr_second));
+        json_auto_t *secondary = json_string(stat_name_lookup(class_table[i].attr_second));
         json_object_set(class, "secondary_attribute", secondary);
         json_auto_t *weapon = json_string(weapon_name_lookup(class_table[i].weapon));
         json_object_set(class, "starting_weapon", weapon);
@@ -140,7 +138,7 @@ char *players_endpoint() {
         json_object_set(player, "name", name);
 
         if (is_immortal(wch->level)) {
-            const char *imm = get_immortal_role(wch->level);
+            const char *imm = immortal_role_name_lookup(wch->level);
             json_auto_t *json_imm = json_string(imm);
             json_object_set(player, "level", json_imm);
         } else {
@@ -185,7 +183,7 @@ char *races_endpoint() {
             json_array_append(skills, skill);
         }
         json_object_set(race, "skills", skills);
-        json_auto_t *size = json_string(get_race_size(pc_race_table[i].size));
+        json_auto_t *size = json_string(size_name_lookup(pc_race_table[i].size));
         json_object_set(race, "size", size);
         json_auto_t *stats = json_object();
         json_auto_t *stat_str = json_integer(pc_race_table[i].stats[0]);
