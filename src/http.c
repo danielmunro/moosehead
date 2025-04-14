@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <gc.h>
 #include <jansson.h>
+#include <regex.h>
 
 #include "merc.h"
 #include "log.h"
@@ -65,7 +66,7 @@ void build_response(
     *response_len = strlen(response);
 }
 
-const char *players_endpoint() {
+char *players_endpoint() {
     json_auto_t *all_players = json_array();
     DESCRIPTOR_DATA *d;
     CHAR_DATA *wch;
@@ -105,14 +106,14 @@ const char *players_endpoint() {
     return json_dumps(all_players, JSON_INDENT(4));
 }
 
-const char *build_endpoint() {
+char *build_endpoint() {
     json_auto_t *resp = json_object();
     json_auto_t *build = json_string(build_version);
     json_object_set(resp, "build", build);
     return json_dumps(resp, JSON_INDENT(4));
 }
 
-const char *races_endpoint() {
+char *races_endpoint() {
     json_auto_t *resp = json_array();
     for (int i = 0;; i++) {
         if (pc_race_table[i].name == NULL) {
@@ -167,23 +168,44 @@ void handle_client(int client_fd) {
     if (bytes_received > 0) {
         char *response = (char *) malloc(BUFFER_SIZE * 2 * sizeof(char));
         size_t response_len;
-        const char *status;
-        const char *output;
-        if (strncmp(buffer, "GET /players ", 13) == 0) {
-            status = "200 OK";
-            output = players_endpoint();
-        } else if (strncmp(buffer, "GET /build ", 11) == 0) {
-            status = "200 OK";
-            output = build_endpoint();
-        } else if (strncmp(buffer, "GET /races ", 11) == 0) {
-            status = "200 OK";
-            output = races_endpoint();
-        } else if (strncmp(buffer, "GET / ", 6) == 0) {
-            status = "200 OK";
-            output = "";
-        } else {
-            status = "404 Not Found";
-            output = "";
+        char *status = "200 OK";
+        char *output = "";
+        regex_t regex;
+        regcomp(&regex, "^([A-Z]+)(\\s+)(.*)(\\s+)(HTTP\\/)([0-9].[0-9])", REG_EXTENDED);
+        regmatch_t matches[4];
+        if (regexec(&regex, buffer, 4, matches, 0) == 0) {
+            int method_len = matches[1].rm_eo - matches[1].rm_so;
+            char method[method_len + 1];
+            strncpy(method, &buffer[matches[1].rm_so], method_len);
+            method[method_len] = '\0';
+            int path_len = matches[3].rm_eo - matches[3].rm_so;
+            char path[path_len + 1];
+            strncpy(path, &buffer[matches[3].rm_so], path_len);
+            path[path_len] = '\0';
+
+            if (strcmp(path, "/players") == 0) {
+                if (strcmp(method, "GET") == 0) {
+                    output = players_endpoint();
+                } else if (strcmp(method, "HEAD") != 0) {
+                    status = "404 Not Found";
+                }
+            } else if (strcmp(path, "/build") == 0) {
+                if (strcmp(method, "GET") == 0) {
+                    output = build_endpoint();
+                } else if (strcmp(method, "HEAD") != 0) {
+                    status = "404 Not Found";
+                }
+            } else if (strcmp(path, "/races") == 0) {
+                if (strcmp(method, "GET") == 0) {
+                    output = races_endpoint();
+                } else if (strcmp(method, "HEAD") != 0) {
+                    status = "404 Not Found";
+                }
+            } else if (strcmp(path, "/") == 0 && (strcmp(method, "GET") != 0 && strcmp(method, "HEAD") != 0)) {
+                status = "404 Not Found";
+            } else {
+                status = "404 Not Found";
+            }
         }
         build_response(status, output, response, &response_len);
         send(client_fd, response, response_len, 0);
