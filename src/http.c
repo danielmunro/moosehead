@@ -20,6 +20,24 @@ int server_fd;
 struct sockaddr_in server_addr;
 const int BUFFER_SIZE = 104857600;
 
+char *index_endpoint();
+char *players_endpoint();
+char *races_endpoint();
+char *build_endpoint();
+
+typedef struct {
+    char *method;
+    char *path;
+    char *(*response)();
+} Endpoint;
+
+Endpoint endpoints[] = {
+        {"GET", "/", index_endpoint},
+        {"GET", "/players", players_endpoint},
+        {"GET", "/races", races_endpoint},
+        {"GET", "/build", build_endpoint}
+};
+
 void init_http_socket(const int port) {
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -64,6 +82,10 @@ void build_response(
              status,
              buffer);
     *response_len = strlen(response);
+}
+
+char *index_endpoint() {
+    return "";
 }
 
 char *players_endpoint() {
@@ -168,7 +190,6 @@ void handle_client(int client_fd) {
     if (bytes_received > 0) {
         char *response = (char *) malloc(BUFFER_SIZE * 2 * sizeof(char));
         size_t response_len;
-        char *status = "200 OK";
         char *output = "";
         regex_t regex;
         regcomp(&regex, "^([A-Z]+)(\\s+)(.*)(\\s+)(HTTP\\/)([0-9].[0-9])", REG_EXTENDED);
@@ -183,32 +204,28 @@ void handle_client(int client_fd) {
             strncpy(path, &buffer[matches[3].rm_so], path_len);
             path[path_len] = '\0';
 
-            if (strcmp(path, "/players") == 0) {
-                if (strcmp(method, "GET") == 0) {
-                    output = players_endpoint();
-                } else if (strcmp(method, "HEAD") != 0) {
-                    status = "404 Not Found";
+            int endpoint_count = sizeof(endpoints) / sizeof(endpoints[0]);
+            bool found = false;
+            for (int i = 0; i < endpoint_count; i++) {
+                if (strcmp(method, endpoints[i].method) == 0
+                    && strcmp(path, endpoints[i].path) == 0) {
+                    output = endpoints[i].response();
+                    found = true;
+                } else if (strcmp(method, "HEAD") == 0
+                            && strcmp(path, endpoints[i].path) == 0) {
+                    found = true;
                 }
-            } else if (strcmp(path, "/build") == 0) {
-                if (strcmp(method, "GET") == 0) {
-                    output = build_endpoint();
-                } else if (strcmp(method, "HEAD") != 0) {
-                    status = "404 Not Found";
-                }
-            } else if (strcmp(path, "/races") == 0) {
-                if (strcmp(method, "GET") == 0) {
-                    output = races_endpoint();
-                } else if (strcmp(method, "HEAD") != 0) {
-                    status = "404 Not Found";
-                }
-            } else if (strcmp(path, "/") == 0 && (strcmp(method, "GET") != 0 && strcmp(method, "HEAD") != 0)) {
-                status = "404 Not Found";
-            } else {
-                status = "404 Not Found";
             }
+
+            if (found) {
+                build_response("200 OK", output, response, &response_len);
+            } else {
+                build_response("404 Not Found", "", response, &response_len);
+            }
+
+            send(client_fd, response, response_len, 0);
         }
-        build_response(status, output, response, &response_len);
-        send(client_fd, response, response_len, 0);
+
         free(response);
     }
     close(client_fd);
