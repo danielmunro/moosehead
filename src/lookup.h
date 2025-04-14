@@ -10,3 +10,5 @@ int position_lookup (const char *name);
 int sex_lookup (const char *name);
 int immc_lookup (const char *name);
 int size_lookup (const char *name);
+char *stat_lookup (sh_int stat);
+char *weapon_name_lookup (int weapon);

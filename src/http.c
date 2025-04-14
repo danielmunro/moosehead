@@ -14,6 +14,7 @@
 #include "merc.h"
 #include "log.h"
 #include "character.h"
+#include "lookup.h"
 #include "string_ext.h"
 
 int server_fd;
@@ -24,6 +25,7 @@ char *index_endpoint();
 char *players_endpoint();
 char *races_endpoint();
 char *build_endpoint();
+char *classes_endpoint();
 
 typedef struct {
     char *method;
@@ -35,7 +37,8 @@ Endpoint endpoints[] = {
         {"GET", "/", index_endpoint},
         {"GET", "/players", players_endpoint},
         {"GET", "/races", races_endpoint},
-        {"GET", "/build", build_endpoint}
+        {"GET", "/build", build_endpoint},
+        {"GET", "/classes", classes_endpoint}
 };
 
 void init_http_socket(const int port) {
@@ -86,6 +89,35 @@ void build_response(
 
 char *index_endpoint() {
     return "";
+}
+
+char *classes_endpoint() {
+    json_auto_t *classes = json_array();
+    for (int i = 0;; i++) {
+        if (strcmp(class_table[i].name, "null") == 0) {
+            break;
+        }
+        json_auto_t *class = json_object();
+        json_auto_t *name = json_string(class_table[i].name);
+        json_object_set(class, "name", name);
+        json_auto_t *primary = json_string(stat_lookup(class_table[i].attr_prime));
+        json_object_set(class, "primary_attribute", primary);
+        json_auto_t *secondary = json_string(stat_lookup(class_table[i].attr_second));
+        json_object_set(class, "secondary_attribute", secondary);
+        json_auto_t *weapon = json_string(weapon_name_lookup(class_table[i].weapon));
+        json_object_set(class, "starting_weapon", weapon);
+        HELP_TRACKER *pTrack = help_tracks[0];
+        while (pTrack != NULL) {
+            if (str_cmp(class_table[i].name, pTrack->keyword) == 0) {
+                json_auto_t *help_text = json_string(pTrack->help->text);
+                json_object_set(class, "description", help_text);
+                break;
+            }
+            pTrack = pTrack->next;
+        }
+        json_array_append(classes, class);
+    }
+    return json_dumps(classes, JSON_INDENT(4));
 }
 
 char *players_endpoint() {
@@ -172,7 +204,7 @@ char *races_endpoint() {
         HELP_TRACKER *pTrack = help_tracks[0];
         while (pTrack != NULL) {
             if (str_cmp(pc_race_table[i].name, pTrack->keyword) == 0) {
-                json_auto_t *help_text = json_string(replace_str(pTrack->help->text, "\n\r", ""));
+                json_auto_t *help_text = json_string(pTrack->help->text);
                 json_object_set(race, "description", help_text);
                 break;
             }

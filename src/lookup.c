@@ -146,3 +146,47 @@ int size_lookup (const char *name)
  
    return -1;
 }
+
+char *stat_lookup (sh_int stat) {
+    switch (stat) {
+        case STAT_STR:
+            return "strength";
+        case STAT_INT:
+            return "intelligence";
+        case STAT_WIS:
+            return "wisdom";
+        case STAT_DEX:
+            return "dexterity";
+        case STAT_CON:
+            return "constitution";
+        case STAT_SOC:
+            return "charisma";
+        default:
+            return "unknown";
+    }
+}
+
+char *weapon_name_lookup (int weapon) {
+    switch (weapon) {
+        case OBJ_VNUM_SCHOOL_MACE:
+            return "mace";
+        case OBJ_VNUM_SCHOOL_DAGGER:
+            return "dagger";
+        case OBJ_VNUM_SCHOOL_SWORD:
+            return "sword";
+        case OBJ_VNUM_SCHOOL_SPEAR:
+            return "spear";
+        case OBJ_VNUM_SCHOOL_STAFF:
+            return "staff";
+        case OBJ_VNUM_SCHOOL_AXE:
+            return "axe";
+        case OBJ_VNUM_SCHOOL_FLAIL:
+            return "flail";
+        case OBJ_VNUM_SCHOOL_WHIP:
+            return "whip";
+        case OBJ_VNUM_SCHOOL_POLEARM:
+            return "polearm";
+        default:
+            return "unknown";
+    }
+}
