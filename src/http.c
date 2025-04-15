@@ -102,7 +102,7 @@ char *help_endpoint(struct yuarel url) {
 
     if (strcmp(params[0].key, "query") != 0) {
         log_info("got unexpected query parameter");
-        return "Url parameter must be `query`";
+        return "Url parameter must be `query`.  There must be no other query parameters.";
     }
 
     json_auto_t *response = json_object();
