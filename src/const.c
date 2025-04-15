@@ -238,7 +238,6 @@ const   struct  race_type race_table  []    =
   form,   parts 
     },
 */
-    { "unique",   FALSE, 0, 0, 0, 0, 0, 0, 0, 0 },
 
     {   "dragon", TRUE, 0, AFF_INFRARED|AFF_FLYING, 0,
   0,    RES_FIRE|RES_BASH|RES_CHARM, VULN_PIERCE|VULN_COLD,

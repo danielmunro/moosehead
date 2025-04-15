@@ -91,10 +91,7 @@ char *index_endpoint() {
 
 char *classes_endpoint() {
     json_auto_t *classes = json_array();
-    for (int i = 0;; i++) {
-        if (strcmp(class_table[i].name, "null") == 0) {
-            break;
-        }
+    for (int i = 0; strcmp(class_table[i].name, "null") != 0; i++) {
         json_auto_t *class = json_object();
         json_auto_t *name = json_string(class_table[i].name);
         json_object_set(class, "name", name);
@@ -104,14 +101,12 @@ char *classes_endpoint() {
         json_object_set(class, "secondary_attribute", secondary);
         json_auto_t *weapon = json_string(weapon_name_lookup(class_table[i].weapon));
         json_object_set(class, "starting_weapon", weapon);
-        HELP_TRACKER *pTrack = help_tracks[0];
-        while (pTrack != NULL) {
+        for (HELP_TRACKER *pTrack = help_tracks[0]; pTrack != NULL; pTrack = pTrack->next) {
             if (str_cmp(class_table[i].name, pTrack->keyword) == 0) {
                 json_auto_t *help_text = json_string(pTrack->help->text);
                 json_object_set(class, "description", help_text);
                 break;
             }
-            pTrack = pTrack->next;
         }
         json_array_append(classes, class);
     }
@@ -167,10 +162,7 @@ char *build_endpoint() {
 
 char *races_endpoint() {
     json_auto_t *resp = json_array();
-    for (int i = 0;; i++) {
-        if (pc_race_table[i].name == NULL) {
-            break;
-        }
+    for (int i = 0; pc_race_table[i].name != NULL; i++) {
         json_auto_t *race = json_object();
         json_auto_t *name = json_string(pc_race_table[i].name);
         json_object_set(race, "name", name);
@@ -199,14 +191,12 @@ char *races_endpoint() {
         json_auto_t *stat_cha = json_integer(pc_race_table[i].stats[5]);
         json_object_set(stats, "cha", stat_cha);
         json_object_set(race, "stats", stats);
-        HELP_TRACKER *pTrack = help_tracks[0];
-        while (pTrack != NULL) {
+        for (HELP_TRACKER *pTrack = help_tracks[0]; pTrack != NULL; pTrack = pTrack->next) {
             if (str_cmp(pc_race_table[i].name, pTrack->keyword) == 0) {
                 json_auto_t *help_text = json_string(pTrack->help->text);
                 json_object_set(race, "description", help_text);
                 break;
             }
-            pTrack = pTrack->next;
         }
         json_array_append(resp, race);
     }
