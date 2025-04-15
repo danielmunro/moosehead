@@ -89,7 +89,21 @@ void build_response(
 }
 
 char *index_endpoint(struct yuarel url) {
-    return "";
+    json_auto_t *response = json_object();
+    int endpoint_count = sizeof(endpoints) / sizeof(endpoints[0]);
+    json_auto_t *endpoint_response = json_array();
+    char path[MAX_INPUT_LENGTH];
+    for (int i = 0; i < endpoint_count; i++) {
+        json_auto_t *one_endpoint = json_object();
+        json_auto_t *one_method = json_string(endpoints[i].method);
+        json_object_set(one_endpoint, "method", one_method);
+        sprintf(path, "/%s", endpoints[i].path);
+        json_auto_t *one_path = json_string(path);
+        json_object_set(one_endpoint, "path", one_path);
+        json_array_append(endpoint_response, one_endpoint);
+    }
+    json_object_set(response, "endpoints", endpoint_response);
+    return json_dumps(response, JSON_INDENT(4));
 }
 
 char *help_endpoint(struct yuarel url) {
