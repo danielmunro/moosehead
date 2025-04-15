@@ -94,25 +94,35 @@ char *index_endpoint(struct yuarel url) {
 
 char *help_endpoint(struct yuarel url) {
     struct yuarel_param params[1];
+    json_auto_t *response = json_object();
+    bool found = false;
 
     if (yuarel_parse_query(url.query, '&', params, 1) < 0) {
-        log_info("unable to parse query");
-        return "";
+        json_auto_t *error_text = json_string("Unable to parse query");
+        json_object_set(response, "error", error_text);
+        return json_dumps(response, JSON_INDENT(4));
     }
 
     if (strcmp(params[0].key, "query") != 0) {
-        log_info("got unexpected query parameter");
-        return "Url parameter must be `query`.  There must be no other query parameters.";
+        json_auto_t *error_text = json_string("Must have only one query parameter: `query`");
+        json_object_set(response, "error", error_text);
+        return json_dumps(response, JSON_INDENT(4));
     }
 
-    json_auto_t *response = json_object();
     for (HELP_TRACKER *pTrack = help_tracks[0]; pTrack != NULL; pTrack = pTrack->next) {
-        if (str_cmp(params[0].val, pTrack->keyword) == 0) {
+        if (str_cmp(params[0].val, pTrack->keyword) == 0 && pTrack->help->level <= LEVEL_HERO) {
             json_auto_t *help_text = json_string(pTrack->help->text);
             json_object_set(response, "help", help_text);
+            found = true;
             break;
         }
     }
+
+    if (!found) {
+        json_auto_t *error_text = json_string("No help topic found");
+        json_object_set(response, "error", error_text);
+    }
+
     return json_dumps(response, JSON_INDENT(4));
 }
 
