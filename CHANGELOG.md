@@ -1,5 +1,15 @@
 # Changelog
 
+## 2025-04-15
+
+* Add an http server with the following endpoints:
+  * GET / - returns a list of available endpoints.
+  * GET /build - get the current build version.
+  * GET /races - array of races.
+  * GET /classes - array of classes.
+  * GET /players - array of logged in players.
+  * GET /help - search for a help topic via `query` parameter.
+
 ## 2025-04-08
 
 * Add log levels, default to `info`.
