@@ -146,3 +146,85 @@ int size_lookup (const char *name)
  
    return -1;
 }
+
+const char *size_name_lookup(int size) {
+    switch (size) {
+        case SIZE_TINY:
+            return "tiny";
+        case SIZE_SMALL:
+            return "small";
+        case SIZE_MEDIUM:
+            return "medium";
+        case SIZE_LARGE:
+            return "large";
+        case SIZE_HUGE:
+            return "huge";
+        case SIZE_GIANT:
+            return "gigantic";
+        default:
+            return "unknown";
+    }
+}
+
+char *stat_name_lookup (sh_int stat) {
+    switch (stat) {
+        case STAT_STR:
+            return "strength";
+        case STAT_INT:
+            return "intelligence";
+        case STAT_WIS:
+            return "wisdom";
+        case STAT_DEX:
+            return "dexterity";
+        case STAT_CON:
+            return "constitution";
+        case STAT_SOC:
+            return "charisma";
+        default:
+            return "unknown";
+    }
+}
+
+char *weapon_name_lookup (int weapon) {
+    switch (weapon) {
+        case OBJ_VNUM_SCHOOL_MACE:
+            return "mace";
+        case OBJ_VNUM_SCHOOL_DAGGER:
+            return "dagger";
+        case OBJ_VNUM_SCHOOL_SWORD:
+            return "sword";
+        case OBJ_VNUM_SCHOOL_SPEAR:
+            return "spear";
+        case OBJ_VNUM_SCHOOL_STAFF:
+            return "staff";
+        case OBJ_VNUM_SCHOOL_AXE:
+            return "axe";
+        case OBJ_VNUM_SCHOOL_FLAIL:
+            return "flail";
+        case OBJ_VNUM_SCHOOL_WHIP:
+            return "whip";
+        case OBJ_VNUM_SCHOOL_POLEARM:
+            return "polearm";
+        default:
+            return "unknown";
+    }
+}
+
+bool is_immortal(int level) {
+    return level > MAX_LEVEL - 8;
+}
+
+const char *immortal_role_name_lookup(int level) {
+    switch (level) {
+        case MAX_LEVEL - 0 : return "IMPLEMENTOR";
+        case MAX_LEVEL - 1 : return "CREATOR";
+        case MAX_LEVEL - 2 : return "SUPREMACY";
+        case MAX_LEVEL - 3 : return "DEITY";
+        case MAX_LEVEL - 4 : return "GOD";
+        case MAX_LEVEL - 5 : return "IMMORTAL";
+        case MAX_LEVEL - 6 : return "DEMIGOD";
+        case MAX_LEVEL - 7 : return "ANGEL";
+        case MAX_LEVEL - 8 : return "AVATAR";
+        default: return "";
+    }
+}

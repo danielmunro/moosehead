@@ -47,6 +47,8 @@
 #include <netdb.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <pthread.h>
+
 #include "merc.h"
 #include "recycle.h"
 #include "gladiator.h"
@@ -56,6 +58,7 @@
 #include "act_comm.h"
 #include "clan.h"
 #include "log.h"
+#include "http.h"
 
 /* command procedures needed */
 DECLARE_DO_FUN	( action_wraithform );
@@ -143,9 +146,8 @@ sh_int		    posse_killer_kills;
 sh_int		    posse_thief_kills;
 sh_int		    posse_thug_kills;
 sh_int		    posse_ruffian_kills;
+const char *        build_version;
 
-
-#define PERMS  0666
 key_t msg_key;
 int   msg_id;
 
@@ -180,7 +182,7 @@ void creation_message(DESCRIPTOR_DATA *d, bool forward);
 int creation_step(DESCRIPTOR_DATA *d, bool forward, bool accept);
 bool is_creation(DESCRIPTOR_DATA *d);
 
-int run(const char *build_version, int port) {
+int run(const int mud_port, const int http_port) {
     struct timeval now_time;
     int control = -1;
 
@@ -201,8 +203,10 @@ int run(const char *build_version, int port) {
     /*
      * Run the game.
      */
-    control = init_socket(port);
+    control = init_socket(mud_port);
     boot_db();
+
+    start_http_thread(http_port);
 
     /*
      * Get a fresh CSV dump of objects on every game startup.
@@ -211,12 +215,14 @@ int run(const char *build_version, int port) {
 
     sprintf(greeting_message, help_greeting, build_version);
 
-    sprintf(log_buf, "MHS is ready :: port %d, build %-6.6s", port, build_version);
+    sprintf(log_buf, "MHS is ready :: mud port %d, http port %d, build %-6.6s",
+            mud_port, http_port, build_version);
     log_info(log_buf);
 
     game_loop_unix(control);
 
     close(control);
+    close_http_socket();
 
     /*
      * That's all, folks.
@@ -533,6 +539,7 @@ void game_loop_unix(int control)
 
   gettimeofday( &last_time, NULL );
   current_time = (time_t) last_time.tv_sec;
+
     }
     
     signal ( SIGSEGV, SIG_DFL );
@@ -542,7 +549,7 @@ void game_loop_unix(int control)
     signal ( SIGILL,  SIG_DFL );
     signal ( SIGIOT,  SIG_DFL );
     signal ( SIGKILL,  SIG_DFL );
-    signal ( SIGTERM,  SIG_DFL );    
+    signal ( SIGTERM,  SIG_DFL );
 
     return;
 }

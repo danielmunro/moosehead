@@ -16,9 +16,10 @@
  ***************************************************************************/
 
 #include <sys/time.h>
+#include <stdio.h>
+#include <stdbool.h>
 
 typedef short int     sh_int;
-typedef unsigned char bool;
 
 /*
  * Function types.
@@ -48,17 +49,9 @@ typedef void SPELL_FUN  args( ( int sn, int level, CHAR_DATA *ch, void *vo,
 int unlink();
 int system();
 
-/*
- * Short scalar types.
- * Diavolo reports AIX compiler has bugs with short types.
- */
-#if     !defined(FALSE)
-#define FALSE    0
-#endif
-
-#if     !defined(TRUE)
-#define TRUE     1
-#endif
+/* bc with existing code */
+#define FALSE    false
+#define TRUE     true
 
 typedef struct plan_exit_data           PLAN_EXIT_DATA;
 typedef struct alliance_data            ALLIANCE_DATA;
@@ -98,9 +91,6 @@ typedef struct  line_edit_data          LINE_EDIT_DATA;
 typedef struct  vnum_range_data         VNUM_RANGE_DATA;
 typedef struct  card_data		        CARD_DATA;
 typedef struct  recipe_data             RECIPE_DATA;
-
-/* UID of the user that the game runs as */
-#define MUD_UID	1001
 
 /*
  * String and memory management parameters.

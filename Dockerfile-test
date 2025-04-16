@@ -1,11 +1,22 @@
 FROM ubuntu:24.04
 
 RUN apt update
-RUN apt install -y -- curl gcc libgc-dev libatomic-ops-dev make file gdb git
+RUN apt install -y -- curl gcc libgc-dev libatomic-ops-dev libjansson-dev make file gdb git
 
-RUN git clone https://github.com/zorgnax/libtap.git
-RUN cd libtap && make && make install
-RUN ldconfig
+RUN <<-EOF
+        git clone https://github.com/jacketizer/libyuarel.git
+        cd libyuarel
+        make
+        make install
+EOF
+
+RUN <<-EOF
+        git clone https://github.com/zorgnax/libtap.git
+        cd libtap
+        make
+        make install
+        ldconfig
+EOF
 
 WORKDIR /mud/moosehead
 COPY src src
