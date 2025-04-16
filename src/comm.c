@@ -206,7 +206,7 @@ int run(const int mud_port, const int http_port) {
     control = init_socket(mud_port);
     boot_db();
 
-    init_http_socket(http_port);
+    start_http_thread(http_port);
 
     /*
      * Get a fresh CSV dump of objects on every game startup.
@@ -218,10 +218,6 @@ int run(const int mud_port, const int http_port) {
     sprintf(log_buf, "MHS is ready :: mud port %d, http port %d, build %-6.6s",
             mud_port, http_port, build_version);
     log_info(log_buf);
-
-    pthread_t http_thread;
-    pthread_create(&http_thread, NULL, poll_http, NULL);
-    pthread_detach(http_thread);
 
     game_loop_unix(control);
 

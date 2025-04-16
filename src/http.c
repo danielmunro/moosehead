@@ -308,7 +308,7 @@ void handle_client(int client_fd) {
     free(buffer);
 }
 
-void *poll_http(void *arg) {
+void *_poll_http(void *arg) {
     while (true) {
         struct sockaddr_in client_addr;
         socklen_t client_addr_len = sizeof(client_addr);
@@ -320,4 +320,12 @@ void *poll_http(void *arg) {
         }
     }
     return NULL;
+}
+
+void start_http_thread(int port) {
+    init_http_socket(port);
+
+    pthread_t http_thread;
+    pthread_create(&http_thread, NULL, _poll_http, NULL);
+    pthread_detach(http_thread);
 }
