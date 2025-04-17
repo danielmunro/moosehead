@@ -335,6 +335,13 @@ const   struct  race_type race_table  []    =
   A|H|M|V, A|B|C|D|E|F|G|H|I|J|K|X
     },
 
+    {
+  "gnome", TRUE,
+  0, AFF_INFRARED, 0,
+  0, RES_POISON|RES_MENTAL, VULN_BASH,
+  A|H|M|V, A|B|C|D|E|F|G|H|I|J|K
+    },
+
       {
   "mutant",	FALSE, 
   0, 0, 0,
@@ -642,6 +649,13 @@ const struct  pc_race_type  pc_race_table []  =
   {135,135,135,135,135,135,135,135,135,135,135,135,135,135,135 },
   { "stone skin" },
   { 11,11,11,11,11,11,11,10 }, { 19,19,19,19,19,19,19,18 }, SIZE_MEDIUM
+    },
+
+    {
+  "gnome", "Gnome", 6, {550, 1000, 500},
+  {120,120,240,240,180,180,240,120,180,180,120,120,120,240,240 },
+  { "dodge", "hide" },
+  {  7,15,17,15,7,17,8,12 }, { 15,23,25,23,15,25,16,23 }, SIZE_TINY
     },
 
     {
