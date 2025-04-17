@@ -213,7 +213,10 @@ char *build_endpoint(struct yuarel url) {
 
 char *races_endpoint(struct yuarel url) {
     json_auto_t *resp = json_array();
-    for (int i = 0; pc_race_table[i].name != NULL; i++) {
+    for (int i = 1; race_table[i].name != NULL; i++) {
+        if (!race_table[i].pc_race) {
+            break;
+        }
         json_auto_t *race = json_object();
         json_auto_t *name = json_string(pc_race_table[i].name);
         json_object_set(race, "name", name);
