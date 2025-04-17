@@ -21,8 +21,21 @@ $ ./bin/run.sh mhs:latest
 
 * Update gods
 * Remove non-unix-architecture code
-* Reduce the number of compiler warnings
+  * Partially done
 * GitHub pages
 * Clean up duplicate code/functions
   * str_dup/str_dup_perm
 * Implement stdbool.h, remove `typedef unsigned char bool` in merc.h
+  * Partially done
+* Backups
+  * Daily - done
+  * Weekly
+  * Monthly
+  * Yearly
+* DevOps
+  * Deploy to prod from dev laptop
+  * Deploy to prod via GitHub workflow
+  * Restore from backup (dev & prod)
+  * Run tests in branches
+* Misc. fixes
+  * Rockbiters reference form `ee`, which doesn't exist.  This is likely supposed to be `dd`.
