@@ -76,7 +76,7 @@ void do_line_editor ( CHAR_DATA *ch, char *arg, DO_FUN *call_back )
   char buf[MAX_STRING_LENGTH];
   CHAR_DATA *prev,*temp;
     
-  act("$n enters the line editor.",ch,NULL,NULL,TO_ROOM,TRUE);
+  act("$n enters the line editor.",ch,NULL,NULL,TO_ROOM,true);
   ch->was_in_room = ch->in_room;
   char_from_room (ch);
   temp = ch;
@@ -116,10 +116,10 @@ void do_line_editor ( CHAR_DATA *ch, char *arg, DO_FUN *call_back )
     editor->cur_line   = 0;    
     editor->prev_menu = ch->pcdata->menu;
     editor->call_back  = call_back;
-    ch->pcdata->no_out = TRUE;
+    ch->pcdata->no_out = true;
     SET_BIT(editor->flags,FLA_LINE_NUM);
     ch->pcdata->line_edit = editor;        
-    insert_line (ch,"Type '/help' for a list of commands.",count_lines(ch),TRUE);
+    insert_line (ch,"Type '/help' for a list of commands.",count_lines(ch),true);
   } else {
     return;
   }
@@ -240,7 +240,7 @@ void get_insert_line_num (CHAR_DATA *ch,char *arg)
   
   if (!is_number(arg)) {
     send_to_char ("Invalid line num.\n\r",ch);
-    insert_info (ch,NULL,FALSE);
+    insert_info (ch,NULL,false);
     return;
   } else {
     line_num = atoi (arg);
@@ -251,7 +251,7 @@ void get_insert_line_num (CHAR_DATA *ch,char *arg)
     if (line_num < 0) {
       line_num = 0;
     }
-    insert_line (ch,NULL,line_num,FALSE);
+    insert_line (ch,NULL,line_num,false);
   }  
 }
 
@@ -265,12 +265,12 @@ void get_delete_line_2 (CHAR_DATA *ch, char *arg, char *arg2)
   else num2 = num1;
   if (num2 < num1) {
     send_to_char ("Second line number must be greater than the first.\n\r",ch);
-    insert_info (ch,NULL,FALSE);
+    insert_info (ch,NULL,false);
     return;    
   } 
   if (num1 < 1) {
     send_to_char ("First line must be 1 or greater.\n\r",ch);
-    insert_info (ch,NULL,FALSE);
+    insert_info (ch,NULL,false);
     return;        
   }
   
@@ -309,14 +309,14 @@ void get_delete_line_2 (CHAR_DATA *ch, char *arg, char *arg2)
   t = count_lines (ch);
   if (ch->pcdata->line_edit->cur_line > t) 
     ch->pcdata->line_edit->cur_line = t + 1;
-  insert_info (ch,NULL,FALSE);    
+  insert_info (ch,NULL,false);    
 }
 
 void get_delete_line_1 (CHAR_DATA *ch,char *arg)
 {
   if (arg[0] == '\0') {
     send_to_char ("Deletion cancelled.\n\r",ch);
-    insert_info (ch,NULL,FALSE);
+    insert_info (ch,NULL,false);
     return;
   }
   get_delete_line_2 (ch,arg,NULL);
@@ -340,7 +340,7 @@ void insert_line_callback (CHAR_DATA *ch, char *arg)
       send_to_char ("  /show        - shows current buffer\n\r",ch);
       send_to_char ("  /cancel      - cancels editing\n\r",ch);
       send_to_char ("  /done        - quits and saves\n\r",ch);
-      insert_info (ch,NULL,FALSE);
+      insert_info (ch,NULL,false);
       return;
     }
     if (!str_prefix (&arg2[1],"done")) {
@@ -351,7 +351,7 @@ void insert_line_callback (CHAR_DATA *ch, char *arg)
       char_list       = ch;      
       ch->desc->connected = CON_PLAYING;
       char_to_room (ch,ch->was_in_room);
-      act("$n comes back from the line editor.",ch,NULL,NULL,TO_ROOM,TRUE);
+      act("$n comes back from the line editor.",ch,NULL,NULL,TO_ROOM,true);
 
       line = ch->pcdata->line_edit->line;
       bigbuf[0] = '\0';
@@ -365,13 +365,13 @@ void insert_line_callback (CHAR_DATA *ch, char *arg)
       clear_buffer (ch);
       free_edit (ch->pcdata->line_edit);
       ch->pcdata->line_edit = NULL;
-      ch->pcdata->no_out = FALSE;
+      ch->pcdata->no_out = false;
       do_menu (ch,NULL);
       return;
     }
     if (!str_prefix (&arg2[1],"show")) {
-      edit_line_show (ch, FALSE);
-      insert_info (ch,NULL,FALSE);
+      edit_line_show (ch, false);
+      insert_info (ch,NULL,false);
       return;
     }
     if (!str_prefix (&arg2[1],"back")) {
@@ -396,7 +396,7 @@ void insert_line_callback (CHAR_DATA *ch, char *arg)
           send_to_char ("No previous lines.\n\r",ch);          
         }
       }
-      insert_info (ch,NULL,FALSE);
+      insert_info (ch,NULL,false);
       return;
     }
     if (!str_prefix (&arg2[1],"linenum")) {
@@ -406,7 +406,7 @@ void insert_line_callback (CHAR_DATA *ch, char *arg)
         send_to_char ("On\n\r",ch);
       else
         send_to_char ("Off\n\r",ch);        
-      insert_info (ch,NULL,FALSE);
+      insert_info (ch,NULL,false);
       return;
     }
     if (!str_prefix (&arg2[1],"cancel")) {
@@ -414,13 +414,13 @@ void insert_line_callback (CHAR_DATA *ch, char *arg)
       char_list       = ch;      
       ch->desc->connected = CON_PLAYING;
       char_to_room (ch,ch->was_in_room);
-      act("$N comes back from the line editor.",ch,NULL,NULL,TO_ROOM,TRUE);
+      act("$N comes back from the line editor.",ch,NULL,NULL,TO_ROOM,true);
     
       ch->pcdata->menu = ch->pcdata->line_edit->prev_menu;
       clear_buffer (ch);
       free_edit (ch->pcdata->line_edit);
       ch->pcdata->line_edit = NULL;
-      ch->pcdata->no_out = FALSE;
+      ch->pcdata->no_out = false;
       do_menu (ch,NULL);
       return;        
     }
@@ -428,7 +428,7 @@ void insert_line_callback (CHAR_DATA *ch, char *arg)
       clear_buffer (ch);
       ch->pcdata->line_edit->cur_line = 1;
       send_to_char ("Buffer cleared.\n\r",ch);
-      insert_info (ch,NULL,FALSE);
+      insert_info (ch,NULL,false);
       return;          
     }
     if (!str_prefix (&arg2[1],"delete")) {
@@ -462,7 +462,7 @@ void insert_line_callback (CHAR_DATA *ch, char *arg)
       }      
     }
     send_to_char ("Invalid option.  Type '/help' for a list of commands.\n\r",ch);    
-    insert_info (ch,NULL,FALSE);
+    insert_info (ch,NULL,false);
     return;
   } else {
     LINE_DATA *line,*new_line;
@@ -486,18 +486,18 @@ void insert_line_callback (CHAR_DATA *ch, char *arg)
     }
     ch->pcdata->line_edit->cur_line++;
   }  
-  insert_info (ch,NULL,FALSE);
+  insert_info (ch,NULL,false);
 }
 
 void insert_line (CHAR_DATA *ch,char *mode,int ins_after,bool show)
 {
   if (show) {
-    insert_info (ch,mode,TRUE);
-    edit_line_show (ch,FALSE);
+    insert_info (ch,mode,true);
+    edit_line_show (ch,false);
   }
   ch->pcdata->interp_fun = insert_line_callback;
   ch->pcdata->line_edit->cur_line = ins_after+1;
-  insert_info (ch,NULL,FALSE);
+  insert_info (ch,NULL,false);
 }
 
 /* void edit_line  ( CHAR_DATA *ch, int num )
@@ -512,11 +512,11 @@ void insert_line (CHAR_DATA *ch,char *mode,int ins_after,bool show)
       send_to_char ("Buffer cleared.\n\r>  ",ch);
       break;
     case ID_LINE_SHOW:
-      edit_line_show (ch, FALSE);
+      edit_line_show (ch, false);
       send_to_char (">  ",ch);
       break;
     case ID_LINE_APPEND:      
-      insert_line (ch,"Type '/help' for a list of commands.",count_lines(ch),FALSE);
+      insert_line (ch,"Type '/help' for a list of commands.",count_lines(ch),false);
       break;
     case ID_LINE_INSERT:
       break;
@@ -536,7 +536,7 @@ void insert_line (CHAR_DATA *ch,char *mode,int ins_after,bool show)
       ch->pcdata->menu = ch->pcdata->line_edit->prev_menu;      
       clear_buffer (ch);
       free_edit (ch->pcdata->line_edit);
-      ch->pcdata->no_out = FALSE;
+      ch->pcdata->no_out = false;
       do_menu (ch,NULL);
       return;    
     case ID_LINE_EXIT:
@@ -551,7 +551,7 @@ void insert_line (CHAR_DATA *ch,char *mode,int ins_after,bool show)
       ch->pcdata->menu = ch->pcdata->line_edit->prev_menu;      
       clear_buffer (ch);
       free_edit (ch->pcdata->line_edit);
-      ch->pcdata->no_out = FALSE;
+      ch->pcdata->no_out = false;
       do_menu (ch,NULL);
       return;
   }

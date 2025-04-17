@@ -29,7 +29,7 @@ void save_dns(void)
 {
     DNS_DATA *pdns;
     FILE *fp;
-    bool found = FALSE;
+    bool found = false;
 
 //    fclose( fpReserve ); 
     if ( ( fp = fopen( DNS_FILE, "w" ) ) == NULL )
@@ -40,7 +40,7 @@ void save_dns(void)
     for (pdns = dns_list; pdns != NULL; pdns = pdns->next)
     {
       fprintf(fp,"%-20s\n",pdns->name); 
-      found = TRUE;
+      found = true;
      }
 
      fclose(fp);
@@ -87,10 +87,10 @@ bool check_dns(char *site)
     for ( pdns = dns_list; pdns != NULL; pdns = pdns->next ) 
     {
      if(!str_prefix(pdns->name,site))
-      return TRUE;
+      return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 

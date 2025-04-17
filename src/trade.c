@@ -92,19 +92,19 @@ bool obj_to_trade( OBJ_DATA *obj, TRADE_DATA *trade, int trader )
 {
 	/* Commented out again
     if ( IS_SET(obj->extra_flags,ITEM_NODROP) )
-    	return FALSE;
+    	return false;
 	 */
 
     /* no trading Nethermancer Robes */
     if ( obj->pIndexData->vnum == OBJ_VNUM_ROBES )
-    	return FALSE;
+    	return false;
 
     if(obj->link_name)
-      return FALSE;
+      return false;
 
     obj->next_in_trade = trade->items[trader];
     trade->items[trader] = obj;
-    return TRUE;
+    return true;
 }
 
 void obj_from_trade( OBJ_DATA *obj, TRADE_DATA *trade, int trader )
@@ -294,13 +294,13 @@ void do_trade( CHAR_DATA *ch, char *argument )
 
         if ( IS_SET(victim->act, PLR_NOTRADE) )
         {
-            act("$N doesn't wish to trade with anybody.",ch,NULL,victim,TO_CHAR,FALSE);
+            act("$N doesn't wish to trade with anybody.",ch,NULL,victim,TO_CHAR,false);
             return;
         }
 
         if ( victim->trade != NULL )
         {
-            act("$N is already trading with somebody.",ch,NULL,victim,TO_CHAR,FALSE);
+            act("$N is already trading with somebody.",ch,NULL,victim,TO_CHAR,false);
             return;
         }
 
@@ -313,12 +313,12 @@ void do_trade( CHAR_DATA *ch, char *argument )
         if ( ch->pcdata->req_trade != NULL )
         {
             act("You haven't answered $N yet.",
-                ch,NULL,ch->pcdata->req_trade,TO_CHAR,FALSE);
+                ch,NULL,ch->pcdata->req_trade,TO_CHAR,false);
             return;
         }
 
-        act("You request a trade with $N.",ch,NULL,victim,TO_CHAR,FALSE);
-        act("$n requests a trade with you.",ch,NULL,victim,TO_VICT,FALSE);
+        act("You request a trade with $N.",ch,NULL,victim,TO_CHAR,false);
+        act("$n requests a trade with you.",ch,NULL,victim,TO_VICT,false);
         
         victim->pcdata->req_trade = ch;
         break;
@@ -331,9 +331,9 @@ void do_trade( CHAR_DATA *ch, char *argument )
         }
 
         act("You accept the invitation to trade with $N.",
-                        ch,NULL,victim,TO_CHAR,FALSE);
+                        ch,NULL,victim,TO_CHAR,false);
         act("$n accepts your invitation to trade.",
-                        ch,NULL,victim,TO_VICT,FALSE);
+                        ch,NULL,victim,TO_VICT,false);
         
 
         ch->pcdata->req_trade = NULL;
@@ -353,8 +353,8 @@ void do_trade( CHAR_DATA *ch, char *argument )
             return;
         }
 
-        act("You decline the offer from $N.",ch,NULL,victim,TO_CHAR,FALSE);
-        act("$n declines your offer.",ch,NULL,victim,TO_VICT,FALSE);
+        act("You decline the offer from $N.",ch,NULL,victim,TO_CHAR,false);
+        act("$n declines your offer.",ch,NULL,victim,TO_VICT,false);
         ch->pcdata->req_trade = NULL;
         break;
 
@@ -368,10 +368,10 @@ void do_trade( CHAR_DATA *ch, char *argument )
         victim = ( trade->trader[0] == ch ? trade->trader[1] :
                                             trade->trader[0] );
        
-        destruct_trade( trade, TRUE );
+        destruct_trade( trade, true );
 
-        act("You cancel the trade.",ch,NULL,victim,TO_CHAR,FALSE);
-        act("$n has cancelled the trade.",ch,NULL,victim,TO_VICT,FALSE);
+        act("You cancel the trade.",ch,NULL,victim,TO_CHAR,false);
+        act("$n has cancelled the trade.",ch,NULL,victim,TO_VICT,false);
         break;        
 
     case TRADE_CLEAR:
@@ -384,9 +384,9 @@ void do_trade( CHAR_DATA *ch, char *argument )
 	victim = ( trade->trader[0] == ch ? trade->trader[1] :
 					    trade->trader[0] );
         
-	destruct_trade( trade, FALSE );
-        act("You clear the trade." ,ch,NULL,victim,TO_CHAR,FALSE);
-        act("$n has cleared the trade.",ch,NULL,victim,TO_VICT,FALSE);
+	destruct_trade( trade, false );
+        act("You clear the trade." ,ch,NULL,victim,TO_CHAR,false);
+        act("$n has cleared the trade.",ch,NULL,victim,TO_VICT,false);
         break;        
 
     case TRADE_SHOW:
@@ -409,7 +409,7 @@ void do_trade( CHAR_DATA *ch, char *argument )
         for ( obj = trade->items[trader] ; 
               obj != NULL ;
               obj = obj->next_in_trade )
-            act("   * $p",ch,obj,NULL,TO_CHAR,FALSE);
+            act("   * $p",ch,obj,NULL,TO_CHAR,false);
         send_to_char("\n\rin exchange for:\n\r",ch);
         if ( trade->gold[!trader] || trade->silver[!trader] )
         {
@@ -420,7 +420,7 @@ void do_trade( CHAR_DATA *ch, char *argument )
         for ( obj = trade->items[!trader] ;
               obj != NULL;
               obj = obj->next_in_trade )
-           act("   * $p",ch,obj,NULL,TO_CHAR,FALSE);
+           act("   * $p",ch,obj,NULL,TO_CHAR,false);
 
         break;
         
@@ -435,15 +435,15 @@ void do_trade( CHAR_DATA *ch, char *argument )
         trader = ( trade->trader[0] == ch ? 0 : 1 );
         victim = ( trade->trader[!trader] );
 
-        trade->approved[trader] = TRUE;
+        trade->approved[trader] = true;
 
-        act("You approve the trade.",ch,NULL,victim,TO_CHAR,FALSE);
-        act("$n approves the trade.",ch,NULL,victim,TO_VICT,FALSE);
+        act("You approve the trade.",ch,NULL,victim,TO_CHAR,false);
+        act("$n approves the trade.",ch,NULL,victim,TO_VICT,false);
 
         if ( trade->approved[!trader] )
         {
-            act("The trade is final.",ch,NULL,victim,TO_CHAR,FALSE);
-            act("The trade is final.",ch,NULL,victim,TO_VICT,FALSE);
+            act("The trade is final.",ch,NULL,victim,TO_CHAR,false);
+            act("The trade is final.",ch,NULL,victim,TO_VICT,false);
 
             /* Both people approve */
             ch->gold += trade->gold[!trader];
@@ -491,8 +491,8 @@ void do_trade( CHAR_DATA *ch, char *argument )
         victim =   trade->trader[!trader];
 
         /* Always reset approvals */
-        trade->approved[0] = FALSE;
-        trade->approved[1] = FALSE;
+        trade->approved[0] = false;
+        trade->approved[1] = false;
 
         if ( !str_cmp( arg, "gold" ) )
         {
@@ -511,9 +511,9 @@ void do_trade( CHAR_DATA *ch, char *argument )
             trade->gold[trader] += amount;
 	    ch->gold -= amount;
             sprintf(buf,"You add %d gold to the trade.",amount);
-            act(buf,ch,NULL,victim,TO_CHAR,FALSE);
+            act(buf,ch,NULL,victim,TO_CHAR,false);
             sprintf(buf,"$n adds %d gold to the trade.",amount);
-            act(buf,ch,NULL,victim,TO_VICT,FALSE);
+            act(buf,ch,NULL,victim,TO_VICT,false);
             return;
         }
         else
@@ -534,9 +534,9 @@ void do_trade( CHAR_DATA *ch, char *argument )
             trade->silver[trader] += amount;
 	    ch->silver -= amount;
             sprintf(buf,"You add %d silver to the trade.",amount);
-            act(buf,ch,NULL,victim,TO_CHAR,FALSE);
+            act(buf,ch,NULL,victim,TO_CHAR,false);
             sprintf(buf,"$n adds %d silver to the trade.",amount);
-            act(buf,ch,NULL,victim,TO_VICT,FALSE);
+            act(buf,ch,NULL,victim,TO_VICT,false);
             return;
         }
         else
@@ -555,12 +555,12 @@ void do_trade( CHAR_DATA *ch, char *argument )
  */
 
         if ( !obj_to_trade( obj, trade, trader ) )
-	    act("You can't trade $p.",ch,obj,victim,TO_CHAR,FALSE);
+	    act("You can't trade $p.",ch,obj,victim,TO_CHAR,false);
 	else
 	{
             obj_from_char( obj );
-            act("You add $p to the trade.",ch,obj,victim,TO_CHAR,FALSE);
-            act("$n adds $p to the trade.",ch,obj,victim,TO_VICT,FALSE);
+            act("You add $p to the trade.",ch,obj,victim,TO_CHAR,false);
+            act("$n adds $p to the trade.",ch,obj,victim,TO_VICT,false);
 	}
         return;
 
@@ -575,8 +575,8 @@ void do_trade( CHAR_DATA *ch, char *argument )
         victim =   trade->trader[!trader]; 
 
         /* Always reset approvals */
-        trade->approved[0] = FALSE;
-        trade->approved[1] = FALSE;
+        trade->approved[0] = false;
+        trade->approved[1] = false;
 
         if ( !str_cmp( arg, "gold" ) )
         {
@@ -595,9 +595,9 @@ void do_trade( CHAR_DATA *ch, char *argument )
             trade->gold[trader] -= amount;
             ch->gold += amount;
             sprintf(buf,"You remove %d gold from the trade.",amount);
-            act(buf,ch,NULL,victim,TO_CHAR,FALSE);
+            act(buf,ch,NULL,victim,TO_CHAR,false);
             sprintf(buf,"$n removes %d gold from the trade.",amount);
-            act(buf,ch,NULL,victim,TO_VICT,FALSE);
+            act(buf,ch,NULL,victim,TO_VICT,false);
             return;
         }
         else
@@ -618,9 +618,9 @@ void do_trade( CHAR_DATA *ch, char *argument )
             trade->silver[trader] -= amount;
 	    ch->silver += amount;
             sprintf(buf,"You remove %d silver from the trade.",amount);
-            act(buf,ch,NULL,victim,TO_CHAR,FALSE);
+            act(buf,ch,NULL,victim,TO_CHAR,false);
             sprintf(buf,"$n removes %d silver from the trade.",amount);
-            act(buf,ch,NULL,victim,TO_VICT,FALSE);
+            act(buf,ch,NULL,victim,TO_VICT,false);
             return;
         }
         else
@@ -634,8 +634,8 @@ void do_trade( CHAR_DATA *ch, char *argument )
         obj_from_trade( obj, trade, trader );
         obj_to_char( obj, ch );
 
-        act("You remove $p from the trade.",ch,obj,victim,TO_CHAR,FALSE);
-        act("$n removes $p from the trade.",ch,obj,victim,TO_VICT,FALSE);
+        act("You remove $p from the trade.",ch,obj,victim,TO_CHAR,false);
+        act("$n removes $p from the trade.",ch,obj,victim,TO_VICT,false);
         break;
       case TRADE_IDENTIFY: 
         if ( ( trade = ch->trade ) == NULL )

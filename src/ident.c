@@ -64,7 +64,7 @@ void do_ident( CHAR_DATA *ch, char *argument )
 
     if ( victim->desc == NULL )
     {
-  act( "$N doesn't have a descriptor.", ch, NULL, victim, TO_CHAR ,TRUE);
+  act( "$N doesn't have a descriptor.", ch, NULL, victim, TO_CHAR ,true);
   return;
     }
 

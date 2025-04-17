@@ -60,71 +60,71 @@ bool check_legal_hall(ROOM_INDEX_DATA *room)
 {
   RESET_DATA *pReset;
   int iClass, iGuild, i;
-  bool exitfound = FALSE;
+  bool exitfound = false;
   if(!room || !room->area)
-    return FALSE;
+    return false;
   /* Check for resets */
   for(pReset = room->area->reset_first; pReset != NULL; pReset = pReset->next)
   {
     if(get_room_index(pReset->arg3) == room)
-      return FALSE;
+      return false;
   }
   /* Check for restrictions */
   /* Can't be a clan room */
   if(room->heal_rate != 100 || room->mana_rate != 100)
-    return FALSE;
+    return false;
   if(room->clan)
-    return FALSE;
+    return false;
   /* No flags */
   if (IS_SET(room->room_flags, ROOM_IMP_ONLY))
-    return FALSE;
+    return false;
   if (IS_SET(room->room_flags, ROOM_GODS_ONLY))
-    return FALSE;
+    return false;
   if (IS_SET(room->room_flags, ROOM_HEROES_ONLY))
-    return FALSE;
+    return false;
   if (IS_SET(room->room_flags,ROOM_NEWBIES_ONLY))
-    return FALSE;
+    return false;
   if (IS_SET(room->room_flags,ROOM_NOCLAN))
-    return FALSE;
+    return false;
   if (IS_SET(room->room_flags,ROOM_CLANONLY))
-    return FALSE;
+    return false;
   if ( IS_SET(room->room_flags, ROOM_PRIVATE))
-    return FALSE;
+    return false;
   if ( IS_SET(room->room_flags, ROOM_SOLITARY))
-    return FALSE;
+    return false;
   if ( IS_SET(room->room_flags, ROOM_ISOLATED))
-    return FALSE;
+    return false;
   if (IS_SET(room->room_flags, ROOM_NOHALL))
-    return FALSE;
+    return false;
   /* No owner */
   if(room->owner != NULL && room->owner[0] != '\0')
-    return FALSE;
+    return false;
   /* All exits from here must link back properly */
   for(i = 0; i < 6; i++)
   {
     if(room->exit[i])
     {/* Can't be right next to a noclan room */
-      exitfound = TRUE;
+      exitfound = true;
       if(room->exit[i]->u1.to_room->vnum < 0 ||
       IS_SET(room->exit[i]->u1.to_room->room_flags, ROOM_NOCLAN) ||
       (!room->exit[i]->u1.to_room->exit[rev_dir[i]] ||
       room->exit[i]->u1.to_room->exit[rev_dir[i]]->u1.to_room != room))
-        return FALSE;/* Clean exits only, can't lead into clan room */
+        return false;/* Clean exits only, can't lead into clan room */
     }
   }
   if(!exitfound)
-    return FALSE;
+    return false;
   /* Can't be a guild room */
   for ( iClass = 0; iClass < MAX_CLASS; iClass++ )
   {
       for ( iGuild = 0; iGuild < MAX_GUILD; iGuild ++)
       {
         if(room->vnum == class_table[iClass].guild[iGuild])
-          return FALSE;
+          return false;
       }
   }
   /* All clear */
-  return TRUE;
+  return true;
 }
 
 /* Allow clan leaders to review their own halls too */
@@ -182,8 +182,8 @@ void do_review(CHAR_DATA *ch, char *argument)
             case PLAN_EXIT:
                      break;
           }
-          to_rev->reviewed = TRUE;
-          save_hall(rev_clan->name, rev_clan->hall, TRUE);
+          to_rev->reviewed = true;
+          save_hall(rev_clan->name, rev_clan->hall, true);
           /* Include outside room details if it's an outside link */
           return;
         }
@@ -235,14 +235,14 @@ void edit_stop(CHAR_DATA *ch)
     REMOVE_BIT(ch->pcdata->edit_flags, EDITMODE_RULES);
     end_long_edit(ch, &ch->pcdata->clan_info->clan->rules);
     send_to_char("Rules editing stopped, updates have been saved.\n\r", ch);
-    ch->pcdata->edits_made = TRUE;
+    ch->pcdata->edits_made = true;
   }
   if(IS_SET(ch->pcdata->edit_flags, EDITMODE_CHARTER))
   {
     REMOVE_BIT(ch->pcdata->edit_flags, EDITMODE_CHARTER);
     end_long_edit(ch, &ch->pcdata->clan_info->clan->charter);
     send_to_char("Charter editing stopped, updates have been saved.\n\r", ch);
-    ch->pcdata->edits_made = TRUE;
+    ch->pcdata->edits_made = true;
   }
   if(IS_SET(ch->pcdata->edit_flags, EDITMODE_DESC))
   {/* They're editing a description, wrap that up */
@@ -252,18 +252,18 @@ void edit_stop(CHAR_DATA *ch)
   }
   if(ch->pcdata->edit_obj)
   {
-    ch->pcdata->edit_obj->editing = FALSE;
+    ch->pcdata->edit_obj->editing = false;
     end_long_edit(ch, &ch->pcdata->edit_obj->desc);
     ch->pcdata->edit_obj = NULL;
   }
   if(ch->pcdata->edits_made)
   {  /* Save the area if modified */
-    ch->pcdata->edits_made = FALSE;
+    ch->pcdata->edits_made = false;
     /* Don't need to save the values, anything updating money should have saved
      * when the change was made */
-/*    save_clan(ch, FALSE, TRUE,
-        IS_SET(ch->pcdata->edit_flags, EDITMODE_HALL) ? TRUE : FALSE);*/
-    save_clan(ch, FALSE, TRUE, TRUE);
+/*    save_clan(ch, false, true,
+        IS_SET(ch->pcdata->edit_flags, EDITMODE_HALL) ? true : false);*/
+    save_clan(ch, false, true, true);
   }
   ch->pcdata->edit_flags = 0;
   send_to_char("Editing stopped, the area has been saved.\n\r", ch);
@@ -501,26 +501,26 @@ bool check_can_edit(CHAR_DATA *ch, int action, bool hedit)
   if(IS_NPC(ch))
   {
     send_to_char("NPCs can not edit.\n\r", ch);
-    return FALSE;
+    return false;
   }
   if(hedit)
   {
     if(!ch->pcdata->clan_info)
-      return FALSE; /* You need a clan */
+      return false; /* You need a clan */
     if(IS_IMMORTAL(ch) && get_trust(ch) >= 57)
-      return TRUE;
+      return true;
     if(ch->pcdata->clan_info->rank == 5)
-      return TRUE; /* Leaders can do anything */
+      return true; /* Leaders can do anything */
     if(IS_SET(ch->pcdata->edit_flags, action) == action)
-      return TRUE;
-    return FALSE;
+      return true;
+    return false;
   }
   send_to_char("Personal editing is not functional quite yet.\n\r", ch);
-  return FALSE;
+  return false;
   if(!ch->in_room || ch->in_room->vnum >= 0)
-    return FALSE;
+    return false;
   if(IS_IMMORTAL(ch) && get_trust(ch) >= 57)
-    return TRUE;
+    return true;
   room = ch->pcdata->clan_info->pers_plan;
   for(; room != NULL; room = room->next)
   {
@@ -531,11 +531,11 @@ bool check_can_edit(CHAR_DATA *ch, int action, bool hedit)
   return room != NULL;
 }
 
-/* if do_buy is set, actually pays.  returns FALSE if can't afford. */
+/* if do_buy is set, actually pays.  returns false if can't afford. */
 bool pay_hall_cost(CHAR_DATA *ch, int amount, bool do_buy, bool hedit)
 {
   if(IS_NPC(ch))
-    return FALSE;
+    return false;
   int *target;
   if(hedit)
   {
@@ -548,12 +548,12 @@ bool pay_hall_cost(CHAR_DATA *ch, int amount, bool do_buy, bool hedit)
     amount *= 1000;/* Amount is in shards, convert to gold */
   }
   if(IS_IMMORTAL(ch) || amount == 0)
-    return TRUE;/* Imms buy for free */
+    return true;/* Imms buy for free */
   if(amount < 0)
   {
     if(do_buy)
       *target -= amount;
-    return TRUE; /* Can always accept money */
+    return true; /* Can always accept money */
   }
   if(*target < amount)
   {
@@ -570,11 +570,11 @@ bool pay_hall_cost(CHAR_DATA *ch, int amount, bool do_buy, bool hedit)
           COST_STR(((amount - *target + 999) / 1000), hedit));
       send_to_char(buf, ch);
     }
-    return FALSE;
+    return false;
   }
   if(do_buy)
     *target -= amount;
-  return TRUE;
+  return true;
 }
 
 void swap_rooms(CHAR_DATA *ch, PLAN_DATA *old_room, PLAN_DATA *new_room, bool hedit)
@@ -604,7 +604,7 @@ void swap_rooms(CHAR_DATA *ch, PLAN_DATA *old_room, PLAN_DATA *new_room, bool he
     }
   }
   /* Need to reset all of the room's strings */
-  load_plan_obj(new_room, TRUE);
+  load_plan_obj(new_room, true);
 }
 
 void set_room_exits(PLAN_DATA *obj)
@@ -663,7 +663,7 @@ void set_room_exits(PLAN_DATA *obj)
         if(target->exit[rev_dir[i]] == NULL)
         {
           if(target->vnum >= 0)
-            modify_room_marker(obj->clan, target, rev_dir[i], TRUE);
+            modify_room_marker(obj->clan, target, rev_dir[i], true);
 
 #ifdef OLC_VERSION
           target->exit[rev_dir[i]] = alloc_perm( sizeof(*target->exit[rev_dir[i]]) );
@@ -695,7 +695,7 @@ void set_room_exits(PLAN_DATA *obj)
             pRoomIndex->exit[i]->u1.to_room->exit[rev_dir[i]]->u1.to_room == pRoomIndex)
         {
           if(pRoomIndex->exit[i]->u1.to_room->vnum >= 0)
-            modify_room_marker(obj->clan, pRoomIndex->exit[i]->u1.to_room, -1, FALSE);
+            modify_room_marker(obj->clan, pRoomIndex->exit[i]->u1.to_room, -1, false);
           ROOM_INDEX_DATA *target = pRoomIndex->exit[i]->u1.to_room;
           GC_FREE(target->exit[rev_dir[i]]);
           target->exit[rev_dir[i]] = NULL;
@@ -844,7 +844,7 @@ void load_mob_obj(PLAN_DATA *obj, bool strings)
     pMobIndex = (MOB_INDEX_DATA*)obj->to_place;
   pMobIndex->vnum                 = obj->plan_index * -1;
   pMobIndex->area                 = 0;
-  pMobIndex->new_format   = TRUE;
+  pMobIndex->new_format   = true;
   if(strings)
   {
     char extra[256];
@@ -959,7 +959,7 @@ void load_mob_obj(PLAN_DATA *obj, bool strings)
 }
 
 void modify_room_marker(CLAN_DATA *clan, ROOM_INDEX_DATA *room, int dir, bool place)
-{/* Remove any previous marker in this room, place a new one if place is TRUE */
+{/* Remove any previous marker in this room, place a new one if place is true */
   int sign_vnum;
   if(clan == NULL || room == NULL)
     return; /* Personal editing */
@@ -991,7 +991,7 @@ void modify_room_marker(CLAN_DATA *clan, ROOM_INDEX_DATA *room, int dir, bool pl
     sign_base->vnum = sign_vnum;
     sign_base->item_type = ITEM_TRASH;
     sign_base->area = 0;
-    sign_base->new_format = TRUE;
+    sign_base->new_format = true;
     sign_base->reset_num = 0;
     sign_base->name = str_dup("clan gate stone");
     sign_base->label = str_dup("clan gate stone");
@@ -1007,7 +1007,7 @@ void modify_room_marker(CLAN_DATA *clan, ROOM_INDEX_DATA *room, int dir, bool pl
     sprintf(buf, "A clan gate stone glows softly by a door leading %s.", dirstr);
     sign_base->description = str_dup(buf);
     sign_base->extra_flags = ITEM_NOLOCATE;
-    object = create_object(sign_base, 1, FALSE );
+    object = create_object(sign_base, 1, false );
     obj_to_room(object, room);
   }
 }
@@ -1055,13 +1055,13 @@ void update_room_sign(CLAN_DATA *clan, ROOM_INDEX_DATA *room)
     sign_base->vnum = sign_vnum;
     sign_base->item_type = ITEM_TRASH;
     sign_base->area = 0;
-    sign_base->new_format = TRUE;
+    sign_base->new_format = true;
     sign_base->reset_num = 0;
     sign_base->name = str_dup("sign");
     sign_base->label = str_dup("sign");
     sign_base->description = str_dup("A sign with the portal destinations available is here");
     sign_base->extra_flags = ITEM_NOLOCATE;
-    object = create_object(sign_base, 1, FALSE );
+    object = create_object(sign_base, 1, false );
     obj_to_room(object, room);
   }
 }
@@ -1083,7 +1083,7 @@ void load_item_obj(PLAN_DATA *obj, bool strings)
 
   pObjIndex->vnum                 = obj->plan_index * -1;
   pObjIndex->area                 = 0;
-  pObjIndex->new_format           = TRUE;
+  pObjIndex->new_format           = true;
   pObjIndex->reset_num    = 0;
   if(strings)
   {
@@ -1234,7 +1234,7 @@ int calc_hall_type(CLAN_DATA *clan, CHAR_DATA *ch)
   int max_mana = 0;
   int max_lab = 0;
   int max_altar = 0;
-  bool pit = FALSE;
+  bool pit = false;
   int healer = 0;
   int portals = 0;
   for(obj = clan->planned; obj != NULL; obj = obj->next)
@@ -1264,7 +1264,7 @@ int calc_hall_type(CLAN_DATA *clan, CHAR_DATA *ch)
           break;
         case PLAN_ITEM:
           if(IS_SET(obj->flags, PLAN_ITEM_PIT))
-            pit = TRUE;
+            pit = true;
           else if(IS_SET(obj->flags, PLAN_ITEM_PORTAL))
             portals++;
           break;
@@ -1348,7 +1348,7 @@ void respawn_plan_obj(PLAN_DATA *obj, PLAN_DATA *start, bool show_creation)
     {
       vic_next  = victim->next;
       if(IS_NPC(victim) && victim->pIndexData->vnum == obj->plan_index * -1)
-        extract_char(victim, TRUE);
+        extract_char(victim, true);
     }
     victim = create_mobile((MOB_INDEX_DATA*)obj->to_place);
     if(victim == NULL)
@@ -1360,9 +1360,9 @@ void respawn_plan_obj(PLAN_DATA *obj, PLAN_DATA *start, bool show_creation)
     if(show_creation)
     {
       if(IS_SET(obj->type, PLAN_PREVIEWED))
-        act( "$n forms from thin air.", victim, NULL, NULL, TO_ROOM ,FALSE);
+        act( "$n forms from thin air.", victim, NULL, NULL, TO_ROOM ,false);
       else
-        act( "$n looks much more solid.", victim, NULL, NULL, TO_ROOM ,FALSE);
+        act( "$n looks much more solid.", victim, NULL, NULL, TO_ROOM ,false);
     }
   }
   else
@@ -1384,7 +1384,7 @@ void respawn_plan_obj(PLAN_DATA *obj, PLAN_DATA *start, bool show_creation)
         extract_obj(object);
       }
     }
-    object = create_object((OBJ_INDEX_DATA*)obj->to_place, 1, FALSE );
+    object = create_object((OBJ_INDEX_DATA*)obj->to_place, 1, false );
 //    if (IS_SET(obj->flags, PLAN_OBJ_DRINK))
 //      obj_to_char(object, ch );/* NOT COMPLETE */
 //    else
@@ -1404,11 +1404,11 @@ void preview_hall_obj(CHAR_DATA *ch, PLAN_DATA *obj, bool hedit)
 {
   REMOVE_BIT(obj->type, PLAN_PLANNED);
   SET_BIT(obj->type, PLAN_PREVIEWED);
-  obj->reviewed = FALSE;
+  obj->reviewed = false;
   /* Remember to call respawn on everything, this only loads it into an actual object */
-  load_plan_obj(obj, TRUE);
+  load_plan_obj(obj, true);
   /* Spawns it if an instance doesn't already exist */
-  respawn_plan_obj(obj, START_OBJ(ch, hedit), TRUE);
+  respawn_plan_obj(obj, START_OBJ(ch, hedit), true);
 }
 
 void place_hall_obj(CHAR_DATA *ch, PLAN_DATA *obj, bool hedit)
@@ -1416,10 +1416,10 @@ void place_hall_obj(CHAR_DATA *ch, PLAN_DATA *obj, bool hedit)
   REMOVE_BIT(obj->type, PLAN_PREVIEWED);
   SET_BIT(obj->type, PLAN_PLACED);
   clear_string(&obj->previewer, NULL);
-  obj->reviewed = FALSE;
-  load_plan_obj(obj, TRUE);
+  obj->reviewed = false;
+  load_plan_obj(obj, true);
   /* Spawns it if an instance doesn't already exist */
-  respawn_plan_obj(obj, START_OBJ(ch, hedit), TRUE);
+  respawn_plan_obj(obj, START_OBJ(ch, hedit), true);
 }
 
 /* Per item refund amount */
@@ -1474,7 +1474,7 @@ int remove_hall_obj(CHAR_DATA *ch, PLAN_DATA *obj, bool hedit)
           {
             next_in_room = in_room->next_in_room;
             if(in_room->pIndexData->vnum < 0)
-              extract_char(in_room, TRUE);
+              extract_char(in_room, true);
             else
             {
               char_from_room(in_room);
@@ -1543,8 +1543,8 @@ int remove_hall_obj(CHAR_DATA *ch, PLAN_DATA *obj, bool hedit)
                   next_on_ground = on_ground->next_content;
                   if(on_ground->pIndexData == obj->to_place)
                   {
-                    act( "$p dissolves into thin air.", ch, on_ground, NULL, TO_ROOM ,FALSE);
-                    act( "$p dissolves into thin air.", ch, on_ground, NULL, TO_CHAR ,FALSE);
+                    act( "$p dissolves into thin air.", ch, on_ground, NULL, TO_ROOM ,false);
+                    act( "$p dissolves into thin air.", ch, on_ground, NULL, TO_CHAR ,false);
                     extract_obj(on_ground);
                   }
                   on_ground = next_on_ground;
@@ -1571,8 +1571,8 @@ int remove_hall_obj(CHAR_DATA *ch, PLAN_DATA *obj, bool hedit)
                 next_in_room = in_room->next;
                 if(in_room->pIndexData == obj->to_place)
                 {
-                  act("$n dissolves into the air.", in_room, NULL, NULL, TO_ROOM, FALSE);
-                  extract_char(in_room, TRUE);
+                  act("$n dissolves into the air.", in_room, NULL, NULL, TO_ROOM, false);
+                  extract_char(in_room, true);
                 }
                 in_room = next_in_room;
               }
@@ -1629,7 +1629,7 @@ void read_to_tilde(FILE *fp, char **string)
 {
   char input[MAX_STRING_LENGTH];
   int i = 0;
-  bool first = FALSE;
+  bool first = false;
   while(!feof(fp))
   {
     input[i] = fgetc(fp);
@@ -1641,7 +1641,7 @@ void read_to_tilde(FILE *fp, char **string)
     if(!first)
     {
       if(input[i] != ' ')
-        first = TRUE;
+        first = true;
       else
         i--;
     }
@@ -1695,7 +1695,7 @@ void fread_clan_hall(FILE *fp, PLAN_DATA **head, CLAN_DATA *clan)
       {
         if(IS_SET(obj->type, (PLAN_PLACED | PLAN_PREVIEWED)))
         {
-          load_plan_obj(obj, TRUE);
+          load_plan_obj(obj, true);
           if(clan->hall_index && IS_SET(obj->type, PLAN_ROOM) && obj->plan_index == clan->hall_index)
             clan->hall = obj;
         }
@@ -1727,10 +1727,10 @@ void fread_clan_hall(FILE *fp, PLAN_DATA **head, CLAN_DATA *clan)
 
 bool fread_plan_obj(FILE *fp, PLAN_DATA *obj)
 {
-  bool found = FALSE;
+  bool found = false;
   char input[MAX_INPUT_LENGTH];
   if(fp == NULL || obj == NULL)
-    return FALSE;
+    return false;
   /* Should be called only after "Label" has been found */
   if (!fscanf(fp, "%s", input)) {
       log_error("fread_plan_obj: error reading input 1");
@@ -1749,19 +1749,19 @@ bool fread_plan_obj(FILE *fp, PLAN_DATA *obj)
           if (!fscanf(fp, "%d", &obj->cost)) {
               log_error("fread_plan_obj: error reading Cost");
           }
-          found = TRUE;
+          found = true;
         }
       case 'D':
         if(strcmp(input, "Desc") == 0)
         {
           read_to_tilde(fp, &obj->desc);
-          found = TRUE;
+          found = true;
         }
         break;
       case '#':
         if(strcmp(input, "#End") == 0)
         {
-          return TRUE; /* Done */
+          return true; /* Done */
         }
         break;
       case 'F':
@@ -1770,12 +1770,12 @@ bool fread_plan_obj(FILE *fp, PLAN_DATA *obj)
           if (!fscanf(fp, "%ld", &obj->flags)) {
               log_error("fread_plan_obj: error reading F");
           }
-          found = TRUE;
+          found = true;
         }
         else if(strcmp(input, "Flagged") == 0)
         {
-          obj->flagged = TRUE;
-          found = TRUE;
+          obj->flagged = true;
+          found = true;
         }
         break;
       case 'I':
@@ -1784,35 +1784,35 @@ bool fread_plan_obj(FILE *fp, PLAN_DATA *obj)
           if (!fscanf(fp, "%d", &obj->plan_index)) {
               log_error("fread_plan_obj: error reading I");
           }
-          found = TRUE;
+          found = true;
         }
         break;
       case 'L':
         if(strcmp(input, "Long") == 0)
         {
           read_to_tilde(fp, &obj->long_d);
-          found = TRUE;
+          found = true;
         }
         else if(strcmp(input, "Loc") == 0)
         {
           if (!fscanf(fp, "%d", &obj->loc)) {
               log_error("fread_plan_obj: error reading Loc");
           }
-          found = TRUE;
+          found = true;
         }
         break;
       case 'N':
         if(strcmp(input, "Name") == 0)
         {
           read_to_tilde(fp, &obj->name);
-          found = TRUE;
+          found = true;
         }
         break;
       case 'S':
         if(strcmp(input, "Short") == 0)
         {
           read_to_tilde(fp, &obj->short_d);
-          found = TRUE;
+          found = true;
         }
         break;
       case 'O':
@@ -1821,14 +1821,14 @@ bool fread_plan_obj(FILE *fp, PLAN_DATA *obj)
           if (fscanf(fp, "%d %d", &obj->opt[0], &obj->opt[1]) < 2) {
               log_error("fread_plan_obj: error reading Opt");
           }
-          found = TRUE;
+          found = true;
         }
         break;
       case 'R':
         if(strcmp(input, "Review") == 0)
         {
-          obj->reviewed = TRUE;
-          found = TRUE;
+          obj->reviewed = true;
+          found = true;
         }
         break;
       case 'T':
@@ -1837,7 +1837,7 @@ bool fread_plan_obj(FILE *fp, PLAN_DATA *obj)
           if (!fscanf(fp, "%ld", &obj->type)) {
               log_error("fread_plan_obj: error reading Type");
           }
-          found = TRUE;
+          found = true;
           if(IS_SET(obj->type, PLAN_ROOM))
             obj->exits = new_p_exit();
         }
@@ -1847,7 +1847,7 @@ bool fread_plan_obj(FILE *fp, PLAN_DATA *obj)
       fread_to_eol(fp);
   }
   bug("No end to planned object found.", 0);
-  return FALSE; /* Bad ending */
+  return false; /* Bad ending */
 }
 
 /* Read and attach the exits, all linked rooms should already be built */
@@ -1860,7 +1860,7 @@ bool fread_plan_exit(FILE *fp, PLAN_DATA *first, CLAN_DATA *clan)
   }
   room = find_edit_obj_by_index(first, PLAN_ROOM, index);
   if(room == NULL || dir < 0 || dir > 6)
-    return FALSE;
+    return false;
   if(exit_index >= 0)
     room->exits[dir].exit = find_edit_obj_by_index(first, PLAN_EXIT, exit_index);
   if(link_index >= 0)
@@ -1874,7 +1874,7 @@ bool fread_plan_exit(FILE *fp, PLAN_DATA *first, CLAN_DATA *clan)
       clan->hall_index = room->plan_index;
     }
   }
-  return TRUE;
+  return true;
 }
 
 void fwrite_plan_obj(FILE *fp, PLAN_DATA *obj)
@@ -1984,7 +1984,7 @@ void search_linked_rooms(PLAN_DATA *start)
 /* Fill in gaps in the index */
 int new_obj_index(CHAR_DATA *ch, int type, bool hedit)
 {
-  bool use_high = FALSE;
+  bool use_high = false;
   int open_val = -1;
   int low = ch->pcdata->clan_info->clan->vnum_min, high = ch->pcdata->clan_info->clan->vnum_min - 1;
   PLAN_DATA *obj = START_OBJ(ch, hedit);
@@ -2000,7 +2000,7 @@ int new_obj_index(CHAR_DATA *ch, int type, bool hedit)
       }
       else if(obj->plan_index == open_val)
       {
-        use_high = TRUE;/* Bad */
+        use_high = true;/* Bad */
         bug("Out of order index found.\n\r", 0);
       }
       if(obj->plan_index > high)
@@ -2197,22 +2197,22 @@ bool check_upgrade(CHAR_DATA *ch, PLAN_DATA *obj, char prefix)
       sprintf(buf, "%c%s", prefix, ch->name);
       clear_string(&obj->previewer, buf);
       send_to_char("Upgrade prepared, awaiting another leader to verify.\n\r", ch);
-      return FALSE;
+      return false;
     }
     if(obj->previewer[0] != prefix)
     {
       sprintf(buf, "%c%s", prefix, ch->name);
       clear_string(&obj->previewer, buf);
       send_to_char("Upgrade request type changed, awaiting another leader to verify.\n\r", ch);
-      return FALSE;
+      return false;
     }
     if(!str_cmp(obj->previewer + 1, ch->name))
     {
       send_to_char("You can't verify your own upgrade.\n\r", ch);
-      return FALSE;
+      return false;
     }
   }
-  return TRUE;
+  return true;
 }
 
 /* This function is awkward, pedit and hedit share enough to be worth having in
@@ -2365,7 +2365,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
     if(!str_prefix(arg, "label"))
     {
       argument = one_argument(argument, arg);
-      blast_punctuation(arg, FALSE, FALSE);
+      blast_punctuation(arg, false, false);
       if(arg[0] == '\0')
       {
         if(hedit)
@@ -2396,7 +2396,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       clear_string(&obj->label, arg);
       sprintf(buf, "Label set to %s.\n\r", arg);
       send_to_char(buf, ch);
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     }/* end label */
     if(!str_prefix(arg, "name"))
@@ -2421,7 +2421,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       clear_string(&obj->name, argument);
       sprintf(buf, "%s name set to %s\n\r", obj->label, argument);
       send_to_char(buf, ch);
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     }
     if(!str_prefix(arg, "hregen"))
@@ -2462,12 +2462,12 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         SET_BIT(obj->flags, PLAN_ROOM_REGEN);
       else
         REMOVE_BIT(obj->flags, PLAN_ROOM_REGEN);
-      set_obj_cost(ch, obj, hedit, FALSE);
+      set_obj_cost(ch, obj, hedit, false);
       sprintf(buf, "Hit regen value set to %d (%d%% regen), cost set to %d %s",
           obj->opt[0], GET_REGEN(obj->opt[0], 0),
           COST_STR(obj->cost, hedit));
       send_to_char(buf, ch);
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     }/* end hregen */
     if(!str_prefix(arg, "mregen"))
@@ -2508,12 +2508,12 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         SET_BIT(obj->flags, PLAN_ROOM_REGEN);
       else
         REMOVE_BIT(obj->flags, PLAN_ROOM_REGEN);
-      set_obj_cost(ch, obj, hedit, FALSE);
+      set_obj_cost(ch, obj, hedit, false);
       sprintf(buf, "Mana regen value set to %d (%d%% regen), cost set to %d %s",
           obj->opt[1], GET_REGEN(obj->opt[1], 0),
           COST_STR(obj->cost, hedit));
       send_to_char(buf, ch);
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     }/* end mregen */
     if(hedit)
@@ -2548,11 +2548,11 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
           SET_BIT(obj->flags, PLAN_ROOM_LAB);
         else
           REMOVE_BIT(obj->flags, PLAN_ROOM_LAB);
-        set_obj_cost(ch, obj, hedit, FALSE);
+        set_obj_cost(ch, obj, hedit, false);
         sprintf(buf, "Magelab value set to %d, cost set to %d %s",
             obj->opt[0], COST_STR(obj->cost, hedit));
         send_to_char(buf, ch);
-        ch->pcdata->edits_made = TRUE;
+        ch->pcdata->edits_made = true;
         return;
       }/* end magelab */
       if(!str_prefix(arg, "altar"))
@@ -2585,11 +2585,11 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
           SET_BIT(obj->flags, PLAN_ROOM_ALTAR);
         else
           REMOVE_BIT(obj->flags, PLAN_ROOM_ALTAR);
-        set_obj_cost(ch, obj, hedit, FALSE);
+        set_obj_cost(ch, obj, hedit, false);
         sprintf(buf, "Altar value set to %d, cost set to %d %s.\n\r",
             obj->opt[0], COST_STR(obj->cost, hedit));
         send_to_char(buf, ch);
-        ch->pcdata->edits_made = TRUE;
+        ch->pcdata->edits_made = true;
         return;
       }/* end altar */
     }/* end if hedit for rooms */
@@ -2616,7 +2616,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         send_to_char("Magelab or altar override outdoor setting, they will be indoors.\n\r", ch);
         return;
       }
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     } /* end outdoors */
     if(!str_prefix(arg, "dark") || !str_prefix(arg, "light"))
@@ -2637,7 +2637,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         sprintf(buf, "%s now has light.\n\r", obj->label);
         send_to_char(buf, ch);
       }
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     } /* end dark */
     if(!str_prefix(arg, "short"))
@@ -2663,7 +2663,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       clear_string(&obj->short_d, argument);
       sprintf(buf, "%s short set to %s\n\r", obj->label, argument);
       send_to_char(buf, ch);
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     }/* end short */
     if(!str_prefix(arg, "long"))
@@ -2689,7 +2689,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       clear_string(&obj->long_d, argument);
       sprintf(buf, "%s long set to %s\n\r", obj->label, argument);
       send_to_char(buf, ch);
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     }/* end long */
     if(!str_prefix(arg, "type"))
@@ -2739,7 +2739,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
             send_to_char("Valid types: pit, fountain, furniture, doodad.\n\r", ch);
           return;
         }
-        set_obj_cost(ch, obj, hedit, FALSE);
+        set_obj_cost(ch, obj, hedit, false);
         switch(obj->flags)
         {
           case PLAN_ITEM_PIT: sprintf(buf, "The item is now a pit, cost is %d %s.\n\r",
@@ -2756,7 +2756,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
                          COST_STR(obj->cost, hedit)); break;
         }
         send_to_char(buf, ch);
-        ch->pcdata->edits_made = TRUE;
+        ch->pcdata->edits_made = true;
         return;
       }
       else if(hedit)
@@ -2773,11 +2773,11 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
           obj->flags = PLAN_MOB_MERCHANT;/* Remove anything previously set */
           obj->opt[0] = 0; /* Clear values */
           obj->opt[1] = 0;
-          set_obj_cost(ch, obj, hedit, FALSE);
+          set_obj_cost(ch, obj, hedit, false);
           sprintf(buf, "%s set to type merchant, cost is now %d %s.\n\r",
               obj->label, COST_STR(obj->cost, hedit));
           send_to_char(buf, ch);
-          ch->pcdata->edits_made = TRUE;
+          ch->pcdata->edits_made = true;
           return;
         }
         if(!str_prefix(arg, "healer"))
@@ -2790,11 +2790,11 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
           obj->flags = PLAN_MOB_HEALER;/* Remove anything previously set */
           obj->opt[0] = 0; /* Clear values */
           obj->opt[1] = 0;
-          set_obj_cost(ch, obj, hedit, FALSE);
+          set_obj_cost(ch, obj, hedit, false);
           sprintf(buf, "%s set to type healer, cost is now %d %s.\n\r",
               obj->label, COST_STR(obj->cost, hedit));
           send_to_char(buf, ch);
-          ch->pcdata->edits_made = TRUE;
+          ch->pcdata->edits_made = true;
           return;
         }
         send_to_char("Valid types: merchant, healer.\n\r", ch);
@@ -2828,11 +2828,11 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
           return;
         }
         obj->opt[0] = value;
-        set_obj_cost(ch, obj, hedit, FALSE);
+        set_obj_cost(ch, obj, hedit, false);
         sprintf(buf, "Discount value set to %d (%d%%), cost set to %d %s.\n\r",
             obj->opt[0], obj->opt[0] * 10, COST_STR(obj->cost, hedit));
         send_to_char(buf, ch);
-        ch->pcdata->edits_made = TRUE;
+        ch->pcdata->edits_made = true;
         return;
       }/* end discount */
       if(!str_prefix(arg, "level"))
@@ -2859,11 +2859,11 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
           return;
         }
         obj->opt[0] = value;
-        set_obj_cost(ch, obj, hedit, FALSE);
+        set_obj_cost(ch, obj, hedit, false);
         sprintf(buf, "Level set to %d (Level %d), cost set to %d %s.\n\r",
             obj->opt[0], obj->opt[0] + 40, COST_STR(obj->cost, hedit));
         send_to_char(buf, ch);
-        ch->pcdata->edits_made = TRUE;
+        ch->pcdata->edits_made = true;
         return;
       }/* end level */
       if(!str_prefix(arg, "race"))
@@ -2893,7 +2893,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         sprintf(buf, "Race set to %s.\n\r",
             race_table[race].name);
         send_to_char(buf, ch);
-        ch->pcdata->edits_made = TRUE;
+        ch->pcdata->edits_made = true;
         return;
       }/* end race */
       if(!str_prefix(arg, "alignment"))
@@ -2933,7 +2933,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
           send_to_char("Valid alignments are good, neutral, or evil.\n\r", ch);
           return;
         }
-        ch->pcdata->edits_made = TRUE;
+        ch->pcdata->edits_made = true;
         return;
       }/* end align */
       if(!str_prefix(arg, "gender") || !str_prefix(arg, "sex"))
@@ -2973,7 +2973,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
           send_to_char("Valid genders are male, female, or none.\n\r", ch);
           return;
         }
-        ch->pcdata->edits_made = TRUE;
+        ch->pcdata->edits_made = true;
         return;
       }/* end gender */
       if(!str_prefix(arg, "target"))
@@ -3056,7 +3056,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         obj->opt[0] = new_target;
         sprintf(buf, "%s is now the target for %s.\n\r", name, obj->label);
         send_to_char(buf, ch);
-        ch->pcdata->edits_made = TRUE;
+        ch->pcdata->edits_made = true;
         return;
       }
     }/* End if hedit for item/mob hall only settings */
@@ -3084,11 +3084,11 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         return;
       }
       obj->opt[0] = value;
-      set_obj_cost(ch, obj, hedit, FALSE);
+      set_obj_cost(ch, obj, hedit, false);
       sprintf(buf, "Regen value set to %d (%d%%), cost set to %d %s.\n\r",
           obj->opt[0], obj->opt[0] * 5, COST_STR(obj->cost, hedit));
       send_to_char(buf, ch);
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     }/* end regen */
     if(!str_prefix(arg, "liquid"))
@@ -3116,7 +3116,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         obj->opt[0] = 0;
       sprintf(buf, "Liquid set to %s.\n\r", liq_table[obj->opt[0]].liq_name);
       send_to_char(buf, ch);
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     }/* end liquid */
 /*    if(!str_prefix(arg, "hidden"))
@@ -3127,7 +3127,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         return;
       }
       TOGGLE_BIT(obj->flags, PLAN_ITEM_HIDDEN);
-      set_obj_cost(ch, obj, hedit, FALSE);
+      set_obj_cost(ch, obj, hedit, false);
       if(IS_SET(obj->flags, PLAN_ITEM_HIDDEN))
       {
         sprintf(buf, "%s will now be hidden, its cost is %d %s.\n\r",
@@ -3139,7 +3139,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
             obj->label, COST_STR(obj->cost, hedit));
       }
       send_to_char(buf, ch);
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     }*//* end hidden */
     if(!str_prefix(arg, "door"))
@@ -3150,7 +3150,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         return;
       }
       TOGGLE_BIT(obj->flags, PLAN_EXIT_CLOSABLE);
-      set_obj_cost(ch, obj, hedit, FALSE);
+      set_obj_cost(ch, obj, hedit, false);
       if(IS_SET(obj->flags, PLAN_EXIT_CLOSABLE))
       {/* Remember, this is opposite of how it started */
         sprintf(buf, "%s now has a door, its cost is %d %s.\n\r",
@@ -3164,7 +3164,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         send_to_char(buf, ch);
         send_to_char("Its settings will be preserved for if you set a door on it again.\n\r", ch);
       }
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     }/* end door */
     if(!str_prefix(arg, "closed") || !str_prefix(arg, "open"))
@@ -3187,7 +3187,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
             obj->label);
         send_to_char(buf, ch);
       }
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     }/* end closed */
     if(!str_prefix(arg, "key"))
@@ -3204,10 +3204,10 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         if(IS_SET(obj->flags, PLAN_EXIT_LOCKABLE))
         {
           REMOVE_BIT(obj->flags, PLAN_EXIT_LOCKABLE);
-          set_obj_cost(ch, obj, hedit, FALSE);
+          set_obj_cost(ch, obj, hedit, false);
           sprintf(buf, "Key cleared, %s is no longer lockable. Cost is %d %s.\n\r",
               obj->label, COST_STR(obj->cost, hedit));
-          ch->pcdata->edits_made = TRUE;
+          ch->pcdata->edits_made = true;
           obj->opt[0] = 0;
         }
         else
@@ -3225,11 +3225,11 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       }
       obj->opt[0] = key->pIndexData->vnum;
       SET_BIT(obj->flags, PLAN_EXIT_LOCKABLE);
-      set_obj_cost(ch, obj, hedit, FALSE);
+      set_obj_cost(ch, obj, hedit, false);
       sprintf(buf, "%s is now lockable with key %s, cost is %d %s.\n\r",
           obj->label, key->short_descr, COST_STR(obj->cost, hedit));
       send_to_char(buf, ch);
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     }/* end key */
     if(!str_prefix(arg, "locked"))
@@ -3252,7 +3252,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
             obj->label);
         send_to_char(buf, ch);
       }
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     }/* end locked */
     if(!str_prefix(arg, "pickproof"))
@@ -3263,7 +3263,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         return;
       }
       TOGGLE_BIT(obj->flags, PLAN_EXIT_NOPICK);
-      set_obj_cost(ch, obj, hedit, FALSE);
+      set_obj_cost(ch, obj, hedit, false);
       if(IS_SET(obj->flags, PLAN_EXIT_NOPICK))
       {/* Remember, this is opposite of how it started */
         sprintf(buf, "%s will now be pickproof if it is locked, its cost is %d %s.\n\r",
@@ -3276,7 +3276,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
             obj->label, COST_STR(obj->cost, hedit));
         send_to_char(buf, ch);
       }
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     }/* end pickproof */
     if(!str_prefix(arg, "nopass"))
@@ -3299,7 +3299,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
             obj->label);
         send_to_char(buf, ch);
       }
-      ch->pcdata->edits_made = TRUE;
+      ch->pcdata->edits_made = true;
       return;
     }/* end locked */
   }/* End editing */
@@ -3339,7 +3339,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       send_to_char("You may not edit a placed or previewed object.\n\r", ch);
       return;
     }
-    if(obj->editing == TRUE)
+    if(obj->editing == true)
     {
       send_to_char("Someone else is editing that object already.\n\r", ch);
       return;
@@ -3348,13 +3348,13 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
     send_to_char(buf, ch);
     if(ch->pcdata->edit_obj)
     {
-      ch->pcdata->edit_obj->editing = FALSE; /* Release the previous one */
+      ch->pcdata->edit_obj->editing = false; /* Release the previous one */
       end_long_edit(ch, &ch->pcdata->edit_obj->desc);
     }
     ch->pcdata->edit_obj = obj;
     if(!IS_SET(obj->type, PLAN_EXIT | PLAN_ITEM))
       start_long_edit(ch, MAX_CUSTOM_DESC, LONG_EDIT_DESC, ch->pcdata->edit_obj->desc);
-    obj->editing = TRUE;
+    obj->editing = true;
     return;/* Editing does not mark edits_made */
   }/* End edit */
   if(!str_prefix(arg, "list"))
@@ -3400,7 +3400,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       send_to_char("Valid filters are: planned, placed, all. If empty, planned will be used.\n\r", ch);
       return;
     }
-    listed = count_edit_obj(ch, type, TRUE, hedit);
+    listed = count_edit_obj(ch, type, true, hedit);
     if(listed == 0)
     {
       send_to_char("No objects of the selected type were found.\n\r", ch);
@@ -3474,14 +3474,14 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       return;
     }
     argument = one_argument(argument, arg);
-    blast_punctuation(arg, FALSE, FALSE);
+    blast_punctuation(arg, false, false);
     if(arg[0] != '\0' && (!str_cmp(arg, "exit") || !str_cmp(arg, "type") ||
       !str_cmp(arg, "exitlink") || get_arg_dir(arg) != -1))
     {
       send_to_char("Invalid label to create an object.\n\r", ch);
       return;
     }
-    count = count_edit_obj(ch, type, FALSE, hedit);
+    count = count_edit_obj(ch, type, false, hedit);
     switch(type)/* type doesn't need masking here */
     {
       case PLAN_ROOM: if(count >= 50) count = -1;
@@ -3543,7 +3543,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       obj->flags = PLAN_MOB_HEALER;
     /* Need to not line up with an existing index, can't just use count */
     obj->plan_index = new_obj_index(ch, type, hedit);
-    set_obj_cost(ch, obj, hedit, FALSE);
+    set_obj_cost(ch, obj, hedit, false);
     if(hedit)
       head = &(ch->pcdata->clan_info->clan->planned);
     else
@@ -3565,13 +3565,13 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
     }
     if(ch->pcdata->edit_obj)
     {
-      ch->pcdata->edit_obj->editing = FALSE; /* Release the previous one */
+      ch->pcdata->edit_obj->editing = false; /* Release the previous one */
       end_long_edit(ch, &ch->pcdata->edit_obj->desc);
     }
     ch->pcdata->edit_obj = obj;
     if(!IS_SET(obj->type, PLAN_EXIT | PLAN_ITEM))
       start_long_edit(ch, MAX_CUSTOM_DESC, LONG_EDIT_DESC, ch->pcdata->edit_obj->desc);
-    obj->editing = TRUE;
+    obj->editing = true;
     if(arg[0] == '\0')
     {
       sprintf(buf, "%s%d", prefix, high);
@@ -3581,7 +3581,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       obj->label = str_dup(arg);
     sprintf(buf, "Object %s created, entering edit mode.\n\r", obj->label);
     send_to_char(buf, ch);
-    ch->pcdata->edits_made = TRUE;
+    ch->pcdata->edits_made = true;
     return;
   }/* End create */
   if(!str_prefix(arg, "clone"))
@@ -3616,13 +3616,13 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       return;
     }
     argument = one_argument(argument, arg);
-    blast_punctuation(arg, FALSE, FALSE);
+    blast_punctuation(arg, false, false);
     if(arg[0] == '\0')
     {
       send_to_char("Invalid label to create an object.\n\r", ch);
       return;
     }
-    count = count_edit_obj(ch, orig->type & PLAN_MASK_TYPE, FALSE, hedit);
+    count = count_edit_obj(ch, orig->type & PLAN_MASK_TYPE, false, hedit);
     switch(orig->type & PLAN_MASK_TYPE)
     {
       case PLAN_ROOM: if(count >= 50) count = -1; break;
@@ -3659,13 +3659,13 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
 
     if(ch->pcdata->edit_obj)
     {
-      ch->pcdata->edit_obj->editing = FALSE; /* Release the previous one */
+      ch->pcdata->edit_obj->editing = false; /* Release the previous one */
       end_long_edit(ch, &ch->pcdata->edit_obj->desc);
     }
     ch->pcdata->edit_obj = obj;
     if(!IS_SET(obj->type, PLAN_EXIT | PLAN_ITEM))
       start_long_edit(ch, MAX_CUSTOM_DESC, LONG_EDIT_DESC, ch->pcdata->edit_obj->desc);
-    obj->editing = TRUE;
+    obj->editing = true;
     obj->label = str_dup(arg);
     sprintf(buf, "Object %s cloned from %s, entering edit mode.\n\r", obj->label, orig->label);
     send_to_char(buf, ch);
@@ -3676,7 +3676,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       orig = orig->next;
     obj->next = orig->next;
     orig->next = obj;
-    ch->pcdata->edits_made = TRUE;
+    ch->pcdata->edits_made = true;
     return;
   }/* End clone */
   if(!str_prefix(arg, "upgrade"))
@@ -3791,10 +3791,10 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       }
       else if(IS_SET(obj->type, PLAN_MOB))
       {/* Can't get in here if it's not hedit */
-        bool can_up = FALSE;
+        bool can_up = false;
         if(IS_SET(obj->flags, PLAN_MOB_MERCHANT))
         {
-          can_up = TRUE;
+          can_up = true;
           if(obj->opt[0] >= PRICE_M_DISCOUNT_COUNT)
           {
             sprintf(buf, "Discount: maxed.\n\rItems: %d %s per item.\n\r",
@@ -3810,7 +3810,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         }
         if(IS_SET(obj->flags, PLAN_MOB_HEALER))
         {
-          can_up = TRUE;
+          can_up = true;
           if(obj->opt[0] >= PRICE_H_LEVEL_COUNT)
             send_to_char("Level: Maxed.\n\r", ch);
           else
@@ -3869,7 +3869,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
               send_to_char("That room's hit regen is already maxed.\n\r", ch);
               return;
             }
-            if(!pay_hall_cost(ch, GET_PRICE(PRICE_R_REGEN + obj->opt[0], hedit), TRUE, hedit))
+            if(!pay_hall_cost(ch, GET_PRICE(PRICE_R_REGEN + obj->opt[0], hedit), true, hedit))
               return;/* It handles error messages if told to actually buy */
             obj->opt[0]++;
             sprintf(buf, "Room %s hit regen enhanced to %d%% for %d %s.\n\r",
@@ -3877,9 +3877,9 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
               PRICE_STR((PRICE_R_REGEN + obj->opt[0] - 1), hedit));
             send_to_char(buf, ch);
             SET_BIT(obj->flags, PLAN_ROOM_REGEN);
-            load_plan_obj(obj, FALSE);/* Just reset the values, no strings changed */
+            load_plan_obj(obj, false);/* Just reset the values, no strings changed */
             clear_string(&obj->previewer, NULL);
-            save_clan(ch, TRUE, TRUE, hedit);/* Save the clan and the hall in one go */
+            save_clan(ch, true, true, hedit);/* Save the clan and the hall in one go */
             return;/* Does not set edits_made because it already saved */
 
           }
@@ -3895,7 +3895,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
               send_to_char("That room's mana regen is already maxed.\n\r", ch);
               return;
             }
-            if(!pay_hall_cost(ch, GET_PRICE(PRICE_R_REGEN + obj->opt[1], hedit), TRUE, hedit))
+            if(!pay_hall_cost(ch, GET_PRICE(PRICE_R_REGEN + obj->opt[1], hedit), true, hedit))
               return;/* It handles error messages if told to actually buy */
             obj->opt[1]++;
             sprintf(buf, "Room %s mana regen enhanced to %d%% for %d %s.\n\r",
@@ -3903,9 +3903,9 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
               PRICE_STR((PRICE_R_REGEN + obj->opt[1] - 1), hedit));
             send_to_char(buf, ch);
             SET_BIT(obj->flags, PLAN_ROOM_REGEN);
-            load_plan_obj(obj, FALSE);/* Just reset the values, no strings changed */
+            load_plan_obj(obj, false);/* Just reset the values, no strings changed */
             clear_string(&obj->previewer, NULL);
-            save_clan(ch, TRUE, TRUE, hedit);/* Save the clan and the hall in one go */
+            save_clan(ch, true, true, hedit);/* Save the clan and the hall in one go */
             return;/* Does not set edits_made because it already saved */
           }
         }
@@ -3928,16 +3928,16 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
               send_to_char("That room's magelab is already maxed.\n\r", ch);
               return;
             }
-            if(!pay_hall_cost(ch, GET_PRICE(PRICE_LAB + obj->opt[0], hedit), TRUE, hedit))
+            if(!pay_hall_cost(ch, GET_PRICE(PRICE_LAB + obj->opt[0], hedit), true, hedit))
               return;/* It handles error messages if told to actually buy */
             obj->opt[0]++;
             sprintf(buf, "Room %s magelab: Upgraded to %d for %d %s.\n\r",
               obj->label, obj->opt[0], PRICE_STR((PRICE_LAB + obj->opt[0] - 1), hedit));
             send_to_char(buf, ch);
             obj->flags |= PLAN_ROOM_LAB;
-            load_plan_obj(obj, FALSE);/* Just reset the values, no strings changed */
+            load_plan_obj(obj, false);/* Just reset the values, no strings changed */
             clear_string(&obj->previewer, NULL);
-            save_clan(ch, TRUE, TRUE, hedit);/* Save the clan and the hall in one go */
+            save_clan(ch, true, true, hedit);/* Save the clan and the hall in one go */
             return;/* Does not set edits_made because it already saved */
           }
           else
@@ -3957,16 +3957,16 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
               send_to_char("That room's altar is already maxed.\n\r", ch);
               return;
             }
-            if(!pay_hall_cost(ch, GET_PRICE((PRICE_ALTAR + obj->opt[0]), hedit), TRUE, hedit))
+            if(!pay_hall_cost(ch, GET_PRICE((PRICE_ALTAR + obj->opt[0]), hedit), true, hedit))
               return;/* It handles error messages if told to actually buy */
             obj->opt[0]++;
             sprintf(buf, "Room %s altar: Upgraded to %d for %d %s.\n\r",
               obj->label, obj->opt[0], PRICE_STR((PRICE_ALTAR + obj->opt[0] - 1), hedit));
             send_to_char(buf, ch);
             obj->flags |= PLAN_ROOM_ALTAR;
-            load_plan_obj(obj, FALSE);/* Just reset the values, no strings changed */
+            load_plan_obj(obj, false);/* Just reset the values, no strings changed */
             clear_string(&obj->previewer, NULL);
-            save_clan(ch, TRUE, TRUE, hedit);/* Save the clan and the hall in one go */
+            save_clan(ch, true, true, hedit);/* Save the clan and the hall in one go */
             return;/* Does not set edits_made because it already saved */
           }
           else
@@ -3994,15 +3994,15 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
             send_to_char("That mob's discount is already maxed.\n\r", ch);
             return;
           }
-          if(!pay_hall_cost(ch, GET_PRICE(PRICE_M_DISCOUNT + obj->opt[0], hedit), TRUE, hedit))
+          if(!pay_hall_cost(ch, GET_PRICE(PRICE_M_DISCOUNT + obj->opt[0], hedit), true, hedit))
             return;/* It handles error messages if told to actually buy */
           obj->opt[0]++;
           sprintf(buf, "Mob %s discount increased to %d%% for %d %s.\n\r",
             obj->label, obj->opt[0] * 10, PRICE_STR(PRICE_M_DISCOUNT + obj->opt[0] - 1, hedit));
           send_to_char(buf, ch);
-          load_plan_obj(obj, FALSE);/* Just reset the values, no strings changed */
+          load_plan_obj(obj, false);/* Just reset the values, no strings changed */
         clear_string(&obj->previewer, NULL);
-          save_clan(ch, TRUE, TRUE, hedit);/* Save the clan and the hall in one go */
+          save_clan(ch, true, true, hedit);/* Save the clan and the hall in one go */
           return; /* Does not set edits_made because it already saved */
         }
         else
@@ -4038,7 +4038,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
             send_to_char("That drink is already available on a merchant.\n\r", ch);
             return;
           }
-          if(!pay_hall_cost(ch, GET_PRICE(PRICE_M_ITEM, hedit), TRUE, hedit))
+          if(!pay_hall_cost(ch, GET_PRICE(PRICE_M_ITEM, hedit), true, hedit))
             return;
           /* Finally, we can make it. */
           drink->loc = obj->plan_index;
@@ -4047,9 +4047,9 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
           sprintf(buf, "%s is now sold by %s, added for %d %s.\n\r",
             drink->label, obj->label, PRICE_STR(PRICE_M_ITEM, hedit));
           send_to_char(buf, ch);
-          load_plan_obj(obj, TRUE);
-          respawn_plan_obj(obj, START_OBJ(ch, hedit), FALSE);
-          save_clan(ch, TRUE, TRUE, hedit);/* Save the clan and the hall in one go */
+          load_plan_obj(obj, true);
+          respawn_plan_obj(obj, START_OBJ(ch, hedit), false);
+          save_clan(ch, true, true, hedit);/* Save the clan and the hall in one go */
           return; /* Does not set edits_made because it already saved */
         }
         else
@@ -4070,16 +4070,16 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
             send_to_char("That mob's level is already maxed.\n\r", ch);
             return;
           }
-          if(!pay_hall_cost(ch, GET_PRICE(PRICE_H_LEVEL + obj->opt[0], hedit), TRUE, hedit))
+          if(!pay_hall_cost(ch, GET_PRICE(PRICE_H_LEVEL + obj->opt[0], hedit), true, hedit))
             return;/* It handles error messages if told to actually buy */
           obj->opt[0]++;
           sprintf(buf, "%s's level increased to %d for %d %s.\n\r",
             obj->label, obj->opt[0] + 40, PRICE_STR(PRICE_H_LEVEL + obj->opt[0] - 1, hedit));
           send_to_char(buf, ch);
-          load_plan_obj(obj, FALSE);/* Just reset the values, no strings changed */
-          respawn_plan_obj(obj, START_OBJ(ch, hedit), FALSE);
+          load_plan_obj(obj, false);/* Just reset the values, no strings changed */
+          respawn_plan_obj(obj, START_OBJ(ch, hedit), false);
           clear_string(&obj->previewer, NULL);
-          save_clan(ch, TRUE, TRUE, hedit);/* Save the clan and the hall in one go */
+          save_clan(ch, true, true, hedit);/* Save the clan and the hall in one go */
           return; /* Does not set edits_made because it already saved */
         }
         else
@@ -4104,16 +4104,16 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
             send_to_char("That item's regen is already maxed.\n\r", ch);
           else
           {
-            if(!pay_hall_cost(ch, GET_PRICE(PRICE_F_REGEN + obj->opt[0], hedit), TRUE, hedit))
+            if(!pay_hall_cost(ch, GET_PRICE(PRICE_F_REGEN + obj->opt[0], hedit), true, hedit))
               return;/* It handles error messages if told to actually buy */
             obj->opt[0]++;
             sprintf(buf, "Item %s hit and mana regen enhanced to %d%% for %d %s.\n\r\n\r",
               obj->label, obj->opt[0] * 5, PRICE_STR(PRICE_F_REGEN + obj->opt[0] - 1, hedit));
             send_to_char(buf, ch);
-            load_plan_obj(obj, FALSE);/* Just reset the values, no strings changed */
-            respawn_plan_obj(obj, START_OBJ(ch, hedit), FALSE);
+            load_plan_obj(obj, false);/* Just reset the values, no strings changed */
+            respawn_plan_obj(obj, START_OBJ(ch, hedit), false);
             clear_string(&obj->previewer, NULL);
-            save_clan(ch, TRUE, TRUE, hedit);/* Save the clan and the hall in one go */
+            save_clan(ch, true, true, hedit);/* Save the clan and the hall in one go */
             return; /* Does not set edits_made because it already saved */
           }
         }
@@ -4192,7 +4192,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
     send_to_char(buf, ch);
     ch->pcdata->edit_obj = NULL;
     free_plan(obj);/* Release it */
-    ch->pcdata->edits_made = TRUE;
+    ch->pcdata->edits_made = true;
     return;
   }/* End delete */
   if(!str_prefix(arg, "stop"))
@@ -4270,7 +4270,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
     place_hall_obj(ch, obj, hedit);
     sprintf(buf, "%s has been made a permanent part of your hall.\n\r", obj->label);
     send_to_char(buf, ch);
-    save_clan(ch, TRUE, TRUE, hedit);
+    save_clan(ch, true, true, hedit);
     return;
   }
   if(!str_prefix(arg, "check"))
@@ -4427,7 +4427,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
           return;
         }
       }
-      if(!pay_hall_cost(ch, obj->cost, TRUE, hedit))
+      if(!pay_hall_cost(ch, obj->cost, true, hedit))
         return;
       if(room)
       {
@@ -4446,7 +4446,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       if(ch->pcdata->edit_obj == obj)
       {
         end_long_edit(ch, &ch->pcdata->edit_obj->desc);
-        ch->pcdata->edit_obj->editing = FALSE;
+        ch->pcdata->edit_obj->editing = false;
         ch->pcdata->edit_obj = NULL;
       }
       preview_hall_obj(ch, obj, hedit);
@@ -4455,7 +4455,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         obj->label, COST_STR(obj->cost, hedit));
       send_to_char(buf, ch);
       clear_string(&obj->previewer, ch->name);
-      save_clan(ch, TRUE, TRUE, hedit);
+      save_clan(ch, true, true, hedit);
       return;
     }
     if(room == NULL)
@@ -4507,12 +4507,12 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         }
       }
     }
-    if(!pay_hall_cost(ch, obj->cost, TRUE, hedit))
+    if(!pay_hall_cost(ch, obj->cost, true, hedit))
       return;
     if(ch->pcdata->edit_obj == obj)
     {
       end_long_edit(ch, &ch->pcdata->edit_obj->desc);
-      ch->pcdata->edit_obj->editing = FALSE;
+      ch->pcdata->edit_obj->editing = false;
       ch->pcdata->edit_obj = NULL;
     }
     obj->loc = room->plan_index;
@@ -4522,7 +4522,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
     send_to_char(buf, ch);
     if(IS_SET(obj->type, PLAN_ITEM) && IS_SET(obj->flags, PLAN_ITEM_PORTAL))
       update_room_sign(ch->pcdata->clan_info->clan, room->to_place);
-    save_clan(ch, TRUE, TRUE, hedit);
+    save_clan(ch, true, true, hedit);
     return;
   }/* end place */
   if(!str_prefix(arg, "remove"))
@@ -4648,20 +4648,20 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       amount = remove_hall_obj(ch, obj, hedit);
       sprintf(buf, "%s removed, %d %s refunded.\n\r",
         obj->label, COST_STR(amount, hedit));
-      pay_hall_cost(ch, amount * -1, TRUE, hedit);
+      pay_hall_cost(ch, amount * -1, true, hedit);
       send_to_char(buf, ch);
-      save_clan(ch, TRUE, TRUE, hedit);
+      save_clan(ch, true, true, hedit);
       sprintf(buf, "You are now editing object %s.\n\r", arg);
       send_to_char(buf, ch);
       if(ch->pcdata->edit_obj)
       {
-        ch->pcdata->edit_obj->editing = FALSE; /* Release the previous one */
+        ch->pcdata->edit_obj->editing = false; /* Release the previous one */
         end_long_edit(ch, &ch->pcdata->edit_obj->desc);
       }
       ch->pcdata->edit_obj = obj;
       if(!IS_SET(obj->type, (PLAN_EXIT | PLAN_ITEM)))
         start_long_edit(ch, MAX_CUSTOM_DESC, LONG_EDIT_DESC, ch->pcdata->edit_obj->desc);
-      obj->editing = TRUE;
+      obj->editing = true;
       return;
     }
     if(!room || obj->loc != room->plan_index)
@@ -4674,20 +4674,20 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       update_room_sign(ch->pcdata->clan_info->clan, ch->in_room);
     sprintf(buf, "%s removed from the room, %d %s refunded.\n\r",
       obj->label, COST_STR(amount, hedit));
-    pay_hall_cost(ch, amount * -1, TRUE, hedit);
+    pay_hall_cost(ch, amount * -1, true, hedit);
     send_to_char(buf, ch);
-    save_clan(ch, TRUE, TRUE, hedit);
+    save_clan(ch, true, true, hedit);
     sprintf(buf, "You are now editing object %s.\n\r", arg);
     send_to_char(buf, ch);
     if(ch->pcdata->edit_obj)
     {
-      ch->pcdata->edit_obj->editing = FALSE; /* Release the previous one */
+      ch->pcdata->edit_obj->editing = false; /* Release the previous one */
       end_long_edit(ch, &ch->pcdata->edit_obj->desc);
     }
     ch->pcdata->edit_obj = obj;
     if(!IS_SET(obj->type, PLAN_EXIT | PLAN_ITEM))
       start_long_edit(ch, MAX_CUSTOM_DESC, LONG_EDIT_DESC, ch->pcdata->edit_obj->desc);
-    obj->editing = TRUE;
+    obj->editing = true;
     return;
   }/* end remove */
   if(!str_prefix(arg, "link"))
@@ -4733,14 +4733,14 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       send_to_char("There is already an exit in that direction from your target room.\n\r", ch);
       return;
     }
-    if(!pay_hall_cost(ch, GET_PRICE(PRICE_LINK, hedit), TRUE, hedit))
+    if(!pay_hall_cost(ch, GET_PRICE(PRICE_LINK, hedit), true, hedit))
       return;
     obj->exits[rev_dir[dir]].link = room;
     room->exits[dir].link = obj;
     set_room_exits(obj);
     sprintf(buf, "%s has been linked to %s for %d %s.\n\r",
       obj->label, room->label, PRICE_STR(PRICE_LINK, hedit));
-    save_clan(ch, TRUE, TRUE, hedit);
+    save_clan(ch, true, true, hedit);
     return;
   }/* end link */
   if(!str_prefix(arg, "unlink"))
@@ -4860,8 +4860,8 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
     amount = get_refund_amount(ch, GET_PRICE(PRICE_LINK, hedit), hedit);
     sprintf(buf, "Link removed, refunded %d %s.\n\r", COST_STR(amount, hedit));
     send_to_char(buf, ch);
-    pay_hall_cost(ch, amount * -1, TRUE, hedit);
-    save_clan(ch, TRUE, TRUE, hedit);
+    pay_hall_cost(ch, amount * -1, true, hedit);
+    save_clan(ch, true, true, hedit);
     return;
   }/* end link */
   if(!str_prefix(arg, "swap"))
@@ -4959,7 +4959,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
     /* All clear: It's the same type, one is previewed the other placed */
     /* Check if they can pay - disabled atm, only text swaps */
     /*amount = get_refund_amount(ch, obj->cost, hedit);
-    if(!pay_hall_cost(ch, new_obj->cost - amount, TRUE, hedit))
+    if(!pay_hall_cost(ch, new_obj->cost - amount, true, hedit))
       return;
     else*/
     {/* I'm sure there's a more efficient way to code this */
@@ -4978,7 +4978,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       if(ch->pcdata->edit_obj == new_obj)
       {/* End the edit on new_obj before the swap */
         end_long_edit(ch, &ch->pcdata->edit_obj->desc);
-        ch->pcdata->edit_obj->editing = FALSE;
+        ch->pcdata->edit_obj->editing = false;
         ch->pcdata->edit_obj = NULL;
       }
       /*obj->cost = new_obj->cost; new_obj->cost = old_cost;
@@ -4992,11 +4992,11 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
       obj->short_d = new_obj->short_d; new_obj->short_d = old_short_d;
       obj->long_d = new_obj->long_d; new_obj->long_d = old_long_d;
       obj->desc = new_obj->desc; new_obj->desc = old_desc;
-      obj->reviewed = FALSE;
-      load_plan_obj(obj, TRUE);/* Just reset the values, no strings changed */
+      obj->reviewed = false;
+      load_plan_obj(obj, true);/* Just reset the values, no strings changed */
       /* Silently update */
-      respawn_plan_obj(obj, START_OBJ(ch, hedit), FALSE);
-      save_clan(ch, TRUE, TRUE, hedit);/* Save the clan and the hall in one go */
+      respawn_plan_obj(obj, START_OBJ(ch, hedit), false);
+      save_clan(ch, true, true, hedit);/* Save the clan and the hall in one go */
       send_to_char("The objects have been swapped.\n\r", ch);
     }
     return;
@@ -5063,13 +5063,13 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         amount = remove_hall_obj(ch, room->exits[dir].exit, hedit);
         sprintf(buf, "Custom exit %s removed, refunded %d %s.\n\r",
           room->exits[dir].exit->label, COST_STR(amount, hedit));
-        pay_hall_cost(ch, amount * -1, TRUE, hedit);
+        pay_hall_cost(ch, amount * -1, true, hedit);
       }
       else
       {
         if(room->exits[dir].exit)
           amount = get_refund_amount(ch, room->exits[dir].exit->cost, hedit);
-        if(!pay_hall_cost(ch, obj->cost - amount, TRUE, hedit))
+        if(!pay_hall_cost(ch, obj->cost - amount, true, hedit))
           return;
         if(room->exits[dir].exit)
         {
@@ -5084,18 +5084,18 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         if(ch->pcdata->edit_obj == obj)
         {
           end_long_edit(ch, &ch->pcdata->edit_obj->desc);
-          ch->pcdata->edit_obj->editing = FALSE;
+          ch->pcdata->edit_obj->editing = false;
           ch->pcdata->edit_obj = NULL;
         }
         REMOVE_BIT(obj->type, PLAN_PLANNED);
         SET_BIT(obj->type, PLAN_PLACED);
-        load_plan_obj(obj, TRUE);
+        load_plan_obj(obj, true);
         set_room_exits(room);
         sprintf(buf, "Custom exit %s placed for %d %s.\n\r",
           obj->label, COST_STR(obj->cost, hedit));
         send_to_char(buf, ch);
       }
-      save_clan(ch, TRUE, TRUE, hedit);
+      save_clan(ch, true, true, hedit);
       return;
     }
     if(obj == NULL)
@@ -5124,19 +5124,19 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
     }
     // Verify they can afford it and charge them
     amount = get_refund_amount(ch, room->cost, hedit);
-    if(!pay_hall_cost(ch, obj->cost - amount, TRUE, hedit))
+    if(!pay_hall_cost(ch, obj->cost - amount, true, hedit))
       return;
     // They've paid
     if(ch->pcdata->edit_obj == obj)
     {
       end_long_edit(ch, &ch->pcdata->edit_obj->desc);
-      ch->pcdata->edit_obj->editing = FALSE;
+      ch->pcdata->edit_obj->editing = false;
       ch->pcdata->edit_obj = NULL;
     }
     swap_rooms(ch, room, obj, hedit);
     sprintf(buf, "Room %s placed for %d %s.\n\r",
       obj->label, COST_STR(obj->cost - amount, hedit));
-    save_clan(ch, TRUE, TRUE, hedit);
+    save_clan(ch, true, true, hedit);
     return;
   }*//* end replace */
   /* End general commands */
@@ -5169,7 +5169,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         }
         if(ch->pcdata->edit_obj)
         {
-          ch->pcdata->edit_obj->editing = FALSE; /* Release the previous one */
+          ch->pcdata->edit_obj->editing = false; /* Release the previous one */
           end_long_edit(ch, &ch->pcdata->edit_obj->desc);
           ch->pcdata->edit_obj = NULL;
         }
@@ -5198,7 +5198,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         REMOVE_BIT(ch->pcdata->edit_flags, EDITMODE_CHARTER);
         end_long_edit(ch, &ch->pcdata->clan_info->clan->charter);
         send_to_char("Charter editing stopped, updates have been saved.\n\r", ch);
-        save_clan(ch, TRUE, TRUE, hedit);
+        save_clan(ch, true, true, hedit);
       }
       else
         send_to_char("Syntax: hedit charter <start|cancel|save>\n\r", ch);
@@ -5231,7 +5231,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         }
         if(ch->pcdata->edit_obj)
         {
-          ch->pcdata->edit_obj->editing = FALSE; /* Release the previous one */
+          ch->pcdata->edit_obj->editing = false; /* Release the previous one */
           end_long_edit(ch, &ch->pcdata->edit_obj->desc);
           ch->pcdata->edit_obj = NULL;
         }
@@ -5260,7 +5260,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
         REMOVE_BIT(ch->pcdata->edit_flags, EDITMODE_RULES);
         end_long_edit(ch, &ch->pcdata->clan_info->clan->rules);
         send_to_char("Rules editing stopped, updates have been saved.\n\r", ch);
-        save_clan(ch, TRUE, TRUE, hedit);
+        save_clan(ch, true, true, hedit);
       }
       else
         send_to_char("Syntax: hedit rules <start|cancel|save>\n\r", ch);
@@ -5272,7 +5272,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
   if(!ch->pcdata->edit_obj)
   {/* This duplicates checks, but better than the five extra lines per check
     * if this were inserted with each edit check */
-    bool bFound = TRUE;
+    bool bFound = true;
     if(!str_prefix(arg, "label"))
       send_to_char("label is an edit mode command, you must be editing an object to use it.\n\r", ch);
     else if(!str_prefix(arg, "name"))
@@ -5334,7 +5334,7 @@ void player_edit(CHAR_DATA *ch, char *argument, bool hedit)
     else if(!str_prefix(arg, "pickproof"))
       send_to_char("pickproof is an edit mode command, you must be editing an object to use it.\n\r", ch);
     else
-      bFound = FALSE;
+      bFound = false;
     if(bFound)
       return;/* Gave them their error message */
   }
@@ -5404,16 +5404,16 @@ void do_movehall(CHAR_DATA *ch, char *argument )
   {
     if(clan->hall->exits[i].outside)
     {
-      modify_room_marker(clan, clan->hall->exits[i].outside, -1, FALSE);
+      modify_room_marker(clan, clan->hall->exits[i].outside, -1, false);
       clan->hall->exits[i].outside = NULL;
     }
   }
   set_room_exits(clan->hall);
   clan->hall->exits[rev_dir[dir]].outside = ch->in_room;
   set_room_exits(clan->hall);
-  modify_room_marker(clan, clan->hall->exits[rev_dir[dir]].outside, dir, TRUE);
+  modify_room_marker(clan, clan->hall->exits[rev_dir[dir]].outside, dir, true);
   send_to_char("Done.\n\r", ch);
-  save_hall(clan->name, clan->hall, TRUE);
+  save_hall(clan->name, clan->hall, true);
 }
 
 /* NOT COMPLETE YET */
@@ -5433,7 +5433,7 @@ void do_hedit(CHAR_DATA *ch, char *argument)
     return;
   }
 
-  if(!ch->pcdata->clan_info || ch->pcdata->clan_info->clan->default_clan == TRUE)
+  if(!ch->pcdata->clan_info || ch->pcdata->clan_info->clan->default_clan == true)
   {
     send_to_char("You must be in a clan to use hedit.\n\r", ch);
     return;
@@ -5446,7 +5446,7 @@ void do_hedit(CHAR_DATA *ch, char *argument)
   }
 
   /* Do they have permissions? */
-  if(!check_can_edit(ch, CLAN_CAN_BUILD, TRUE))
+  if(!check_can_edit(ch, CLAN_CAN_BUILD, true))
   {
     send_to_char("You are not allowed to edit your clan's hall.\n\r", ch);
     return;
@@ -5464,7 +5464,7 @@ void do_hedit(CHAR_DATA *ch, char *argument)
     return;
   }
 
-  player_edit(ch, argument, TRUE);
+  player_edit(ch, argument, true);
 }
 
 /* NOT COMPLETE YET */
@@ -5487,7 +5487,7 @@ void do_pedit(CHAR_DATA *ch, char *argument)
   }
 
   /* Location check here */
-  if(!check_can_edit(ch, 0, FALSE))
+  if(!check_can_edit(ch, 0, false))
   {
     send_to_char("You are not in your personal rooms, you may not use pedit here.\n\r", ch);
     return;
@@ -5500,6 +5500,6 @@ void do_pedit(CHAR_DATA *ch, char *argument)
     return;
   }
 
-  player_edit(ch, argument, FALSE);
+  player_edit(ch, argument, false);
 }
 

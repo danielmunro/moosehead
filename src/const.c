@@ -41,27 +41,27 @@
 const struct deity_type deity_table[] =
 {
     {	"mojo",		"Mojo",		{"recall"},
-	ALIGN_NONE,	FALSE	},
+	ALIGN_NONE,	false	},
     {	"matook",	"Matook",	{"recall","patience"},
-	ALIGN_NONE,	FALSE	},
+	ALIGN_NONE,	false	},
     {	"bolardari",	"Bolardari",	{"recall","random"},
-	ALIGN_NEUTRAL,	FALSE	},
+	ALIGN_NEUTRAL,	false	},
     {	"megena",	"Megena",	{"recall","nurture","meld"},
-	ALIGN_GOOD,	FALSE	},
+	ALIGN_GOOD,	false	},
     {	"huitzilopochtli", "Huitzilopochtli", {"recall","reanimation"},
-	ALIGN_EVIL,	FALSE	},
+	ALIGN_EVIL,	false	},
     {	"xochipili",	"Xochipili",	{"recall","opiate"},
-	ALIGN_NONE,	FALSE	},
+	ALIGN_NONE,	false	},
     {	"paladine",	"Paladine",	{"recall","bravery","stature"},
-	ALIGN_GOOD,	TRUE	},
+	ALIGN_GOOD,	true	},
     {   "loki",		"Loki",		{"recall","distraction","meld"},
-	ALIGN_NEUTRAL,	TRUE	},
+	ALIGN_NEUTRAL,	true	},
     {	"cthon",	"Cthon",	{"recall","fear","speed"},
-	ALIGN_EVIL,	TRUE	},
+	ALIGN_EVIL,	true	},
     {	"hermes",	"Hermes",	{"recall","transport"},
-	ALIGN_NONE,	TRUE	},
+	ALIGN_NONE,	true	},
     {   "almighty", "The Almighty", {"recall", "banishment" },
-	ALIGN_NONE,     TRUE    }
+	ALIGN_NONE,     true    }
 };
 
 /* item type list */
@@ -238,161 +238,161 @@ const   struct  race_type race_table  []    =
   form,   parts 
     },
 */
-    { "unique",   FALSE, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { "unique",   false, 0, 0, 0, 0, 0, 0, 0, 0 },
 
-    {   "dragon", TRUE, 0, AFF_INFRARED|AFF_FLYING, 0,
+    {   "dragon", true, 0, AFF_INFRARED|AFF_FLYING, 0,
   0,    RES_FIRE|RES_BASH|RES_CHARM, VULN_PIERCE|VULN_COLD,
    A|H|Z,   A|C|D|E|F|G|H|I|J|K|P|Q|U|V|X
     },
 
     { 
-  "human",    TRUE, 
+  "human",    true, 
   0,    0,    0,
   0,    0,    0,
   A|H|M|V,  A|B|C|D|E|F|G|H|I|J|K
     },
 
     {
-  "elf",      TRUE,
+  "elf",      true,
   0,    AFF_INFRARED, 0,
   0,    RES_MENTAL,  VULN_IRON,
   A|H|M|V,  A|B|C|D|E|F|G|H|I|J|K
     },
 
     {
-  "dwarf",    TRUE,
+  "dwarf",    true,
   0,    AFF_INFRARED, 0,
   0,    RES_POISON|RES_DISEASE, VULN_DROWNING,
   A|H|M|V,  A|B|C|D|E|F|G|H|I|J|K
     },
 
     {
-  "giant",    TRUE,
+  "giant",    true,
   0,    0,    0,
   0,    RES_FIRE|RES_COLD,  VULN_LIGHTNING,
   A|H|M|V,  A|B|C|D|E|F|G|H|I|J|K
     },
     {
-  "ogre",    TRUE,
+  "ogre",    true,
   0,    0,    0,
   0,    RES_FIRE|RES_COLD,  VULN_MENTAL,
   A|H|M|V,  A|B|C|D|E|F|G|H|I|J|K
     },
     {
-   "lasher", TRUE,
+   "lasher", true,
    0,   AFF_FLYING,     0,
    0,   RES_FIRE|RES_LIGHTNING, VULN_HOLY,
    A|H|M|V,  A|B|C|D|E|F|G|H|I|J|K
     },
     {
-   "kender",    TRUE,
+   "kender",    true,
    0, 0, 0,
    0, RES_BASH, VULN_COLD|VULN_POISON,
    A|H|M|V,  A|B|C|D|E|F|G|H|I|J|K
     },
     {
-  "goblin",   TRUE,
+  "goblin",   true,
   0,    AFF_INFRARED, 0,
   IMM_POISON,    RES_DISEASE,  VULN_LIGHTNING,
   A|H|M|V,  A|B|C|D|E|F|G|H|I|J|K
     },
     {
-  "half-elf",  TRUE,
+  "half-elf",  true,
   0,  AFF_INFRARED, 0,
   0,  RES_CHARM, VULN_IRON,
   A|H|M|V,  A|B|C|D|E|F|G|H|I|J|K
     },
     {
-  "yinn",  TRUE, 
+  "yinn",  true, 
   0, AFF_INFRARED, 0,
   0, RES_COLD|RES_LIGHTNING, VULN_FIRE,
   A|H|M|V, A|B|C|D|E|F|G|H|I|J|K
     },
     {
-  "volare",  TRUE,
+  "volare",  true,
   0, AFF_FLYING, 0,
   0, RES_HOLY|RES_CHARM, VULN_NEGATIVE,
   A|H|M|V, A|B|C|D|E|F|G|H|I|J|K
     },
     {
-  "rockbiter", TRUE,
+  "rockbiter", true,
   0, 0, 0,
   0, RES_WEAPON|RES_LIGHTNING, VULN_MENTAL,
   E|J|M|ee, A|B|C|D|E|F|G|H|I|J|K
     },
 
     {
-  "faerie",	TRUE, 
+  "faerie",	true, 
   0, AFF_FLYING|AFF_INFRARED|AFF_DETECT_INVIS|AFF_DETECT_HIDDEN, 0,
   0, RES_MAGIC, VULN_BASH,
   A|H|M|V, A|B|C|D|E|F|G|H|I|J|K
     },
 
     {
-  "gargoyle",  TRUE,
+  "gargoyle",  true,
   0, AFF_FLYING|AFF_INFRARED|AFF_DETECT_INVIS, 0,
   0, 0, 0,
   A|H|M|V, A|B|C|D|E|F|G|H|I|J|K|X
     },
 
     {
-  "gnome", TRUE,
+  "gnome", true,
   0, AFF_INFRARED, 0,
   0, RES_POISON|RES_MENTAL, VULN_BASH,
   A|H|M|V, A|B|C|D|E|F|G|H|I|J|K
     },
 
       {
-  "mutant",	FALSE, 
+  "mutant",	false, 
   0, 0, 0,
   0, 0, 0,
   A|H|M|V, A|B|C|D|E|F|G|H|I|J|K
     },
 
     {
-  "smurf",	FALSE, 
+  "smurf",	false, 
   0, 0, 0,
   0, 0, 0,
   A|H|M|V, A|B|C|D|E|F|G|H|I|J|K
     },
 
     {
-  "bat",      FALSE,
+  "bat",      false,
   0,    AFF_FLYING|AFF_INFRARED, OFF_DODGE|OFF_FAST,
   0,    0,    VULN_LIGHT,
   A|G|V,    A|C|D|E|F|H|J|K|P
     },
 
     {
-  "bear",     FALSE,
+  "bear",     false,
   0,    0,    OFF_CRUSH|OFF_DISARM|OFF_BERSERK,
   0,    RES_BASH|RES_COLD,  0,
   A|G|V,    A|B|C|D|E|F|H|J|K|U|V
     },
 
     {
-  "cat",      FALSE,
+  "cat",      false,
   0,    AFF_INFRARED,  OFF_FAST|OFF_DODGE,
   0,    0,    0,
   A|G|V,    A|C|D|E|F|H|J|K|Q|U|V
     },
 
     {
-  "centipede",    FALSE,
+  "centipede",    false,
   0,    AFF_INFRARED,  0,
   0,    RES_PIERCE|RES_COLD,  VULN_BASH,
   A|B|G|O,    A|C|K 
     },
 
     {
-  "dog",      FALSE,
+  "dog",      false,
   0,    0,    OFF_FAST,
   0,    0,    0,
   A|G|V,    A|C|D|E|F|H|J|K|U|V
     },
 
     {
-  "doll",     FALSE,
+  "doll",     false,
   0,    0,    0,
   IMM_COLD|IMM_POISON|IMM_HOLY|IMM_NEGATIVE|IMM_MENTAL|IMM_DISEASE
   |IMM_DROWNING,  RES_BASH|RES_LIGHT,
@@ -401,42 +401,42 @@ const   struct  race_type race_table  []    =
     },
 
     {
-  "fido",     FALSE,
+  "fido",     false,
   0,    0,    OFF_DODGE|ASSIST_RACE,
   0,    0,      VULN_MAGIC,
   A|B|G|V,  A|C|D|E|F|H|J|K|Q|V
     },    
    
     {
-  "fox",      FALSE,
+  "fox",      false,
   0,    AFF_INFRARED,  OFF_FAST|OFF_DODGE,
   0,    0,    0,
   A|G|V,    A|C|D|E|F|H|J|K|Q|V
     },
 
     {
-  "hobgoblin",    FALSE,
+  "hobgoblin",    false,
   0,    AFF_INFRARED, 0,
   0,    RES_DISEASE|RES_POISON, 0,
   A|H|M|V,        A|B|C|D|E|F|G|H|I|J|K|Y
     },
 
     {
-  "kobold",   FALSE,
+  "kobold",   false,
   0,    AFF_INFRARED, 0,
   0,    RES_POISON, VULN_MAGIC,
   A|B|H|M|V,  A|B|C|D|E|F|G|H|I|J|K|Q
     },
 
     {
-  "lizard",   FALSE,
+  "lizard",   false,
   0,    0,    0,
   0,    RES_POISON, VULN_COLD,
   A|G|X|cc, A|C|D|E|F|H|K|Q|V
     },
 
     {
-  "modron",   FALSE,
+  "modron",   false,
   0,    AFF_INFRARED,   ASSIST_RACE|ASSIST_ALIGN,
   IMM_CHARM|IMM_DISEASE|IMM_MENTAL|IMM_HOLY|IMM_NEGATIVE,
       RES_FIRE|RES_COLD|RES_ACID, 0,
@@ -444,49 +444,49 @@ const   struct  race_type race_table  []    =
     },
 
     {
-  "orc",      FALSE,
+  "orc",      false,
   0,    AFF_INFRARED, 0,
   0,    RES_DISEASE,  VULN_LIGHT,
   A|H|M|V,  A|B|C|D|E|F|G|H|I|J|K
     },
 
     {
-  "pig",      FALSE,
+  "pig",      false,
   0,    0,    0,
   0,    0,    0,
   A|G|V,    A|C|D|E|F|H|J|K
     },  
 
     {
-  "rabbit",   FALSE,
+  "rabbit",   false,
   0,    0,    OFF_DODGE|OFF_FAST,
   0,    0,    0,
   A|G|V,    A|C|D|E|F|H|J|K
     },
     
     {
-  "school monster", FALSE,
+  "school monster", false,
   ACT_NOALIGN,    0,    0,
   IMM_CHARM|IMM_SUMMON, 0,    VULN_MAGIC,
   A|M|V,    A|B|C|D|E|F|H|J|K|Q|U
     },  
 
     {
-  "snake",    FALSE,
+  "snake",    false,
   0,    0,    0,
   0,    RES_POISON, VULN_COLD,
   A|G|X|Y|cc, A|D|E|F|K|L|Q|V|X
     },
  
     {
-  "song bird",    FALSE,
+  "song bird",    false,
   0,    AFF_FLYING,   OFF_FAST|OFF_DODGE,
   0,    0,    0,
   A|G|W,    A|C|D|E|F|H|K|P
     },
 
     {
-  "troll",    FALSE,
+  "troll",    false,
   0,    AFF_REGENERATION|AFF_INFRARED|AFF_DETECT_HIDDEN,
   OFF_BERSERK,
   0,  RES_CHARM|RES_BASH, VULN_FIRE|VULN_ACID,
@@ -494,21 +494,21 @@ const   struct  race_type race_table  []    =
     },
 
     {
-  "water fowl",   FALSE,
+  "water fowl",   false,
   0,    AFF_SWIM|AFF_FLYING,  0,
   0,    RES_DROWNING,   0,
   A|G|W,    A|C|D|E|F|H|K|P
     },    
   
     {
-  "wolf",     FALSE,
+  "wolf",     false,
   0,    AFF_INFRARED,  OFF_FAST|OFF_DODGE,
   0,    0,    0,  
   A|G|V,    A|C|D|E|F|J|K|Q|V
     },
 
     {
-  "wyvern",   FALSE,
+  "wyvern",   false,
   0,    AFF_FLYING|AFF_DETECT_INVIS|AFF_DETECT_HIDDEN,
   OFF_BASH|OFF_FAST|OFF_DODGE,
   IMM_POISON, 0,  VULN_LIGHT,
@@ -516,7 +516,7 @@ const   struct  race_type race_table  []    =
     },
 
     {
-  "unique",   FALSE,
+  "unique",   false,
   0,    0,    0,
   0,    0,    0,    
   0,    0
@@ -1076,105 +1076,105 @@ const struct  class_type  class_table [MAX_CLASS] =
 {
     {
   "mage", "Mag",  STAT_INT, STAT_WIS,  OBJ_VNUM_SCHOOL_DAGGER,
-  { 3018, 9618 },  75,  20, 6, 87,  6,  8, 2, FALSE,
+  { 3018, 9618 },  75,  20, 6, 87,  6,  8, 2, false,
   { 0, 0 },
   "mage basics", "mage default"
     },
 
     {
   "cleric", "Cle",  STAT_WIS, STAT_STR,  OBJ_VNUM_SCHOOL_MACE,
-  { 3003, 9619 },  75,  20, 2, 100,  7, 10, 2, FALSE,
+  { 3003, 9619 },  75,  20, 2, 100,  7, 10, 2, false,
   { 0, 0 },
   "cleric basics", "cleric default"
     },
 
     {
   "thief", "Thi",  STAT_DEX, STAT_INT,  OBJ_VNUM_SCHOOL_DAGGER,
-  { 3028, 9639 },  75,  20,  -4, 112, 8, 13, 0, FALSE,
+  { 3028, 9639 },  75,  20,  -4, 112, 8, 13, 0, false,
   { 0, 0 },  
   "thief basics", "thief default"
     },
 
     {
   "warrior", "War",  STAT_STR, STAT_CON,  OBJ_VNUM_SCHOOL_SWORD,
-  { 3022, 9633 },  75,  20,  -10, 120,  11, 15, 0, FALSE,
+  { 3022, 9633 },  75,  20,  -10, 120,  11, 15, 0, false,
   { 0, 0 }, 
   "warrior basics", "warrior default"
     },
 
     {
   "monk", "Mon",  STAT_DEX, STAT_WIS,  OBJ_VNUM_SCHOOL_MACE,
-  { 3028, 9619 },  75,  20,  -4, 105,  8, 13, 1, TRUE,
+  { 3028, 9619 },  75,  20,  -4, 105,  8, 13, 1, true,
   { CLASS_THIEF, CLASS_CLERIC },
   "monk basics", "thiefmonk default"
     },
 
     {
   "paladin", "Pal",  STAT_STR, STAT_WIS, OBJ_VNUM_SCHOOL_SWORD,
-  { 3022, 9619 },  75,  20,  -7, 110, 10, 15, 1, TRUE,
+  { 3022, 9619 },  75,  20,  -7, 110, 10, 15, 1, true,
    { CLASS_WARRIOR, CLASS_CLERIC },
   "paladin basics", "clericpaladin default"
     },
 
     {
   "berzerker", "Ber",  STAT_STR, STAT_DEX,  OBJ_VNUM_SCHOOL_SWORD,
-  { 3022, 9639 },  75,  20,  -7, 115,  10, 15, 0, TRUE,
+  { 3022, 9639 },  75,  20,  -7, 115,  10, 15, 0, true,
   { CLASS_WARRIOR, CLASS_THIEF },
   "berzerker basics", "thiefberzerker default"
     },
 
     {
   "druid", "Dru",  STAT_WIS, STAT_INT,  OBJ_VNUM_SCHOOL_MACE,
-  { 3003, 9618 },  75,  20,  4, 90,  7, 10, 2, TRUE,
+  { 3003, 9618 },  75,  20,  4, 90,  7, 10, 2, true,
   { CLASS_MAGE, CLASS_CLERIC },
   "druid basics", "magedruid default"
     },
 
     {
   "assassin", "Ass",  STAT_DEX, STAT_INT,  OBJ_VNUM_SCHOOL_DAGGER,
-  { 3018, 9639 },  75,  20,  1, 95,  8, 13, 1, TRUE,
+  { 3018, 9639 },  75,  20,  1, 95,  8, 13, 1, true,
   { CLASS_MAGE, CLASS_THIEF }, 
   "assassin basics", "thiefassassin default"
     },
 
     {
   "samurai", "Sam",  STAT_INT, STAT_STR,  OBJ_VNUM_SCHOOL_SWORD,
-  { 3018, 9639 },  75,  20,  2, 105,  9, 15, 1, TRUE,
+  { 3018, 9639 },  75,  20,  2, 105,  9, 15, 1, true,
   { CLASS_MAGE, CLASS_WARRIOR },
   "samurai basics", "warriorsamurai default"
     },
 
     {
   "elementalist", "Ele", STAT_INT, STAT_WIS, OBJ_VNUM_SCHOOL_DAGGER,
-  { 3768, 0 }, 75, 20, 4, 100, 6, 10, 2, FALSE,
+  { 3768, 0 }, 75, 20, 4, 100, 6, 10, 2, false,
   { 0, 0 }, 
   "elementalist basics", "elementalist default"
     },
 
    {
   "wizard", "Wiz",   STAT_INT, STAT_WIS,  OBJ_VNUM_SCHOOL_DAGGER,
-  { 3018, 9618 },  75,  20, 6, 85,  6,  8, 2, TRUE, 
+  { 3018, 9618 },  75,  20, 6, 85,  6,  8, 2, true, 
   { CLASS_MAGE, -1 },
   "mage basics", "wizard default"
   },
      
   {
  "crusader", "Cru", STAT_WIS, STAT_STR, OBJ_VNUM_SCHOOL_MACE,
- { 3003, 9619 },  75,  20, 2, 105,  8, 11, 2, TRUE, 
+ { 3003, 9619 },  75,  20, 2, 105,  8, 11, 2, true, 
  { CLASS_CLERIC, -1 },
  "cleric basics", "crusader default"
   },
 
   {
  "rogue", "Rog", STAT_DEX,  STAT_INT, OBJ_VNUM_SCHOOL_DAGGER,
- { 3028, 9639 }, 75, 20, -4, 105, 8, 13, 0, TRUE, 
+ { 3028, 9639 }, 75, 20, -4, 105, 8, 13, 0, true, 
  { CLASS_THIEF, -1 },
  "thief basics", "rogue default" 
  },
 
  {
  "blademaster", "Bla", STAT_STR, STAT_CON, OBJ_VNUM_SCHOOL_SWORD,
- { 3022, 9633 }, 75, 20, -10, 115, 11, 15, 0, TRUE, 
+ { 3022, 9633 }, 75, 20, -10, 115, 11, 15, 0, true, 
  { CLASS_WARRIOR, -1 },
  "warrior basics", "blademaster default"
  }

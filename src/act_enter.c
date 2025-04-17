@@ -133,7 +133,7 @@ void do_enter( CHAR_DATA *ch, char *argument)
 	||  !is_room_clan(ch,location)
 	||  (room_is_private(ch,location) && !IS_TRUSTED(ch,IMPLEMENTOR)))
 	{
-	   act("$p doesn't seem to go anywhere.",ch,portal,NULL,TO_CHAR,FALSE);
+	   act("$p doesn't seem to go anywhere.",ch,portal,NULL,TO_CHAR,false);
 	   return;
 	}
 
@@ -145,7 +145,7 @@ void do_enter( CHAR_DATA *ch, char *argument)
         }
 
 	if ( ch->invis_level < 51 )
-	    act("$n steps into $p.",ch,portal,NULL,TO_ROOM,FALSE);
+	    act("$n steps into $p.",ch,portal,NULL,TO_ROOM,false);
 	
         if (IS_SET(ch->mhs,MHS_HIGHLANDER))
 	{
@@ -160,10 +160,10 @@ void do_enter( CHAR_DATA *ch, char *argument)
 	}
 
 	if (IS_SET(portal->value[2],GATE_NORMAL_EXIT))
-	    act("You enter $p.",ch,portal,NULL,TO_CHAR,FALSE);
+	    act("You enter $p.",ch,portal,NULL,TO_CHAR,false);
 	else
 	    act("You walk through $p and find yourself somewhere else...",
-	        ch,portal,NULL,TO_CHAR,FALSE); 
+	        ch,portal,NULL,TO_CHAR,false); 
 
 	char_from_room(ch);
 	char_to_room(ch, location);
@@ -201,9 +201,9 @@ void do_enter( CHAR_DATA *ch, char *argument)
 	if (ch->invis_level < 51 )
 	{
 	if (IS_SET(portal->value[2],GATE_NORMAL_EXIT))
-	    act("$n has arrived.",ch,portal,NULL,TO_ROOM,FALSE);
+	    act("$n has arrived.",ch,portal,NULL,TO_ROOM,false);
 	else
-	    act("$n has arrived through $p.",ch,portal,NULL,TO_ROOM,FALSE);
+	    act("$n has arrived through $p.",ch,portal,NULL,TO_ROOM,false);
 	}
 
 	do_look(ch,"auto");
@@ -218,15 +218,15 @@ void do_enter( CHAR_DATA *ch, char *argument)
 
  	if (portal != NULL && portal->value[0] == -1)
 	{
-	    act("$p fades out of existence.",ch,portal,NULL,TO_CHAR,FALSE);
+	    act("$p fades out of existence.",ch,portal,NULL,TO_CHAR,false);
 	    if (ch->in_room == old_room)
-		act("$p fades out of existence.",ch,portal,NULL,TO_ROOM,FALSE);
+		act("$p fades out of existence.",ch,portal,NULL,TO_ROOM,false);
 	    else if (old_room->people != NULL)
 	    {
 		act("$p fades out of existence.", 
-		    old_room->people,portal,NULL,TO_CHAR,FALSE);
+		    old_room->people,portal,NULL,TO_CHAR,false);
 		act("$p fades out of existence.",
-		    old_room->people,portal,NULL,TO_ROOM,FALSE);
+		    old_room->people,portal,NULL,TO_ROOM,false);
 	    }
 	    extract_obj(portal);
             portal = NULL;
@@ -255,13 +255,13 @@ void do_enter( CHAR_DATA *ch, char *argument)
                 &&  (IS_NPC(fch) && IS_SET(fch->act,ACT_AGGRESSIVE)))
                 {
                     act("You can't bring $N into the city.",
-                    	ch,NULL,fch,TO_CHAR,FALSE);
+                    	ch,NULL,fch,TO_CHAR,false);
                     act("You aren't allowed in the city.",
-                    	fch,NULL,NULL,TO_CHAR,FALSE);
+                    	fch,NULL,NULL,TO_CHAR,false);
                     continue;
             	}
  
-            	act( "You follow $N.", fch, NULL, ch, TO_CHAR,FALSE );
+            	act( "You follow $N.", fch, NULL, ch, TO_CHAR,false );
 		do_enter(fch,argument);
             }
     	}

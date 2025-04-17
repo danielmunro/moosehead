@@ -43,7 +43,7 @@ void do_scan(CHAR_DATA *ch, char *argument)
 
    if (arg1[0] == '\0')
    {
-      act("$n looks all around.", ch, NULL, NULL, TO_ROOM,FALSE);
+      act("$n looks all around.", ch, NULL, NULL, TO_ROOM,false);
       send_to_char("Looking around you see:\n\r", ch);
                 scan_list(ch->in_room, ch, 0, -1);
 
@@ -62,8 +62,8 @@ void do_scan(CHAR_DATA *ch, char *argument)
    else if (!str_cmp(arg1, "d") || !str_cmp(arg1, "down"))  door = 5;
    else { send_to_char("Which way do you want to scan?\n\r", ch); return; }
 
-   act("You peer intently $T.", ch, NULL, dir_name[door], TO_CHAR,FALSE);
-   act("$n peers intently $T.", ch, NULL, dir_name[door], TO_ROOM,FALSE);
+   act("You peer intently $T.", ch, NULL, dir_name[door], TO_CHAR,false);
+   act("$n peers intently $T.", ch, NULL, dir_name[door], TO_ROOM,false);
    sprintf(buf, "Looking %s you see:\n\r", dir_name[door]);
                                                                                   
    scan_room = ch->in_room;
@@ -89,7 +89,7 @@ void scan_list(ROOM_INDEX_DATA *scan_room, CHAR_DATA *ch, sh_int depth,
    {
       if (rch == ch) continue;
       if (!IS_NPC(rch) && rch->invis_level > get_trust(ch)) continue;
-      if (can_see(ch, rch, FALSE)) scan_char(rch, ch, depth, door);
+      if (can_see(ch, rch, false)) scan_char(rch, ch, depth, door);
    }
    return;
 }
@@ -102,7 +102,7 @@ void scan_char(CHAR_DATA *victim, CHAR_DATA *ch, sh_int depth, sh_int door)
 
    buf[0] = '\0';
 
-   strcat(buf, PERS(victim, ch, FALSE));
+   strcat(buf, PERS(victim, ch, false));
    strcat(buf, ", ");
    sprintf(buf2, distance[depth], dir_name[door]);
    strcat(buf, buf2);

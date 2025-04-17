@@ -1171,7 +1171,7 @@ bool check_range(CHAR_DATA *ch, int range_type, int vnum) {
     VNUM_RANGE_DATA *range;
 
     if (get_trust(ch) >= CREATOR) {
-        return TRUE;
+        return true;
     }
     if (vnum == -1) {
         switch (range_type) {
@@ -1201,13 +1201,13 @@ bool check_range(CHAR_DATA *ch, int range_type, int vnum) {
     range = ch->pcdata->edit.range;
     while (range) {
         if ((vnum >= range->min) && (vnum <= range->max)) {
-            return TRUE;
+            return true;
         }
         range = range->next;
     }
 
     send_to_char("You do not have permision.\n\r>  ", ch);
-    return FALSE;
+    return false;
 }
 
 void build_flag_menu(char **flag_table, char *title, CHAR_DATA *ch) {
@@ -1390,7 +1390,7 @@ void build_attack_menu(CHAR_DATA *ch, MENU_FUN call_back) {
 
 void show_flags(int flags, char **flag_table, CHAR_DATA *ch) {
     int t;
-    int found = FALSE;
+    int found = false;
     char buf[MAX_STRING_LENGTH];
 
     for (t = 0;; t++) {
@@ -1403,7 +1403,7 @@ void show_flags(int flags, char **flag_table, CHAR_DATA *ch) {
             } else {
                 send_to_char(capitalize(flag_table[t]), ch);
             }
-            found = TRUE;
+            found = true;
         }
     }
     if (!found) send_to_char("None", ch);
@@ -1572,7 +1572,7 @@ void edit_area_purge(CHAR_DATA *ch) {
             for (victim = pRoom->people; victim != NULL; victim = vnext) {
                 vnext = victim->next_in_room;
                 if (IS_NPC(victim) && victim != ch)
-                    extract_char(victim, TRUE);
+                    extract_char(victim, true);
             }
 
             for (obj = pRoom->contents; obj != NULL; obj = obj_next) {
@@ -1606,10 +1606,10 @@ void edit_area_new_vnum(CHAR_DATA *ch, char *arg) {
     pArea->max_vnum_mob = vnum;
     pArea->age = 15;
     pArea->nplayer = 0;
-    pArea->empty = FALSE;
-    pArea->freeze = TRUE;
-    pArea->under_develop = TRUE;
-    pArea->no_transport = FALSE;
+    pArea->empty = false;
+    pArea->freeze = true;
+    pArea->under_develop = true;
+    pArea->no_transport = false;
     if (area_first == NULL)
         area_first = pArea;
     if (area_last != NULL)
@@ -1779,7 +1779,7 @@ void edit_area(CHAR_DATA *ch, int num) {
                     bool temp;
 
                     temp = ch->pcdata->edit.area->freeze;
-                    ch->pcdata->edit.area->freeze = TRUE;
+                    ch->pcdata->edit.area->freeze = true;
                     reset_area(ch->pcdata->edit.area);
                     ch->pcdata->edit.area->freeze = temp;
                     send_to_char("Area reset.\n\r", ch);
@@ -1947,12 +1947,12 @@ bool create_room(CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir) {
     }
     if (vnum == 0) {
         send_to_char("Out of room vnums for this area.\n\r", ch);
-        return FALSE;
+        return false;
     }
 
     if (!check_range(ch, RANGE_ROOM, vnum)) {
         send_to_char("Room could not be created.\n\r", ch);
-        return FALSE;
+        return false;
     }
 
     sprintf(buf, "Created room [%d].", vnum);
@@ -2003,7 +2003,7 @@ bool create_room(CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir) {
     char_to_room(ch, pRoomIndex);
     ch->pcdata->edit.room = pRoomIndex;
 
-    return TRUE;
+    return true;
 }
 
 void edit_room_create_dir(CHAR_DATA *ch, char *arg) {
@@ -2110,7 +2110,7 @@ void edit_room_list(CHAR_DATA *ch) {
     int idx;
     char buf[MAX_STRING_LENGTH] = "";
     char bigbuf[4 * MAX_STRING_LENGTH] = "";
-    int col = FALSE;
+    int col = false;
 
     for (idx = ch->pcdata->edit.area->min_vnum_room;
          idx <= ch->pcdata->edit.area->max_vnum_room; idx++) {
@@ -2122,15 +2122,15 @@ void edit_room_list(CHAR_DATA *ch) {
         if (room) {
             sprintf(buf, "[%5d] %-30s", room->vnum, room->name);
             if (col) {
-                col = FALSE;
+                col = false;
                 if (strlen(buf) > 38) {
                     strcat(bigbuf, "\n\r");
                 }
                 strcat(bigbuf, buf);
             } else {
-                col = TRUE;
+                col = true;
                 if (strlen(buf) > 38) {
-                    col = FALSE;
+                    col = false;
                 }
                 strcat(bigbuf, "\n\r");
                 strcat(bigbuf, buf);
@@ -2600,7 +2600,7 @@ void edit_room_extend_add(CHAR_DATA *ch, char *arg) {
 void edit_room_extend_rem(CHAR_DATA *ch, char *arg) {
     EXTRA_DESCR_DATA *ed, *prev_ed;
     char buf[MAX_STRING_LENGTH];
-    bool found = FALSE;
+    bool found = false;
 
     prev_ed = NULL;
     ch->pcdata->interp_fun = do_menu;
@@ -2614,7 +2614,7 @@ void edit_room_extend_rem(CHAR_DATA *ch, char *arg) {
             }
             sprintf(buf, "Extended description '%s' removed.\n\r>  ", ed->keyword);
             send_to_char(buf, ch);
-            found = TRUE;
+            found = true;
             free_extra_descr(ed);
             break;
         }
@@ -2777,7 +2777,7 @@ void edit_mob_list(CHAR_DATA *ch) {
     MOB_INDEX_DATA *mob;
     int idx;
     char buf[MAX_STRING_LENGTH] = "", bigbuf[4 * MAX_STRING_LENGTH] = "";
-    int col = FALSE;
+    int col = false;
 
     for (idx = ch->pcdata->edit.area->min_vnum_mob;
          idx <= ch->pcdata->edit.area->max_vnum_mob; idx++) {
@@ -2789,15 +2789,15 @@ void edit_mob_list(CHAR_DATA *ch) {
         if (mob) {
             sprintf(buf, "[%5d] %-30s", mob->vnum, mob->short_descr);
             if (col) {
-                col = FALSE;
+                col = false;
                 if (strlen(buf) > 38) {
                     strcat(bigbuf, "\n\r");
                 }
                 strcat(bigbuf, buf);
             } else {
-                col = TRUE;
+                col = true;
                 if (strlen(buf) > 38) {
-                    col = FALSE;
+                    col = false;
                 }
                 strcat(bigbuf, "\n\r");
                 strcat(bigbuf, buf);
@@ -2839,7 +2839,7 @@ void edit_mob_create(CHAR_DATA *ch) {
         ch->pcdata->edit.area->max_vnum_mob = vnum;
 
     mob = GC_MALLOC(sizeof(MOB_INDEX_DATA));
-    mob->new_format = TRUE;
+    mob->new_format = true;
     mob->vnum = vnum;
     mob->spec_fun = NULL;
     mob->pShop = NULL;
@@ -4176,7 +4176,7 @@ void edit_obj_list(CHAR_DATA *ch) {
     OBJ_INDEX_DATA *obj;
     int idx;
     char buf[MAX_STRING_LENGTH] = "", bigbuf[4 * MAX_STRING_LENGTH] = "";
-    int col = FALSE;
+    int col = false;
 
     for (idx = ch->pcdata->edit.area->min_vnum_obj;
          idx <= ch->pcdata->edit.area->max_vnum_obj; idx++) {
@@ -4188,15 +4188,15 @@ void edit_obj_list(CHAR_DATA *ch) {
         if (obj) {
             sprintf(buf, "[%5d] %-30s", obj->vnum, obj->short_descr);
             if (col) {
-                col = FALSE;
+                col = false;
                 if (strlen(buf) > 38) {
                     strcat(bigbuf, "\n\r");
                 }
                 strcat(bigbuf, buf);
             } else {
-                col = TRUE;
+                col = true;
                 if (strlen(buf) > 38) {
-                    col = FALSE;
+                    col = false;
                 }
                 strcat(bigbuf, "\n\r");
                 strcat(bigbuf, buf);
@@ -4237,12 +4237,12 @@ void edit_obj_create(CHAR_DATA *ch) {
         ch->pcdata->edit.area->max_vnum_obj = vnum;
 
     obj = GC_MALLOC(sizeof(OBJ_INDEX_DATA));
-    obj->new_format = TRUE;
+    obj->new_format = true;
     obj->vnum = vnum;
     obj->area = ch->pcdata->edit.area;
     obj->extra_descr = NULL;
     obj->affected = NULL;
-    obj->new_format = TRUE;
+    obj->new_format = true;
     obj->name = str_dup("generic object");
     obj->short_descr = str_dup("Generic Short Description");
     obj->description = str_dup("Generic Description");
@@ -4445,11 +4445,11 @@ void edit_obj_type(CHAR_DATA *ch, int num) {
     if (num != ID_EDIT_PREVIOUS) {
         ch->pcdata->edit.obj->item_type = num;
         t = 0;
-        found = FALSE;
+        found = false;
         while (item_table[t].type && !found) {
             if (item_table[t].type == num) {
                 num = t;
-                found = TRUE;
+                found = true;
                 break;
             }
             t++;
@@ -4637,7 +4637,7 @@ void edit_obj_extend_add(CHAR_DATA *ch, char *arg) {
 void edit_obj_extend_rem(CHAR_DATA *ch, char *arg) {
     EXTRA_DESCR_DATA *ed, *prev_ed;
     char buf[MAX_STRING_LENGTH];
-    bool found = FALSE;
+    bool found = false;
 
     prev_ed = NULL;
     ch->pcdata->interp_fun = do_menu;
@@ -4651,7 +4651,7 @@ void edit_obj_extend_rem(CHAR_DATA *ch, char *arg) {
             }
             sprintf(buf, "Extended description '%s' removed.\n\r>  ", ed->keyword);
             send_to_char(buf, ch);
-            found = TRUE;
+            found = true;
             free_extra_descr(ed);
             break;
         }
@@ -4726,7 +4726,7 @@ bool edit_obj_disp_aff(CHAR_DATA *ch, OBJ_INDEX_DATA *obj) {
     char buf[MAX_STRING_LENGTH];
     int idx = 0;
 
-    if (!obj->affected) return FALSE;
+    if (!obj->affected) return false;
 
     for (paf = obj->affected; paf != NULL; paf = paf->next) {
         idx++;
@@ -4773,7 +4773,7 @@ bool edit_obj_disp_aff(CHAR_DATA *ch, OBJ_INDEX_DATA *obj) {
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 void edit_obj_rem_aff(CHAR_DATA *ch, char *arg) {
@@ -4902,7 +4902,7 @@ void edit_obj_update_instances(CHAR_DATA *ch) {
     obj = object_list;
     while (obj) {
         if (obj->pIndexData == ch->pcdata->edit.obj) {
-            ObjIndexToInstance(obj, obj->pIndexData, obj->level, FALSE);
+            ObjIndexToInstance(obj, obj->pIndexData, obj->level, false);
         }
         obj = obj->next;
     }
@@ -5171,16 +5171,16 @@ void edit_reset_room(CHAR_DATA *ch) {
     area = pRoom->area;
     reset = area->reset_first;
     prev_reset = NULL;
-    mark = FALSE;
+    mark = false;
     while (reset) {
         next_reset = reset->next;
-        remove = FALSE;
+        remove = false;
         switch (reset->command) {
             case 'M':
                 if (reset->arg3 == pRoom->vnum)
-                    mark = remove = TRUE;
+                    mark = remove = true;
                 else
-                    mark = FALSE;
+                    mark = false;
                 break;
             case 'G':
             case 'E':
@@ -5188,20 +5188,20 @@ void edit_reset_room(CHAR_DATA *ch) {
                 break;
             case 'D':
                 if (reset->arg1 == pRoom->vnum)
-                    remove = TRUE;
-                mark = FALSE;
+                    remove = true;
+                mark = false;
                 break;
             case 'O':
                 if (reset->arg3 == pRoom->vnum)
-                    mark = remove = TRUE;
+                    mark = remove = true;
                 else
-                    mark = FALSE;
+                    mark = false;
                 break;
             case 'P':
                 remove = mark;
                 break;
             default:
-                mark = FALSE;
+                mark = false;
         }
         if (remove) {
             if (reset == area->reset_last) {

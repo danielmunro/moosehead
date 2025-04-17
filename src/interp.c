@@ -45,7 +45,7 @@ bool  check_social  args( ( CHAR_DATA *ch, char *command,
 /*
  * Log-all switch.
  */
-bool        fLogAll   = FALSE;
+bool        fLogAll   = false;
 
 
 
@@ -623,7 +623,7 @@ void interpret( CHAR_DATA *ch, char *argument )
     /*
      * Look for command in command table.
      */
-    found = FALSE;
+    found = false;
     trust = get_trust( ch );
 #ifdef OLC_VERSION
     if(ch->icg == ICG_BUILD)
@@ -647,7 +647,7 @@ void interpret( CHAR_DATA *ch, char *argument )
         )
      )
   {
-      found = TRUE;
+      found = true;
       break;
   }
     }
@@ -758,12 +758,12 @@ if (cmd_table[cmd].log != LOG_NEVER) {
       if(ch->pcdata->wraith_timer > 0)
       {
         ch->pcdata->wraith_timer = 0;
-        act("You failed to go to wraithform!",ch,NULL,NULL,TO_CHAR,FALSE);
-        act("$n failed to go to wraithform!",ch,NULL,NULL,TO_ROOM,FALSE);
+        act("You failed to go to wraithform!",ch,NULL,NULL,TO_CHAR,false);
+        act("$n failed to go to wraithform!",ch,NULL,NULL,TO_ROOM,false);
       }
       if(ch->pcdata->pulse_timer > 0)
       {
-        end_pulse_command(ch, FALSE, FALSE);
+        end_pulse_command(ch, false, false);
       }
     }
 
@@ -773,8 +773,8 @@ if (cmd_table[cmd].log != LOG_NEVER) {
 
         paf = affect_find(ch->affected, gsn_acclimate);
         affect_remove(ch,paf,APPLY_BOTH);
-        act("You no longer are attuned with your environment.",ch,NULL,NULL,TO_CHAR,FALSE);
-        act("$n is no longer attuned with $s environment.",ch,NULL,NULL,TO_ROOM,FALSE);
+        act("You no longer are attuned with your environment.",ch,NULL,NULL,TO_CHAR,false);
+        act("$n is no longer attuned with $s environment.",ch,NULL,NULL,TO_ROOM,false);
     }
 
     /*
@@ -805,8 +805,8 @@ if (cmd_table[cmd].log != LOG_NEVER) {
 
         paf = affect_find(ch->affected, gsn_acclimate);
         affect_remove(ch,paf,APPLY_BOTH);
-        act("You no longer are attuned with your environment.",ch,NULL,NULL,TO_CHAR,FALSE);
-        act("$n is no longer attuned with $s environment.",ch,NULL,NULL,TO_ROOM,FALSE);
+        act("You no longer are attuned with your environment.",ch,NULL,NULL,TO_CHAR,false);
+        act("$n is no longer attuned with $s environment.",ch,NULL,NULL,TO_ROOM,false);
     }
 */
     tail_chain(); /* Never disturb the sleeping giant */
@@ -822,40 +822,40 @@ bool check_social( CHAR_DATA *ch, char *command, char *argument )
     int cmd;
     bool found;
 
-    found  = FALSE;
+    found  = false;
     for ( cmd = 0; social_table[cmd].name[0] != '\0'; cmd++ )
     {
   if ( command[0] == social_table[cmd].name[0]
   &&   !str_prefix( command, social_table[cmd].name ) )
   {
-      found = TRUE;
+      found = true;
       break;
   }
     }
 
     if ( !found )
-  return FALSE;
+  return false;
 
     if ( !IS_NPC(ch) && IS_SET(ch->comm, COMM_NOEMOTE) )
     {
   send_to_char( "You are anti-social!\n\r", ch );
-  return TRUE;
+  return true;
     }
 
     switch ( ch->position )
     {
     case POS_DEAD:
   send_to_char( "Lie still; you are DEAD.\n\r", ch );
-  return TRUE;
+  return true;
 
     case POS_INCAP:
     case POS_MORTAL:
   send_to_char( "You are hurt far too bad for that.\n\r", ch );
-  return TRUE;
+  return true;
 
     case POS_STUNNED:
   send_to_char( "You are too stunned to do that.\n\r", ch );
-  return TRUE;
+  return true;
 
     case POS_SLEEPING:
   /*
@@ -865,7 +865,7 @@ bool check_social( CHAR_DATA *ch, char *command, char *argument )
   if ( !str_cmp( social_table[cmd].name, "snore" ) )
       break;
   send_to_char( "In your dreams, or what?\n\r", ch );
-  return TRUE;
+  return true;
 
     }
 
@@ -873,8 +873,8 @@ bool check_social( CHAR_DATA *ch, char *command, char *argument )
     victim = NULL;
     if ( arg[0] == '\0' )
     {
-  act( social_table[cmd].others_no_arg, ch, NULL, victim, TO_ROOM    ,FALSE);
-  act( social_table[cmd].char_no_arg,   ch, NULL, victim, TO_CHAR    ,FALSE);
+  act( social_table[cmd].others_no_arg, ch, NULL, victim, TO_ROOM    ,false);
+  act( social_table[cmd].char_no_arg,   ch, NULL, victim, TO_CHAR    ,false);
     }
     else if ( ( victim = get_char_room( ch, arg ) ) == NULL )
     {
@@ -882,14 +882,14 @@ bool check_social( CHAR_DATA *ch, char *command, char *argument )
     }
     else if ( victim == ch )
     {
-  act( social_table[cmd].others_auto,   ch, NULL, victim, TO_ROOM    ,FALSE);
-  act( social_table[cmd].char_auto,     ch, NULL, victim, TO_CHAR    ,FALSE);
+  act( social_table[cmd].others_auto,   ch, NULL, victim, TO_ROOM    ,false);
+  act( social_table[cmd].char_auto,     ch, NULL, victim, TO_CHAR    ,false);
     }
     else
     {
-  act( social_table[cmd].others_found,  ch, NULL, victim, TO_NOTVICT ,FALSE);
-  act( social_table[cmd].char_found,    ch, NULL, victim, TO_CHAR    ,FALSE);
-  act( social_table[cmd].vict_found,    ch, NULL, victim, TO_VICT    ,FALSE);
+  act( social_table[cmd].others_found,  ch, NULL, victim, TO_NOTVICT ,false);
+  act( social_table[cmd].char_found,    ch, NULL, victim, TO_CHAR    ,false);
+  act( social_table[cmd].vict_found,    ch, NULL, victim, TO_VICT    ,false);
 
   if ( !IS_NPC(ch) && IS_NPC(victim)
   &&   !IS_AFFECTED(victim, AFF_CHARM)
@@ -899,7 +899,7 @@ bool check_social( CHAR_DATA *ch, char *command, char *argument )
         if(victim->pIndexData->vnum == MOB_VNUM_INSANE_MIME)
         {// Special mime handling
                 if(!victim->qchar || victim->qchar != ch)
-                        return TRUE;// He ignores socials from people he's not duelling
+                        return true;// He ignores socials from people he's not duelling
                 if(cmd == victim->qnum2)
                 {// Continue the duel
                         quest_handler(victim, ch, NULL, QUEST_MIME, QSTEP_WIN);
@@ -912,7 +912,7 @@ bool check_social( CHAR_DATA *ch, char *command, char *argument )
                 {// Shrug and leave, the player didn't accept the duel but did social back
                         quest_handler(victim, ch, NULL, QUEST_MIME, QSTEP_MOVE);
                 }
-                return TRUE;
+                return true;
         }
 
       switch ( number_bits( 4 ) )
@@ -922,23 +922,23 @@ bool check_social( CHAR_DATA *ch, char *command, char *argument )
       case 1: case 2: case 3: case 4:
       case 5: case 6: case 7: case 8:
     act( social_table[cmd].others_found,
-        victim, NULL, ch, TO_NOTVICT ,FALSE);
+        victim, NULL, ch, TO_NOTVICT ,false);
     act( social_table[cmd].char_found,
-        victim, NULL, ch, TO_CHAR    ,FALSE);
+        victim, NULL, ch, TO_CHAR    ,false);
     act( social_table[cmd].vict_found,
-        victim, NULL, ch, TO_VICT    ,FALSE);
+        victim, NULL, ch, TO_VICT    ,false);
     break;
 
       case 9: case 10: case 11: case 12:
-    act( "$n slaps $N.",  victim, NULL, ch, TO_NOTVICT ,FALSE);
-    act( "You slap $N.",  victim, NULL, ch, TO_CHAR    ,FALSE);
-    act( "$n slaps you.", victim, NULL, ch, TO_VICT    ,FALSE);
+    act( "$n slaps $N.",  victim, NULL, ch, TO_NOTVICT ,false);
+    act( "You slap $N.",  victim, NULL, ch, TO_CHAR    ,false);
+    act( "$n slaps you.", victim, NULL, ch, TO_VICT    ,false);
     break;
       }
   }
     }
 
-    return TRUE;
+    return true;
 }
 
 /*

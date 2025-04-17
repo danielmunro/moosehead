@@ -93,77 +93,77 @@ void do_unread(CHAR_DATA *ch)
 {
     char buf[MAX_STRING_LENGTH];
     int count;
-    bool found = FALSE;
+    bool found = false;
 
     if (IS_NPC(ch))
   return; 
 
     if ((count = count_spool(ch,news_list)) > 0)
     {
-  found = TRUE;
+  found = true;
   sprintf(buf,"There %s %d new news article%s waiting.\n\r",
       count > 1 ? "are" : "is",count, count > 1 ? "s" : "");
   send_to_char(buf,ch);
     }
     if ((count = count_spool(ch,changes_list)) > 0)
     {
-  found = TRUE;
+  found = true;
   sprintf(buf,"There %s %d change%s waiting to be read.\n\r",
       count > 1 ? "are" : "is", count, count > 1 ? "s" : "");
         send_to_char(buf,ch);
     }
     if ((count = count_spool(ch,note_list)) > 0)
     {
-  found = TRUE;
+  found = true;
   sprintf(buf,"You have %d new IC note%s waiting.\n\r",
       count, count > 1 ? "s" : "");
   send_to_char(buf,ch);
     }
     if ((count = count_spool(ch,ooc_list)) > 0)
     {
-  found = TRUE;
+  found = true;
   sprintf(buf,"You have %d new OOC note%s waiting.\n\r",
       count, count > 1 ? "s" : "");
   send_to_char(buf,ch);
     }
     if ((count=count_spool(ch,bug_list)) > 0)
     {
-  found = TRUE;
+  found = true;
   sprintf(buf,"There have been %d bug%s reported.\n\r",
 	count, count > 1 ? "s" : "");
   send_to_char(buf,ch);
     }
     if ((count = count_spool(ch,clan_list)) > 0)
     {
-  found = TRUE;
+  found = true;
   sprintf(buf,"You have %d clan note%s to read.\n\r",
       count, count > 1 ? "s" : "" );
   send_to_char(buf,ch);
     }
     if ((count = count_spool(ch,idea_list)) > 0)
     {
-  found = TRUE;
+  found = true;
   sprintf(buf,"You have %d unread idea%s to peruse.\n\r",
       count, count > 1 ? "s" : "");
   send_to_char(buf,ch);
     }
     if ((count = count_spool(ch,quest_list)) > 0)
     {
-  found = TRUE;
+  found = true;
   sprintf(buf,"You have %d quest note%s to read.\n\r",
       count, count > 1 ? "s" : "" );
   send_to_char(buf,ch);
     }
     if (IS_TRUSTED(ch,ANGEL) && (count = count_spool(ch,penalty_list)) > 0)
     {
-  found = TRUE;
+  found = true;
   sprintf(buf,"%d %s been added.\n\r",
       count, count > 1 ? "penalties have" : "penalty has");
   send_to_char(buf,ch);
     }
     if (IS_TRUSTED(ch,ANGEL) && (count = count_spool(ch,immortal_list)) > 0)
     {
-  found = TRUE;
+  found = true;
   sprintf(buf,"%d %s been added.\n\r",
       count, count > 1 ? "gnotes have" : "gnote has");
   send_to_char(buf,ch);
@@ -467,19 +467,19 @@ void append_note(NOTE_DATA *pnote)
 
 bool is_note_to( CHAR_DATA *ch, NOTE_DATA *pnote )
 {   if ( ch->level == MAX_LEVEL-1)
-  return TRUE;
+  return true;
     if ( !str_cmp( ch->name, pnote->sender ) )
-  return TRUE;
+  return true;
 
     if ( is_exact_name( "all", pnote->to_list ) )
-  return TRUE;
+  return true;
 
     if ( IS_IMMORTAL(ch) && is_name( "immortal", pnote->to_list ) )
-  return TRUE;
+  return true;
 
     if ( IS_SET(ch->pcdata->clan_flags, CLAN_PAB) 
 	&& is_exact_name("pab", pnote->to_list) )
-  return TRUE;
+  return true;
 
     if ( IS_IMMORTAL(ch) && (is_exact_name("honor",pnote->to_list) 
 	 || is_exact_name("posse",pnote->to_list)
@@ -487,25 +487,25 @@ bool is_note_to( CHAR_DATA *ch, NOTE_DATA *pnote )
 	 || is_exact_name("warlock",pnote->to_list)
 	 || is_exact_name("avarice",pnote->to_list)
 	 || is_exact_name("zealot",pnote->to_list))) 
-        return TRUE;
+        return true;
 
     if ( ((is_clan(ch) || IS_IMMORTAL(ch))
 	   && is_exact_name("clans",pnote->to_list) ) )
-	return TRUE;
+	return true;
 
     if (   (ch->clan && is_exact_name(clan_table[ch->clan].name,pnote->to_list) ) )
-  	return TRUE;
+  	return true;
     if(ch->pcdata->clan_info && is_exact_name(ch->pcdata->clan_info->clan->name, pnote->to_list))
-      return TRUE;
+      return true;
 
 
     if ( is_exact_name( ch->name, pnote->to_list ) )
-  return TRUE;
+  return true;
 
     if ( ch->level > CREATOR )
-	return TRUE;
+	return true;
 
-    return FALSE;
+    return false;
 }
 
 
@@ -647,12 +647,12 @@ bool hide_note (CHAR_DATA *ch, NOTE_DATA *pnote)
     time_t last_read;
 
     if (IS_NPC(ch))
-  return TRUE;
+  return true;
 
     switch (pnote->type)
     {
   default:
-      return TRUE;
+      return true;
   case NOTE_NOTE:
       last_read = ch->pcdata->last_note;
       break;
@@ -686,15 +686,15 @@ bool hide_note (CHAR_DATA *ch, NOTE_DATA *pnote)
     }
     
     if (pnote->date_stamp <= last_read)
-  return TRUE;
+  return true;
 
     if (!str_cmp(ch->name,pnote->sender))
-  return TRUE;
+  return true;
 
     if ((!is_note_to(ch,pnote)) && (ch->level < CREATOR))
-  return TRUE;
+  return true;
 
-    return FALSE;
+    return false;
 }
 
 void update_read(CHAR_DATA *ch, NOTE_DATA *pnote)
@@ -884,7 +884,7 @@ void parse_note( CHAR_DATA *ch, char *argument, int type )
  
         if ( !str_cmp( argument, "all" ) )
         {
-            fAll = TRUE;
+            fAll = true;
             anum = 0;
         }
  
@@ -922,7 +922,7 @@ void parse_note( CHAR_DATA *ch, char *argument, int type )
  
         else if ( is_number( argument ) )
         {
-            fAll = FALSE;
+            fAll = false;
             anum = atoi( argument );
         }
         else
@@ -1011,7 +1011,7 @@ void parse_note( CHAR_DATA *ch, char *argument, int type )
         {
             if ( is_note_to( ch, pnote ) && vnum++ == anum )
             {
-                note_remove( ch, pnote, FALSE );
+                note_remove( ch, pnote, false );
                 send_to_char( "Ok.\n\r", ch );
                 return;
             }
@@ -1036,7 +1036,7 @@ void parse_note( CHAR_DATA *ch, char *argument, int type )
         {
             if ( is_note_to( ch, pnote ) && vnum++ == anum )
             {
-                note_remove( ch, pnote,TRUE );
+                note_remove( ch, pnote,true );
                 send_to_char( "Ok.\n\r", ch );
                 return;
             }
@@ -1339,12 +1339,12 @@ void parse_note( CHAR_DATA *ch, char *argument, int type )
 bool start_long_edit(CHAR_DATA *ch, int limit, int type, char *base_str)
 {
   if(IS_NPC(ch))
-    return FALSE;
+    return false;
   if(type < 0 || type > EDIT_TYPES)
   {
     bug("Bad long edit type.", 0);
     send_to_char("Sorry, the type of field you want to edit could not be found.\n\r", ch);
-    return FALSE;
+    return false;
   }
   if(ch->pcdata->edit_str != NULL)
   {/* Already editing */
@@ -1354,17 +1354,17 @@ bool start_long_edit(CHAR_DATA *ch, int limit, int type, char *base_str)
       case LONG_EDIT_DESC: send_to_char("You are currently editing a description.\n\r", ch); break;
       case LONG_EDIT_NOTE: send_to_char("You are currently editing a note.\n\r", ch); break;
     }
-    return FALSE;
+    return false;
   }
   if(limit <= 0)
   {
     bug("Long edit: Limit too short.", 0);
-    return FALSE;
+    return false;
   }
   if(limit > 65535)
   {
     bug("Long edit: Limit too long.", 0);
-    return FALSE;
+    return false;
   }
   ch->pcdata->edit_type = type;
   ch->pcdata->edit_limit = limit;
@@ -1417,7 +1417,7 @@ bool start_long_edit(CHAR_DATA *ch, int limit, int type, char *base_str)
     ch->pcdata->edit_len = 0;
     ch->pcdata->edit_count = 0;
   }
-  return TRUE;
+  return true;
 }
 
 void do_long_edit(CHAR_DATA *ch, char *arg, int type, int edit_type)

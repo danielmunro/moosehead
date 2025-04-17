@@ -228,11 +228,11 @@ void do_species( CHAR_DATA *ch, char *argument )
    {
       if (obj->item_type == ITEM_CONTAINER && fExpand )
          {
-         show_list_to_char(obj->contains, ch, TRUE, TRUE, TRUE);
+         show_list_to_char(obj->contains, ch, true, true, true);
          }
        pstrShow = format_obj_to_char( obj, ch, fShort );
 
-       fCombine = FALSE;
+       fCombine = false;
 
        if ( IS_NPC(ch) || IS_SET(ch->display, DISP_COMBINE))
        {
@@ -245,7 +245,7 @@ void do_species( CHAR_DATA *ch, char *argument )
          if ( !strcmp( prgpstrShow[iShow], pstrShow ) )
          {
        prgnShow[iShow]++;
-       fCombine = TRUE;
+       fCombine = true;
        break;
          }
      }
@@ -326,7 +326,7 @@ void do_species( CHAR_DATA *ch, char *argument )
      if ( IS_AFFECTED(victim, AFF_FAERIE_FIRE) )
         strcat( buf, "({MPink Aura{x) " );
      if ( IS_AFFECTED(victim, AFF_FAERIE_FOG) ) strcat( buf, "({mPurple Aura{x) "  );
-     if(!IS_SET(victim->mhs,MHS_GLADIATOR) || gladiator_info.exper == FALSE)
+     if(!IS_SET(victim->mhs,MHS_GLADIATOR) || gladiator_info.exper == false)
      {
      if ( IS_EVIL(victim)
      &&   (IS_AFFECTED(ch, AFF_DETECT_ALIGN) || IS_SET(ch->act, PLR_HOLYLIGHT))     )
@@ -359,7 +359,7 @@ void do_species( CHAR_DATA *ch, char *argument )
         strcat( buf, "({DBlack Aura{x) " );
      if ( IS_AFFECTED(victim, AFF_SANCTUARY)   )
         strcat( buf, "({WWhite Aura{x) " );
-   if(!IS_SET(victim->mhs,MHS_GLADIATOR) || gladiator_info.exper == FALSE)
+   if(!IS_SET(victim->mhs,MHS_GLADIATOR) || gladiator_info.exper == false)
    {
      if ( is_affected(victim,skill_lookup("flame shield") ) )
         strcat( buf, "({rFire Shield{x} " );
@@ -409,13 +409,13 @@ void do_species( CHAR_DATA *ch, char *argument )
      }
 
      if (IS_SET(victim->mhs,MHS_SHAPEMORPHED)
-         || (IS_SET(victim->mhs,MHS_GLADIATOR) && gladiator_info.blind == TRUE))
+         || (IS_SET(victim->mhs,MHS_GLADIATOR) && gladiator_info.blind == true))
      {
         strcat ( buf, victim->long_descr);
      }
      else
      {
-        strcat( buf, PERS( victim, ch, FALSE ) );
+        strcat( buf, PERS( victim, ch, false ) );
         if ( !IS_NPC(victim) && !IS_SET(ch->display,DISP_BRIEF_DESCR)
         &&   victim->position == POS_STANDING && ch->on == NULL )
            strcat( buf, victim->pcdata->title );
@@ -540,13 +540,13 @@ void do_species( CHAR_DATA *ch, char *argument )
    else if ( victim->in_room == victim->fighting->in_room )
    {
     /*   if (IS_SET(victim->fighting->mhs,MHS_GLADIATOR)
-           && gladiator_info.blind == TRUE)
-          strcat( buf, PERS( victim->fighting->long_descr, ch, FALSE ) );
+           && gladiator_info.blind == true)
+          strcat( buf, PERS( victim->fighting->long_descr, ch, false ) );
        else */
-     if (IS_SET(victim->mhs,MHS_GLADIATOR) && gladiator_info.blind == TRUE)
+     if (IS_SET(victim->mhs,MHS_GLADIATOR) && gladiator_info.blind == true)
         strcat ( buf, victim->long_descr);
      else
-          strcat( buf, PERS( victim->fighting, ch, FALSE ) );
+          strcat( buf, PERS( victim->fighting, ch, false ) );
        strcat( buf, "." );
    }
    else
@@ -571,31 +571,31 @@ void do_species( CHAR_DATA *ch, char *argument )
      bool found;
      AFFECT_DATA *paf, *paf_last = NULL;
 
-     if ( can_see( victim, ch, FALSE ) )
+     if ( can_see( victim, ch, false ) )
      {
    if (ch == victim)
        if(IS_SET(ch->mhs,MHS_SHAPEMORPHED) ||
-          (IS_SET(ch->mhs,MHS_GLADIATOR) && gladiator_info.blind == TRUE))
-          act( "$l looks at $mself.",ch,NULL,NULL,TO_ROOM,FALSE);
+          (IS_SET(ch->mhs,MHS_GLADIATOR) && gladiator_info.blind == true))
+          act( "$l looks at $mself.",ch,NULL,NULL,TO_ROOM,false);
        else
-          act( "$n looks at $mself.",ch,NULL,NULL,TO_ROOM,FALSE);
+          act( "$n looks at $mself.",ch,NULL,NULL,TO_ROOM,false);
    else
    {
        if(IS_SET(ch->mhs,MHS_SHAPEMORPHED) ||
-          (IS_SET(ch->mhs,MHS_GLADIATOR) && gladiator_info.blind == TRUE))
+          (IS_SET(ch->mhs,MHS_GLADIATOR) && gladiator_info.blind == true))
        {
-          act( "$l looks at you.", ch, NULL, victim, TO_VICT, FALSE  );
-          act( "$l looks at $L.",  ch, NULL, victim, TO_NOTVICT,FALSE );
+          act( "$l looks at you.", ch, NULL, victim, TO_VICT, false  );
+          act( "$l looks at $L.",  ch, NULL, victim, TO_NOTVICT,false );
        }
        else
        {
-          act( "$n looks at you.", ch, NULL, victim, TO_VICT, FALSE  );
-          act( "$n looks at $N.",  ch, NULL, victim, TO_NOTVICT,FALSE );
+          act( "$n looks at you.", ch, NULL, victim, TO_VICT, false  );
+          act( "$n looks at $N.",  ch, NULL, victim, TO_NOTVICT,false );
        }
    }
      }
 
-     if (IS_SET(ch->mhs,MHS_GLADIATOR) && gladiator_info.blind ==TRUE)
+     if (IS_SET(ch->mhs,MHS_GLADIATOR) && gladiator_info.blind ==true)
         strcpy( buf, ch->long_descr);
      else
      {
@@ -604,7 +604,7 @@ void do_species( CHAR_DATA *ch, char *argument )
         if ( victim->description[0] != '\0' )
            send_to_char( victim->description, ch );
         else
-           act( "You see nothing special about $M.", ch, NULL, victim, TO_CHAR, FALSE);
+           act( "You see nothing special about $M.", ch, NULL, victim, TO_CHAR, false);
         }
 
         if (IS_IMMORTAL (ch) && IS_SET (ch->display,DISP_DISP_VNUM))
@@ -629,7 +629,7 @@ void do_species( CHAR_DATA *ch, char *argument )
            }
        }
 
-        strcpy( buf, PERS(victim, ch, FALSE) );
+        strcpy( buf, PERS(victim, ch, false) );
 
         strcat (buf, " the ");
         if( !IS_NPC(victim) )
@@ -672,7 +672,7 @@ void do_species( CHAR_DATA *ch, char *argument )
 
      if(!IS_SET(ch->mhs,MHS_GLADIATOR))
      {
-        found = FALSE;
+        found = false;
      for ( iWear = 0; iWear < MAX_WEAR; iWear++ )
      {
 
@@ -682,11 +682,11 @@ void do_species( CHAR_DATA *ch, char *argument )
        if ( !found )
        {
      send_to_char( "\n\r", ch );
-     act( "$N is using:", ch, NULL, victim, TO_CHAR, FALSE );
-     found = TRUE;
+     act( "$N is using:", ch, NULL, victim, TO_CHAR, false );
+     found = true;
        }
        send_to_char( where_name[iWear], ch );
-       send_to_char( format_obj_to_char( obj, ch, TRUE ), ch );
+       send_to_char( format_obj_to_char( obj, ch, true ), ch );
        send_to_char( "\n\r", ch );
    }
      }
@@ -697,17 +697,17 @@ void do_species( CHAR_DATA *ch, char *argument )
      &&   number_percent( ) < get_skill(ch,gsn_peek))
      {
    send_to_char( "\n\rYou peek at the inventory:\n\r", ch );
-   check_improve(ch,gsn_peek,TRUE,4);
-   show_list_to_char( victim->carrying, ch, TRUE, TRUE, FALSE );
+   check_improve(ch,gsn_peek,true,4);
+   show_list_to_char( victim->carrying, ch, true, true, false );
      }
 
      if ( IS_AFFECTED(ch,AFF_DETECT_MAGIC) ||  IS_SET(ch->act, PLR_HOLYLIGHT))
      {
   if ( victim->affected != NULL )
   {
-     bool vis_dur = FALSE;
+     bool vis_dur = false;
      if(victim->level <= ch->level && ch->class == class_lookup("wizard") && number_percent() < get_skill(ch,gsn_spellcraft))
-        vis_dur = TRUE;
+        vis_dur = true;
      send_to_char( "\n\rAffected by the following spells:\n\r", ch );
      for ( paf = victim->affected; paf != NULL; paf = paf->next )
      {
@@ -765,7 +765,7 @@ void do_species( CHAR_DATA *ch, char *argument )
    if ( get_trust(ch) < rch->invis_level)
        continue;
 
-   if ( can_see( ch, rch, FALSE ) )
+   if ( can_see( ch, rch, false ) )
    {
        show_char_to_char_0( rch, ch );
    }
@@ -785,15 +785,15 @@ void do_species( CHAR_DATA *ch, char *argument )
  {
 
      if (!IS_NPC(ch) && IS_SET(ch->act,PLR_HOLYLIGHT))
-   return TRUE;
+   return true;
 
      if ( IS_AFFECTED(ch, AFF_BLIND) )
      {
    send_to_char( "You can't see a thing!\n\r", ch );
-   return FALSE;
+   return false;
      }
 
-     return TRUE;
+     return true;
  }
 
 void do_kit( CHAR_DATA *ch, char *argument )
@@ -803,7 +803,7 @@ void do_kit( CHAR_DATA *ch, char *argument )
    char buf[MAX_STRING_LENGTH];
    char cbuf[MAX_STRING_LENGTH];
    int kit;
-   bool fAll = TRUE;
+   bool fAll = true;
 
    argument = one_argument( argument, arg1 );
    one_argument( argument, arg2 );
@@ -946,7 +946,7 @@ ch->practice += (skill_table[ch->pcdata->specialize].rating[ch->class] * 10);
             if ( kit_table[kit].skills[i] == NULL )
                 break;
             else
-                group_add(ch,kit_table[kit].skills[i],FALSE);
+                group_add(ch,kit_table[kit].skills[i],false);
 
         sprintf(buf,"You take the %s kit.\n\r",
                 kit_table[kit].name );
@@ -959,11 +959,11 @@ ch->practice += (skill_table[ch->pcdata->specialize].rating[ch->class] * 10);
                 for ( obj = ch->carrying ; obj ; obj = obj->next_content )
                 {
                     if ( obj->item_type == ITEM_ARMOR )
-                        remove_obj( ch, obj, FALSE );
+                        remove_obj( ch, obj, false );
                 }
                 */
 /* Remove all EQ on the Player to avoid getting around armor restrictions */
-                remove_all_objs(ch, TRUE);
+                remove_all_objs(ch, true);
 
                 do_outfit( ch, "nethermancer" );
         }
@@ -998,14 +998,14 @@ ch->practice += (skill_table[ch->pcdata->specialize].rating[ch->class] * 10);
             }
             else
             {
-                fAll = FALSE;
+                fAll = false;
             }
         if ( fAll )
                 send_to_char( "all", ch);
         else
                 send_to_char( cbuf, ch );
 
-        fAll = TRUE;
+        fAll = true;
         cbuf[0] = '\0';
 
         send_to_char("\n\r{WRaces{x:  ",ch);
@@ -1017,7 +1017,7 @@ ch->practice += (skill_table[ch->pcdata->specialize].rating[ch->class] * 10);
            }
            else
            {
-               fAll = FALSE;
+               fAll = false;
            }
 
         if (  fAll )
@@ -1113,8 +1113,8 @@ void do_peek(CHAR_DATA *ch, char *argument)
   if( number_percent( ) < get_skill(ch,gsn_peek))
      {
    send_to_char( "\n\rYou peek at their inventory:\n\r", ch );
-   check_improve(ch,gsn_peek,TRUE,4);
-   show_list_to_char( victim->carrying, ch, TRUE, TRUE, FALSE );
+   check_improve(ch,gsn_peek,true,4);
+   show_list_to_char( victim->carrying, ch, true, true, false );
 
    if ( ( ch->class == class_lookup("thief") ||
           ch->class == class_lookup("rogue") ||
@@ -1132,8 +1132,8 @@ void do_peek(CHAR_DATA *ch, char *argument)
      }
   else
      {
-        if(IS_AWAKE(victim) && can_see(victim,ch,FALSE))
- act("$N tried to peek at what you're carrying.", victim,NULL,ch,TO_CHAR,FALSE);
+        if(IS_AWAKE(victim) && can_see(victim,ch,false))
+ act("$N tried to peek at what you're carrying.", victim,NULL,ch,TO_CHAR,false);
  }
 
   return;
@@ -1254,7 +1254,7 @@ void do_peek(CHAR_DATA *ch, char *argument)
    return;
    }
      send_to_char( "You let out an earthshaking ROAR!\n\r", ch );
- act( "$n ROARS and makes your entire body quiver!",ch,NULL,NULL,TO_ROOM,FALSE);
+ act( "$n ROARS and makes your entire body quiver!",ch,NULL,NULL,TO_ROOM,false);
 
    if(IS_SET(ch->in_room->room_flags,ROOM_ISOLATED))
    {// New isolated code
@@ -1937,11 +1937,11 @@ void do_glance ( CHAR_DATA *ch, char *argument )
 
      if ( ( victim = get_char_room( ch, arg ) ) != NULL )
    {
-     if(IS_SET(ch->mhs,MHS_GLADIATOR) && gladiator_info.blind == TRUE)
+     if(IS_SET(ch->mhs,MHS_GLADIATOR) && gladiator_info.blind == true)
         strcpy (buf, victim->long_descr);
      else
      {
-        strcpy( buf, PERS(victim, ch, FALSE) );
+        strcpy( buf, PERS(victim, ch, false) );
 
 
      strcat (buf, " the ");
@@ -2143,7 +2143,7 @@ void do_glance ( CHAR_DATA *ch, char *argument )
              do_exits( ch, "auto" );
    }
 
-   show_list_to_char( ch->in_room->contents, ch, FALSE, FALSE, FALSE );
+   show_list_to_char( ch->in_room->contents, ch, false, false, false );
    show_char_to_char( ch->in_room->people,   ch );
    return;
      }
@@ -2202,8 +2202,8 @@ void do_glance ( CHAR_DATA *ch, char *argument )
      break;
        }
 
-       act( "$p contains:", ch, obj, NULL, TO_CHAR, FALSE );
-       show_list_to_char( obj->contains, ch, TRUE, TRUE, FALSE );
+       act( "$p contains:", ch, obj, NULL, TO_CHAR, false );
+       show_list_to_char( obj->contains, ch, true, true, false );
        break;
    }
    return;
@@ -2239,7 +2239,7 @@ void do_glance ( CHAR_DATA *ch, char *argument )
                        spell_identify(gsn_lore,
                                       (4 * obj->level) / 3, ch, obj, TARGET_OBJ);
                        ch->mana -= 20;
-                       check_improve(ch, gsn_lore, TRUE, 4);
+                       check_improve(ch, gsn_lore, true, 4);
                    }
                }
                return;
@@ -2266,7 +2266,7 @@ void do_glance ( CHAR_DATA *ch, char *argument )
                        spell_identify(gsn_lore,
                                       (4 * obj->level) / 3, ch, obj, TARGET_OBJ);
                        ch->mana -= 20;
-                       check_improve(ch, gsn_lore, TRUE, 4);
+                       check_improve(ch, gsn_lore, true, 4);
                    }
                }
                return;
@@ -2314,7 +2314,7 @@ void do_glance ( CHAR_DATA *ch, char *argument )
        spell_identify(gsn_lore,
            (4* obj->level)/3,ch,obj,TARGET_OBJ);
        ch->mana -= 20;
-       check_improve(ch,gsn_lore,TRUE,4);}
+       check_improve(ch,gsn_lore,true,4);}
            }
            return;
          }
@@ -2402,9 +2402,9 @@ void do_glance ( CHAR_DATA *ch, char *argument )
        &&   pexit->keyword[0] != '\0'
        &&   pexit->keyword[0] != ' ' )
        {
-         act( "The $d is closed.", ch, NULL, pexit->keyword, TO_CHAR, FALSE );
+         act( "The $d is closed.", ch, NULL, pexit->keyword, TO_CHAR, false );
        } else {
-         act( "The exit is closed.", ch, NULL, pexit->keyword, TO_CHAR, FALSE );
+         act( "The exit is closed.", ch, NULL, pexit->keyword, TO_CHAR, false );
        }
    } else {
       ROOM_INDEX_DATA *temp_room;
@@ -2528,7 +2528,7 @@ void do_glance ( CHAR_DATA *ch, char *argument )
    sprintf(buf,"Obvious exits from room %d: {g\n\r",ch->in_room->vnum);
      else
    sprintf(buf,"Obvious exits: {g\n\r");
-     found = FALSE;
+     found = false;
      for ( door = 0; door <= 5; door++ )
      {
    if ( ( pexit = ch->in_room->exit[door] ) != NULL
@@ -2539,7 +2539,7 @@ void do_glance ( CHAR_DATA *ch, char *argument )
    &&   !IS_SET(pexit->exit_info, EX_CONCEALED)
    &&   !IS_SET(pexit->exit_info, EX_SECRET) )
    {
-       found = TRUE;
+       found = true;
        if ( fAuto )
        {
      strcat( buf, " " );
@@ -2638,10 +2638,10 @@ void do_attributes( CHAR_DATA *ch, char *argument )
       char buf2[MAX_STRING_LENGTH];
 
       sprintf(buf2,"$n says 'My stats:\n\r%s'",buf);
-      act(buf2,ch,NULL,NULL,TO_ROOM,TRUE);
+      act(buf2,ch,NULL,NULL,TO_ROOM,true);
 
       sprintf(buf2,"You say 'My stats:\n\r%s'",buf);
-      act(buf2,ch,NULL,NULL,TO_CHAR,TRUE);
+      act(buf2,ch,NULL,NULL,TO_CHAR,true);
       return;
    }
   return;
@@ -3301,10 +3301,10 @@ void format_help_to_char(CHAR_DATA *ch, HELP_DATA *pHelp)
   char *keyword, *related, *text;
   char *divider = "{G----------------------------------------{x\n\r";
   int length = 1;// For '\0'
-  bool imotd = FALSE;
+  bool imotd = false;
   
   if(!str_cmp(pHelp->keyword, "imotd"))
-    imotd = TRUE;
+    imotd = true;
   
 #ifdef OLC_VERSION// Length of draft warning note
    if(IS_SET(pHelp->status, HELP_STAT_DRAFT))
@@ -3366,7 +3366,7 @@ void do_help( CHAR_DATA *ch, char *argument )
    HELP_DATA *pHelp;
    char argall[MAX_INPUT_LENGTH],argone[MAX_INPUT_LENGTH];
    int col;
-   bool found = FALSE;// New help code
+   bool found = false;// New help code
 
    col = 0;
 
@@ -3428,7 +3428,7 @@ void do_help( CHAR_DATA *ch, char *argument )
 #endif
         !str_prefix(argall, pTrack->keyword))
       {
-        found = TRUE;
+        found = true;
         break;
       }
     }
@@ -3516,7 +3516,7 @@ void do_whois (CHAR_DATA *ch, char *argument)
     BUFFER *output;
     char buf[MAX_STRING_LENGTH], cbuf[MAX_STRING_LENGTH], sbuf[MAX_STRING_LENGTH];
     DESCRIPTOR_DATA *d;
-    bool found = FALSE;
+    bool found = false;
     char wizi[50],  incog[50];
     char surname[15];
 
@@ -3537,12 +3537,12 @@ void do_whois (CHAR_DATA *ch, char *argument)
   char who_name[200];
   char const *display_race;
 
-  if (d->connected != CON_PLAYING || !can_see(ch,d->character,TRUE))
+  if (d->connected != CON_PLAYING || !can_see(ch,d->character,true))
       continue;
 
   wch = ( d->original != NULL ) ? d->original : d->character;
 
-  if (!can_see(ch,wch,TRUE))
+  if (!can_see(ch,wch,true))
       continue;
 
     cbuf[0] = '\0';
@@ -3580,7 +3580,7 @@ void do_whois (CHAR_DATA *ch, char *argument)
     }
   if (!str_prefix(arg,wch->name))
   {
-      found = TRUE;
+      found = true;
 
       /* work out the printing */
           class = class_table[wch->class].who_name;
@@ -3758,16 +3758,16 @@ void do_who( CHAR_DATA *ch, char *argument )
     bool rgfClass[MAX_CLASS];
     bool rgfRace[MAX_PC_RACE];
     bool rgfClan[MAX_CLAN];
-    bool fClassRestrict = FALSE;
-    bool fClanRestrict = FALSE;
-    bool fClan = FALSE;
-    bool fNonClan = FALSE;
-    bool fRaceRestrict = FALSE;
-    bool fImmortalOnly = FALSE;
-    bool shownCDR = FALSE;
+    bool fClassRestrict = false;
+    bool fClanRestrict = false;
+    bool fClan = false;
+    bool fNonClan = false;
+    bool fRaceRestrict = false;
+    bool fImmortalOnly = false;
+    bool shownCDR = false;
     char incog[50], wizi[50];
-    bool fHighlander = FALSE;
-    bool fGladiator = FALSE;
+    bool fHighlander = false;
+    bool fGladiator = false;
     char surname[15];
 
     /*
@@ -3776,11 +3776,11 @@ void do_who( CHAR_DATA *ch, char *argument )
     iLevelLower    = 0;
     iLevelUpper    = MAX_LEVEL;
     for ( iClass = 0; iClass < MAX_CLASS; iClass++ )
-        rgfClass[iClass] = FALSE;
+        rgfClass[iClass] = false;
     for ( iRace = 0; iRace < MAX_PC_RACE; iRace++ )
-        rgfRace[iRace] = FALSE;
+        rgfRace[iRace] = false;
     for (iClan = 0; iClan < MAX_CLAN; iClan++)
-  rgfClan[iClan] = FALSE;
+  rgfClan[iClan] = false;
 
     /*
      * Parse arguments.
@@ -3813,7 +3813,7 @@ void do_who( CHAR_DATA *ch, char *argument )
              */
             if ( arg[0] == 'i' )
             {
-                fImmortalOnly = TRUE;
+                fImmortalOnly = true;
             }
             else
             {
@@ -3824,29 +3824,29 @@ void do_who( CHAR_DATA *ch, char *argument )
                     if (iRace == 0 || iRace >= MAX_PC_RACE)
                     {
                        if (!str_prefix(arg,"gladiator"))
-                          fGladiator = TRUE;
+                          fGladiator = true;
                        else
                        {
                           if (!str_prefix(arg,"clan"))
-                             fClan = TRUE;
+                             fClan = true;
                           else
                           {
                              if (!str_prefix(arg,"nonclan"))
                              {
-                                fNonClan = TRUE;
+                                fNonClan = true;
                              }
                              else
                              {
                                 iClan = nonclan_lookup(arg);
                                 if  (iClan)
                                 {
-                                   fClanRestrict = TRUE;
-                                   rgfClan[iClan] = TRUE;
+                                   fClanRestrict = true;
+                                   rgfClan[iClan] = true;
                                 }
                                 else
                                 {
                                    if (!str_prefix(arg,"highlander"))
-                                      fHighlander = TRUE;
+                                      fHighlander = true;
                                    else
                                    {
                                       send_to_char("That's not a valid race, class or clan.\n\r",ch);
@@ -3859,14 +3859,14 @@ void do_who( CHAR_DATA *ch, char *argument )
                     }
                     else
                     {
-                        fRaceRestrict = TRUE;
-                        rgfRace[iRace] = TRUE;
+                        fRaceRestrict = true;
+                        rgfRace[iRace] = true;
                     }
                 }
                 else
                 {
-                    fClassRestrict = TRUE;
-                    rgfClass[iClass] = TRUE;
+                    fClassRestrict = true;
+                    rgfClass[iClass] = true;
                 }
             }
         }
@@ -3910,12 +3910,12 @@ void do_who( CHAR_DATA *ch, char *argument )
          * Check for match against restrictions.
          * Don't use trust as that exposes trusted mortals.
          */
-        if ( d->connected != CON_PLAYING || !can_see( ch, d->character, TRUE) )
+        if ( d->connected != CON_PLAYING || !can_see( ch, d->character, true) )
             continue;
 
         wch   = ( d->original != NULL ) ? d->original : d->character;
 
-  if (!can_see(ch,wch,TRUE)
+  if (!can_see(ch,wch,true)
            || (wch->level == level && IS_SET(wch->display,DISP_CODER))
       || (wch->level != level
       && !(wch->level == level-1 && IS_SET(wch->display,DISP_CODER))))
@@ -3949,7 +3949,7 @@ void do_who( CHAR_DATA *ch, char *argument )
         {
         sprintf(buf,"CODERS\n\r------\n\r");
         add_buf(output,buf);
-        shownCDR = TRUE;
+        shownCDR = true;
         }
 
         /*
@@ -4113,7 +4113,7 @@ if(wch->pcdata && wch->pcdata->clan_info)
      count = 0;
 
      for ( d = descriptor_list; d != NULL; d = d->next )
-   if ( d->connected == CON_PLAYING && can_see( ch, d->character, TRUE ) )
+   if ( d->connected == CON_PLAYING && can_see( ch, d->character, true ) )
        count++;
 
      max_on = UMAX(count,max_on);
@@ -4131,7 +4131,7 @@ if(wch->pcdata && wch->pcdata->clan_info)
  void do_inventory( CHAR_DATA *ch, char *argument )
  {
      send_to_char( "You are carrying:\n\r", ch );
-     show_list_to_char( ch->carrying, ch, TRUE, TRUE, FALSE );
+     show_list_to_char( ch->carrying, ch, true, true, false );
      return;
  }
 
@@ -4144,7 +4144,7 @@ if(wch->pcdata && wch->pcdata->clan_info)
      bool found;
 
      send_to_char( "You are using:\n\r", ch );
-     found = FALSE;
+     found = false;
      for ( iWear = 0; iWear < MAX_WEAR; iWear++ )
      {
    if ( ( obj = get_eq_char( ch, iWear ) ) == NULL )
@@ -4161,14 +4161,14 @@ if(wch->pcdata && wch->pcdata->clan_info)
 
    if ( can_see_obj( ch, obj ) )
    {
-       send_to_char( format_obj_to_char( obj, ch, TRUE ), ch );
+       send_to_char( format_obj_to_char( obj, ch, true ), ch );
        send_to_char( "\n\r", ch );
    }
    else
    {
        send_to_char( "something.\n\r", ch );
    }
-   found = TRUE;
+   found = true;
      }
 
      if ( !found )
@@ -4273,7 +4273,7 @@ if(wch->pcdata && wch->pcdata->clan_info)
    else                         msg = "$p looks worse than $P.";
      }
 
-     act( msg, ch, obj1, obj2, TO_CHAR,FALSE );
+     act( msg, ch, obj1, obj2, TO_CHAR,false );
      return;
  }
 
@@ -4326,7 +4326,7 @@ if(wch->pcdata && wch->pcdata->clan_info)
    if ( arg[0] == '\0' )
    {
       send_to_char( "Players near you:\n\r", ch );
-      found = FALSE;
+      found = false;
       for ( d = descriptor_list; d; d = d->next )
       {
          if ( (d->connected == CON_PLAYING)
@@ -4338,19 +4338,19 @@ if(wch->pcdata && wch->pcdata->clan_info)
          && ( (is_room_owner(ch,victim->in_room) )
          ||   (!room_is_private(ch,victim->in_room)) )
          && ( victim->in_room->area == scan_room->area )
-         && ( can_see( ch, victim,FALSE))
+         && ( can_see( ch, victim,false))
          && ( !is_clan( ch ) || ( is_clan(ch) && !IS_AFFECTED(ch,AFF_BLIND)))
          && ( check_match(ch, victim) )
          && (get_skill(ch,gsn_scan) >=
             (number_percent() + (victim->level - ch->level)*2 )))
 
          {
-            if(found == FALSE)
+            if(found == false)
             {
-               found = TRUE;
-               check_improve(ch,gsn_scan,TRUE,4);
+               found = true;
+               check_improve(ch,gsn_scan,true,4);
             }
-            if(IS_SET(ch->mhs,MHS_GLADIATOR) && gladiator_info.blind == TRUE && victim != ch)
+            if(IS_SET(ch->mhs,MHS_GLADIATOR) && gladiator_info.blind == true && victim != ch)
                sprintf( buf, "%-28s %s\n\r",
                victim->long_descr, victim->in_room->name );
             else
@@ -4362,12 +4362,12 @@ if(wch->pcdata && wch->pcdata->clan_info)
       if ( !found )
       {
          send_to_char( "None\n\r", ch );
-         check_improve(ch,gsn_scan,FALSE,7);
+         check_improve(ch,gsn_scan,false,7);
       }
    }
    else
    {
-      found = FALSE;
+      found = false;
       for ( victim = char_list; victim != NULL; victim = victim->next )
       {
          if ( victim->in_room != NULL
@@ -4375,35 +4375,35 @@ if(wch->pcdata && wch->pcdata->clan_info)
          &&   !IS_AFFECTED(victim, AFF_HIDE)
          &&   !IS_AFFECTED(victim, AFF_SNEAK)
          &&   !IS_SET(victim->in_room->room_flags,ROOM_NOWHERE)
-         &&   can_see( ch, victim, FALSE )
+         &&   can_see( ch, victim, false )
          &&   is_name( arg, victim->name )
          && (get_skill(ch,gsn_scan) >=
             (number_percent() + victim->level - ch->level)))
 
          {
-           if(found == FALSE)
+           if(found == false)
            {
-             found = TRUE;
-             check_improve(ch,gsn_scan,TRUE,4);
+             found = true;
+             check_improve(ch,gsn_scan,true,4);
            }
-           if(IS_SET(ch->mhs,MHS_GLADIATOR) && gladiator_info.blind == TRUE)
+           if(IS_SET(ch->mhs,MHS_GLADIATOR) && gladiator_info.blind == true)
            {
-                found = FALSE;
+                found = false;
                 break;// No scanning specific names in blind gladiators
 //              sprintf( buf, "%-28s %s\n\r",
 //              victim->long_descr, victim->in_room->name );
            }
            else
               sprintf( buf, "%-28s %s\n\r",
-              PERS(victim, ch, FALSE), victim->in_room->name );
+              PERS(victim, ch, false), victim->in_room->name );
            send_to_char( buf, ch );
            break;
         }
      }
      if ( !found )
      {
-       act( "You didn't find any $T.", ch, NULL, arg, TO_CHAR,FALSE );
-       check_improve(ch,gsn_scan,FALSE,6);
+       act( "You didn't find any $T.", ch, NULL, arg, TO_CHAR,false );
+       check_improve(ch,gsn_scan,false,6);
      }
   }
 
@@ -4459,7 +4459,7 @@ if(wch->pcdata && wch->pcdata->clan_info)
      else if ( diff <=   9 ) msg = "$N laughs at you mercilessly.";
      else                    msg = "Death will thank you for your gift.";
 
-     act( msg, ch, NULL, victim, TO_CHAR,FALSE );
+     act( msg, ch, NULL, victim, TO_CHAR,false );
      return;
  }
 
@@ -4579,7 +4579,7 @@ if(wch->pcdata && wch->pcdata->clan_info)
    if (argument[0] == '-')
    {
        int len;
-       bool found = FALSE;
+       bool found = false;
 
        if (ch->description == NULL || ch->description[0] == '\0')
        {
@@ -4597,7 +4597,7 @@ if(wch->pcdata && wch->pcdata->clan_info)
          {
        if (len > 0)
            len--;
-       found = TRUE;
+       found = true;
          }
          else /* found the second one */
          {
@@ -4654,7 +4654,7 @@ void do_kr( CHAR_DATA *ch, char *argument)
      sprintf(buf,"$n says 'I have claimed the souls of %d victims, %d of them by my own hand.'\n\r",
             ch->pcdata->highlander_data[ALL_KILLS],
             ch->pcdata->highlander_data[REAL_KILLS]);
-     act(buf,ch,NULL,NULL,TO_ROOM,FALSE);
+     act(buf,ch,NULL,NULL,TO_ROOM,false);
 
      sprintf(buf,"You have claimed the souls of %d victims, %d of them by your own hand.\n\r",
             ch->pcdata->highlander_data[ALL_KILLS],
@@ -4744,7 +4744,7 @@ void do_kr( CHAR_DATA *ch, char *argument)
   }
 
   strcat(buf,"'\n\r");
-  act( buf, ch, NULL, NULL, TO_ROOM,FALSE );
+  act( buf, ch, NULL, NULL, TO_ROOM,false );
 
   return;
 
@@ -4764,7 +4764,7 @@ void do_kr( CHAR_DATA *ch, char *argument)
    send_to_char(buf,ch);
 
    sprintf(buf, "$n says 'I have %d/%d hp, %d/%d mana, %d/%d mv. %d xp.'", ch->hit, ch->max_hit, ch->mana, ch->max_mana, ch->move, ch->max_move, ch->exp);
-   act( buf, ch, NULL, NULL, TO_ROOM, TRUE );
+   act( buf, ch, NULL, NULL, TO_ROOM, true );
 
      return;
  }
@@ -4773,8 +4773,8 @@ void do_kr( CHAR_DATA *ch, char *argument)
 
  void do_practice( CHAR_DATA *ch, char *argument )
  {
-     bool fNew = FALSE, fSkills = FALSE, fSpells = FALSE;
-     bool fOld = FALSE, fSkip = FALSE;
+     bool fNew = false, fSkills = false, fSpells = false;
+     bool fOld = false, fSkip = false;
      char buf[MAX_STRING_LENGTH * 3];
      char buf2[MAX_STRING_LENGTH * 3];
      char arg[MAX_INPUT_LENGTH];
@@ -4789,19 +4789,19 @@ void do_kr( CHAR_DATA *ch, char *argument)
      one_argument( target_name, arg2 );
 
      if (!str_cmp(arg,"-old"))
-        fOld = TRUE;
+        fOld = true;
      else
      if (!str_cmp(arg,"-skip"))
-        fSkip = TRUE;
+        fSkip = true;
      else
      if (!str_cmp(arg,"-new"))
-        fNew = TRUE;
+        fNew = true;
      else
      if (!str_cmp(arg,"-skills"))
-        fSkills = TRUE;
+        fSkills = true;
      else
      if (!str_cmp(arg,"-spells"))
-        fSpells = TRUE;
+        fSpells = true;
 
      if ( argument[0] == '\0' || fNew || fSkills || fSpells)
      {
@@ -4911,16 +4911,16 @@ void do_kr( CHAR_DATA *ch, char *argument)
               if ( ch->pcdata->learned[sn] < 100 )
               {
                  act( "You jump around yelling 'Pfresh my $T!'",
-                    ch, NULL, skill_table[sn].name, TO_CHAR, TRUE );
+                    ch, NULL, skill_table[sn].name, TO_CHAR, true );
                  act( "$n jumps around yelling 'Pfresh my $T!'",
-                    ch, NULL, skill_table[sn].name, TO_ROOM, TRUE );
+                    ch, NULL, skill_table[sn].name, TO_ROOM, true );
               }
               else
               {
                  act( "You head is bursting with all the knowledge of $T!",
-                    ch, NULL, skill_table[sn].name, TO_CHAR, TRUE );
+                    ch, NULL, skill_table[sn].name, TO_CHAR, true );
                  act( "$n grabs their head and screams 'Yikes my $T!'",
-                    ch, NULL, skill_table[sn].name, TO_ROOM, TRUE);
+                    ch, NULL, skill_table[sn].name, TO_ROOM, true);
               }
            }
            else
@@ -4949,17 +4949,17 @@ void do_kr( CHAR_DATA *ch, char *argument)
               if ( ch->pcdata->learned[sn] < adept )
               {
                  act( "You practice $T.",
-                    ch, NULL, skill_table[sn].name, TO_CHAR, FALSE );
+                    ch, NULL, skill_table[sn].name, TO_CHAR, false );
                  act( "$n practices $T.",
-                    ch, NULL, skill_table[sn].name, TO_ROOM, FALSE );
+                    ch, NULL, skill_table[sn].name, TO_ROOM, false );
               }
               else
               {
                  ch->pcdata->learned[sn] = adept;
                  act( "You are now learned at $T.",
-                    ch, NULL, skill_table[sn].name, TO_CHAR, FALSE );
+                    ch, NULL, skill_table[sn].name, TO_CHAR, false );
                  act( "$n is now learned at $T.",
-                    ch, NULL, skill_table[sn].name, TO_ROOM, FALSE );
+                    ch, NULL, skill_table[sn].name, TO_ROOM, false );
               }
            }
         }
@@ -5200,13 +5200,13 @@ bool check_match( CHAR_DATA *ch, CHAR_DATA *victim)
 {
 
   if (!IS_SET(ch->display, DISP_BRIEF_SCAN))
-     return TRUE;
+     return true;
 
   if ( (is_clan(ch) && is_clan(victim)) ||
        (!is_clan(ch) && !is_clan(victim)) )
-         return TRUE;
+         return true;
 
-  return FALSE;
+  return false;
 }
 
 void do_enemy( CHAR_DATA *ch, char *argument )

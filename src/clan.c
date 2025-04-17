@@ -134,7 +134,7 @@ bool notify_clan_char(char *string, CLAN_CHAR *target, bool offline)
   DESCRIPTOR_DATA *d;
   CHAR_DATA *victim;
   if(!string || string[0] == '\0' || !target)
-    return FALSE;
+    return false;
   for(d = descriptor_list; d != NULL; d = d->next)
   {
     if((victim = d->character) == NULL || d->connected != CON_PLAYING)
@@ -142,7 +142,7 @@ bool notify_clan_char(char *string, CLAN_CHAR *target, bool offline)
     if(!str_cmp(victim->name, target->name))
     {
       send_to_char(string, victim);
-      return TRUE;
+      return true;
     }
   }
   if(offline)
@@ -151,15 +151,15 @@ bool notify_clan_char(char *string, CLAN_CHAR *target, bool offline)
       clear_string(&target->messages, string);
     else
     {
-      bool overflow = FALSE;
+      bool overflow = false;
       int len = strlen(target->messages);
       if(len > MAX_INPUT_LENGTH * 10)
-        return FALSE;
+        return false;
       char *old_string = target->messages;
       len += strlen(string);
       if(len > MAX_INPUT_LENGTH * 10)
       {
-        overflow = TRUE;
+        overflow = true;
         len += strlen("You have reached the limit on offline messages.\n\r");
       }
 #ifdef OLC_VERSION
@@ -174,21 +174,21 @@ bool notify_clan_char(char *string, CLAN_CHAR *target, bool offline)
       free_string(old_string);
     }
   }
-  return FALSE;
+  return false;
 }
 
 bool notify_clan_leaders(char *string, CLAN_DATA *clan, bool offline)
 {
   CLAN_CHAR *target;
-  bool leader_found = FALSE;
+  bool leader_found = false;
   if(!string || string[0] == '\0' || !clan)
-    return FALSE;
+    return false;
   for(target = clan->members; target != NULL; target = target->next)
   {
     if(target->rank == 5)
     {
       notify_clan_char(string, target, offline);
-      leader_found = TRUE;
+      leader_found = true;
     }
   }
   return leader_found;
@@ -514,7 +514,7 @@ void do_donate(CHAR_DATA *ch, char *argument)
       ch->pcdata->clan_info->donated += extra;
     }
   }
-  save_clan(ch, TRUE, FALSE, TRUE);
+  save_clan(ch, true, false, true);
 }
 
 void do_rank(CHAR_DATA *ch, char *argument)
@@ -611,7 +611,7 @@ void do_rank(CHAR_DATA *ch, char *argument)
     send_to_char(arg2, ch);
   }
   sprintf(arg2, "Your rank has been set to %d.\n\r", rank);
-  notify_clan_char(arg2, victim, FALSE);
+  notify_clan_char(arg2, victim, false);
 }
 
 bool check_alliance(CLAN_DATA *first, CLAN_DATA *second)
@@ -622,11 +622,11 @@ bool check_alliance(CLAN_DATA *first, CLAN_DATA *second)
     if(ally->clan == second)
     {
       if(ally->pending)
-        return FALSE;
-      return TRUE;
+        return false;
+      return true;
     }
   }
-  return FALSE;
+  return false;
 }
 
 void do_chelp(CHAR_DATA *ch, char *argument)
@@ -930,7 +930,7 @@ void do_ally(CHAR_DATA *ch, char *argument)
           {/* The simplest, kill the offer - refund the reserved tribute */
             send_to_char("You reject the alliance.\n\r", ch);
             sprintf(buf, "%s has {Rrejected{x your alliance offer, %d reserved tribute refunded.\n\r", ch->pcdata->clan_info->clan->name, ally->cost / 100);
-            notify_clan_leaders(buf, ally->clan, FALSE);
+            notify_clan_leaders(buf, ally->clan, false);
             ally->clan->tribute += ally->cost;
             if(prev_ally)
               prev_ally->next = ally->next;
@@ -960,13 +960,13 @@ void do_ally(CHAR_DATA *ch, char *argument)
           ch->pcdata->clan_info->clan->tribute += ally->bribe;
           send_to_char("You accept the alliance.\n\r", ch);
           sprintf(buf, "%s has {Gaccepted{x your alliance offer, you will be allied for %d days.\n\r", ch->pcdata->clan_info->clan->name, ally->offer_duration);
-          notify_clan_leaders(buf, ally->clan, FALSE);
+          notify_clan_leaders(buf, ally->clan, false);
           sprintf(buf, "Your clan is now allied with %s for %d days.\n\r", ally->clan->name, ally->offer_duration);
           notify_clan(buf, ch->pcdata->clan_info->clan);
           sprintf(buf, "Your clan is now allied with %s for %d days.\n\r", ch->pcdata->clan_info->clan->name, ally->offer_duration);
           notify_clan(buf, ally->clan);
           ally->duration = ally->offer_duration * 24 * 60 * 60 / 40;
-          ally->pending = FALSE;
+          ally->pending = false;
           /* Insert the new alliance back to the offering clan */
           prev_ally = new_ally();
           if(ally->clan->allies)
@@ -1009,7 +1009,7 @@ void do_ally(CHAR_DATA *ch, char *argument)
     send_to_char(buf, ch);
     ch->pcdata->clan_info->clan->tribute += ally->cost;
     sprintf(buf, "%s has withdrawn their alliance offer.\n\r", ch->pcdata->clan_info->clan->name);
-    notify_clan_leaders(buf, ally->clan, FALSE);
+    notify_clan_leaders(buf, ally->clan, false);
     if(!prev_ally)
       ally->clan->allies = ally->next;
     else
@@ -1073,12 +1073,12 @@ void do_ally(CHAR_DATA *ch, char *argument)
   else
     sprintf(arg, "They are paying full cost for the alliance themselves.\n\r");
   strcat(buf, arg);
-  notify_clan_leaders(buf, target, FALSE);
+  notify_clan_leaders(buf, target, false);
   ally = new_ally();
   ally->cost = cost - 500; /* 500 non-refundable */
   ally->bribe = bribe;
   ally->to_pay = other_cost;
-  ally->pending = TRUE;
+  ally->pending = true;
   ally->offer_duration = duration;
   ally->duration = 24 * 60 * 60 / 40; /* Ticks last 40 seconds */
   ally->clan = ch->pcdata->clan_info->clan;
@@ -1162,7 +1162,7 @@ void remove_clan_member(CLAN_CHAR *cchar)
   }
   else
   {
-    bool deleted_clan = FALSE;
+    bool deleted_clan = false;
     if(!prev)
     {
       cchar->clan->members = cchar->clan->members->next;
@@ -1170,7 +1170,7 @@ void remove_clan_member(CLAN_CHAR *cchar)
       {/* Last member is gone, mark to disband the clan */
         char save_old[256], save_new[256];
         CLAN_DATA *clan;
-        deleted_clan = TRUE;
+        deleted_clan = true;
         for(old_c = outcast->members; old_c != NULL; old_c = old_c->next)
         {
           if(old_c->old_clan == cchar->clan)
@@ -1330,7 +1330,7 @@ void add_clan_member(CLAN_DATA *clan, CHAR_DATA *ch, int rank)
     /* Assign them reward merit based on current clan, rank, and hours */
     if(!IS_IMMORTAL(ch))
     {
-      ch->pcdata->clan_info->award_merit = calculate_bonus_merit(ch, TRUE);
+      ch->pcdata->clan_info->award_merit = calculate_bonus_merit(ch, true);
       if(ch->pcdata->clan_info->award_merit < 100)
         send_to_char("You are awarded starter tribute credit for your past experience.\n\r", ch);
       else
@@ -1390,39 +1390,39 @@ bool is_clan_friendly(CHAR_DATA *first, CHAR_DATA *second)
   if(IS_NPC(first))
   {
     if(first->pIndexData->vnum < 0)
-      return TRUE;
-    return FALSE;
+      return true;
+    return false;
   }
   if(IS_NPC(second))
   {
     if(second->pIndexData->vnum < 0)
-      return TRUE;
-    return FALSE;
+      return true;
+    return false;
   }
 /* Test only code */
 //if(first->pcdata->clan_info)
 //{/* They're not interested in fighting */
 //  if(!is_name("fight", first->pcdata->title))
-//    return TRUE;
+//    return true;
 //}
 //if(second->pcdata->clan_info)
 //{/* They're not interested in fighting */
 //  if(!is_name("fight", second->pcdata->title))
-//    return TRUE;
+//    return true;
 //}
   if(first->pcdata->clan_info && !first->pcdata->clan_info->clan->default_clan)
   {
     if(second->pcdata->clan_info && !second->pcdata->clan_info->clan->default_clan)
     {
       if(first->pcdata->clan_info->clan == second->pcdata->clan_info->clan)
-        return TRUE;
+        return true;
       return check_alliance(first->pcdata->clan_info->clan, second->pcdata->clan_info->clan);
     }
   }
   /* No chance of them being in the same clan/alliance, just check if they're clanners */
   if(is_clan(first) && is_clan(second))
-    return FALSE;
-  return TRUE;
+    return false;
+  return true;
 }
 
 
@@ -1476,7 +1476,7 @@ bool check_offline_outcast(char *name)
   CLAN_DATA *clan;
   CLAN_CHAR *cchar;
   if(name == NULL || name[0] == '\0')
-    return FALSE;
+    return false;
   for(clan = clan_first; clan != NULL; clan = clan->next)
   {
     if(clan->default_clan == CLAN_OUTCAST)
@@ -1487,26 +1487,26 @@ bool check_offline_outcast(char *name)
     for(cchar = clan->members; cchar != NULL; cchar = cchar->next)
     {
       if(!str_cmp(cchar->name, name))
-        return TRUE;
+        return true;
     }
   }
-  return FALSE;
+  return false;
 }
 
 /* Returns if this is a bonus qualifying kill or not */
 bool clan_kill_type(CHAR_DATA *killer, CHAR_DATA *victim)
 {
   if(IS_NPC(killer) || !killer->pcdata->clan_info || killer->pcdata->clan_info->clan->default_clan)
-    return FALSE;
+    return false;
   if(IS_SET(victim->act,PLR_DWEEB))
-    return TRUE;
+    return true;
   switch(killer->pcdata->clan_info->clan->type)
   {
-    default: return FALSE; /* Most types have no primary kill type or type may not be set */
+    default: return false; /* Most types have no primary kill type or type may not be set */
     case CLAN_TYPE_LAW:
       switch(killer->pcdata->clan_info->clan->enemy)
       {
-        default: return FALSE;
+        default: return false;
         case CLAN_ENEMY_SMALL: return (victim->size == SIZE_TINY || victim->size == SIZE_SMALL || victim->size == SIZE_MEDIUM);
         case CLAN_ENEMY_MEDIUM: return (victim->size == SIZE_MEDIUM || victim->size == SIZE_LARGE);
         case CLAN_ENEMY_LARGE: return (victim->size == SIZE_LARGE || victim->size == SIZE_HUGE || victim->size == SIZE_GIANT);
@@ -1731,7 +1731,7 @@ void do_establish(CHAR_DATA *ch, char *argument)
           }
         }
       }
-      save_clan(ch, TRUE, FALSE, TRUE);
+      save_clan(ch, true, false, true);
     }
     else if(!str_cmp(arg, "color"))
     {
@@ -1776,7 +1776,7 @@ void do_establish(CHAR_DATA *ch, char *argument)
         sprintf(buf, "Your clan is now %s%s{x.\n\r",
           ch->pcdata->clan_info->clan->color, ch->pcdata->clan_info->clan->name);
         send_to_char(buf, ch);
-        save_clan(ch, TRUE, FALSE, TRUE);
+        save_clan(ch, true, false, true);
       }
     }
     else
@@ -1787,7 +1787,7 @@ void do_establish(CHAR_DATA *ch, char *argument)
     return;
   }
   argument = one_argument(argument, arg);
-  if(!IS_IMMORTAL(ch) && ch->level > 20 && clan_table[ch->clan].true_clan == FALSE && !ch->pcdata->clan_info)
+  if(!IS_IMMORTAL(ch) && ch->level > 20 && clan_table[ch->clan].true_clan == false && !ch->pcdata->clan_info)
   {
     send_to_char("You are too high level to join the clan system, you may not establish a clan.\n\r", ch);
     return;
@@ -1927,7 +1927,7 @@ void do_establish(CHAR_DATA *ch, char *argument)
   else
   {
     clear_string(&ch->pcdata->clan_info->clan->name, arg);
-    ch->pcdata->clan_info->clan->inactive = FALSE; /* Reactivate */
+    ch->pcdata->clan_info->clan->inactive = false; /* Reactivate */
     if(clan->type > 0)
       clan->type = clan->type * -1; /* Type is cleared on reactivation */
     clan->initiation = 1000000; /* 10,000 * 100 (It tracks in merit, not points) */
@@ -1935,7 +1935,7 @@ void do_establish(CHAR_DATA *ch, char *argument)
     sprintf(buf, "%s reactivated, type has been cleared.\n\rYou must complete initiation to secure your clan.\n\rYou have 3 days to earn 10000 merit.\n\r", clan->name);
     send_to_char(buf, ch);
   }
-  save_clan(ch, TRUE, FALSE, TRUE);
+  save_clan(ch, true, false, true);
 }
 
 void save_clan_list(void)
@@ -1961,8 +1961,8 @@ void save_clan_list(void)
 
 void update_clan_version(CLAN_DATA *clan)
 {
-  bool clan_update = FALSE;
-  bool hall_update = FALSE;
+  bool clan_update = false;
+  bool hall_update = false;
   if(clan->version >= CLAN_FILE_VERSION)
     return; /* No updates */
   if(clan->version < 1)
@@ -1972,7 +1972,7 @@ void update_clan_version(CLAN_DATA *clan)
     PLAN_DATA *obj;
     if(clan->default_clan)
       return;
-    clan_update = TRUE;
+    clan_update = true;
     clan->tribute = 0;
     clan->max_tribute = 0;
     clan->awarded_tribute = 0;
@@ -1982,7 +1982,7 @@ void update_clan_version(CLAN_DATA *clan)
     calculate_award_tribute(clan);
     /* Restored, now subtract their placed items */
     if(clan->planned)
-      hall_update = TRUE; /* If it has no planned items, don't save the hall */
+      hall_update = true; /* If it has no planned items, don't save the hall */
     for(obj = clan->planned; obj; obj = obj->next)
     {
       /* Calculate item cost fresh, this has been corrected too */
@@ -1991,7 +1991,7 @@ void update_clan_version(CLAN_DATA *clan)
         if(obj->opt[0] > PRICE_LAB_COUNT)
           obj->opt[0] = PRICE_LAB_COUNT;
       }
-      set_obj_cost(NULL, obj, TRUE, TRUE);
+      set_obj_cost(NULL, obj, true, true);
       if(IS_SET(obj->type, (PLAN_PREVIEWED | PLAN_PLACED)))
         clan->tribute -= obj->cost * 100;/* Cost is in tribute */
     }
@@ -2022,13 +2022,13 @@ void update_clan_version(CLAN_DATA *clan)
         break;
       }
     }
-    hall_update = TRUE;
-    clan_update = TRUE;
+    hall_update = true;
+    clan_update = true;
   }
   /* Be sure to update CLAN_FILE_VERSION if this is updated */
   /* Save so it doesn't have to run this update every time until someone triggers a save */
   if(hall_update)
-    save_hall(clan->name, clan->planned, TRUE);
+    save_hall(clan->name, clan->planned, true);
   if(clan_update)
     do_save_clan(clan);
 }
@@ -2040,7 +2040,7 @@ void load_clans(void)
   char input[MAX_STRING_LENGTH];
   int default_clan;
   FILE *fp;
-  bool outcast = FALSE, loner = FALSE;
+  bool outcast = false, loner = false;
   sprintf( cload, "%s%s", CLAN_DIR, "clan_list" );
   if((fp = fopen(cload, "r")) == NULL)
   {
@@ -2065,9 +2065,9 @@ void load_clans(void)
   for(clan = clan_first; clan != NULL; clan = clan->next)
   {
     if(!loner && str_cmp(clan->name, "Loner") == 0)
-      loner = TRUE;
+      loner = true;
     else if(!outcast && str_cmp(clan->name, "Outcast") == 0)
-      outcast = TRUE;
+      outcast = true;
     update_clan_version(clan);/* Even on the default clans, in case it impacts their members */
   }
   if(!loner)
@@ -2128,8 +2128,8 @@ void load_clan(char *clan_name, int def_clan)
   int in_int;
   FILE *fp;
   CLAN_CHAR *cchar = NULL;
-  bool first_end = FALSE;
-  bool done = FALSE;
+  bool first_end = false;
+  bool done = false;
   sprintf( hload, "%s%s.clan", CLAN_DIR, capitalize(clan_name));
   if((fp = fopen(hload, "r")) == NULL)
   {
@@ -2160,7 +2160,7 @@ void load_clan(char *clan_name, int def_clan)
   clan->name = str_dup(clan_name);
   while(!feof(fp) && !done)
   {
-    bool found = FALSE;
+    bool found = false;
     if (!fscanf(fp, "%s", input)) {
         log_error("load_clan: error reading input");
     }
@@ -2169,17 +2169,17 @@ void load_clan(char *clan_name, int def_clan)
       case '#': if(str_cmp(input, "#End") == 0)
                 {/* There should be two ends */
                   if(!first_end)
-                    first_end = TRUE;
+                    first_end = true;
                   else
-                    done = TRUE;
-                  found = TRUE;
+                    done = true;
+                  found = true;
                 }
                 break;
       case 'A': if(str_cmp(input, "Ally") == 0)
       {
         ALLIANCE_DATA *ally;
         CLAN_DATA *target;
-        found = TRUE;
+        found = true;
         for(target = clan_first; target != NULL; target = target->next)
         {
           if(str_cmp(target->name, input) == 0)
@@ -2207,13 +2207,13 @@ void load_clan(char *clan_name, int def_clan)
             log_error("load_clan: error reading Ally");
         }
         if(in_int)
-          ally->pending = TRUE;
+          ally->pending = true;
       }
       else if(str_cmp(input, "Assists") == 0) {
           if (!fscanf(fp, "%d", &clan->assists)) {
               log_error("load_clan: error reading Assists");
           }
-          found = TRUE;
+          found = true;
       }
       else if(str_cmp(input, "AwardMerit") == 0)
       {
@@ -2222,22 +2222,22 @@ void load_clan(char *clan_name, int def_clan)
         } else if (!fscanf(fp, "%d", &cchar->award_merit)) {
             log_error("load_clan: error reading AwardMerit");
         }
-        found = TRUE;
+        found = true;
       }
       else if(str_cmp(input, "ATribute") == 0) {
         if (!fscanf(fp, "%d", &clan->awarded_tribute)) {
             log_error("load_clan: error reading ATribute");
         }
-        found = TRUE;
+        found = true;
       }
       break;
       case 'C': if(str_cmp(input, "Charter") == 0) {
-          read_to_tilde(fp, &clan->charter); found = TRUE; }
+          read_to_tilde(fp, &clan->charter); found = true; }
           if(str_cmp(input, "CreateDate") == 0) {
             if (!fscanf(fp, "%ld", &clan->creation)) {
                 log_error("load_clan: error reading CreateDate");
             }
-            found = TRUE;
+            found = true;
           }
           if(str_cmp(input, "Color") == 0) {
             if (!fscanf(fp, "%s", input)) {
@@ -2245,7 +2245,7 @@ void load_clan(char *clan_name, int def_clan)
             }
             clan->color[0] = input[0]; clan->color[1] = input[1];
             clan->color[2] = '\0';
-            found = TRUE; }
+            found = true; }
         break;
       case 'D':
           if(str_cmp(input, "Donated") == 0) {
@@ -2254,7 +2254,7 @@ void load_clan(char *clan_name, int def_clan)
               } else if (!fscanf(fp, "%d", &cchar->donated)) {
                   log_error("load_clan: error reading Donated");
               }
-              found = TRUE;
+              found = true;
           }
         break;
       case 'E':
@@ -2262,7 +2262,7 @@ void load_clan(char *clan_name, int def_clan)
               if (!fscanf(fp, "%d", &clan->enemy)) {
                   log_error("load_clan: error reading Enemy");
               }
-              found = TRUE;
+              found = true;
           }
       break;
       case 'F':
@@ -2272,7 +2272,7 @@ void load_clan(char *clan_name, int def_clan)
               } else if (!fscanf(fp, "%ld", &cchar->flags)) {
                   log_error("load_clan: error reading Flags");
               }
-          found = TRUE;
+          found = true;
         }
         break;
       case 'H':
@@ -2280,7 +2280,7 @@ void load_clan(char *clan_name, int def_clan)
               if (!fscanf(fp, "%d", &clan->hall_index)) {
                   log_error("load_clan: error reading Hall");
               }
-              found = TRUE;
+              found = true;
           }
         break;
       case 'I':
@@ -2288,13 +2288,13 @@ void load_clan(char *clan_name, int def_clan)
               if (!fscanf(fp, "%d", &clan->initiation)) {
                   log_error("load_clan: error reading Ini");
               }
-              found = TRUE;
+              found = true;
           }
           if(str_cmp(input, "IniDate") == 0) {
             if (!fscanf(fp, "%ld", &clan->init_date)) {
                 log_error("load_clan: error reading IniDate");
             }
-            found = TRUE;
+            found = true;
           }
         break;
       case 'J': if(str_cmp(input, "Join") == 0)
@@ -2306,7 +2306,7 @@ void load_clan(char *clan_name, int def_clan)
                   log_error("load_clan: error reading Join");
               }
           }
-          found = TRUE;
+          found = true;
         }
         break;
       case 'K':
@@ -2314,7 +2314,7 @@ void load_clan(char *clan_name, int def_clan)
               if (!fscanf(fp, "%d", &clan->kills)) {
                   log_error("load_clan: error reading Kills");
               }
-              found = TRUE;
+              found = true;
           }
         break;
       case 'L': if(str_cmp(input, "Login") == 0)
@@ -2326,11 +2326,11 @@ void load_clan(char *clan_name, int def_clan)
                   log_error("load_clan: error reading Login");
               }
           }
-          found = TRUE;
+          found = true;
         }
         break;
       case 'R': if(str_cmp(input, "Rules") == 0) {
-          read_to_tilde(fp, &clan->rules); found = TRUE; }
+          read_to_tilde(fp, &clan->rules); found = true; }
         else if(!str_cmp(input, "Rank"))
         {
           if(!cchar)
@@ -2345,7 +2345,7 @@ void load_clan(char *clan_name, int def_clan)
             else if(cchar->rank == 5)
               clan->leaders++;
           }
-          found = TRUE;
+          found = true;
         }
         break;
       case 'T':
@@ -2353,12 +2353,12 @@ void load_clan(char *clan_name, int def_clan)
               if (!fscanf(fp, "%d", &clan->type)) {
                   log_error("load_clan: error reading Type");
               }
-              found = TRUE;
+              found = true;
           } else if(str_cmp(input, "Tribute") == 0) {
               if (!fscanf(fp, "%d", &clan->tribute)) {
                   log_error("load_clan: error reading Tribute");
               }
-              found = TRUE;
+              found = true;
           }
           break;
       case 'M': if(!str_cmp(input, "Member")) {
@@ -2378,7 +2378,7 @@ void load_clan(char *clan_name, int def_clan)
               log_error("load_clan: error reading Member");
           }
           cchar->name = str_dup(input);
-          found = TRUE;
+          found = true;
         }
         else if(str_cmp(input, "Merit") == 0)
         {
@@ -2389,7 +2389,7 @@ void load_clan(char *clan_name, int def_clan)
                   log_error("load_clan: error reading Merit");
               }
           }
-          found = TRUE;
+          found = true;
         }
         else if(str_cmp(input, "MeritMatch") == 0)
         {
@@ -2421,7 +2421,7 @@ void load_clan(char *clan_name, int def_clan)
           }
           if(feof(fp))
             bug("Bad end to merit match", 0);
-          found = TRUE;
+          found = true;
         }
         else if(str_cmp(input, "MeritLost") == 0)
         {
@@ -2432,7 +2432,7 @@ void load_clan(char *clan_name, int def_clan)
                   log_error("load_clan: error reading MeritLost");
               }
           }
-          found = TRUE;
+          found = true;
         }
         else if(str_cmp(input, "MeritTrack") == 0)
         {
@@ -2467,7 +2467,7 @@ void load_clan(char *clan_name, int def_clan)
             if(feof(fp))
               bug("Bad end to merit delay", 0);
           }
-          found = TRUE;
+          found = true;
         }
         else if(str_cmp(input, "MeritPrimary") == 0)
         {
@@ -2478,7 +2478,7 @@ void load_clan(char *clan_name, int def_clan)
                   log_error("load_clan: error reading MeritPrimary");
               }
           }
-          found = TRUE;
+          found = true;
         }
         else if(str_cmp(input, "MeritBank") == 0)
         {
@@ -2489,25 +2489,25 @@ void load_clan(char *clan_name, int def_clan)
                   log_error("load_clan: error reading MeritBank");
               }
           }
-          found = TRUE;
+          found = true;
         }
         else if(str_cmp(input, "MinVnum") == 0) {
           if (!fscanf(fp, "%d", &clan->vnum_min)) {
               log_error("load_clan: error reading MinVnum");
           }
-          found = TRUE;
+          found = true;
         }
         else if(str_cmp(input, "MaxVnum") == 0) {
           if (!fscanf(fp, "%d", &clan->vnum_max)) {
               log_error("load_clan: error reading MaxVnum");
           }
-          found = TRUE;
+          found = true;
         }
         else if(str_cmp(input, "MTribute") == 0) {
           if (!fscanf(fp, "%d", &clan->max_tribute)) {
               log_error("load_clan: error reading MTribute");
           }
-          found = TRUE;
+          found = true;
         }
         break;
       case 'V':
@@ -2515,7 +2515,7 @@ void load_clan(char *clan_name, int def_clan)
           if (!fscanf(fp, "%d", &clan->version)) {
               log_error("load_clan: error reading Version");
           }
-          found = TRUE;
+          found = true;
         }
         break;
     }
@@ -2536,7 +2536,7 @@ void load_clan(char *clan_name, int def_clan)
       {
         if(IS_SET(obj->type, (PLAN_PLACED | PLAN_PREVIEWED)))
         {
-          respawn_plan_obj(obj, clan->planned, TRUE);
+          respawn_plan_obj(obj, clan->planned, true);
           if(IS_SET(obj->type, PLAN_ITEM) && IS_SET(obj->flags, PLAN_ITEM_PORTAL))
           {
             PLAN_DATA *room = find_edit_obj_by_index(clan->planned, PLAN_ROOM, obj->loc);
@@ -2685,7 +2685,7 @@ bool save_hall(char *clan_name, PLAN_DATA *plans, bool save_immediately)
   {
     bug( "Save_clan hall: fopen", 0 );
     perror( hsave );
-    return FALSE;
+    return false;
   }
   /* Cycle through all the plans */
   for(obj = plans; obj != NULL; obj = obj->next)
@@ -2704,15 +2704,15 @@ bool save_hall(char *clan_name, PLAN_DATA *plans, bool save_immediately)
   fclose( fp );
   if(save_immediately)
     rename(TEMP_FILE, hsave);
-  return TRUE;
+  return true;
 }
 
 void save_clan(CHAR_DATA *ch, bool save_c, bool save_h, bool hedit)
 {/* If hedit is false, save_clan means save_char */
   /* Save both into temp files, then after the save is done replace both temp files */
   /* This minimizes the chance of a desync from a bad crash timing between a clan
-   * payment and the associated hall upgrade - only needed if both saves are TRUE */
-  /* set backup_needed to TRUE if it's a clan modified, or in the player for their hall */
+   * payment and the associated hall upgrade - only needed if both saves are true */
+  /* set backup_needed to true if it's a clan modified, or in the player for their hall */
   /* Remove the has updated flag on the ch if hall is saved, that flag is only used for that */
   if(!ch || IS_NPC(ch))
     return;
@@ -2723,8 +2723,8 @@ void save_clan(CHAR_DATA *ch, bool save_c, bool save_h, bool hedit)
     if(save_h)
     {
       sprintf( hsave, "%s%s%s", CLAN_DIR, capitalize(ch->pcdata->clan_info->clan->name), ".hall" );
-      ch->pcdata->edits_made = FALSE;
-      if(!save_hall(ch->pcdata->clan_info->clan->name, START_OBJ(ch, hedit), FALSE))
+      ch->pcdata->edits_made = false;
+      if(!save_hall(ch->pcdata->clan_info->clan->name, START_OBJ(ch, hedit), false))
         return;
     }
 /* clan save is similar, but saves clan into TEMP_FILE2 */

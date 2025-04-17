@@ -65,7 +65,7 @@ int getpid();
 time_t time(time_t *tloc);
 #endif
 
-bool new_helps = FALSE;// New help code
+bool new_helps = false;// New help code
 int load_new_helps(HELP_DATA **first, HELP_DATA **last);
 void create_help_tracks(void);
 
@@ -691,7 +691,7 @@ void select_bounty(int qualifier)
   CHAR_DATA *mob_found = NULL;
   int i, j;
   int level = 1;
-  bounty_downgrade = FALSE;
+  bounty_downgrade = false;
   bounty_timer = 0;
   bounty_desc = number_range(4, 102);// Below 4 gets too many of the same type
   if(qualifier > 0)
@@ -957,7 +957,7 @@ void boot_db( void )
       exit( 1 );
   }
   top_string  = string_space;
-  fBootDb   = TRUE;
+  fBootDb   = true;
     }
 
     /*
@@ -1003,7 +1003,7 @@ void boot_db( void )
     }
 
     /* Set Gladiator Settings */
-    gladiator_info.started = FALSE;
+    gladiator_info.started = false;
     gladiator_info.time_left = 0;
     gladiator_info.min_level = 0;
     gladiator_info.max_level = 0;
@@ -1154,7 +1154,7 @@ void boot_db( void )
      */
     {
   fix_exits( );
-  fBootDb = FALSE;
+  fBootDb = false;
   area_update( );
   load_notes( );
   load_bans();
@@ -1197,17 +1197,17 @@ void load_area( FILE *fp, char *file_name )
     fread_number(fp);
     pArea->age    = 100;
     pArea->nplayer  = 0;
-    pArea->empty  = FALSE;
+    pArea->empty  = false;
     pArea->min_vnum_room = 
     pArea->max_vnum_room = 
     pArea->min_vnum_obj  = 
     pArea->max_vnum_obj  =     
     pArea->min_vnum_mob  = 
     pArea->max_vnum_mob  = 0;
-    pArea->freeze        = FALSE;
-    pArea->new_area      = FALSE;
+    pArea->freeze        = false;
+    pArea->new_area      = false;
     pArea->under_develop = (strstr (file_name,"newareas") != NULL);
-    pArea->no_transport	 = FALSE;
+    pArea->no_transport	 = false;
 
     if ( area_first == NULL )
   area_first = pArea;
@@ -1305,7 +1305,7 @@ void load_recipes( FILE *fp)
 // New help code
 //Note: mishandles high # symbols "{|}~" but these shouldn't be showing up 
 bool alphabet_before(char *first, char *second)
-{// Returns TRUE if first is before second alphabetically. Numbers are early.
+{// Returns true if first is before second alphabetically. Numbers are early.
   int i = 0;
   while(first[i] && second[i])
   {
@@ -1314,14 +1314,14 @@ bool alphabet_before(char *first, char *second)
     else
     {
       if(UPPER(first[i]) < UPPER(second[i]))
-        return TRUE;
+        return true;
       else
-        return FALSE;
+        return false;
     }
   }
   if(!first[i])// Ran out of first one first, so it should go in front
-    return TRUE;
-  return FALSE;
+    return true;
+  return false;
 }
 
 void create_help_tracks(void)
@@ -1400,7 +1400,7 @@ int load_new_helps(HELP_DATA **first, HELP_DATA **last)
     bug("Unable to open new help file.\n\r", 0);
     return 0;
   }
-  new_helps = TRUE;
+  new_helps = true;
   for ( ; ; )
   {
   //#ifdef OLC_VERSION
@@ -1533,7 +1533,7 @@ void load_old_mob( FILE *fp )
   if ( vnum == 0 )
       break;
 
-  fBootDb = FALSE;
+  fBootDb = false;
   if ( get_mob_index( vnum ) != NULL )
   {
       bug( "Load_old_mobiles: vnum %d duplicated.", vnum );
@@ -1543,7 +1543,7 @@ void load_old_mob( FILE *fp )
         rename_area (area_last->file_name);                    
       exit( 1 );
   }
-  fBootDb = TRUE;
+  fBootDb = true;
   
   if (area_last->min_vnum_mob == 0) {
     area_last->min_vnum_mob = vnum;
@@ -1561,7 +1561,7 @@ void load_old_mob( FILE *fp )
   pMobIndex     = GC_MALLOC( sizeof(*pMobIndex) );
 #endif
   pMobIndex->vnum     = vnum;
-  pMobIndex->new_format   = FALSE;
+  pMobIndex->new_format   = false;
   pMobIndex->player_name    = fread_string( fp );
   pMobIndex->short_descr    = fread_string( fp );
   pMobIndex->long_descr   = fread_string( fp );
@@ -1683,7 +1683,7 @@ void load_old_obj( FILE *fp )
   if ( vnum == 0 )
       break;
 
-  fBootDb = FALSE;
+  fBootDb = false;
   if ( get_obj_index( vnum ) != NULL )
   {
       bug( "Load_objects: vnum %d duplicated.", vnum );
@@ -1693,7 +1693,7 @@ void load_old_obj( FILE *fp )
         rename_area (area_last->file_name);                    
       exit( 1 );
   }
-  fBootDb = TRUE;
+  fBootDb = true;
   
   if (area_last->min_vnum_obj == 0) {
     area_last->min_vnum_obj = vnum;
@@ -1711,7 +1711,7 @@ void load_old_obj( FILE *fp )
   pObjIndex     = GC_MALLOC( sizeof(*pObjIndex) );
 #endif
   pObjIndex->vnum     = vnum;
-  pObjIndex->new_format   = FALSE;
+  pObjIndex->new_format   = false;
   pObjIndex->reset_num    = 0;
   pObjIndex->name     = fread_string( fp );
   pObjIndex->short_descr    = fread_string( fp );
@@ -1877,7 +1877,7 @@ void load_resets( FILE *fp )
           ? fread_number(fp) : 0;
         fread_to_eol( fp );
         
-  error_found = FALSE;        
+  error_found = false;        
   /*
    * Validate parameters.
    * We're calling the index functions for the side effect.
@@ -1886,7 +1886,7 @@ void load_resets( FILE *fp )
   {
   default:
       bug( "Load_resets: bad command '%c'.", letter );
-      error_found = TRUE;      
+      error_found = true;      
       break;
   case 'M':  
   case 'O':
@@ -1899,7 +1899,7 @@ void load_resets( FILE *fp )
       if ( pReset->arg3 < 0 || pReset->arg3 > 2 )
       {
     bug( "Load_resets: 'D': bad 'locks': %d.", pReset->arg3 );
-    error_found = TRUE;          
+    error_found = true;          
       }
  */
       break;
@@ -1907,7 +1907,7 @@ void load_resets( FILE *fp )
       if ( pReset->arg2 < 0 || pReset->arg2 > 6 )
       {
     bug( "Load_resets: 'R': bad exit %d.", pReset->arg2 );
-    error_found = TRUE;
+    error_found = true;
       }
       break;
   }
@@ -1964,7 +1964,7 @@ void load_rooms( FILE *fp )
   if ( vnum == 0 )
       break;
 
-  fBootDb = FALSE;
+  fBootDb = false;
   if ( get_room_index( vnum ) != NULL )
   {
       bug( "Load_rooms: vnum %d duplicated.", vnum );
@@ -1974,7 +1974,7 @@ void load_rooms( FILE *fp )
         rename_area (area_last->file_name);              
       exit( 1 );
   }
-  fBootDb = TRUE;
+  fBootDb = true;
   
   if (area_last->min_vnum_room == 0) {
     area_last->min_vnum_room = vnum;
@@ -2237,7 +2237,7 @@ void fix_exits( void )
   {
       bool fexit;
 
-      fexit = FALSE;
+      fexit = false;
       for ( door = 0; door <= 5; door++ )
       {
     if ( ( pexit = pRoomIndex->exit[door] ) != NULL )
@@ -2247,7 +2247,7 @@ void fix_exits( void )
       pexit->u1.to_room = NULL;
       pRoomIndex->exit[door] = NULL;
         } else {
-      fexit = TRUE; 
+      fexit = true; 
       pexit->u1.to_room = get_room_index( pexit->u1.vnum );
         }
     }
@@ -2342,7 +2342,7 @@ void area_update( void )
        )
         pArea->age = 15 - 2;
       else if (pArea->nplayer == 0)
-        pArea->empty = TRUE;
+        pArea->empty = true;
   }
 
 
@@ -2366,7 +2366,7 @@ void reset_area( AREA_DATA *pArea )
     int level;
 
     mob   = NULL;
-    last  = TRUE;
+    last  = true;
     level = 0;
     for ( pReset = pArea->reset_first; pReset != NULL; pReset = pReset->next )
     {
@@ -2400,7 +2400,7 @@ void reset_area( AREA_DATA *pArea )
 
       if ( pMobIndex->count >= pReset->arg2 )
       {
-    last = FALSE;
+    last = false;
     break;
       }
 
@@ -2411,7 +2411,7 @@ void reset_area( AREA_DATA *pArea )
         count++;
         if (count >= pReset->arg4)
         {
-          last = FALSE;
+          last = false;
           break;
         }
     }
@@ -2437,7 +2437,7 @@ void reset_area( AREA_DATA *pArea )
 
       char_to_room( mob, pRoomIndex );
       level = URANGE( 0, mob->level - 2, LEVEL_HERO - 1 );
-      last  = TRUE;
+      last  = true;
       break;
 
   case 'O':
@@ -2456,7 +2456,7 @@ void reset_area( AREA_DATA *pArea )
       if ( (pArea->nplayer > 0 && !pArea->freeze)
       ||   count_obj_list( pObjIndex, pRoomIndex->contents ) > 0 )
       {
-    last = FALSE;
+    last = false;
     break;
       }
 
@@ -2468,15 +2468,15 @@ void reset_area( AREA_DATA *pArea )
           limit = pReset->arg2;
       if ( pObjIndex->count >= limit )
       {
-	last = FALSE;
+	last = false;
 	break;
       }
 
       obj       = create_object( pObjIndex, UMIN(number_fuzzy(level),
-                   LEVEL_HERO - 1), TRUE );
+                   LEVEL_HERO - 1), true );
       obj->cost = 0;
       obj_to_room( obj, pRoomIndex );
-      last = TRUE;
+      last = true;
       break;
 
   case 'P':
@@ -2506,13 +2506,13 @@ void reset_area( AREA_DATA *pArea )
       || (count = count_obj_list(pObjIndex,obj_to->contains)) 
     > pReset->arg4 )
       {
-    last = FALSE;
+    last = false;
     break;
       }
 
       while (count < pReset->arg4)
       {
-          obj = create_object( pObjIndex, number_fuzzy(obj_to->level), TRUE );
+          obj = create_object( pObjIndex, number_fuzzy(obj_to->level), true );
         obj_to_obj( obj, obj_to );
     count++;
     if (pObjIndex->count >= limit)
@@ -2520,7 +2520,7 @@ void reset_area( AREA_DATA *pArea )
       }
       /* fix object lock state! */
       obj_to->value[1] = obj_to->pIndexData->value[1];
-      last = TRUE;
+      last = true;
       break;
 
   case 'G':
@@ -2538,7 +2538,7 @@ void reset_area( AREA_DATA *pArea )
       {
     bug( "Reset_area: 'E' or 'G': null mob for vnum %d.",
         pReset->arg1 );
-    last = FALSE;
+    last = false;
     break;
       }
 
@@ -2575,7 +2575,7 @@ void reset_area( AREA_DATA *pArea )
     case ITEM_TREASURE: olevel = number_range( 10, 20 ); break;
     }
 
-    obj = create_object( pObjIndex, olevel, TRUE );
+    obj = create_object( pObjIndex, olevel, true );
     if( obj->item_type != ITEM_TRASH )
     SET_BIT( obj->extra_flags, ITEM_INVENTORY );
       }
@@ -2592,7 +2592,7 @@ void reset_area( AREA_DATA *pArea )
     if (pObjIndex->count < limit || number_range(0,2) == 0 || pArea->freeze)
     {
         obj=create_object(pObjIndex,UMIN(number_fuzzy(level),
-        LEVEL_HERO - 1), TRUE);
+        LEVEL_HERO - 1), true);
         /* error message if it is too high */
 /*        if (obj->level > mob->level + 3
         ||  (obj->item_type == ITEM_WEAPON 
@@ -2609,7 +2609,7 @@ void reset_area( AREA_DATA *pArea )
       obj_to_char( obj, mob );
       if ( pReset->command == 'E' )
     equip_char( mob, obj, pReset->arg3 );
-      last = TRUE;
+      last = true;
       break;
 
   case 'D':
@@ -2644,7 +2644,7 @@ void reset_area( AREA_DATA *pArea )
     break;
       }
 
-      last = TRUE;
+      last = true;
       break;
 
   case 'R':
@@ -3001,7 +3001,7 @@ void ObjIndexToInstance ( OBJ_DATA *obj, OBJ_INDEX_DATA *pObjIndex, int level, b
       affect_remove_obj(obj, obj->affected);
   }
   
-    obj->enchanted  = FALSE;
+    obj->enchanted  = false;
     obj->warps 	    = 0;
     obj->damaged = 0;
     if (pObjIndex->new_format)
@@ -3185,7 +3185,7 @@ OBJ_DATA *create_object( OBJ_INDEX_DATA *pObjIndex, int level, bool favored )
     obj->stolen_timer  = 0;    
     ObjIndexToInstance (obj,pObjIndex,level,favored);
  
-    obj->original = TRUE;
+    obj->original = true;
  
     obj->next   = object_list;
     object_list   = obj;
@@ -3447,14 +3447,14 @@ int fread_number( FILE *fp )
 
     number = 0;
 
-    sign   = FALSE;
+    sign   = false;
     if ( c == '+' )
     {
   c = getc( fp );
     }
     else if ( c == '-' )
     {
-  sign = TRUE;
+  sign = true;
   c = getc( fp );
     }
 
@@ -3489,7 +3489,7 @@ long fread_flag( FILE *fp)
 {
     int number;
     char c;
-    bool negative = FALSE;
+    bool negative = false;
 
     do
     {
@@ -3499,7 +3499,7 @@ long fread_flag( FILE *fp)
 
     if (c == '-')
     {
-  negative = TRUE;
+  negative = true;
   c = getc(fp);
     }
 
@@ -3711,11 +3711,11 @@ char *fread_string_eol( FILE *fp )
     char *plast;
     char c;
  
-    if ( char_special[EOF-EOF] != TRUE )
+    if ( char_special[EOF-EOF] != true )
     {
-        char_special[EOF -  EOF] = TRUE;
-        char_special['\n' - EOF] = TRUE;
-        char_special['\r' - EOF] = TRUE;
+        char_special[EOF -  EOF] = true;
+        char_special['\n' - EOF] = true;
+        char_special['\r' - EOF] = true;
     }
  
     plast = top_string + sizeof(char *);
@@ -4185,7 +4185,7 @@ void do_areas( CHAR_DATA *ch, char *argument )
    {
     bigbuf[0] = '\0';
     area = area_first;
-    odd = FALSE;
+    odd = false;
     if (IS_IMMORTAL (ch))
     send_to_char ("* denotes areas under development - IMM only.\n\r",ch);
 
@@ -4785,7 +4785,7 @@ void smash_tilde( char *str )
 
 /*
  * Compare strings, case insensitive.
- * Return TRUE if different
+ * Return true if different
  *   (compatibility with historical functions).
  */
 bool str_cmp( const char *astr, const char *bstr )
@@ -4797,7 +4797,7 @@ bool str_cmp( const char *astr, const char *bstr )
   if(bstr != NULL)
     strcat(buf, bstr);
   bug( buf, 0 );
-  return TRUE;
+  return true;
     }
 
     if ( bstr == NULL )
@@ -4805,23 +4805,23 @@ bool str_cmp( const char *astr, const char *bstr )
   char buf[256];
   sprintf(buf, "Str_cmp: null bstr. astr: %s", astr);
   bug( buf, 0 );
-  return TRUE;
+  return true;
     }
 
     for ( ; *astr || *bstr; astr++, bstr++ )
     {
   if ( LOWER(*astr) != LOWER(*bstr) )
-      return TRUE;
+      return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 
 
 /*
  * Compare strings, case insensitive, for prefix matching.
- * Return TRUE if astr not a prefix of bstr
+ * Return true if astr not a prefix of bstr
  *   (compatibility with historical functions).
  */
 bool str_prefix( const char *astr, const char *bstr )
@@ -4829,7 +4829,7 @@ bool str_prefix( const char *astr, const char *bstr )
     if ( astr == NULL )
     {
   bug( "Strn_cmp: null astr.", 0 );
-  return TRUE;
+  return true;
     }
 
     if ( bstr == NULL )
@@ -4838,23 +4838,23 @@ bool str_prefix( const char *astr, const char *bstr )
   sprintf(buf, "Strn_cmp: null bstr. astr: %s", astr);
   bug(buf, 0);
 //  bug( "Strn_cmp: null bstr.", 0 );
-  return TRUE;
+  return true;
     }
 
     for ( ; *astr; astr++, bstr++ )
     {
   if ( LOWER(*astr) != LOWER(*bstr) )
-      return TRUE;
+      return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 
 
 /*
  * Compare strings, case insensitive, for match anywhere.
- * Returns TRUE is astr not part of bstr.
+ * Returns true is astr not part of bstr.
  *   (compatibility with historical functions).
  */
 bool str_infix( const char *astr, const char *bstr )
@@ -4865,7 +4865,7 @@ bool str_infix( const char *astr, const char *bstr )
     char c0;
 
     if ( ( c0 = LOWER(astr[0]) ) == '\0' )
-  return FALSE;
+  return false;
 
     sstr1 = strlen(astr);
     sstr2 = strlen(bstr);
@@ -4873,17 +4873,17 @@ bool str_infix( const char *astr, const char *bstr )
     for ( ichar = 0; ichar <= sstr2 - sstr1; ichar++ )
     {
   if ( c0 == LOWER(bstr[ichar]) && !str_prefix( astr, bstr + ichar ) )
-      return FALSE;
+      return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 
 
 /*
  * Compare strings, case insensitive, for suffix matching.
- * Return TRUE if astr not a suffix of bstr
+ * Return true if astr not a suffix of bstr
  *   (compatibility with historical functions).
  */
 bool str_suffix( const char *astr, const char *bstr )
@@ -4894,9 +4894,9 @@ bool str_suffix( const char *astr, const char *bstr )
     sstr1 = strlen(astr);
     sstr2 = strlen(bstr);
     if ( sstr1 <= sstr2 && !str_cmp( astr, bstr + sstr2 - sstr1 ) )
-  return FALSE;
+  return false;
     else
-  return TRUE;
+  return true;
 }
 
 

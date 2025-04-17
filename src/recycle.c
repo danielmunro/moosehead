@@ -1018,7 +1018,7 @@ bool add_buf(BUFFER *buffer, char *string)
     oldsize = buffer->size;
 
     if (buffer->state == BUFFER_OVERFLOW) /* don't waste time on bad strings! */
-  return FALSE;
+  return false;
 
     len = strlen(buffer->string) + strlen(string) + 1;
 
@@ -1031,7 +1031,7 @@ bool add_buf(BUFFER *buffer, char *string)
     buffer->size = oldsize;
     buffer->state = BUFFER_OVERFLOW;
     bug("buffer overflow past size %d",buffer->size);
-    return FALSE;
+    return false;
       }
     }
     }
@@ -1049,7 +1049,7 @@ bool add_buf(BUFFER *buffer, char *string)
     }
 
     strcat(buffer->string,string);
-    return TRUE;
+    return true;
 }
 
 

@@ -39,7 +39,7 @@ void clear_macro_marks ( CHAR_DATA *ch )
   
   macro = ch->pcdata->macro;  
   while (macro) {
-    macro->mark = FALSE;
+    macro->mark = false;
     macro = macro->next;
   }  
 }
@@ -52,7 +52,7 @@ bool check_macro ( CHAR_DATA *ch, char *argument )
   int idx, len, cnt;
   
   if (IS_NPC (ch))
-    return FALSE;
+    return false;
       
   argument = one_argument (argument, arg);  
   
@@ -61,7 +61,7 @@ bool check_macro ( CHAR_DATA *ch, char *argument )
     if (!str_cmp (arg,macro->name)) {      
       if (macro->mark) {
         send_to_char ("Circular macro error.\n\r",ch);
-        return TRUE;
+        return true;
       }       
       for (cnt = 0; cnt < 100; cnt++) argp[cnt] = NULL;
       idx = 0;
@@ -70,7 +70,7 @@ bool check_macro ( CHAR_DATA *ch, char *argument )
         argument = one_argument (argument,arg);
       }      
       ch->pcdata->macro_count++;
-      macro->mark = TRUE;
+      macro->mark = true;
       sprintf (buf2,"Macro '%s' invoked.\n\r",macro->name);
       send_to_char (buf2,ch);      
       buf = macro->text;
@@ -113,16 +113,16 @@ bool check_macro ( CHAR_DATA *ch, char *argument )
 			  log_info( log_buf );
 			  write_to_descriptor( ch->desc->descriptor,
 			      "\n\r*** PUT A LID ON IT!!! ***\n\r", 0, ch->desc );
-      	return FALSE;
+      	return false;
       }
 
       strcat (buf2,ch->desc->inbuf);  /* make sure extra commands are after macro */
       strcpy (ch->desc->inbuf,buf2);  /* also needed for macros inside of macros */
-      return TRUE;
+      return true;
     }
     macro = macro->next;    
   }  
-  return FALSE;
+  return false;
 }
 
 void do_unmacro ( CHAR_DATA *ch, char *argument )
@@ -222,7 +222,7 @@ void do_macro ( CHAR_DATA *ch, char *argument )
   macro->next = ch->pcdata->macro;
   macro->name = str_dup (arg);
   macro->text = str_dup (argument);
-  macro->mark = FALSE;
+  macro->mark = false;
   ch->pcdata->macro = macro;  
   sprintf (buf,"Macro '%s' now defined as '%s'.\n\r",macro->name,macro->text);
   send_to_char (buf,ch);

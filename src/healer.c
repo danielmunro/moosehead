@@ -18,7 +18,7 @@ void do_heal(CHAR_DATA *ch, char *argument)
     int cost,sn;
     SPELL_FUN *spell;
     char *words = "";
-    bool glad_healing = FALSE;
+    bool glad_healing = false;
 
     /* check for healer */
     for ( mob = ch->in_room->people; mob; mob = mob->next_in_room )
@@ -43,23 +43,23 @@ void do_heal(CHAR_DATA *ch, char *argument)
     if( !IS_NPC(ch) && ch->clan && ch->in_room->clan 
 	&& IS_SET(ch->pcdata->clan_flags, CLAN_NO_HEALER) )
 	{
-	act("$N says 'I have been forbidden to provide you with healing.'", ch, NULL, mob, TO_CHAR, FALSE);
+	act("$N says 'I have been forbidden to provide you with healing.'", ch, NULL, mob, TO_CHAR, false);
 	return;
 	}
 
     if ( ch->in_room->clan && ch->in_room->clan != ch->clan && !IS_IMMORTAL(ch))
        {
-       act("$N says 'I do not service those not of my clan, begone foul rogue!'",ch,NULL,mob,TO_CHAR,FALSE);
+       act("$N says 'I do not service those not of my clan, begone foul rogue!'",ch,NULL,mob,TO_CHAR,false);
        return;
        }
     one_argument(argument,arg);
-    if(IS_SET(ch->mhs, MHS_GLADIATOR) && gladiator_info.exper == TRUE)
-	glad_healing = TRUE;
+    if(IS_SET(ch->mhs, MHS_GLADIATOR) && gladiator_info.exper == true)
+	glad_healing = true;
 
     if (arg[0] == '\0')
     {
         /* display price list */
-	act("$N says 'I offer the following spells:'",ch,NULL,mob,TO_CHAR,FALSE);
+	act("$N says 'I offer the following spells:'",ch,NULL,mob,TO_CHAR,false);
 	send_to_char("  light: cure light wounds      10 gold\n\r",ch);
 	send_to_char("  serious: cure serious wounds  15 gold\n\r",ch);
 	send_to_char("  critic: cure critical wounds  25 gold\n\r",ch);
@@ -87,7 +87,7 @@ void do_heal(CHAR_DATA *ch, char *argument)
 		send_to_char("  armor:    armor                8 gold\n\r",ch);
 		send_to_char("  glow:   sanctuary	      80 gold\n\r",ch);
 	}
-        if(IS_SET(ch->mhs, MHS_GLADIATOR) && gladiator_info.WNR == TRUE)
+        if(IS_SET(ch->mhs, MHS_GLADIATOR) && gladiator_info.WNR == true)
         {
 		send_to_char("  gladiate: spell up             FREE\n\r",ch);
         }
@@ -181,7 +181,7 @@ void do_heal(CHAR_DATA *ch, char *argument)
 	    spell = spell_bless;
 	    sn    = skill_lookup("bless");
 	    words = "fido";
-	    if(glad_healing == TRUE)
+	    if(glad_healing == true)
 		    cost = 0;
 	    else
 		    cost  = 500;
@@ -192,7 +192,7 @@ void do_heal(CHAR_DATA *ch, char *argument)
 	    spell = spell_armor;
 	    sn    = skill_lookup("armor");
 	    words = "knahk";
-	    if(glad_healing == TRUE)
+	    if(glad_healing == true)
 		    cost = 0;
 	    else
 		    cost  = 700;
@@ -203,12 +203,12 @@ void do_heal(CHAR_DATA *ch, char *argument)
 	    spell = spell_sanctuary;
 	    sn    = skill_lookup("sanctuary");
 	    words = "havana cigar";
-	    if(glad_healing == TRUE)
+	    if(glad_healing == true)
 		    cost = 0;
 	    else
 		    cost  = 8000;
     }
-    else if(glad_healing == TRUE)
+    else if(glad_healing == true)
     {
 	    if (!str_prefix(arg,"haste"))
 	    {
@@ -248,14 +248,14 @@ void do_heal(CHAR_DATA *ch, char *argument)
       else
       {
     act("$N says 'Type 'heal' for a list of spells.'",
-        ch,NULL,mob,TO_CHAR,FALSE);
+        ch,NULL,mob,TO_CHAR,false);
     return;
       }
     }
-    else if(IS_SET(ch->mhs, MHS_GLADIATOR) && gladiator_info.WNR == TRUE && 
+    else if(IS_SET(ch->mhs, MHS_GLADIATOR) && gladiator_info.WNR == true && 
       (!str_prefix(arg,"gladiate") || !str_prefix(arg,"gladiator")))
     {
-      act("$n utters the words 'good luck'.",mob,NULL,words,TO_ROOM,FALSE);
+      act("$n utters the words 'good luck'.",mob,NULL,words,TO_ROOM,false);
       spell = spell_bless;
       sn    = skill_lookup("bless");
       if(sn != -1) spell(sn,mob->level,mob,ch,TARGET_CHAR);
@@ -276,7 +276,7 @@ void do_heal(CHAR_DATA *ch, char *argument)
     else 
     {
 	act("$N says 'Type 'heal' for a list of spells.'",
-	    ch,NULL,mob,TO_CHAR,FALSE);
+	    ch,NULL,mob,TO_CHAR,false);
 	return;
     }
 
@@ -284,7 +284,7 @@ void do_heal(CHAR_DATA *ch, char *argument)
     if (cost > (ch->gold * 100 + ch->silver))
     {
 	act("$N says 'You do not have enough gold for my services.'",
-	    ch,NULL,mob,TO_CHAR,FALSE);
+	    ch,NULL,mob,TO_CHAR,false);
 	return;
     }
 
@@ -296,7 +296,7 @@ void do_heal(CHAR_DATA *ch, char *argument)
       mob->gold += cost/100;
       mob->silver += cost % 100;
     }
-    act("$n utters the words '$T'.",mob,NULL,words,TO_ROOM,FALSE);
+    act("$n utters the words '$T'.",mob,NULL,words,TO_ROOM,false);
      
     if (spell == NULL)  /* restore mana trap...kinda hackish */
     {

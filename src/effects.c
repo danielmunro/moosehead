@@ -25,7 +25,7 @@
 
 void acid_effect(void *vo, int level, int dam, int target)
 {
-  bool permanent = TRUE;
+  bool permanent = true;
 
     if (target == TARGET_ROOM) /* nail objects on the floor */
      {
@@ -118,7 +118,7 @@ void acid_effect(void *vo, int level, int dam, int target)
 	{
 	    default:
 		return;
-	    case ITEM_CONTAINER: permanent = FALSE;// Containers are not destroyed
+	    case ITEM_CONTAINER: permanent = false;// Containers are not destroyed
 	    case ITEM_CORPSE_PC:
 	    case ITEM_CORPSE_NPC:
 	  if(obj->damaged >= 100)
@@ -127,7 +127,7 @@ void acid_effect(void *vo, int level, int dam, int target)
 			msg = "$p fumes and sizzles.";// Not destroyed
 		break;
 	    case ITEM_ARMOR:
-	    case ITEM_CLOTHING: permanent = FALSE;// Gear is not destroyed
+	    case ITEM_CLOTHING: permanent = false;// Gear is not destroyed
 		if(obj->damaged >= 100)
 			msg = "$p is corroded into scrap!";
 		else
@@ -150,9 +150,9 @@ void acid_effect(void *vo, int level, int dam, int target)
 	}
 
 	if (obj->carried_by != NULL)
-	    act(msg,obj->carried_by,obj,NULL,TO_ALL,FALSE);
+	    act(msg,obj->carried_by,obj,NULL,TO_ALL,false);
 	else if (obj->in_room != NULL && obj->in_room->people != NULL)
-	    act(msg,obj->in_room->people,obj,NULL,TO_ALL,FALSE);
+	    act(msg,obj->in_room->people,obj,NULL,TO_ALL,false);
 	
 	if(obj->damaged >= 100)
 	{
@@ -191,7 +191,7 @@ void acid_effect(void *vo, int level, int dam, int target)
 
 void cold_effect(void *vo, int level, int dam, int target)
 {
-    bool permanent = TRUE;
+    bool permanent = true;
 
     if (target == TARGET_ROOM) /* nail objects on the floor */
     {
@@ -220,9 +220,9 @@ void cold_effect(void *vo, int level, int dam, int target)
 	{
 	    AFFECT_DATA af;
 
-            act("$n turns blue and shivers.",victim,NULL,NULL,TO_ROOM,FALSE);
+            act("$n turns blue and shivers.",victim,NULL,NULL,TO_ROOM,false);
 	    act("A chill sinks deep into your bones."
-		,victim,NULL,NULL,TO_CHAR,FALSE);
+		,victim,NULL,NULL,TO_CHAR,false);
             af.where     = TO_AFFECTS;
             af.type      = skill_lookup("chill touch");
             af.level     = level;
@@ -308,7 +308,7 @@ void cold_effect(void *vo, int level, int dam, int target)
 		else
 			msg = "$p is surrounded by ice.";
 		break;
-	    case ITEM_DRINK_CON: permanent = FALSE;
+	    case ITEM_DRINK_CON: permanent = false;
 		if(obj->damaged >= 100)
 			msg = "$p freezes solid!";
 		else
@@ -317,9 +317,9 @@ void cold_effect(void *vo, int level, int dam, int target)
 	}
 
 	if (obj->carried_by != NULL)
-	    act(msg,obj->carried_by,obj,NULL,TO_ALL,FALSE);
+	    act(msg,obj->carried_by,obj,NULL,TO_ALL,false);
 	else if (obj->in_room != NULL && obj->in_room->people != NULL)
-	    act(msg,obj->in_room->people,obj,NULL,TO_ALL,FALSE);
+	    act(msg,obj->in_room->people,obj,NULL,TO_ALL,false);
 
 	if(obj->damaged >= 100)
 	{
@@ -371,23 +371,23 @@ void trap_effect( CHAR_DATA *ch,     AFFECT_DATA *paf )
      /* dam = number_range(ch->level,UMAX(ch->level,get_skill(ch,gsn_trap)));*/
      dam = dice( paf->level /5, paf->modifier  );
      raffect_remove(ch->in_room,paf);
-     act("You tripped a claw trap!",ch,NULL,NULL,TO_CHAR,FALSE);
-     act("$n trips a claw trap!",ch,NULL,NULL,TO_ROOM,FALSE);
+     act("You tripped a claw trap!",ch,NULL,NULL,TO_CHAR,false);
+     act("$n trips a claw trap!",ch,NULL,NULL,TO_ROOM,false);
      /* want these to work just a little more */
      if ( number_percent() > ( save + 10 ) )
      {
-	 act("You dodged the trap.",ch,NULL,NULL,TO_CHAR,FALSE);
-	 act("$n dodges the trap.",ch,NULL,NULL,TO_ROOM,FALSE);
+	 act("You dodged the trap.",ch,NULL,NULL,TO_CHAR,false);
+	 act("$n dodges the trap.",ch,NULL,NULL,TO_ROOM,false);
 	 return;
      }
-     damage(ch,ch,dam,0,DAM_BASH,FALSE,FALSE);  
+     damage(ch,ch,dam,0,DAM_BASH,false,false);  
      break;
     case TRAP_SNARE: /* hold alter trap for char, and swap it */
      /* want these to work a little less often , -10 on save */
      if ( number_percent() > ( save - 10 ) )
      {
-	 act("You dodged a snare trap!",ch,NULL,NULL,TO_CHAR,FALSE);
-	 act("$n dodges a snare trap.",ch,NULL,NULL,TO_ROOM,FALSE);
+	 act("You dodged a snare trap!",ch,NULL,NULL,TO_CHAR,false);
+	 act("$n dodges a snare trap.",ch,NULL,NULL,TO_ROOM,false);
 	 raffect_remove(ch->in_room,paf);
 	 return;
      }
@@ -398,21 +398,21 @@ void trap_effect( CHAR_DATA *ch,     AFFECT_DATA *paf )
      raffect_remove(ch->in_room,paf);
      ch->position = POS_RESTING;
      ch->pcdata->quit_time = 2;
-     act("You are caught in a snare trap!",ch,NULL,NULL,TO_CHAR,FALSE);
-     act("$n is caught in a snare trap.",ch,NULL,NULL,TO_ROOM,FALSE);
+     act("You are caught in a snare trap!",ch,NULL,NULL,TO_CHAR,false);
+     act("$n is caught in a snare trap.",ch,NULL,NULL,TO_ROOM,false);
      break;
     case TRAP_ALARM: /* just send an alarm out */
      raffect_remove(ch->in_room,paf);
      /* want these to wrok often, so add 30% to save number */
      if ( number_percent() > ( save + 30 ) )
      {
-	act("You dodged an alarm trap!",ch,NULL,NULL,TO_CHAR,FALSE);
-	act("$n dodges a alarm trap.",ch,NULL,NULL,TO_ROOM,FALSE);
+	act("You dodged an alarm trap!",ch,NULL,NULL,TO_CHAR,false);
+	act("$n dodges a alarm trap.",ch,NULL,NULL,TO_ROOM,false);
      }
      else
      {
-       act("You tripped an alarm trap!",ch,NULL,NULL,TO_CHAR,FALSE);
-       act("$n trips an alarm trap!",ch,NULL,NULL,TO_ROOM,FALSE);
+       act("You tripped an alarm trap!",ch,NULL,NULL,TO_CHAR,false);
+       act("$n trips an alarm trap!",ch,NULL,NULL,TO_ROOM,false);
        for ( victim = char_list ; victim != NULL ; victim = vch_next )
        {
 	 vch_next = victim->next;
@@ -444,13 +444,13 @@ void holy_effect( CHAR_DATA *victim, int level, int align, CHAR_DATA *ch )
     {
         if ( align >= 350 )
 	{
-     act("$n is blinded by the light.",victim,NULL,NULL,TO_ROOM,FALSE);
-     act("You are blinded by the light.",victim,NULL,NULL,TO_CHAR,FALSE);
+     act("$n is blinded by the light.",victim,NULL,NULL,TO_ROOM,false);
+     act("You are blinded by the light.",victim,NULL,NULL,TO_CHAR,false);
 	}
 	else
 	{
-    act("$n is surrounded by unholy darkness.",victim,NULL,NULL,TO_ROOM,FALSE);
-    act("You are surrouned by unholy darkness.",victim,NULL,NULL,TO_CHAR,FALSE);
+    act("$n is surrounded by unholy darkness.",victim,NULL,NULL,TO_ROOM,false);
+    act("You are surrouned by unholy darkness.",victim,NULL,NULL,TO_CHAR,false);
 	}
 
 	af.where 		= TO_AFFECTS;
@@ -473,7 +473,7 @@ void holy_effect( CHAR_DATA *victim, int level, int align, CHAR_DATA *ch )
 
 void fire_effect(void *vo, int level, int dam, int target)
 {
-    bool permanent = TRUE;
+    bool permanent = true;
 
     if (target == TARGET_ROOM)  /* nail objects on the floor */
     {
@@ -504,9 +504,9 @@ void fire_effect(void *vo, int level, int dam, int target)
                &&  !saves_spell(level / 4 + dam / 20, victim,DAM_FIRE))
            {
               AFFECT_DATA af;
-              act("$n is blinded by smoke!",victim,NULL,NULL,TO_ROOM,FALSE);
+              act("$n is blinded by smoke!",victim,NULL,NULL,TO_ROOM,false);
               act("Your eyes tear up from smoke...you can't see a thing!",
-                   victim,NULL,NULL,TO_CHAR,FALSE);
+                   victim,NULL,NULL,TO_CHAR,false);
 	 
               af.where        = TO_AFFECTS;
               af.type         = skill_lookup("fire breath");
@@ -599,7 +599,7 @@ void fire_effect(void *vo, int level, int dam, int target)
         {
         default:             
 	    return;
-        case ITEM_CONTAINER: permanent = FALSE;
+        case ITEM_CONTAINER: permanent = false;
         	if(obj->damaged >= 100)
             msg = "$p ignites and burns!";
         	else
@@ -645,9 +645,9 @@ void fire_effect(void *vo, int level, int dam, int target)
         }
 
 	if (obj->carried_by != NULL) {
-        act(msg, obj->carried_by, obj, NULL, TO_ALL, FALSE);
+        act(msg, obj->carried_by, obj, NULL, TO_ALL, false);
     } else if (obj->in_room != NULL && obj->in_room->people != NULL) {
-        act(msg, obj->in_room->people, obj, NULL, TO_ALL, FALSE);
+        act(msg, obj->in_room->people, obj, NULL, TO_ALL, false);
     }
 		
 		if(obj->damaged >= 100)
@@ -712,7 +712,7 @@ void poison_effect(void *vo,int level, int dam, int target)
 
             send_to_char("You feel poison coursing through your veins.\n\r",
                 victim);
-            act("$n looks very ill.",victim,NULL,NULL,TO_ROOM,FALSE);
+            act("$n looks very ill.",victim,NULL,NULL,TO_ROOM,false);
 
             af.where     = TO_AFFECTS;
             af.type      = gsn_poison;
@@ -777,7 +777,7 @@ void poison_effect(void *vo,int level, int dam, int target)
 
 void shock_effect(void *vo,int level, int dam, int target)
 {
-    bool permanent = TRUE;
+    bool permanent = true;
 
     if (target == TARGET_ROOM)
     {
@@ -876,7 +876,7 @@ void shock_effect(void *vo,int level, int dam, int target)
 		else
 			msg = "Electricity crackles over $p.";
 		break;
-	   case ITEM_JEWELRY:permanent = FALSE;
+	   case ITEM_JEWELRY:permanent = false;
 	  if(obj->damaged >= 100)
 			msg = "$p is fused into a worthless lump.";
 		else
@@ -885,9 +885,9 @@ void shock_effect(void *vo,int level, int dam, int target)
 	}
 
 	if (obj->carried_by != NULL)
-	    act(msg,obj->carried_by,obj,NULL,TO_ALL,FALSE);
+	    act(msg,obj->carried_by,obj,NULL,TO_ALL,false);
 	else if (obj->in_room != NULL && obj->in_room->people != NULL)
-	    act(msg,obj->in_room->people,obj,NULL,TO_ALL,FALSE);
+	    act(msg,obj->in_room->people,obj,NULL,TO_ALL,false);
 
 	if(obj->damaged >= 100)
 	{

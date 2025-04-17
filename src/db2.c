@@ -187,7 +187,7 @@ void load_mobiles( FILE *fp )
         if ( vnum == 0 )
             break;
  
-        fBootDb = FALSE;
+        fBootDb = false;
         if ( get_mob_index( vnum ) != NULL )
         {
             bug( "Load_mobiles: vnum %d duplicated.", vnum );
@@ -197,7 +197,7 @@ void load_mobiles( FILE *fp )
               rename_area (area_last->file_name);                          
             exit( 1 );
         }
-        fBootDb = TRUE;
+        fBootDb = true;
         
         if (area_last->min_vnum_mob == 0) {
           area_last->min_vnum_mob = vnum;
@@ -216,7 +216,7 @@ void load_mobiles( FILE *fp )
 #endif
         pMobIndex->vnum                 = vnum;
 	pMobIndex->area			= area_last;
-  pMobIndex->new_format   = TRUE;
+  pMobIndex->new_format   = true;
   newmobs++;
         pMobIndex->player_name          = fread_string( fp );
         pMobIndex->short_descr          = fread_string( fp );
@@ -236,7 +236,7 @@ void load_mobiles( FILE *fp )
 
 	  /* Speial handling, no trans areas */
 	if ( IS_SET(pMobIndex->act,ACT_NOTRANS) )
-		pMobIndex->area->no_transport = TRUE; 
+		pMobIndex->area->no_transport = true; 
 
         pMobIndex->affected_by          = fread_flag( fp )
           | race_table[pMobIndex->race].aff;
@@ -383,7 +383,7 @@ void load_objects( FILE *fp )
         if ( vnum == 0 )
             break;
  
-        fBootDb = FALSE;
+        fBootDb = false;
         if ( get_obj_index( vnum ) != NULL )
         {
             bug( "Load_objects: vnum %d duplicated.", vnum );
@@ -393,7 +393,7 @@ void load_objects( FILE *fp )
               rename_area (area_last->file_name);                          
             exit( 1 );
         }
-        fBootDb = TRUE;
+        fBootDb = true;
         
         if (area_last->min_vnum_obj == 0) {
           area_last->min_vnum_obj = vnum;
@@ -412,7 +412,7 @@ void load_objects( FILE *fp )
 #endif
         pObjIndex->vnum                 = vnum;
         pObjIndex->area                 = area_last;
-        pObjIndex->new_format           = TRUE;
+        pObjIndex->new_format           = true;
   pObjIndex->reset_num    = 0;
   newobjs++;
         pObjIndex->name                 = fread_string( fp );

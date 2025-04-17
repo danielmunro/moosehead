@@ -50,7 +50,7 @@ void  obj_update  args( ( void ) );
 void  room_update args( ( void ) );
 void  aggr_update args( ( void ) );
 void  shapeshift_remove args ((CHAR_DATA *ch));   
-bool  ch_in_wraithform = FALSE;
+bool  ch_in_wraithform = false;
 void sector_damage args ((CHAR_DATA *ch));
 /* Externals */
 void remove_highlander args((CHAR_DATA *ch, CHAR_DATA *victim));
@@ -127,32 +127,32 @@ void check_savant( CHAR_DATA *ch )
        {
        case 1: 
 	   act("The wind picks up and whips your cloak about violently.",
-		ch,NULL,NULL,TO_CHAR,FALSE);
+		ch,NULL,NULL,TO_CHAR,false);
 	   ch->pcdata->savant += 10;
 	   break;
        case 2:
 	    act("Your arms feel cold and stiff suddenly.",
-		ch,NULL,NULL,TO_CHAR,FALSE);
+		ch,NULL,NULL,TO_CHAR,false);
 	    ch->pcdata->savant += 3;
 	    break;
        case 3:
 	    act("You double over in pain as a high scream pierces your head.",
-		ch,NULL,NULL,TO_CHAR,FALSE);
+		ch,NULL,NULL,TO_CHAR,false);
 		ch->pcdata->savant += 2;
 	    break;
        case 4:
 	    act("You hear voices babbling on the edges of the wind.",
-		ch,NULL,NULL,TO_CHAR,FALSE);
+		ch,NULL,NULL,TO_CHAR,false);
 		ch->pcdata->savant += 4;
 	    break;
        case 5:
 	    act("Your vision blurs momentarily.",
-		ch,NULL,NULL,TO_CHAR,FALSE);
+		ch,NULL,NULL,TO_CHAR,false);
 		ch->pcdata->savant += 9;
 	    break;
        case 6:
 	    act("Your soul cries out in agony.",
-		ch,NULL,NULL,TO_CHAR,FALSE);
+		ch,NULL,NULL,TO_CHAR,false);
             dam = number_range(ch->level,ch->level*2);
 	    ch->hit = UMAX(1, ch->hit - dam );
 	    ch->pcdata->savant += ( dam / 5 );
@@ -203,7 +203,7 @@ void check_savant( CHAR_DATA *ch )
 	ch->hit++;
 	send_to_char("A sudden shooting pain runs through your forearms.\n\r",ch);
 	SET_BIT(ch->mhs,MHS_SAVANT);
-	act("$n cringes in sudden pain.",ch,NULL,NULL,TO_ROOM,FALSE);
+	act("$n cringes in sudden pain.",ch,NULL,NULL,TO_ROOM,false);
 	return;
     }
     
@@ -227,8 +227,8 @@ void check_nethermancer( CHAR_DATA *ch )
    {
         wiznet("{YNether Weapon made by:  $N.{x",ch,NULL,WIZ_NOTES,WIZ_SECURE,get_trust(ch));
 	SET_BIT(weapon->value[4],WEAPON_NETHER);
-	act("$p glows with a black aura.",ch,weapon,NULL,TO_CHAR,FALSE);
-	act("$p glows with a black aura.",ch,weapon,NULL,TO_ROOM,FALSE);
+	act("$p glows with a black aura.",ch,weapon,NULL,TO_CHAR,false);
+	act("$p glows with a black aura.",ch,weapon,NULL,TO_ROOM,false);
    }
 }
 
@@ -254,8 +254,8 @@ void check_vampirictouch( CHAR_DATA *ch)
     {
       wiznet("Vampiric Weapon made by:  $N.",ch,NULL,WIZ_DEITYFAVOR,0,get_trust(ch));
       SET_BIT(weapon->value[4],WEAPON_VAMPIRIC);
-      act("$p suddenly looks a bit more {Dwicked{x.",ch,weapon,NULL,TO_CHAR,FALSE);
-      act("$p suddenly looks a bit more {Dwicked{x.",ch,weapon,NULL,TO_ROOM,FALSE);
+      act("$p suddenly looks a bit more {Dwicked{x.",ch,weapon,NULL,TO_CHAR,false);
+      act("$p suddenly looks a bit more {Dwicked{x.",ch,weapon,NULL,TO_ROOM,false);
     }
 }  
 
@@ -288,13 +288,13 @@ void check_mutate( CHAR_DATA *ch )
         if (pc_race_table[new_race].skills[i] == NULL) {
             break;
         }
-        group_add(ch,pc_race_table[new_race].skills[i],FALSE);
+        group_add(ch,pc_race_table[new_race].skills[i],false);
     }
 		
 	ch->size = pc_race_table[new_race].size;
 	ch->race = new_race;
 	send_to_char("Your body shimmers and shakes.\n\r",ch);
-	act("$n's body shimmers and shakes.",ch,NULL,NULL,TO_ROOM,FALSE);
+	act("$n's body shimmers and shakes.",ch,NULL,NULL,TO_ROOM,false);
    }
 
    return;
@@ -517,10 +517,10 @@ void do_level( CHAR_DATA *ch, char *argument )
       if(!ch->pcdata->confirm_outcast)
       {
         send_to_char("{YDid you mean to level without clanning?{x\n\rEnter '{Wlevel{x' again to continue or '{Wloner{x' first.\n\r", ch);
-        ch->pcdata->confirm_outcast = TRUE;
+        ch->pcdata->confirm_outcast = true;
         return;
       }
-      ch->pcdata->confirm_outcast = FALSE;
+      ch->pcdata->confirm_outcast = false;
     }
     
 	if( ch->pcdata->debit_level > 0 ) 
@@ -639,7 +639,7 @@ int hit_gain( CHAR_DATA *ch )
   {
       gain += number * gain / 100;
       if (ch->hit < ch->max_hit)
-    check_improve(ch,gsn_fast_healing,TRUE,8);
+    check_improve(ch,gsn_fast_healing,true,8);
   }
 
        if(IS_SET(ch->act,PLR_MUMMY) && !IS_NPC(ch))
@@ -750,7 +750,7 @@ int mana_gain( CHAR_DATA *ch )
   {
       gain += number * gain / 100;
       if (ch->mana < ch->max_mana)
-          check_improve(ch,gsn_meditation,TRUE,8);
+          check_improve(ch,gsn_meditation,true,8);
   }
 
 
@@ -1018,7 +1018,7 @@ void mobile_update( void )
       obj_best    = 0;
       for ( obj = ch->in_room->contents; obj; obj = obj->next_content )
       {
-    if ( CAN_WEAR(obj, ITEM_TAKE) && can_loot(ch, obj, TRUE)
+    if ( CAN_WEAR(obj, ITEM_TAKE) && can_loot(ch, obj, true)
          && obj->cost > max  && obj->cost > 0 && count_users(obj) == 0 )
     {
         obj_best    = obj;
@@ -1030,7 +1030,7 @@ void mobile_update( void )
       {
     obj_from_room( obj_best );
     obj_to_char( obj_best, ch );
-    act( "$n gets $p.", ch, obj_best, NULL, TO_ROOM ,FALSE);
+    act( "$n gets $p.", ch, obj_best, NULL, TO_ROOM ,false);
       }
   }
 
@@ -1050,7 +1050,7 @@ void mobile_update( void )
   && ( !IS_SET(ch->act, ACT_INDOORS)
   ||   IS_SET(pexit->u1.to_room->room_flags,ROOM_INDOORS)))
   {
-      move_char( ch, door, FALSE );
+      move_char( ch, door, false );
   }                     
     }
 
@@ -1071,7 +1071,7 @@ void load_rbow_char(ROOM_INDEX_DATA *pRoom, int vnum)
   af.modifier  = 0;
   af.bitvector = 0;
   affect_to_char( rbowchar, &af );
-  act("$n touches down right in front of you!", rbowchar, NULL, NULL, TO_ROOM, FALSE);
+  act("$n touches down right in front of you!", rbowchar, NULL, NULL, TO_ROOM, false);
   /* Activate the AI just in case there's a player in the room already */ 
   spec_rainbow(rbowchar);
 }
@@ -1100,7 +1100,7 @@ bool spawn_rainbow(void)
   {
     bug("No area found to spawn the rainbow in.", 0);
     rainbow = 0;
-    return FALSE;
+    return false;
   }
 
   count = 0;
@@ -1113,7 +1113,7 @@ bool spawn_rainbow(void)
   if(count < 2)/* Sometimes it can't spawn */
   {
     rainbow = 0;
-    return FALSE;
+    return false;
   }
 
   /* There's a couple outdoor rooms to spawn the rainbow in */
@@ -1141,7 +1141,7 @@ bool spawn_rainbow(void)
     }
   }
   rainbow_area = pArea;
-  return TRUE;
+  return true;
 }
 
 /*
@@ -1462,8 +1462,8 @@ void char_update( void )
           && ch->passenger == NULL
 	  && ch->pIndexData->pShop == NULL) 
 	   {
-              act("$n wanders on home.",ch,NULL,NULL,TO_ROOM,FALSE);
-              extract_char(ch,TRUE);
+              act("$n wanders on home.",ch,NULL,NULL,TO_ROOM,false);
+              extract_char(ch,true);
               continue;
             }
 
@@ -1518,7 +1518,7 @@ void char_update( void )
 			 else
 			 {
 			   /* move the player to the next room */
-			    move_char(ch, door, FALSE);
+			    move_char(ch, door, false);
 			 }
 		
                   } /* end else, for no room */
@@ -1565,7 +1565,7 @@ void char_update( void )
             REMOVE_BIT(ch->affected_by, AFF_SLEEP);
           }
 
-	  damage( ch, ch, ch->level/3, gsn_plague,DAM_DISEASE,FALSE,TRUE);
+	  damage( ch, ch, ch->level/3, gsn_plague,DAM_DISEASE,false,true);
 	 }
 	else
 	 {
@@ -1592,11 +1592,11 @@ void char_update( void )
 
   else if ( ch->position == POS_INCAP && number_range(0,1) == 0)
   {
-      damage( ch, ch, 1, TYPE_UNDEFINED, DAM_NONE,FALSE,FALSE);
+      damage( ch, ch, 1, TYPE_UNDEFINED, DAM_NONE,false,false);
   }
   else if ( ch->position == POS_MORTAL )
   {
-      damage( ch, ch, 1, TYPE_UNDEFINED, DAM_NONE,FALSE,FALSE);
+      damage( ch, ch, 1, TYPE_UNDEFINED, DAM_NONE,false,false);
   }     
 
   if ( ch->position == POS_STUNNED )
@@ -1640,12 +1640,12 @@ void char_update( void )
     if ( --obj->value[2] == 0 && ch->in_room != NULL )
     {
         --ch->in_room->light;
-        act( "$p goes out.", ch, obj, NULL, TO_ROOM ,FALSE);
-        act( "$p flickers and goes out.", ch, obj, NULL, TO_CHAR ,FALSE);
+        act( "$p goes out.", ch, obj, NULL, TO_ROOM ,false);
+        act( "$p flickers and goes out.", ch, obj, NULL, TO_CHAR ,false);
         extract_obj( obj );
     }
     else if ( obj->value[2] <= 5 && ch->in_room != NULL)
-        act("$p flickers.",ch,obj,NULL,TO_CHAR,FALSE);
+        act("$p flickers.",ch,obj,NULL,TO_CHAR,false);
       }
 
       if (IS_IMMORTAL(ch))
@@ -1667,9 +1667,9 @@ void char_update( void )
     {
         ch->was_in_room = ch->in_room;
         if ( ch->fighting != NULL )
-      stop_fighting( ch, TRUE );
+      stop_fighting( ch, true );
         act( "$n disappears into the void.",
-      ch, NULL, NULL, TO_ROOM ,FALSE);
+      ch, NULL, NULL, TO_ROOM ,false);
         send_to_char( "You disappear into the void.\n\r", ch );
 	if (IS_SET(ch->mhs,MHS_HIGHLANDER))
 	{
@@ -1681,7 +1681,7 @@ void char_update( void )
            sprintf(buf, "%s has left the arena for the void.", ch->name);
            gladiator_talk(buf); 
 	   send_to_char("You drifted into the void and were removed from the Arena.\n\r",ch);
-	   gladiator_left_arena(ch,FALSE);
+	   gladiator_left_arena(ch,false);
 	}
 
         if (ch->level > 1)
@@ -1722,14 +1722,14 @@ void char_update( void )
 
       if( is_affected(ch, skill_lookup("wraithform")) )
       {
-	ch_in_wraithform = TRUE;
+	ch_in_wraithform = true;
       }
 
       if ( paf->duration > 0 )
       {
 	 if ( paf->type == gsn_rage && ch->fighting != NULL )
 	 {
-	    check_improve(ch,paf->type,TRUE,5);
+	    check_improve(ch,paf->type,true,5);
 	    paf->duration += 2;
  	 }
 	 /*Gladiators Do not lose spell duration/level during wait */
@@ -1766,7 +1766,7 @@ void char_update( void )
     }
 
     /*Kill em if they're still in wraithform and haven't un wraithed*/
-    if ( ch_in_wraithform == TRUE 
+    if ( ch_in_wraithform == true 
          && is_affected(ch, skill_lookup("wraithform")) 
          && paf->type == skill_lookup("wraithform") 
        ) 
@@ -1801,21 +1801,21 @@ void char_update( void )
 	    if ( dice(3,10) > get_curr_stat(ch,STAT_CON) )
  	    {
 		act("$n gasps in pain as $e struggles to breathe.",
-			ch,NULL,NULL,TO_ROOM,FALSE);
+			ch,NULL,NULL,TO_ROOM,false);
 		act("You gasp in pain as you struggle to breathe.",
-			ch,NULL,NULL,TO_CHAR,FALSE);
+			ch,NULL,NULL,TO_CHAR,false);
 		dam = dice(10,8);
 	    }
 	    else
 	    {
 		act("$n breathes laboriously, gasping.",
-		    ch,NULL,NULL,TO_ROOM,FALSE);
+		    ch,NULL,NULL,TO_ROOM,false);
 		act("You breathe laboriously, gasping.",
-		    ch,NULL,NULL,TO_CHAR,FALSE);
+		    ch,NULL,NULL,TO_CHAR,false);
 		dam = dice(5,8); 
 	    }
 
-	    damage(ch,ch,dam,gsn_asphyxiate,DAM_OTHER,FALSE,TRUE);
+	    damage(ch,ch,dam,gsn_asphyxiate,DAM_OTHER,false,true);
 	}
 
 	if (is_affected(ch, gsn_irradiate) && ch != NULL )
@@ -1828,9 +1828,9 @@ void char_update( void )
 		return;
 
  	    act("$n is wracked with painful nervous spasms.",
-		ch,NULL,NULL,TO_ROOM,FALSE);
+		ch,NULL,NULL,TO_ROOM,false);
 	    act("Your body is wracked by painful nervous spasms.",
-		ch,NULL,NULL,TO_CHAR,FALSE);
+		ch,NULL,NULL,TO_CHAR,false);
 
 	    for ( paf = ch->affected ;    paf != NULL ; paf = paf->next )
 	       if ( paf->type == gsn_irradiate )
@@ -1842,7 +1842,7 @@ void char_update( void )
 	    for ( i = 0 ; i < duration ; i++ ) 
 	       dam *= 2; /* dmage increases each round you have it */
 
-	    damage(ch,ch,dam,gsn_irradiate,DAM_ENERGY,FALSE,TRUE);
+	    damage(ch,ch,dam,gsn_irradiate,DAM_ENERGY,false,true);
 	}
 
 
@@ -1859,7 +1859,7 @@ void char_update( void )
     continue;
             
       act("$n writhes in agony as plague sores erupt from $s skin.",
-    ch,NULL,NULL,TO_ROOM,FALSE);
+    ch,NULL,NULL,TO_ROOM,false);
       send_to_char("You writhe in agony from the plague.\n\r",ch);
             for ( af = ch->affected; af != NULL; af = af->next )
             {
@@ -1893,7 +1893,7 @@ void char_update( void )
               && !IS_AFFECTED(vch,AFF_PLAGUE) && number_bits(4) == 0)
               {
                   send_to_char("You feel hot and feverish.\n\r",vch);
-                  act("$n shivers and looks very ill.",vch,NULL,NULL,TO_ROOM,FALSE);
+                  act("$n shivers and looks very ill.",vch,NULL,NULL,TO_ROOM,false);
                   affect_join(vch,&plague);
               }
             }
@@ -1902,7 +1902,7 @@ void char_update( void )
       dam = UMIN(ch->level,af->level/5+1);
       ch->mana -= dam;
       ch->move -= apply_chi(ch,dam);
-      damage( ch, ch, dam, gsn_plague,DAM_DISEASE,FALSE,TRUE);
+      damage( ch, ch, dam, gsn_plague,DAM_DISEASE,false,true);
         }
   else if ( IS_AFFECTED(ch, AFF_POISON) && ch != NULL
        &&   !IS_AFFECTED(ch,AFF_SLOW))
@@ -1914,9 +1914,9 @@ void char_update( void )
 
       if (poison != NULL)
       {
-          act( "$n shivers and suffers.", ch, NULL, NULL, TO_ROOM ,FALSE);
+          act( "$n shivers and suffers.", ch, NULL, NULL, TO_ROOM ,false);
           send_to_char( "You shiver and suffer.\n\r", ch );
-          damage(ch,ch,poison->level/10 + 1,gsn_poison,DAM_POISON,FALSE,TRUE);
+          damage(ch,ch,poison->level/10 + 1,gsn_poison,DAM_POISON,false,true);
 //COREY DO THE REM AFF SLEEP HERE
           if ( IS_AFFECTED(ch, AFF_SLEEP) )
           {
@@ -1936,20 +1936,20 @@ void char_update( void )
       OBJ_DATA *obj,*obj_next;
       switch (ch->pIndexData->vnum) {
   case MOB_VNUM_SKEL_WAR:
-     act("$n reenters the realm of the dead.",ch,NULL,NULL,TO_ROOM,FALSE);
+     act("$n reenters the realm of the dead.",ch,NULL,NULL,TO_ROOM,false);
      break;
 
 /* Added 28-AUG-00 By Boogums for warhorses to go poof */
   case MOB_VNUM_WARHORSE:
      nuke_pets(ch);
-     act("$n returns to the OK Corral.\r\n",ch,NULL,NULL,TO_ROOM,FALSE);
+     act("$n returns to the OK Corral.\r\n",ch,NULL,NULL,TO_ROOM,false);
      break;
 
   case MOB_VNUM_CORPSE:
   default:
-    act("$n decays into dust.",ch,NULL,NULL,TO_ROOM,FALSE);
+    act("$n decays into dust.",ch,NULL,NULL,TO_ROOM,false);
       }
-      stop_fighting( ch, TRUE );
+      stop_fighting( ch, true );
       for ( obj = ch->carrying; obj != NULL; obj = obj_next )
       {
   obj_next = obj->next_content;
@@ -1964,7 +1964,7 @@ void char_update( void )
 
   ch->pIndexData->killed++;
   kill_table[URANGE(0, ch->level, MAX_LEVEL-1)].killed++;
-  extract_char( ch, TRUE );
+  extract_char( ch, true );
     } else {
       ch->life_timer--;        /* you still got some time left */
     }
@@ -2115,14 +2115,14 @@ void obj_update( void )
       {
           rch = obj->carried_by;
           act(skill_table[paf->type].msg_obj,
-        rch,obj,NULL,TO_CHAR,FALSE);
+        rch,obj,NULL,TO_CHAR,false);
       }
       if (obj->in_room != NULL 
       && obj->in_room->people != NULL)
       {
           rch = obj->in_room->people;
           act(skill_table[paf->type].msg_obj,
-        rch,obj,NULL,TO_ALL,FALSE);
+        rch,obj,NULL,TO_ALL,false);
       }
                     }
                 }
@@ -2201,13 +2201,13 @@ void obj_update( void )
 	  {
 	     if ( original_type == SECT_AIR )
 	     {
-	       act( "$p is blown away.", rch, obj, NULL, TO_ROOM ,FALSE);
-	       act( "$p is blown away.", rch, obj, NULL, TO_CHAR ,FALSE);
+	       act( "$p is blown away.", rch, obj, NULL, TO_ROOM ,false);
+	       act( "$p is blown away.", rch, obj, NULL, TO_CHAR ,false);
 	     }
 	     else
 	     {
-	       act( "$p floats away.", rch, obj, NULL, TO_ROOM ,FALSE);
-	       act( "$p floats away.", rch, obj, NULL, TO_CHAR ,FALSE);
+	       act( "$p floats away.", rch, obj, NULL, TO_ROOM ,false);
+	       act( "$p floats away.", rch, obj, NULL, TO_CHAR ,false);
              }
 	  }
 	   /* move the object to the next room */
@@ -2219,13 +2219,13 @@ void obj_update( void )
 	  {
 	     if ( original_type == SECT_AIR )
 	     {
-	       act( "$p is blown in.", rch, obj, NULL, TO_ROOM ,FALSE);
-	       act( "$p is blown in.", rch, obj, NULL, TO_CHAR ,FALSE);
+	       act( "$p is blown in.", rch, obj, NULL, TO_ROOM ,false);
+	       act( "$p is blown in.", rch, obj, NULL, TO_CHAR ,false);
 	     }
 	     else
 	     {
-	       act( "$p floats in.", rch, obj, NULL, TO_ROOM ,FALSE);
-	       act( "$p floats in.", rch, obj, NULL, TO_CHAR ,FALSE);
+	       act( "$p floats in.", rch, obj, NULL, TO_ROOM ,false);
+	       act( "$p floats in.", rch, obj, NULL, TO_CHAR ,false);
              }
           }
         
@@ -2264,9 +2264,9 @@ void obj_update( void )
     obj->carried_by->silver += obj->cost/5;
       else
       {
-        act( message, obj->carried_by, obj, NULL, TO_CHAR ,FALSE);
+        act( message, obj->carried_by, obj, NULL, TO_CHAR ,false);
     if ( obj->wear_loc == WEAR_FLOAT)
-        act(message,obj->carried_by,obj,NULL,TO_ROOM,FALSE);
+        act(message,obj->carried_by,obj,NULL,TO_ROOM,false);
       }
   }
   else if ( obj->in_room != NULL
@@ -2275,8 +2275,8 @@ void obj_update( void )
       if (! (obj->in_obj && obj->in_obj->pIndexData->vnum == OBJ_VNUM_PIT
              && !CAN_WEAR(obj->in_obj,ITEM_TAKE)))
       {
-        act( message, rch, obj, NULL, TO_ROOM ,FALSE);
-        act( message, rch, obj, NULL, TO_CHAR ,FALSE);
+        act( message, rch, obj, NULL, TO_ROOM ,false);
+        act( message, rch, obj, NULL, TO_CHAR ,false);
       }
   }
 
@@ -2362,7 +2362,7 @@ void aggr_update( void )
       && !IS_AFFECTED(ch,AFF_CALM)
       && !IS_AFFECTED(ch,AFF_CHARM)
       && ch->fighting == NULL
-      && can_see( ch, wch, FALSE ) 
+      && can_see( ch, wch, false ) 
       && !IS_IMMORTAL(wch) 
       && number_bits(1) != 0 
       && ch->pIndexData->pShop == NULL
@@ -2385,7 +2385,7 @@ void aggr_update( void )
       ||   IS_AFFECTED(ch, AFF_CHARM)
       ||   !IS_AWAKE(ch)
       ||   ( IS_SET(ch->act, ACT_WIMPY) && IS_AWAKE(wch) )
-      ||   !can_see( ch, wch, FALSE ) 
+      ||   !can_see( ch, wch, false ) 
       ||   number_bits(1) == 0)
     continue;
 
@@ -2406,7 +2406,7 @@ void aggr_update( void )
     &&   ch->level >= vch->level - 5 
     &&   get_curr_stat(vch,STAT_SOC) + (vch->level - ch->level) / 3 <= number_range(16,23) 
     &&   ( !IS_SET(ch->act, ACT_WIMPY) || !IS_AWAKE(vch) )
-    &&   can_see( ch, vch, FALSE ) )
+    &&   can_see( ch, vch, false ) )
     {
         if ( number_range( 0, count ) == 0 )
       victim = vch;
@@ -2581,11 +2581,11 @@ void dot_update( void )
 
 void sector_damage(CHAR_DATA *ch)
 {
-	bool char_safe = FALSE;
+	bool char_safe = false;
 	if (is_affected(ch,skill_lookup("wraithform")) )
-		char_safe = TRUE;
+		char_safe = true;
         if (is_affected(ch,skill_lookup("water breathing")) )
-                char_safe = TRUE;
+                char_safe = true;
 
 	if(ch->in_room != NULL)
 	{
@@ -2597,19 +2597,19 @@ void sector_damage(CHAR_DATA *ch)
 	  if (number_percent() < 15 && !IS_SET(ch->imm_flags,IMM_FIRE) && !IS_IMMORTAL(ch) &&
 	      !is_affected(ch,skill_lookup("wraithform")) )
 	  {
-		act("You are scorched by a jet of flame from the ground!", ch, NULL, NULL, TO_CHAR, FALSE);
-		act("$n is scorched by a jet of flame from the ground!", ch, NULL, NULL, TO_ROOM, FALSE);
-		damage(ch,ch,ch->level/2,0,DAM_FIRE,FALSE,FALSE);
+		act("You are scorched by a jet of flame from the ground!", ch, NULL, NULL, TO_CHAR, false);
+		act("$n is scorched by a jet of flame from the ground!", ch, NULL, NULL, TO_ROOM, false);
+		damage(ch,ch,ch->level/2,0,DAM_FIRE,false,false);
 	  }
           break;
         case SECT_WATER_PLANE:
-	  if ( number_percent() < 40 && !IS_SET(ch->imm_flags, IMM_DROWNING) && !IS_IMMORTAL(ch) && char_safe == FALSE ) 
+	  if ( number_percent() < 40 && !IS_SET(ch->imm_flags, IMM_DROWNING) && !IS_IMMORTAL(ch) && char_safe == false ) 
 /*       ( (!is_affected(ch, skill_lookup("water breathing"))) || (!is_affected(ch,skill_lookup("wraithform"))) )
 */
           {
-		act("Your lungs scream with the need for air!", ch, NULL, NULL, TO_CHAR, FALSE);
-		act("$n gasps for air and gulps down some water!", ch, NULL, NULL, TO_ROOM, FALSE);
-		damage(ch,ch,ch->level*3/2,0,DAM_DROWNING,FALSE,FALSE);
+		act("Your lungs scream with the need for air!", ch, NULL, NULL, TO_CHAR, false);
+		act("$n gasps for air and gulps down some water!", ch, NULL, NULL, TO_ROOM, false);
+		damage(ch,ch,ch->level*3/2,0,DAM_DROWNING,false,false);
 	  }
 	  break;
 	}

@@ -2,8 +2,8 @@
 #define MOOSEHEAD_MACROS_H
 
 #define IS_VALID(data)          ((data) != NULL && (data)->valid)
-#define VALIDATE(data)          ((data)->valid = TRUE)
-#define INVALIDATE(data)        ((data)->valid = FALSE)
+#define VALIDATE(data)          ((data)->valid = true)
+#define INVALIDATE(data)        ((data)->valid = false)
 #define UMIN(a, b)              ((a) < (b) ? (a) : (b))
 #define UMAX(a, b)              ((a) > (b) ? (a) : (b))
 #define URANGE(a, b, c)         ((b) < (a) ? (a) : ((b) > (c) ? (c) : (b)))

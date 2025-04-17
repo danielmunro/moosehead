@@ -65,7 +65,7 @@ void do_startgladiator(CHAR_DATA *ch, char *argument)
       return;
    }
 
-   if (gladiator_info.started == TRUE)
+   if (gladiator_info.started == true)
    {
       send_to_char("There is already a Gladiator Event going on!\n\r", ch);
       return;
@@ -136,7 +136,7 @@ void do_startgladiator(CHAR_DATA *ch, char *argument)
       gladiator_info.team_counter = i6;
    }
 
-   gladiator_info.started = TRUE;
+   gladiator_info.started = true;
    gladiator_info.type = i1;
    gladiator_info.min_level = i2;
    gladiator_info.max_level = i3;
@@ -153,30 +153,30 @@ void do_startgladiator(CHAR_DATA *ch, char *argument)
    log_info(arg5);
    if (!str_prefix(arg5,"blind"))
    {
-      gladiator_info.blind = TRUE;
-      gladiator_info.exper = FALSE;
-      gladiator_info.WNR = FALSE;
+      gladiator_info.blind = true;
+      gladiator_info.exper = false;
+      gladiator_info.WNR = false;
       strcpy(arg5, "blind");
    }
    else if(!str_prefix(arg5, "experimental"))
    {
-      gladiator_info.exper = TRUE;
-      gladiator_info.blind = TRUE;
-      gladiator_info.WNR = FALSE;
+      gladiator_info.exper = true;
+      gladiator_info.blind = true;
+      gladiator_info.WNR = false;
       strcpy(arg5, "{REXPERIMENTAL{x");
    }
    else if(!str_prefix(arg5, "wnr"))
    {
-      gladiator_info.exper = FALSE;
-      gladiator_info.blind = FALSE;
-      gladiator_info.WNR = TRUE;
+      gladiator_info.exper = false;
+      gladiator_info.blind = false;
+      gladiator_info.WNR = true;
       strcpy(arg5, "{WWednesday Night Rumble!{x");
    }
    else
    {
-      gladiator_info.blind = FALSE;
-      gladiator_info.exper = FALSE;
-      gladiator_info.WNR = FALSE;
+      gladiator_info.blind = false;
+      gladiator_info.exper = false;
+      gladiator_info.WNR = false;
       strcpy(arg5, "not blind");
    }
 
@@ -388,14 +388,14 @@ void do_endgladiator( CHAR_DATA *ch, char *argument )
        free_buf(gladbuffer);
 #endif
 
-       gladiator_info.started = FALSE;
+       gladiator_info.started = false;
        gladiator_info.playing = 0;
        gladiator_info.time_left = 0;
        gladiator_info.min_level = 0;
        gladiator_info.max_level = 0;
        gladiator_info.type = 0;
        gladiator_info.team_counter = 0;
-       gladiator_info.blind = FALSE;
+       gladiator_info.blind = false;
        gladiator_info.gladiator_score = 0;
        gladiator_info.barbarian_score = 0;
        gladiator_info.bet_counter = 0;
@@ -513,14 +513,14 @@ void gladiator_winner( CHAR_DATA *ch )
    glad_qnote = NULL;
 #endif
 
-   gladiator_info.started = FALSE;
+   gladiator_info.started = false;
    gladiator_info.playing = 0;
    gladiator_info.time_left = 0;
    gladiator_info.min_level = 0;
    gladiator_info.max_level = 0;
    gladiator_info.type = 0;
    gladiator_info.team_counter = 0;
-   gladiator_info.blind = FALSE;
+   gladiator_info.blind = false;
    gladiator_info.gladiator_score = 0;
    gladiator_info.barbarian_score = 0;
    gladiator_info.bet_counter = 0;
@@ -543,7 +543,7 @@ void do_gladiator( CHAR_DATA *ch, char *argument)
 
    argument = one_argument( argument, arg1 );
 
-   if (gladiator_info.started != TRUE) 
+   if (gladiator_info.started != true) 
    {
       send_to_char("There is no Gladiator Combat going!\n\r", ch);
       return;
@@ -577,7 +577,7 @@ void do_gladiator( CHAR_DATA *ch, char *argument)
       return;
    }
 
-   if (gladiator_info.started == TRUE && gladiator_info.time_left < 1)
+   if (gladiator_info.started == true && gladiator_info.time_left < 1)
    {
       send_to_char("Hey goober its started already.\n\r", ch);
       return;
@@ -585,7 +585,7 @@ void do_gladiator( CHAR_DATA *ch, char *argument)
 
 
       location = get_room_index(ROOM_VNUM_SINGLE_GLADIATOR);  
-      act("$n goes to spill some blood in Gladiator Combat!", ch, NULL, NULL, TO_ROOM,FALSE);
+      act("$n goes to spill some blood in Gladiator Combat!", ch, NULL, NULL, TO_ROOM,false);
       ch->mana = ch->max_mana;// Not hp so you can't jump here to heal, then quit 
       while(ch->damaged)
   	damage_remove(ch, ch->damaged);
@@ -608,16 +608,16 @@ void do_gladiator( CHAR_DATA *ch, char *argument)
         /* NEVER go past this length */
         ch->long_descr = str_dup( "An extra long Gladiator string is here, taking up space." );
         set_glad_name(ch);
-        act("$l arrives to prove his worth!", ch, NULL, NULL, TO_ROOM,FALSE);
+        act("$l arrives to prove his worth!", ch, NULL, NULL, TO_ROOM,false);
       }
       else
       {
-        act("$n arrives to prove his worth!", ch, NULL, NULL, TO_ROOM,FALSE);
+        act("$n arrives to prove his worth!", ch, NULL, NULL, TO_ROOM,false);
       }
       gladiator_info.playing++;
       gladiator_info.num_of_glads++;
       die_follower(ch);
-      if(gladiator_info.exper == TRUE || gladiator_info.WNR == TRUE)
+      if(gladiator_info.exper == true || gladiator_info.WNR == true)
       {
         while ( ch->flash_affected )
           flash_affect_remove( ch, ch->flash_affected,APPLY_BOTH );
@@ -656,7 +656,7 @@ void do_gbet ( CHAR_DATA *ch , char *argument )
 
   if (!str_cmp(arg1, "clear"))
    {
-     if (gladiator_info.started == TRUE && gladiator_info.bet_counter < 1)
+     if (gladiator_info.started == true && gladiator_info.bet_counter < 1)
      {
        send_to_char("Umm....it's a little late, the event has already begun\n\r", ch);
        return;
@@ -694,7 +694,7 @@ void do_gbet ( CHAR_DATA *ch , char *argument )
   return;
    }
    
-   if (gladiator_info.started != TRUE) 
+   if (gladiator_info.started != true) 
    {
       send_to_char("There is no Gladiator Combat going!\n\r", ch);
       return;
@@ -712,14 +712,14 @@ void do_gbet ( CHAR_DATA *ch , char *argument )
      return;
      }
 
-  if (gladiator_info.started == TRUE && victim != ch 
+  if (gladiator_info.started == true && victim != ch 
       && IS_SET(ch->mhs, MHS_GLADIATOR))
       {
       send_to_char("If you want to bet, you have to bet on yourself. \n\r", ch);
       return;
       }
  
-  if (gladiator_info.started == TRUE && gladiator_info.bet_counter < 1)
+  if (gladiator_info.started == true && gladiator_info.bet_counter < 1)
    {
       send_to_char("You may not bet after the combat has started\n\r", ch);
       return;
@@ -816,7 +816,7 @@ void gladiator_bet_resolve( CHAR_DATA *winner, CHAR_DATA *bettor )
 /* Do not go over the length of: "An extra long Gladiator string is here, taking up space." */
 void set_glad_name(CHAR_DATA *ch)
 {// Mirrors condition values
-    if(gladiator_info.started != TRUE || gladiator_info.blind != TRUE ||
+    if(gladiator_info.started != true || gladiator_info.blind != true ||
       !IS_SET(ch->mhs, MHS_GLADIATOR) || IS_NPC(ch))
       return;
     char team[15];
@@ -825,7 +825,7 @@ void set_glad_name(CHAR_DATA *ch)
       strcpy(team, "Barbarian");
     else
       strcpy(team, "Gladiator");
-    if(gladiator_info.exper == TRUE)
+    if(gladiator_info.exper == true)
     {
       if (percent >= 100)
         sprintf(ch->long_descr, "A healthy %s", team);
@@ -843,7 +843,7 @@ void set_glad_name(CHAR_DATA *ch)
 void gladiator_rename_all(void)
 {
   DESCRIPTOR_DATA *d;
-  if(gladiator_info.started != TRUE || gladiator_info.blind != TRUE)
+  if(gladiator_info.started != true || gladiator_info.blind != true)
     return;/* Nothing to do if it's not running or isn't blind */
   for ( d = descriptor_list; d; d = d->next )
   {
@@ -856,7 +856,7 @@ void gladiator_rename_all(void)
 
 void gladiator_update(void)
 {
-   if (gladiator_info.started == TRUE)
+   if (gladiator_info.started == true)
    {
       if (gladiator_info.bet_counter > 0)
          gladiator_start_countdown();
@@ -1034,14 +1034,14 @@ void end_gladiator(void)
 {
    DESCRIPTOR_DATA *d;
 
-   gladiator_info.started = FALSE;
+   gladiator_info.started = false;
    gladiator_info.time_left = 0;
    gladiator_info.min_level = 0;
    gladiator_info.max_level = 0;
    gladiator_info.type = 0;
    gladiator_info.playing = 0;
    gladiator_info.team_counter = 0;
-   gladiator_info.blind = FALSE;
+   gladiator_info.blind = false;
    gladiator_info.bet_counter = 0;
    gladiator_info.total_levels = 0;
    gladiator_info.total_wins = 0;
@@ -1262,7 +1262,7 @@ void gladiator_kill( CHAR_DATA *victim, CHAR_DATA *ch )
    sprintf(buf, "%s lands the killing blow on %s!", ch->name,victim->name);
    gladiator_talk_ooc(buf); 
 
-   if(gladiator_info.exper == TRUE)
+   if(gladiator_info.exper == true)
    {// Restore for percent damages dealt to this player. Sanc/withstand on the killer.
     AFFECT_DATA af;
     DAMAGE_DATA *damages;
@@ -1288,7 +1288,7 @@ void gladiator_kill( CHAR_DATA *victim, CHAR_DATA *ch )
       }
       if(afp == NULL)
       {// Give them a long sanctuary at their level, couldn't find an existing one
-  			act( "$n is surrounded by a white aura.", ch, NULL, NULL, TO_ROOM ,FALSE);
+  			act( "$n is surrounded by a white aura.", ch, NULL, NULL, TO_ROOM ,false);
   			send_to_char( "You are surrounded by a white aura.\n\r", ch );
   			af.where     = TO_AFFECTS;
   			af.type      = gsn_sanctuary;
@@ -1325,7 +1325,7 @@ void gladiator_kill( CHAR_DATA *victim, CHAR_DATA *ch )
         af.bitvector = AFF_WITHSTAND_DEATH;
         affect_to_char( ch, &af );
         send_to_char( "You feel like you can withstand death itself.\n\r", ch );
-        act( "$n looks more powerful than death.", ch, NULL, NULL, TO_ROOM ,FALSE);
+        act( "$n looks more powerful than death.", ch, NULL, NULL, TO_ROOM ,false);
       }
     }
      for(damages = victim->damaged; damages != NULL; damages = damages->next)
@@ -1441,7 +1441,7 @@ void do_odds ( CHAR_DATA *ch , char *argument )
   int odds = 0;
   int thiswinloss, gladadj, winlossavg, avg_level; 
 
-    if(gladiator_info.started != TRUE )
+    if(gladiator_info.started != true )
     {
     send_to_char("There is no event running currently.\n\r", ch);
     return;
@@ -1511,7 +1511,7 @@ void do_gstatus( CHAR_DATA *ch, char *argument)
    DESCRIPTOR_DATA *d;
    sh_int percent;
 
-   if(gladiator_info.started != TRUE )
+   if(gladiator_info.started != true )
    {
       send_to_char("There is no event running currently.\n\r", ch);
       return;
@@ -1533,7 +1533,7 @@ void do_gstatus( CHAR_DATA *ch, char *argument)
       return;
    }
 
-   fFirst = TRUE;
+   fFirst = true;
    for (d = descriptor_list; d != NULL; d = d->next)
    {
       if (d->character != NULL)
@@ -1543,7 +1543,7 @@ void do_gstatus( CHAR_DATA *ch, char *argument)
 	    if(fFirst)
 	    {
                strcpy( buf, d->character->name);
-	       fFirst = FALSE;
+	       fFirst = false;
 	    }
 	    else
                strcat( buf, d->character->name);

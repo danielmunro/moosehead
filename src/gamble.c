@@ -40,10 +40,10 @@ void do_blackjack(CHAR_DATA *ch,char *argument)
     switch( LOWER(arg1[0]) )
     {
       case 'b': place_bet(ch,UMIN(30000,atoi(arg2))); break;
-      case 'h': give_card(ch); show_bj_hand(ch,TRUE); check_bj_hand(ch); break;
-      case 's': show_bj_hand(ch,TRUE); show_bj_hand(ch,FALSE); break;
+      case 'h': give_card(ch); show_bj_hand(ch,true); check_bj_hand(ch); break;
+      case 's': show_bj_hand(ch,true); show_bj_hand(ch,false); break;
       case 'h':
-      default: show_bj_hand(ch,TRUE);
+      default: show_bj_hand(ch,true);
     }
 
     return;
@@ -62,7 +62,7 @@ void give_card(CHAR_DATA *ch)
 {
   CARD_DATA *newcard;
   char buf[MAX_STRING_LENGTH];
-  bool nCard=TRUE;
+  bool nCard=true;
   sh_int i;
 
   if(ch->hand[4] != NULL)

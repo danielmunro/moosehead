@@ -175,7 +175,7 @@ void do_pledge( CHAR_DATA *ch, char *argument )
 bool has_gift( CHAR_DATA *ch, int gift)
 {
   int gn;
-  bool found = FALSE;
+  bool found = false;
 
   if( gift == MAX_GIFTS)
 	return found;
@@ -185,7 +185,7 @@ bool has_gift( CHAR_DATA *ch, int gift)
     if(deity_table[ch->pcdata->deity].gifts[gn] == NULL)
 	return found;
     if(!str_cmp(gift_table[gift].name,deity_table[ch->pcdata->deity].gifts[gn]))
-	found = TRUE;
+	found = true;
   }
 
   return found;
@@ -193,26 +193,26 @@ bool has_gift( CHAR_DATA *ch, int gift)
 
 bool is_aligned( CHAR_DATA *ch )
 {
-  bool matches = FALSE;
+  bool matches = false;
 
   switch(deity_table[ch->pcdata->deity].align)
   {
    case ALIGN_NONE:
-    matches = TRUE;
+    matches = true;
     break;
    case ALIGN_GOOD:
 	if(IS_GOOD(ch)) {
-        matches = TRUE;
+        matches = true;
     }
     break;
    case ALIGN_NEUTRAL:
 	if(IS_NEUTRAL(ch)) {
-        matches = TRUE;
+        matches = true;
     }
     break;
    case ALIGN_EVIL:
 	if(IS_EVIL(ch)) {
-        matches = TRUE;
+        matches = true;
     }
     break;
    default:
@@ -383,7 +383,7 @@ void do_pray( CHAR_DATA *ch, char *argument )
       if(victim != NULL && !IS_NPC(victim) && !IS_IMMORTAL(victim) && !is_clan(victim) && (victim->position == POS_INCAP || victim->position == POS_MORTAL))
       {
         CHAR_DATA *in_room;
-        bool calmed = FALSE;
+        bool calmed = false;
 	// There is a non-clan, non-immortal incapacitated player being targeted
         sprintf(buf, "You feel spiritually {bdrained{x as Matook {Wintervenes{x for %s.\n\r", victim->name);
         send_to_char(buf,ch);
@@ -408,7 +408,7 @@ void do_pray( CHAR_DATA *ch, char *argument )
             af.bitvector = AFF_CALM;
             affect_to_char(in_room,&af);
 
-            calmed = TRUE;
+            calmed = true;
           }
         }
 
@@ -458,7 +458,7 @@ void do_pray( CHAR_DATA *ch, char *argument )
         channel_vis_status(ch,d->character);
 	if(IS_SET(d->character->display,DISP_COLOR))
 	    send_to_char(BOLD,d->character);
-      act_new("$n prays '$t'",ch,argument,d->character,TO_VICT,POS_DEAD,FALSE);
+      act_new("$n prays '$t'",ch,argument,d->character,TO_VICT,POS_DEAD,false);
 	if(IS_SET(d->character->display,DISP_COLOR))
 	    send_to_char(NORMAL,d->character);
 	}
@@ -542,7 +542,7 @@ void give_gift(CHAR_DATA *ch,int gift)
        DESCRIPTOR_DATA *d;
        char buf2[MAX_STRING_LENGTH];
        char buf[MAX_STRING_LENGTH];
-       bool first = TRUE;
+       bool first = true;
 
   strcpy(name,gift_table[gift].name);
 
@@ -551,7 +551,7 @@ void give_gift(CHAR_DATA *ch,int gift)
   case 'r': /* 3 find out which one */
 	if( !str_prefix(name,"recall"))
 	{
-	 recall( ch, "", TRUE );
+	 recall( ch, "", true );
 	 break;
 	}
 
@@ -589,7 +589,7 @@ void give_gift(CHAR_DATA *ch,int gift)
                 else
 		sprintf(buf, "%s is a follower of the Almighty.\n\r", 
 			d->character->name); 
-		first = FALSE;
+		first = false;
 	      }
 	      else
 	      {
@@ -758,12 +758,12 @@ void give_gift(CHAR_DATA *ch,int gift)
 		 &&   IS_SET(pexit->u1.to_room->room_flags, ROOM_NO_MOB) ) )
                  continue;
 
-               move_char( gch, door, FALSE );
+               move_char( gch, door, false );
                if ( ( now_in = gch->in_room ) == was_in )
                   continue;
 
                gch->in_room = was_in;
-               act( "$n runs in fear!", gch, NULL, NULL, TO_ROOM ,FALSE);
+               act( "$n runs in fear!", gch, NULL, NULL, TO_ROOM ,false);
                gch->in_room = now_in;
                send_to_char("You run in fear.\n\r",gch);
             }
@@ -778,12 +778,12 @@ void give_gift(CHAR_DATA *ch,int gift)
 	{
  	 room = get_random_room(ch);
 	 send_to_char("You have been transported!\n\r",ch);
-	 act( "$n vanishes!", ch, NULL, NULL, TO_ROOM ,FALSE);
-	 if (ch->fighting != NULL) stop_fighting(ch,FALSE);
+	 act( "$n vanishes!", ch, NULL, NULL, TO_ROOM ,false);
+	 if (ch->fighting != NULL) stop_fighting(ch,false);
 	 char_from_room( ch );
 	 char_to_room( ch, room );
 	 clear_mount(ch);
-	 act( "$n slowly fades into existence.", ch, NULL, NULL, TO_ROOM ,FALSE);
+	 act( "$n slowly fades into existence.", ch, NULL, NULL, TO_ROOM ,false);
 	 do_look( ch, "auto" );
 	}
 	break;
@@ -827,8 +827,8 @@ void reanimation(CHAR_DATA *ch)
 	 {
 	  obj_from_char( obj );
 	  obj_to_room( obj, ch->in_room );
-  act( "$p springs to life.", obj->carried_by, obj, NULL, TO_CHAR ,FALSE);
-	  act( "$n drops $p.", obj->carried_by, obj, NULL, TO_ROOM ,FALSE);
+  act( "$p springs to life.", obj->carried_by, obj, NULL, TO_CHAR ,false);
+	  act( "$n drops $p.", obj->carried_by, obj, NULL, TO_ROOM ,false);
 	 }
 	 for(cobj = obj->contains; cobj != NULL; cobj = cobj_next )
 	 {
@@ -848,16 +848,16 @@ void reanimation(CHAR_DATA *ch)
       {
         ch->pcdata->linked[i]->wear_loc = WEAR_NONE;
         if(ch->pcdata->linked[i]->damaged == 1000)
-          act("$p is {Rshattered{x and will cost extra to repair.", ch, ch->pcdata->linked[i], NULL, TO_CHAR, FALSE);
+          act("$p is {Rshattered{x and will cost extra to repair.", ch, ch->pcdata->linked[i], NULL, TO_CHAR, false);
         else if(ch->pcdata->linked[i]->damaged == 100)
         {
           if(!ch->pcdata || !ch->pcdata->clan_info ||
             ch->pcdata->clan_info->clan->type != CLAN_TYPE_PEACE ||
             ch->pcdata->clan_info->clan->tribute < 0 ||
             ch->pcdata->clan_info->clan->max_tribute < 20000)
-            act("$p is {Rbroken{x and will shatter if you die again.", ch, ch->pcdata->linked[i], NULL, TO_CHAR, FALSE);
+            act("$p is {Rbroken{x and will shatter if you die again.", ch, ch->pcdata->linked[i], NULL, TO_CHAR, false);
           else
-            act("$p is {Rbroken{x.", ch, ch->pcdata->linked[i], NULL, TO_CHAR, FALSE);
+            act("$p is {Rbroken{x.", ch, ch->pcdata->linked[i], NULL, TO_CHAR, false);
         }
       }
     }
@@ -963,7 +963,7 @@ bool deity_enchant_armor(CHAR_DATA *ch, int amount)
 	OBJ_DATA *obj;
 	AFFECT_DATA *paf;
 	int armors = 0;
-	bool ac_found = FALSE;
+	bool ac_found = false;
     for ( obj = ch->carrying; obj != NULL; obj = obj->next_content)
     {
 		if (obj->wear_loc != -1 && obj->item_type == ITEM_ARMOR)
@@ -999,7 +999,7 @@ bool deity_enchant_armor(CHAR_DATA *ch, int amount)
 	}
 	if(armors == 0)
 	{// Send back a failure message
-		return FALSE;
+		return false;
 	}
 	/* The real fun: randomly select a valid armor piece, find it, then enchant it */
 	armors = number_range(1, armors);
@@ -1041,14 +1041,14 @@ bool deity_enchant_armor(CHAR_DATA *ch, int amount)
 	if(obj == NULL)
 	{// Send back a failure message - This one shouldn't happen
 		bug( "Expected armor missing", 0);
-		return FALSE;
+		return false;
 	}
 	do_deity_msg("%s is pleased with your choice of armor.", ch);
 	/* Time to do an enchant on this object, it was cleared earlier */
     if (!obj->enchanted)
     {
   AFFECT_DATA *af_new;
-  obj->enchanted = TRUE;
+  obj->enchanted = true;
 
   for (paf = obj->pIndexData->affected; paf != NULL; paf = paf->next) 
   {
@@ -1069,23 +1069,23 @@ bool deity_enchant_armor(CHAR_DATA *ch, int amount)
 
     if (amount == 1)
     {
-  act("$p shimmers with a gold aura.",ch,obj,NULL,TO_CHAR,FALSE);
-  act("$p shimmers with a gold aura.",ch,obj,NULL,TO_ROOM,FALSE);
+  act("$p shimmers with a gold aura.",ch,obj,NULL,TO_CHAR,false);
+  act("$p shimmers with a gold aura.",ch,obj,NULL,TO_ROOM,false);
   SET_BIT(obj->extra_flags, ITEM_MAGIC);
     }
     
     else if ( amount == 2)
     {
-  act("$p glows a {Ybrilliant{x gold!",ch,obj,NULL,TO_CHAR,FALSE);
-  act("$p glows a {Ybrilliant{x gold!",ch,obj,NULL,TO_ROOM,FALSE);
+  act("$p glows a {Ybrilliant{x gold!",ch,obj,NULL,TO_CHAR,false);
+  act("$p glows a {Ybrilliant{x gold!",ch,obj,NULL,TO_ROOM,false);
   SET_BIT(obj->extra_flags,ITEM_MAGIC);
   SET_BIT(obj->extra_flags,ITEM_GLOW);
     }
 
     else
     {// This one's safety is here in case someone accidentally does 
-  act("$p glows with a {YBLINDING gold{x aura!!",ch,obj,NULL,TO_CHAR,FALSE);
-  act("$p glows with a {YBLINDING gold{x aura!!",ch,obj,NULL,TO_ROOM,FALSE);
+  act("$p glows with a {YBLINDING gold{x aura!!",ch,obj,NULL,TO_CHAR,false);
+  act("$p glows with a {YBLINDING gold{x aura!!",ch,obj,NULL,TO_ROOM,false);
   SET_BIT(obj->extra_flags,ITEM_MAGIC);
   SET_BIT(obj->extra_flags,ITEM_GLOW);
 	amount = 4;
@@ -1102,7 +1102,7 @@ bool deity_enchant_armor(CHAR_DATA *ch, int amount)
   {
       if ( paf->location == APPLY_AC)
       {
-    ac_found = TRUE;
+    ac_found = true;
     paf->type = skill_lookup("enchant armor");
     paf->modifier -= amount;
     paf->level = UMAX(paf->level,ch->level);
@@ -1123,21 +1123,21 @@ bool deity_enchant_armor(CHAR_DATA *ch, int amount)
       paf->next = obj->affected;
       obj->affected = paf;
     }
- return TRUE;
+ return true;
 }
 
 bool deity_enchant_weapon(CHAR_DATA *ch, OBJ_DATA *obj, int amount)
 {
     AFFECT_DATA *paf; 
     int hit_bonus, dam_bonus;
-    bool hit_found = FALSE, dam_found = FALSE;
+    bool hit_found = false, dam_found = false;
 
 	if(amount <= 0)
-		return FALSE;
+		return false;
 
     if (obj->item_type != ITEM_WEAPON)
     {
-  return FALSE;
+  return false;
     }
 
     /* this means they have no bonus */
@@ -1153,13 +1153,13 @@ bool deity_enchant_weapon(CHAR_DATA *ch, OBJ_DATA *obj, int amount)
             if ( paf->location == APPLY_HITROLL )
             {
 		hit_bonus = paf->modifier;
-		hit_found = TRUE;
+		hit_found = true;
       	    }
 
             if (paf->location == APPLY_DAMROLL )
       	    {
         	dam_bonus = paf->modifier;
-    		dam_found = TRUE;
+    		dam_found = true;
             }
       }
     }
@@ -1170,26 +1170,26 @@ bool deity_enchant_weapon(CHAR_DATA *ch, OBJ_DATA *obj, int amount)
 	if ( paf->location == APPLY_HITROLL )
 	{
 		hit_bonus = paf->modifier;
-		hit_found = TRUE;
+		hit_found = true;
 	}
 
 	if (paf->location == APPLY_DAMROLL )
 	{
 		dam_bonus = paf->modifier;
-		dam_found = TRUE;
+		dam_found = true;
 	}
 
       }
     }
 
 	if(hit_bonus + amount > amount * 2 || dam_bonus + amount > amount * 2 || (obj->level + 1 > ch->level && obj->level < LEVEL_HERO - 1))
-		return FALSE;// Don't enchant it above their level, or the hit or damage too much
+		return false;// Don't enchant it above their level, or the hit or damage too much
 
     /* okay, move all the old flags into new vectors if we have to */
     if (!obj->enchanted)
     {
   AFFECT_DATA *af_new;
-  obj->enchanted = TRUE;
+  obj->enchanted = true;
 
   for (paf = obj->pIndexData->affected; paf != NULL; paf = paf->next) 
   {
@@ -1212,21 +1212,21 @@ bool deity_enchant_weapon(CHAR_DATA *ch, OBJ_DATA *obj, int amount)
 
     if (amount == 1)
     {
-  act("$p glows blue.",ch,obj,NULL,TO_CHAR,FALSE);
-  act("$p glows blue.",ch,obj,NULL,TO_ROOM,FALSE);
+  act("$p glows blue.",ch,obj,NULL,TO_CHAR,false);
+  act("$p glows blue.",ch,obj,NULL,TO_ROOM,false);
   SET_BIT(obj->extra_flags, ITEM_MAGIC);
     }
     else if(amount == 3)
     {
-  act("$p glows with a {BBLINDING blue{x aura!!",ch,obj,NULL,TO_CHAR,FALSE);
-  act("$p glows with a {BBLINDING blue{x aura!!",ch,obj,NULL,TO_ROOM,FALSE);
+  act("$p glows with a {BBLINDING blue{x aura!!",ch,obj,NULL,TO_CHAR,false);
+  act("$p glows with a {BBLINDING blue{x aura!!",ch,obj,NULL,TO_ROOM,false);
   SET_BIT(obj->extra_flags,ITEM_MAGIC);
   SET_BIT(obj->extra_flags,ITEM_GLOW);
      }
      else
      {
-  act("$p glows a {Bbrilliant{x blue!",ch,obj,NULL,TO_CHAR,FALSE);
-  act("$p glows a {Bbrilliant{x blue!",ch,obj,NULL,TO_ROOM,FALSE);
+  act("$p glows a {Bbrilliant{x blue!",ch,obj,NULL,TO_CHAR,false);
+  act("$p glows a {Bbrilliant{x blue!",ch,obj,NULL,TO_ROOM,false);
   SET_BIT(obj->extra_flags,ITEM_MAGIC);
   SET_BIT(obj->extra_flags,ITEM_GLOW);
   amount = 2;// Safety check
@@ -1293,7 +1293,7 @@ bool deity_enchant_weapon(CHAR_DATA *ch, OBJ_DATA *obj, int amount)
         paf->next       = obj->affected;
         obj->affected   = paf;
     }
-	return TRUE;
+	return true;
 }
 
 int do_favor_error(CHAR_DATA *ch, int rarity, int index, int xp, int favor_strength)
@@ -1315,7 +1315,7 @@ int do_favor_reward(CHAR_DATA *ch, CHAR_DATA *victim, int rarity, int index, int
 	switch(rarity)
 	{
 		case 3:{
-			act("$n {yglows{x with a dim holy aura.",ch,NULL,NULL,TO_ROOM,FALSE);
+			act("$n {yglows{x with a dim holy aura.",ch,NULL,NULL,TO_ROOM,false);
 			switch(index)
 			{
 				case 0: do_deity_msg("%s favors you.", ch); xp_level = 3; break;
@@ -1350,7 +1350,7 @@ int do_favor_reward(CHAR_DATA *ch, CHAR_DATA *victim, int rarity, int index, int
 					af.bitvector = 0;
 					affect_to_char( ch, &af );
 					send_to_char( "Your muscles surge with heightened power!\n\r", ch );
-					act("$n's muscles surge with heightened power.",ch,NULL,NULL,TO_ROOM,FALSE);
+					act("$n's muscles surge with heightened power.",ch,NULL,NULL,TO_ROOM,false);
 					break;// Giant Strength
 				case 5: do_deity_msg("%s places magical barriers around you.", ch);
 					xp_level = 2;
@@ -1374,13 +1374,13 @@ int do_favor_reward(CHAR_DATA *ch, CHAR_DATA *victim, int rarity, int index, int
 					af.modifier  = -20;
 					af.bitvector = 0;
 					affect_to_char( ch, &af );
-					act( "$n is surrounded by a force shield.", ch, NULL, NULL, TO_ROOM ,FALSE);
+					act( "$n is surrounded by a force shield.", ch, NULL, NULL, TO_ROOM ,false);
 					send_to_char( "You are surrounded by a force shield.\n\r", ch );
 					break;// Armor and Shield
 			}
 			} break;// END RARITY 3
 		case 2:{
-			act("$n {yglows{x with a holy aura.",ch,NULL,NULL,TO_ROOM,FALSE);
+			act("$n {yglows{x with a holy aura.",ch,NULL,NULL,TO_ROOM,false);
 			switch(index)
 			{
 				case 0:
@@ -1411,7 +1411,7 @@ int do_favor_reward(CHAR_DATA *ch, CHAR_DATA *victim, int rarity, int index, int
 						af.location  = APPLY_AC;
 						affect_to_char(ch,&af);
 						send_to_char("You are filled with holy wrath!\n\r",ch);
-						act("$n gets a wild look in $s eyes!",ch,NULL,NULL,TO_ROOM,FALSE);
+						act("$n gets a wild look in $s eyes!",ch,NULL,NULL,TO_ROOM,false);
 					}
 					break;// Frenzy
 				case 1: do_deity_msg("You have pleased %s.", ch);
@@ -1442,14 +1442,14 @@ int do_favor_reward(CHAR_DATA *ch, CHAR_DATA *victim, int rarity, int index, int
 						af.bitvector = AFF_HASTE;
 						affect_to_char( ch, &af );
 						send_to_char( "You feel yourself moving more quickly.\n\r", ch );
-						act("$n is moving more quickly.",ch,NULL,NULL,TO_ROOM,FALSE);
+						act("$n is moving more quickly.",ch,NULL,NULL,TO_ROOM,false);
 					}
 					break;// Haste
 				case 3: do_deity_msg("%s protects you from harm.", ch);
 					xp_level = 1;
 					affect_strip(ch,gsn_sanctuary);
 					REMOVE_BIT(ch->affected_by,AFF_SANCTUARY);
-					act( "$n is surrounded by a white aura.", ch, NULL, NULL, TO_ROOM ,FALSE);
+					act( "$n is surrounded by a white aura.", ch, NULL, NULL, TO_ROOM ,false);
 					send_to_char( "You are surrounded by a white aura.\n\r", ch );
 					af.where     = TO_AFFECTS;
     				af.type      = gsn_sanctuary;
@@ -1464,7 +1464,7 @@ int do_favor_reward(CHAR_DATA *ch, CHAR_DATA *victim, int rarity, int index, int
 					xp_level = 2;
 					ch->gold += 10 + favor_strength * 20;
 					break;// +10/30/50 gold
-				case 5: if(deity_enchant_armor(ch, favor_strength + 1) == TRUE)
+				case 5: if(deity_enchant_armor(ch, favor_strength + 1) == true)
 							xp_level = 1;// If armor is enchanted, only level 1 xp
 						else
 						{// No message is sent on failure, same as for weapon enchant function
@@ -1489,7 +1489,7 @@ int do_favor_reward(CHAR_DATA *ch, CHAR_DATA *victim, int rarity, int index, int
 
 					affect_to_char(ch,&af);
 					send_to_char("You are surrounded by a shield of blades.\n\r",ch);
-					act("$n is surrounded by a shield of blades.",ch,NULL,NULL,TO_ROOM,FALSE);
+					act("$n is surrounded by a shield of blades.",ch,NULL,NULL,TO_ROOM,false);
 					break;// Shield of Blades
 				case 7: do_deity_msg("%s clouds your foe's minds.", ch);
 					xp_level = 1;
@@ -1530,7 +1530,7 @@ int do_favor_reward(CHAR_DATA *ch, CHAR_DATA *victim, int rarity, int index, int
 						do_deity_msg("%s fills you with holy fury!", ch);
 						xp_level = 1;
 						send_to_char("Your pulse races as you are consumed by rage!\n\r",ch);
-						act("$n gets a wild look in $s eyes.",ch,NULL,NULL,TO_ROOM,FALSE);
+						act("$n gets a wild look in $s eyes.",ch,NULL,NULL,TO_ROOM,false);
 
 						affect_strip(ch,skill_lookup("frenzy"));
 						affect_strip(ch,gsn_berserk);
@@ -1557,7 +1557,7 @@ int do_favor_reward(CHAR_DATA *ch, CHAR_DATA *victim, int rarity, int index, int
 			}
 			} break;// END RARITY 2
 		case 1:{
-			act("$n {yglows{x with a holy aura.",ch,NULL,NULL,TO_ROOM,FALSE);
+			act("$n {yglows{x with a holy aura.",ch,NULL,NULL,TO_ROOM,false);
 			switch(index)
 			{
 				case 0: do_deity_msg("%s is especially pleased with you.", ch);
@@ -1591,7 +1591,7 @@ int do_favor_reward(CHAR_DATA *ch, CHAR_DATA *victim, int rarity, int index, int
 					}
 					else if( (obj = get_eq_char( ch, WEAR_SECOND ) ) != NULL)
 					{// This shouldn't be possible, but may as well catch it in case it happens
-						if(deity_enchant_weapon(ch, obj, favor_strength + 1) == FALSE)
+						if(deity_enchant_weapon(ch, obj, favor_strength + 1) == false)
 						{
 							do_deity_msg("%s is pleased by the care you take of your weaponry.", ch);
 							xp_level = 2;// Bonus xp for no item to enchant
@@ -1627,11 +1627,11 @@ int do_favor_reward(CHAR_DATA *ch, CHAR_DATA *victim, int rarity, int index, int
 
 					affect_to_char(ch,&af);
 					send_to_char("You are more attuned to your environment.\n\r",ch);
-					act("$n is more attuned to $s environment.",ch,NULL,NULL,TO_ROOM,FALSE);
+					act("$n is more attuned to $s environment.",ch,NULL,NULL,TO_ROOM,false);
 					break;// Acclimate
 				case 4: do_deity_msg("%s finds you a {Wdiamond{x in the rough", ch);
 					xp_level = 2;
-					obj_to_char(create_object(get_obj_index(OBJ_VNUM_DIAMOND),0,FALSE),ch);
+					obj_to_char(create_object(get_obj_index(OBJ_VNUM_DIAMOND),0,false),ch);
 					break;// Gives you a diamond
 			}
 			} break;// END RARITY 1
@@ -1723,7 +1723,7 @@ int do_favor_reward(CHAR_DATA *ch, CHAR_DATA *victim, int rarity, int index, int
 					update_pos(clone);
 					do_deity_msg("%s tests you with a trial of courage! {YDo not flee!{x", ch);
 					char_to_room(clone,ch->in_room);
-					act("$n appears with a {yBLINDING{x flash and screams and attacks!", clone, NULL, NULL, TO_ROOM, FALSE);
+					act("$n appears with a {yBLINDING{x flash and screams and attacks!", clone, NULL, NULL, TO_ROOM, false);
 					multi_hit(clone,ch,TYPE_UNDEFINED);
 					ch->pcdata->deity_trial_timer = 10;
 					ch->pcdata->deity_trial = 0;
@@ -1777,12 +1777,12 @@ int do_favor_reward(CHAR_DATA *ch, CHAR_DATA *victim, int rarity, int index, int
 				xp_level = 0;// No bonus xp for trial assignment
 				sprintf(buf, "You have {Y%d ticks{x to complete your trial. 'pray abandon' to end early.\n\r", ch->pcdata->deity_trial_timer);
 				send_to_char(buf, ch);
-				act("$n {Yglows{x with a {YBLINDING{x holy aura.",ch,NULL,NULL,TO_ROOM,FALSE);
+				act("$n {Yglows{x with a {YBLINDING{x holy aura.",ch,NULL,NULL,TO_ROOM,false);
 				log_deity_favor(ch, NULL, DEITY_TRIAL_ACTIVATE);
 			}
 			else
 			{// Rare
-				act("$n {Yglows{x with a {Ybright{x holy aura.",ch,NULL,NULL,TO_ROOM,FALSE);
+				act("$n {Yglows{x with a {Ybright{x holy aura.",ch,NULL,NULL,TO_ROOM,false);
 			}
 			} break;// END RARITY 0 (Least common)
 	}
@@ -1948,7 +1948,7 @@ int deity_trial_kill(CHAR_DATA *ch, CHAR_DATA *victim, int xp)
 		sprintf(buf, "You have completed the trial given to you by %s!\n\r", deity_table[ch->pcdata->deity].pname);
 		send_to_char(buf, ch);
 		send_to_char("You are rewarded with some skill!\n\r", ch);
-		act("$n is surrounded by a holy glow.", ch, NULL, NULL, TO_ROOM, FALSE);
+		act("$n is surrounded by a holy glow.", ch, NULL, NULL, TO_ROOM, false);
 		xp *= 2;// Triple xp, so return double the current amount
 		ch->skill_points += skillVal;
 		ch->pcdata->deity_trial_timer = 0;// End the trial

@@ -49,10 +49,6 @@ typedef void SPELL_FUN  args( ( int sn, int level, CHAR_DATA *ch, void *vo,
 int unlink();
 int system();
 
-/* bc with existing code */
-#define FALSE    false
-#define TRUE     true
-
 typedef struct plan_exit_data           PLAN_EXIT_DATA;
 typedef struct alliance_data            ALLIANCE_DATA;
 typedef struct clan_data                CLAN_DATA;
@@ -2141,7 +2137,7 @@ struct  kill_data
 #define COMM_NOGLADIATOR	(L)
 
 /* display flags */
-#define COMM_TRUE_TRUST         (K)
+#define COMM_true_TRUST         (K)
 #define COMM_TELNET_GA          (P)
 #define COMM_NOGRATS            (R)
 #define COMM_TELL_BEEP          (S)
@@ -3290,7 +3286,7 @@ extern sh_int gsn_blade_barrier;
             + current_time - (ch)->logon )/72000))
 
 #define COLOR_ON(ch)		(IS_SET((ch)->display,DISP_COLOR))
-#define IS_CAPPED(ch)		(IS_NPC((ch)) ? FALSE : (ch)->pcdata->capped)
+#define IS_CAPPED(ch)		(IS_NPC((ch)) ? false : (ch)->pcdata->capped)
 #define IS_GOOD(ch)             (ch->alignment >= 350)
 #define IS_EVIL(ch)             (ch->alignment <= -350)
 #define IS_NEUTRAL(ch)          (!IS_GOOD(ch) && !IS_EVIL(ch))

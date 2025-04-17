@@ -27,41 +27,41 @@ DECLARE_DO_FUN(do_quit  );
 
 bool out_of_element( CHAR_DATA *ch)
 { 
-  bool DARK = FALSE, LIGHT = FALSE;
-  if(IS_NPC(ch) ) return FALSE;
+  bool DARK = false, LIGHT = false;
+  if(IS_NPC(ch) ) return false;
 
   if( time_info.hour > 6 && time_info.hour < 19 )
-	LIGHT = TRUE;
+	LIGHT = true;
 
   if( time_info.hour < 6 || time_info.hour > 19 )
-	DARK = TRUE;
+	DARK = true;
 
   if( LIGHT
     && IS_SET(ch->act,PLR_VAMP)
     && !IS_NPC(ch)
     && !IS_SET(ch->in_room->room_flags,ROOM_INDOORS) )
-	return TRUE;
+	return true;
 
   if( IS_SET(ch->act,PLR_WERE) 
     && DARK
     && !IS_NPC(ch)
     && !IS_SET(ch->in_room->room_flags,ROOM_INDOORS)
     && IS_AFFECTED(ch,AFF_MORPH) )
-	return TRUE;
+	return true;
   
   if( LIGHT
     && IS_SET(ch->act,PLR_MUMMY)
     && !IS_NPC(ch)
     && !IS_SET(ch->in_room->room_flags,ROOM_INDOORS) )
-	return TRUE;
+	return true;
 
   if ( LIGHT 
     && !IS_NPC(ch)
     && ch->race == race_lookup("gargoyle")
     && !IS_SET(ch->in_room->room_flags, ROOM_INDOORS) )
-	return TRUE;
+	return true;
 
-   return FALSE;
+   return false;
 }
 
 void do_remort( CHAR_DATA *ch, char *argument)
