@@ -2078,15 +2078,14 @@ void creation_message(DESCRIPTOR_DATA *d, bool forward)
     write_to_buffer( d, buf, 0 );
     break;
 	case CON_GET_NEW_RACE:
-  write_to_buffer(d,"\n\rThe following races are available:\n\r  ",0);
+  write_to_buffer(d,"\n\rThe following races are available:\n\r",0);
   for ( i = 1; race_table[i].name != NULL; i++ )
   {
    if (!race_table[i].pc_race)
     break;
-   write_to_buffer(d," * ",0);
+   write_to_buffer(d,"  * ",0);
    write_to_buffer(d,race_table[i].name,0);
    write_to_buffer(d,"\n\r",0);
-   write_to_buffer(d," ",1);
   }
 
   write_to_buffer(d,"\n\r",0);
