@@ -36,6 +36,5 @@ $ ./bin/run.sh mhs:latest
   * Deploy to prod from dev laptop
   * Deploy to prod via GitHub workflow
   * Restore from backup (dev & prod)
-  * Run tests in branches
 * Misc. fixes
   * Rockbiters reference form `ee`, which doesn't exist.  This is likely supposed to be `dd`.
