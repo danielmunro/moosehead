@@ -27,10 +27,10 @@
 #include "tables.h"
 #include "gladiator.h"
 #include "act_obj.h"
-
-/* command procedures needed */
-DECLARE_DO_FUN(do_look    );
-DECLARE_DO_FUN(do_order    );
+#include "act_info.h"
+#include "act_comm.h"
+#include "lookup.h"
+#include "fight.h"
 
 extern int bounty_item;
 extern int bounty_type;
@@ -42,12 +42,6 @@ extern int bounty_timer;
 bool cast_spell args((CHAR_DATA *ch, char *argument, bool fChant, bool fFocus));
 void  say_spell args( ( CHAR_DATA *ch, int sn ) );
 void write_spell( CHAR_DATA *ch, int sn );
-
-/* imported functions */
-bool    remove_obj      args( ( CHAR_DATA *ch, int iWear, bool fReplace ) );
-void  wear_obj  args( ( CHAR_DATA *ch, OBJ_DATA *obj, bool fReplace ) );
-void  set_fighting  args( ( CHAR_DATA *ch, CHAR_DATA *victim ) );
-int	nonclan_lookup	args( (const char *name) );
 
 bool check_annointment(CHAR_DATA *victim, CHAR_DATA *ch)
 {
