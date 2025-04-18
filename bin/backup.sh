@@ -1,6 +1,9 @@
+#!/bin/bash
+
+ENV_FILE=$1
+
 docker run --volume mud-data:/backup/data \
-           --env-file ~/.env/backup.env \
+           --env-file $ENV_FILE \
            --rm \
-           --detach \
            --entrypoint backup \
            offen/docker-volume-backup:v2
