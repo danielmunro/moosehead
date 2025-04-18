@@ -2,7 +2,7 @@
 
 ## 2025-04-17
 
-* New race added: gnomes.  Gnomes are a race of tiny humanoids, standing no more than 3' tall on average.  They are quite adept in the arts of magic, only being surpassed in raw talent by faeries.  Being a tiny race, they are also nimble on their feet.  Gnomes can see in the dark with infravision.  Gnomes possess deep wisdom, leading to a desire to keep their alignment neutral.  Remaining neutral gives gnomes a small bonus to their skills.  A help entry is still on the todo list.
+* New race added: gnomes.  Gnomes are a race of tiny humanoids, standing no more than 3' tall on average. They are quite adept in the arts of magic, only being surpassed in raw talent by faeries.  Being a tiny race, they are also nimble on their feet, making adequate thieves. Gnomes can see in the dark with infravision.  Gnomes possess deep wisdom, leading to a desire to keep their alignment neutral. Remaining neutral gives gnomes a small bonus to their spell casting. A help entry is still on the todo list.
 * Fix a bug introduced in a change that came in with the http server, causing xp to be calculated incorrectly.
 * Improve CI/CD so that tests run on any branch.  Docker images are published on main after a successful test run.
 * Fully implement `stdbool.h`
