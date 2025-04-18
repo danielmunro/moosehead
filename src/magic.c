@@ -1238,6 +1238,18 @@ if (!IS_IMMORTAL(ch))
     if ( is_mounted(ch) )
 	spell_skill -= ( spell_skill / 10 );
 
+    /* Gnome casting modifier, based on alignment.
+     * Neutral - up to 3% boost
+     * Otherwise - up to 3% penalty
+     */
+    if (ch->race == race_lookup("gnome")) {
+        if (IS_NEUTRAL(ch)) {
+            spell_skill += (spell_skill / 30);
+        } else {
+            spell_skill -= (spell_skill / 30);
+        }
+    }
+
     if ( number_percent( ) > spell_skill ) 
     {
 
@@ -1327,6 +1339,14 @@ if (!IS_IMMORTAL(ch))
              send_to_char("You failed.\n\r",ch);
              return true;
          }
+     }
+
+     /* Gnome magical resistance if neutral alignment */
+     if (target == TARGET_CHAR && victim != NULL
+        && victim != ch && victim->race == race_lookup("gnome")
+        && IS_NEUTRAL(victim) && number_percent() < victim->level / 10) {
+         send_to_char("You failed.\n\r",ch);
+         return true;
      }
 
      if ( target == TARGET_CHAR && victim != NULL &&
