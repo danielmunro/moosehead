@@ -12,11 +12,6 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Build test docker image
-        uses: docker/build-push-action@v5
-        with:
-          push: false
-          file: Dockerfile-test
-          tags: test:latest
-      - name: Run tests
-        run: docker run test:latest
+      - uses: actions/checkout@v4
+      - name: Run the tests
+        run: ./bin/mhs test
