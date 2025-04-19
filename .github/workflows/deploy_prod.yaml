@@ -23,6 +23,6 @@ jobs:
           ssh-add /home/runner/.ssh/github_actions
       - name: Deploy to production
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }}
+          ssh -i /home/runner/.ssh/github_actions ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }}
           cd ${{ secrets.CD_PATH }}
           mhs prod-deploy ${{ secrets.IMAGE_REPO }} ${{ inputs.tag }}
