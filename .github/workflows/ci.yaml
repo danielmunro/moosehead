@@ -12,5 +12,7 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     steps:
+      - name: Check directory
+        run: ls
       - name: Run the tests
         run: ./bin/mhs test
