@@ -16,6 +16,7 @@
 #include "gladiator.h"
 #include "recycle.h"
 
+/* local functions */
 void do_startgladiator (CHAR_DATA *ch, char *argument);
 void do_endgladiator (CHAR_DATA *ch, char *argument);
 void do_removegladiator (CHAR_DATA *ch, char *argument);
