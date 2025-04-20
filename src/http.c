@@ -19,6 +19,7 @@ int server_fd;
 struct sockaddr_in server_addr;
 const int BUFFER_SIZE = 104857600;
 
+/* local functions */
 char *index_endpoint(struct yuarel url);
 char *players_endpoint(struct yuarel url);
 char *races_endpoint(struct yuarel url);
