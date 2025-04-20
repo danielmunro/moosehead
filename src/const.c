@@ -33,9 +33,6 @@
 #include "merc.h"
 #include "magic.h"
 #include "interp.h"
-/*
- #include "imc-mercbase.h"
- */
 
 /* for deities */
 const struct deity_type deity_table[] =
