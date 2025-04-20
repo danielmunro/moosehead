@@ -27,34 +27,22 @@
 #include "recycle.h"
 #include "clan.h"
 #include "act_info.h"
+#include "act_comm.h"
+#include "magic.h"
 #include "special.h"
 #include "handler.h"
 #include "lookup.h"
 
-/* command procedures needed */
-DECLARE_DO_FUN(do_split   );
-DECLARE_DO_FUN(do_yell    );
-DECLARE_DO_FUN(do_say   );
-DECLARE_DO_FUN(do_help   );
-DECLARE_SPELL_FUN(  spell_null    );
-/* Imported */
-CLAN_DATA* clan_lookup  args( ( const char *name ) );
-
-void do_get( CHAR_DATA *ch, char *argument );
 /*
  * Local functions.
  */
-#define CD CHAR_DATA
-#define OD OBJ_DATA
-bool  remove_obj  args( (CHAR_DATA *ch, int iWear, bool fReplace ) );
-void  wear_obj  args( (CHAR_DATA *ch, OBJ_DATA *obj, bool fReplace ) );
-CD *  find_keeper args( (CHAR_DATA *ch ) );
-int get_cost  args( (CHAR_DATA *keeper, OBJ_DATA *obj, bool fBuy ) );
-void  obj_to_keeper args( (OBJ_DATA *obj, CHAR_DATA *ch ) );
-OD *  get_obj_keeper  args( (CHAR_DATA *ch,CHAR_DATA *keeper,char *argument));
-
-#undef OD
-#undef  CD
+void do_get (CHAR_DATA *ch, char *argument);
+bool remove_obj (CHAR_DATA *ch, int iWear, bool fReplace);
+void wear_obj (CHAR_DATA *ch, OBJ_DATA *obj, bool fReplace);
+CHAR_DATA *find_keeper (CHAR_DATA *ch);
+int get_cost (CHAR_DATA *keeper, OBJ_DATA *obj, bool fBuy);
+void obj_to_keeper (OBJ_DATA *obj, CHAR_DATA *ch);
+OBJ_DATA *get_obj_keeper (CHAR_DATA *ch, CHAR_DATA *keeper, char *argument);
 
 #define COST_ACCURACY   100
 #define COST_SPEED      300
