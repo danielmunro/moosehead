@@ -28,3 +28,5 @@ $ ./bin/run.sh mhs:latest
 * DevOps
   * Deploy to prod from laptop
   * Restore from backup (dev & prod)
+* Issues
+  * `convert.c` mentioned a function, `spec_guard`, but that function doesn't exist.  Using `spec_guard_d` instead.

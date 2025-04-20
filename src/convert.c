@@ -22,13 +22,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+
 #include "merc.h"
-
-
-SPEC_FUN spec_thief;
-SPEC_FUN spec_guard;
-SPEC_FUN spec_cast_mage;
-SPEC_FUN spec_cast_cleric;
+#include "special.h"
 
 typedef struct link_type LINK;
 
@@ -140,7 +136,7 @@ void convert_mob(MOB_INDEX_DATA *mob)
     class = mob->spec_fun == spec_thief ? 1 : 
 	    mob->spec_fun == spec_cast_mage ? 2 :
 	    mob->spec_fun == spec_cast_cleric ? 3 : 
-	    mob->spec_fun == spec_guard ? 4 : 0;
+	    mob->spec_fun == spec_guard_d ? 4 : 0;
 
     level = mob->level;
 
