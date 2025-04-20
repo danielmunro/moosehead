@@ -29,6 +29,7 @@
 #include "special.h"
 #include "act_obj.h"
 #include "recycle.h"
+#include "mag2.h"
 
 /* command procedures needed */
 DECLARE_DO_FUN(do_quit    );
@@ -49,7 +50,6 @@ void  char_update args( ( void ) );
 void  obj_update  args( ( void ) );
 void  room_update args( ( void ) );
 void  aggr_update args( ( void ) );
-void  shapeshift_remove args ((CHAR_DATA *ch));   
 bool  ch_in_wraithform = false;
 void sector_damage args ((CHAR_DATA *ch));
 /* Externals */

@@ -24,7 +24,9 @@
  #include <stdlib.h>
  #include <ctype.h>
  #include <time.h>
+
  #include "merc.h"
+ #include "act_obj.h"
  #include "magic.h"
  #include "recycle.h"
  #include "tables.h"

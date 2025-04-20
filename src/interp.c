@@ -27,6 +27,7 @@
 #include "tables.h"
 #include "lookup.h"
 #include "flags.h"
+#include "mag2.h"
 #include "note.h"
 
 

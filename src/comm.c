@@ -53,6 +53,7 @@
 #include "merc.h"
 #include "act_wiz.h"
 #include "act_info.h"
+#include "act_obj.h"
 #include "recycle.h"
 #include "gladiator.h"
 #include "tables.h"
