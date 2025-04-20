@@ -23,6 +23,8 @@
 #include <time.h>
 
 #include "merc.h"
+#include "act_info.h"
+#include "act_wiz.h"
 #include "magic.h"
 #include "recycle.h"
 #include "tables.h"
@@ -30,22 +32,11 @@
 #include "clan.h"
 #include "lookup.h"
 
-/* command procedures needed */
-DECLARE_DO_FUN(do_return  );
-DECLARE_DO_FUN(do_look  );
-
-
-
 /*
  * Local functions.
  */
-void  affect_modify args( ( CHAR_DATA *ch, AFFECT_DATA *paf, bool fAdd, int AppType ) );
-void  destruct_trade args( ( TRADE_DATA *trade, bool ifree ) );
-/*
- * External functions.
- */
-int	nonclan_lookup	args( (const char *name) );
-
+void affect_modify (CHAR_DATA *ch, AFFECT_DATA *paf, bool fAdd, int AppType);
+void destruct_trade (TRADE_DATA *trade, bool ifree);
 
 void prompt_pulse_command(CHAR_DATA *ch)
 {
