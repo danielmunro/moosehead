@@ -30,6 +30,7 @@
 #include "mag2.h"
 #include "note.h"
 #include "remort.h"
+#include "skills.h"
 
 
 

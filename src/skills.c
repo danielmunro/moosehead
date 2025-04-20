@@ -5,13 +5,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "merc.h"
-#include "magic.h"
 
-/* command procedures needed */
-DECLARE_DO_FUN(do_groups	);
-DECLARE_DO_FUN(do_help		);
-DECLARE_DO_FUN(do_say		);
+#include "merc.h"
+#include "act_info.h"
+#include "act_comm.h"
+
+void do_groups (CHAR_DATA *ch, char *argument);
 
 
 /* used to get new skills */
