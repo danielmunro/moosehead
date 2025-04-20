@@ -25,14 +25,8 @@ $ ./bin/run.sh mhs:latest
 * GitHub pages
 * Clean up duplicate code/functions
   * str_dup/str_dup_perm
-* Backups
-  * Daily - done
-  * Weekly
-  * Monthly
-  * Yearly
 * DevOps
-  * Deploy to prod from dev laptop
-  * Deploy to prod via GitHub workflow
+  * Deploy to prod from laptop
   * Restore from backup (dev & prod)
 * Misc. fixes
   * Rockbiters reference form `ee`, which doesn't exist.  This is likely supposed to be `dd`.
