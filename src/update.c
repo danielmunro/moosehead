@@ -21,21 +21,18 @@
 #include <time.h>
 
 #include "merc.h"
+#include "act_comm.h"
 #include "act_info.h"
 #include "act_move.h"
+#include "act_obj.h"
 #include "lookup.h"
 #include "music.h"
 #include "tables.h"
 #include "gladiator.h"
 #include "db.h"
 #include "special.h"
-#include "act_obj.h"
 #include "recycle.h"
 #include "mag2.h"
-
-/* command procedures needed */
-DECLARE_DO_FUN(do_quit    );
-DECLARE_DO_FUN( do_look);
 
 /*
  * Local functions.

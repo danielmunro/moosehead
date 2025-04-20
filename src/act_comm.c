@@ -23,6 +23,7 @@
 #include <time.h>
 
 #include "merc.h"
+#include "act_info.h"
 #include "act_wiz.h"
 #include "recycle.h"
 #include "tables.h"
@@ -34,7 +35,8 @@
 void count_clanners(void);
 
 /* Locals */
-void reclass		args( ( CHAR_DATA *ch, int class, bool fPenalty ) );
+void reclass (CHAR_DATA *ch, int class, bool fPenalty);
+void do_quit (CHAR_DATA *ch, char *argument);
 
 // New code to transfer (Also anywhere with timestamp)
 void send_timestamp(CHAR_DATA *ch, bool send_now, bool global)

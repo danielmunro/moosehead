@@ -3535,7 +3535,6 @@ void    set_title       args( ( CHAR_DATA *ch, char *title ) );
 void    show_list_to_char       args( ( OBJ_DATA *list, CHAR_DATA *ch,
              bool fShort, bool fShowNothing , bool fExpand) );
 void	do_surname	args( ( CHAR_DATA *ch, char *argument) );
-void do_look( CHAR_DATA *ch, char *argument );
 
 /* act_move.c */
 bool	is_abolishable	args( ( AFFECT_DATA *af ) );
