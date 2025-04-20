@@ -22,15 +22,18 @@
 #include <time.h>
 
 #include "merc.h"
+#include "act_comm.h"
+#include "act_move.h"
+#include "act_obj.h"
+#include "fight.h"
+#include "handler.h"
 #include "tables.h"
 #include "magic.h"
 #include "mag2.h"
 #include "lookup.h"
 
-void	check_equip	args( (CHAR_DATA *ch) );
-bool	check_wear	args( (CHAR_DATA *ch, OBJ_DATA *obj) );
-void	one_hit		args( ( CHAR_DATA *ch, CHAR_DATA *victim, int dt ) );
-int     count_fight_size args( (CHAR_DATA *ch) );
+void check_equip (CHAR_DATA *ch);
+bool check_wear	(CHAR_DATA *ch, OBJ_DATA *obj);
 
 extern int social_count_targeted;
 extern int social_count;
@@ -44,21 +47,6 @@ int bounty_item = -1;
 int bounty_room = -1;
 int bounty_complete = 0;
 bool bounty_downgrade = false;
- 
-/* command procedures needed */
-DECLARE_DO_FUN(do_order	);
-DECLARE_DO_FUN( do_wear	);
-DECLARE_DO_FUN(do_rescue);
-DECLARE_DO_FUN(do_yell		);
-DECLARE_DO_FUN(do_bash		);
-DECLARE_DO_FUN(do_open		);
-DECLARE_DO_FUN(do_close		);
-DECLARE_DO_FUN(do_say	);
-DECLARE_DO_FUN(do_backstab);
-DECLARE_DO_FUN(do_flee);
-DECLARE_DO_FUN(do_murder);
-DECLARE_DO_FUN(do_wake);
-DECLARE_DO_FUN(do_stand);
 
 /*
  * The following special functions are available for mobiles.

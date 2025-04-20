@@ -23,7 +23,11 @@
 #include <time.h>
 
 #include "merc.h"
+#include "act_comm.h"
+#include "act_obj.h"
+#include "act_move.h"
 #include "interp.h"
+#include "fight.h"
 #include "tables.h"
 #include "lookup.h"
 #include "flags.h"
