@@ -29,6 +29,7 @@
 #include "gladiator.h"
 #include "clan.h"
 
+/* local functions */
 void do_recall (CHAR_DATA *ch, char *argument);
 bool recall (CHAR_DATA *ch, char *argument, bool fPray);
 void do_stand (CHAR_DATA *ch, char *argument);
