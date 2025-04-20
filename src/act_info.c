@@ -26,21 +26,20 @@
  #include <time.h>
 
  #include "merc.h"
+ #include "act_move.h"
  #include "act_obj.h"
+ #include "act_wiz.h"
  #include "magic.h"
  #include "recycle.h"
  #include "tables.h"
  #include "lookup.h"
  #include "gladiator.h"
 
- /* command procedures needed */
- DECLARE_DO_FUN( do_exits        );
- DECLARE_DO_FUN( do_look         );
- DECLARE_DO_FUN( do_help         );
- DECLARE_DO_FUN( do_affects      );
- DECLARE_DO_FUN( do_play         );
- DECLARE_DO_FUN( do_outfit       );
- DECLARE_DO_FUN( do_dismount     );
+/* local functions */
+void do_exits (CHAR_DATA *ch, char *argument);
+void do_look (CHAR_DATA *ch, char *argument);
+void do_help (CHAR_DATA *ch, char *argument);
+void do_affects (CHAR_DATA *ch, char *argument);
 
  char *  const  where_name      [] =
  {
