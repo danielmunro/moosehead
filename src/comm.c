@@ -51,39 +51,23 @@
 #include <fcntl.h>
 
 #include "merc.h"
+#include "act_wiz.h"
+#include "act_info.h"
 #include "recycle.h"
 #include "gladiator.h"
 #include "tables.h"
 #include "dump_obj_csv.h"
 #include "handler.h"
 #include "act_comm.h"
+#include "act_info.h"
+#include "act_move.h"
 #include "clan.h"
 #include "log.h"
 #include "http.h"
 #include "lookup.h"
-
-/* command procedures needed */
-DECLARE_DO_FUN	( action_wraithform );
-DECLARE_DO_FUN (action_zealot_convert);
-DECLARE_DO_FUN   ( action_ambush );
-DECLARE_DO_FUN(do_help          );
-DECLARE_DO_FUN(do_look          );
-DECLARE_DO_FUN(do_skills        );
-DECLARE_DO_FUN(do_outfit        );
-DECLARE_DO_FUN(do_count		);
-DECLARE_DO_FUN(do_unread        );
-DECLARE_DO_FUN(do_gossip);
-DECLARE_DO_FUN(do_ooc);
-DECLARE_DO_FUN(do_question);
-DECLARE_DO_FUN(do_answer);
-DECLARE_DO_FUN(do_clantalk);
-DECLARE_DO_FUN(do_auction);
-DECLARE_DO_FUN(do_music);
-DECLARE_DO_FUN(do_quest);
-DECLARE_DO_FUN(do_reply);
-DECLARE_DO_FUN(do_tell);
-DECLARE_DO_FUN(do_grats);
-DECLARE_DO_FUN(do_gtell);
+#include "mag2.h"
+#include "note.h"
+#include "skills.h"
 
 /*
  * Malloc debugging stuff.
@@ -3643,8 +3627,8 @@ if (IS_SET(ch->mhs,MHS_HIGHLANDER))
       act("$n has entered the game.",ch->pet,NULL,NULL,TO_ROOM,false);
   }
 #ifdef GAME_VERSION
-  do_unread(ch,"");
-  do_count(ch,"");
+  do_unread(ch);
+  do_count(ch, "");
 #endif
   if(!IS_NPC(ch) && ch->pcdata->start_time > 0)
   {
