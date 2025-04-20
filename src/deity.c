@@ -21,14 +21,14 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+
 #include "merc.h"
+#include "act_info.h"
+#include "act_move.h"
+#include "fight.h"
 #include "tables.h"
 #include "recycle.h"
 #include "lookup.h"
-
-DECLARE_DO_FUN(do_recall  );
-DECLARE_DO_FUN(do_rescue  );
-DECLARE_DO_FUN(do_look  );
 
 extern int rainbow;
 
@@ -36,8 +36,6 @@ extern int rainbow;
 int deity_value_override = 0;
 int deity_msg_override = 0;
 #endif
-
-bool recall	args( ( CHAR_DATA *ch, char *argument, bool fPray ) );
 
 void do_pledg( CHAR_DATA *ch, char *argument )
 {
