@@ -28,12 +28,7 @@
 #include "tables.h"
 #include "act_obj.h"
 
-#if !defined(macintosh)
-extern  int     _filbuf         args( (FILE *) );
-#endif
 
-
-int rename(const char *oldfname, const char *newfname);
 
 /*
  * Array of containers read for proper re-nesting of objects.
@@ -46,14 +41,13 @@ static  OBJ_DATA *  rgObjNest [MAX_NEST + 1];
 /*
  * Local functions.
  */
- void   convert_bits    args( ( CHAR_DATA *ch ) );
-void  fwrite_char args( ( CHAR_DATA *ch,  FILE *fp ) );
-void  fwrite_obj  args( ( CHAR_DATA *ch,  OBJ_DATA  *obj,
-          FILE *fp, int iNest ) );
-void  fwrite_pet  args( ( CHAR_DATA *pet, FILE *fp) );
-void  fread_char  args( ( CHAR_DATA *ch,  FILE *fp ) );
-void    fread_pet args( ( CHAR_DATA *ch,  FILE *fp ) );
-void  fread_obj args( ( CHAR_DATA *ch,  FILE *fp ) );
+void convert_bits (CHAR_DATA *ch);
+void fwrite_char (CHAR_DATA *ch, FILE *fp);
+void fwrite_obj (CHAR_DATA *ch, OBJ_DATA *obj, FILE *fp, int iNest);
+void fwrite_pet (CHAR_DATA *pet, FILE *fp);
+void fread_char (CHAR_DATA *ch, FILE *fp);
+void fread_pet (CHAR_DATA *ch, FILE *fp);
+void fread_obj (CHAR_DATA *ch, FILE *fp);
 
 
 /*
