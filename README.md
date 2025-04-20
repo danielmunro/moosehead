@@ -35,4 +35,3 @@ $ ./bin/run.sh mhs:latest
   * `gamble.c` not referenced in Makefile -- can it be removed?
   * `sign.c` not referenced in Makefile -- can it be removed?
   * Move function declarations out of merc.h into respective .h files
-  * `special.c` -- DECLARE_SPEC_FUN

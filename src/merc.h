@@ -37,11 +37,9 @@ typedef void SPELL_FUN  args( ( int sn, int level, CHAR_DATA *ch, void *vo,
 #define const
 #define args( list )                    ( )
 #define DECLARE_DO_FUN( fun )           void fun( )
-#define DECLARE_SPEC_FUN( fun )         bool fun( )
 #define DECLARE_SPELL_FUN( fun )        void fun( )
 #else
 #define DECLARE_DO_FUN( fun )           DO_FUN    fun
-#define DECLARE_SPEC_FUN( fun )         SPEC_FUN  fun
 #define DECLARE_SPELL_FUN( fun )        SPELL_FUN fun
 #endif
 
