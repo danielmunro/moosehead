@@ -21,7 +21,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+
 #include "merc.h"
+#include "act_wiz.h"
 #include "recycle.h"
 #include "tables.h"
 #include "interp.h"
@@ -33,9 +35,6 @@ void count_clanners(void);
 
 /* Locals */
 void reclass		args( ( CHAR_DATA *ch, int class, bool fPenalty ) );
-
-/* Externals */
-void remove_highlander  args (( CHAR_DATA *ch, CHAR_DATA *victim));
 
 // New code to transfer (Also anywhere with timestamp)
 void send_timestamp(CHAR_DATA *ch, bool send_now, bool global)
