@@ -21,6 +21,7 @@
 #include <ctype.h>
 #include <time.h>
 #include <math.h>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/resource.h>
@@ -47,14 +48,6 @@ extern int bounty_timer;
 extern bool bounty_downgrade;
 
 #define calloc(m,n) GC_MALLOC((m)*(n))
-
-extern int getrlimit (int resource, struct rlimit *rlp);
-
-extern int _filbuf (FILE *);
-
-long random();
-int getpid();
-time_t time(time_t *tloc);
 
 bool new_helps = false;// New help code
 int load_new_helps(HELP_DATA **first, HELP_DATA **last);
