@@ -327,7 +327,6 @@ DECLARE_DO_FUN( do_reclass);
 #ifdef ANDARONDEV
 DECLARE_DO_FUN( do_reloadme   );
 #endif
-DECLARE_DO_FUN( do_remort );
 DECLARE_DO_FUN( do_remove );
 DECLARE_DO_FUN( do_removegladiator );
 DECLARE_DO_FUN( do_rename );

@@ -22,7 +22,6 @@
 #include "merc.h"
 #include "tables.h"
 
-DECLARE_DO_FUN(do_remort    );
 DECLARE_DO_FUN(do_quit  );
 
 bool out_of_element( CHAR_DATA *ch)

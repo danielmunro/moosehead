@@ -29,6 +29,7 @@
 #include "flags.h"
 #include "mag2.h"
 #include "note.h"
+#include "remort.h"
 
 
 
