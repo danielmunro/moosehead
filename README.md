@@ -33,4 +33,5 @@ $ ./bin/run.sh mhs:latest
   * Refactor `alloc_perm` -> 'GC_MALLOC'
   * VNUM data errors on startup
   * `gamble.c` not referenced in Makefile -- can it be removed?
+  * `sign.c` not referenced in Makefile -- can it be removed?
   * Move function declarations out of merc.h into respective .h files
