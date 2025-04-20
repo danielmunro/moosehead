@@ -1,12 +1,12 @@
 /* spells used in Merc */
 
 void say_spell (CHAR_DATA *ch, int sn);
+void spell_null (int sn, int level, CHAR_DATA *ch, void *vo, int target);
 
 /*
  * Spell functions.
  * Defined in magic.c.
  */
-DECLARE_SPELL_FUN(  spell_null    );
 DECLARE_SPELL_FUN(  spell_accuracy );
 DECLARE_SPELL_FUN(  spell_acid_blast  );
 DECLARE_SPELL_FUN(  spell_aid	);
