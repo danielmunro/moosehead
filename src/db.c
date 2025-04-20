@@ -46,24 +46,15 @@ extern int bounty_room;
 extern int bounty_timer;
 extern bool bounty_downgrade;
 
-/* a test to see if this acually works */
 #define calloc(m,n) GC_MALLOC((m)*(n))
 
-#if defined(unix)
-extern int getrlimit(int resource, struct rlimit *rlp);
-/*extern int setrlimit(int resource, struct rlimit *rlp);*/
-#endif
+extern int getrlimit (int resource, struct rlimit *rlp);
 
-#if !defined(macintosh)
-extern  int _filbuf   args( (FILE *) );
-#endif
+extern int _filbuf (FILE *);
 
-#if !defined(OLD_RAND)
 long random();
-/*void srandom(int seed);*/
 int getpid();
 time_t time(time_t *tloc);
-#endif
 
 bool new_helps = false;// New help code
 int load_new_helps(HELP_DATA **first, HELP_DATA **last);
@@ -94,18 +85,12 @@ HELP_TRACKER *  help_tracks[28]; // A-Z and #
 SHOP_DATA *   shop_first;
 SHOP_DATA *   shop_last;
 
-// commented out due to duplicate definitions error with new compiler
-//NOTE_DATA *   note_free;
-
 char      bug_buf   [2*MAX_INPUT_LENGTH];
 char      dns_buf   [20];
 CHAR_DATA *   char_list;
 char *      help_greeting;
 char      log_buf   [2*MAX_INPUT_LENGTH];
 KILL_DATA   kill_table  [MAX_LEVEL];
-
-// commented out due to duplicate definitions error with new compiler
-//NOTE_DATA *   note_list;
 
 OBJ_DATA *    object_list;
 TIME_INFO_DATA    time_info;
@@ -357,31 +342,29 @@ char      strArea[MAX_INPUT_LENGTH];
 /*
  * Local booting procedures.
 */
-void    init_mm         args( ( void ) );
-void  load_area args( ( FILE *fp, char *file_name ) );
-void  load_cstat  args( ( FILE *fp ) );
-void  load_helps  args( ( FILE *fp ) );
-void  load_old_mob  args( ( FILE *fp ) );
-void  load_mobiles  args( ( FILE *fp ) );
-void  load_old_obj  args( ( FILE *fp ) );
-void  load_objects  args( ( FILE *fp ) );
-void  load_recipes args( ( FILE *fp )  );
-void  load_resets args( ( FILE *fp ) );
-void  load_rooms  args( ( FILE *fp ) );
-void  load_shops  args( ( FILE *fp ) );
-void  load_socials  args( ( FILE *fp ) );
-void  load_specials args( ( FILE *fp ) );
-void  load_notes  args( ( void ) );
-void  load_bans args( ( void ) );
-void  load_dns args( ( void ) );
+void init_mm (void);
+void load_area (FILE *fp, char *file_name);
+void load_cstat (FILE *fp);
+void load_helps (FILE *fp);
+void load_old_mob (FILE *fp);
+void load_mobiles (FILE *fp);
+void load_old_obj (FILE *fp);
+void load_objects (FILE *fp);
+void load_recipes (FILE *fp);
+void load_resets (FILE *fp);
+void load_rooms (FILE *fp);
+void load_shops (FILE *fp);
+void load_socials (FILE *fp);
+void load_specials (FILE *fp);
+void load_notes (void);
+void load_bans (void);
+void load_dns (void);
 
-void  fix_exits args( ( void ) );
+void fix_exits (void);
 
-void  reset_area  args( ( AREA_DATA * pArea ) );
+void reset_area (AREA_DATA * pArea);
 
-#if defined(unix)
 /* RT max open files fix */
- 
 void maxfilelimit()
 {
     struct rlimit r;
@@ -390,7 +373,6 @@ void maxfilelimit()
     r.rlim_cur = r.rlim_max;
     setrlimit(RLIMIT_NOFILE, &r);
 }
-#endif
 
 AREA_NAME_DATA *area_name_first,*area_name_last;
 
@@ -938,10 +920,8 @@ void boot_db( void )
   /* help.are and a few others don't have an AREA_DATA */
   AREA_NAME_DATA *area_name;
 
-#if defined(unix)
     /* open file fix */
     maxfilelimit();
-#endif
 
     /*
      * Init some data space stuff.
@@ -4671,37 +4651,9 @@ int number_bits( int width )
 
 
 
-/*
- * I've gotten too many bad reports on OS-supplied random number generators.
- * This is the Mitchell-Moore algorithm from Knuth Volume II.
- * Best to leave the constants alone unless you've read Knuth.
- * -- Furey
- */
-#if defined (OLD_RAND)
-static  int     rgiState[2+55];
-#endif
- 
 void init_mm( )
 {
-#if defined (OLD_RAND)
-    int *piState;
-    int iState;
- 
-    piState     = &rgiState[2];
- 
-    piState[-2] = 55 - 55;
-    piState[-1] = 55 - 24;
- 
-    piState[0]  = ((int) current_time) & ((1 << 30) - 1);
-    piState[1]  = 1;
-    for ( iState = 2; iState < 55; iState++ )
-    {
-        piState[iState] = (piState[iState-1] + piState[iState-2])
-                        & ((1 << 30) - 1);
-    }
-#else
     srandom(time(NULL)^getpid());
-#endif
     return;
 }
  
@@ -4709,28 +4661,7 @@ void init_mm( )
  
 long number_mm( void )
 {
-#if defined (OLD_RAND)
-    int *piState;
-    int iState1;
-    int iState2;
-    int iRand;
- 
-    piState             = &rgiState[2];
-    iState1             = piState[-2];
-    iState2             = piState[-1];
-    iRand               = (piState[iState1] + piState[iState2])
-                        & ((1 << 30) - 1);
-    piState[iState1]    = iRand;
-    if ( ++iState1 == 55 )
-        iState1 = 0;
-    if ( ++iState2 == 55 )
-        iState2 = 0;
-    piState[-2]         = iState1;
-    piState[-1]         = iState2;
-    return iRand >> 6;
-#else
     return random() >> 6;
-#endif
 }
 
 

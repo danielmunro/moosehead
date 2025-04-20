@@ -30,8 +30,6 @@
 #include "tables.h"
 #include "db.h"
 
-int fputc(int,FILE *);
-
 extern char *  const   dir_name        [];
 
 void fdump(FILE *file, char *string)

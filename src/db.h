@@ -1,6 +1,4 @@
-/* "$Id: db.h,v 1.7 2001/12/08 02:08:53 poquah Exp $*/
 /* files used in db.c */
-
 typedef struct area_name_data AREA_NAME_DATA;
 struct area_name_data {
   AREA_NAME_DATA *next;
@@ -32,6 +30,8 @@ extern int     newobjs;
 extern AREA_DATA  * area_first, * area_last;
 
 extern AREA_NAME_DATA  *area_name_first,*area_name_last;
+
+void rename_area (char *strArea);
 
 /* from db2.c */
 extern int  social_count;

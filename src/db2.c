@@ -19,8 +19,6 @@ int                            social_count    = 0;
 int                            social_count_targeted = 0;
 extern AREA_DATA *             area_last;
 
-extern void rename_area (char *strArea);
-
 /* snarf a socials file */
 void load_socials( FILE *fp)
 {

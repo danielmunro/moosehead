@@ -30,3 +30,5 @@ $ ./bin/run.sh mhs:latest
   * Restore from backup (dev & prod)
 * Issues
   * `convert.c` mentioned a function, `spec_guard`, but that function doesn't exist.  Using `spec_guard_d` instead.
+  * Refactor `alloc_perm` -> 'GC_MALLOC'
+  * VNUM data errors on startup
