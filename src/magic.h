@@ -1,5 +1,6 @@
-/* $Id: magic.h,v 1.79 2004/08/26 01:30:27 boogums Exp $" */
 /* spells used in Merc */
+
+void say_spell (CHAR_DATA *ch, int sn);
 
 /*
  * Spell functions.

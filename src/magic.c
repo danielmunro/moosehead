@@ -39,9 +39,9 @@ extern int bounty_timer;
 /*
  * Local functions.
  */
-bool cast_spell args((CHAR_DATA *ch, char *argument, bool fChant, bool fFocus));
-void  say_spell args( ( CHAR_DATA *ch, int sn ) );
-void write_spell( CHAR_DATA *ch, int sn );
+bool cast_spell (CHAR_DATA *ch, char *argument, bool fChant, bool fFocus);
+void say_spell (CHAR_DATA *ch, int sn);
+void write_spell (CHAR_DATA *ch, int sn);
 
 bool check_annointment(CHAR_DATA *victim, CHAR_DATA *ch)
 {

@@ -59,7 +59,6 @@ DECLARE_DO_FUN(do_flee);
 DECLARE_DO_FUN(do_murder);
 DECLARE_DO_FUN(do_wake);
 DECLARE_DO_FUN(do_stand);
-void say_spell( CHAR_DATA *ch, int sn );
 
 /*
  * The following special functions are available for mobiles.
