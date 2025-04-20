@@ -37,6 +37,7 @@
 
 #define FLA_LINE_NUM      1
 
+/* local functions */
 void edit_line_show ( CHAR_DATA *ch, bool show_pos );
 void insert_line (CHAR_DATA *ch,char *mode,int ins_after,bool show);
 int count_lines ( CHAR_DATA *ch );
