@@ -25,14 +25,12 @@
 #include "merc.h"
 #include "act_info.h"
 #include "act_wiz.h"
+#include "comm.h"
 #include "recycle.h"
 #include "tables.h"
 #include "interp.h"
 #include "lookup.h"
 #include "gladiator.h"
-
-/* In comm.c */
-void count_clanners(void);
 
 /* Locals */
 void reclass (CHAR_DATA *ch, int class, bool fPenalty);
