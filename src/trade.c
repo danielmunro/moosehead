@@ -8,6 +8,7 @@
 #include <time.h>
 
 #include "merc.h"
+#include "act_info.h"
 #include "recycle.h"
 #include "magic.h"
 
@@ -22,9 +23,6 @@
 #define     TRADE_CLEAR         8
 #define     TRADE_ACCEPT        9
 #define     TRADE_IDENTIFY      10
-
-/* Import */
-DECLARE_DO_FUN( do_help );
 
 /*OBJ_DATA *get_obj_trade( TRADE_DATA *trade, int trader, char *argument )
 {

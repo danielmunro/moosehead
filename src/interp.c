@@ -24,6 +24,7 @@
 
 #include "merc.h"
 #include "act_comm.h"
+#include "act_info.h"
 #include "act_obj.h"
 #include "act_move.h"
 #include "interp.h"
