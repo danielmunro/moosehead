@@ -5,7 +5,8 @@
 * Added weekly and monthly backup jobs.  The current backup schedule is:
   * Daily, with a one-week retention.
   * Weekly, with a one-month retention.
-  * Monthly, with a one-year retention. 
+  * Monthly, with a one-year retention.
+* Fixed Rockbiter form to be FORM_MINERAL.
 
 ## 2025-04-17
 

@@ -28,5 +28,3 @@ $ ./bin/run.sh mhs:latest
 * DevOps
   * Deploy to prod from laptop
   * Restore from backup (dev & prod)
-* Misc. fixes
-  * Rockbiters reference form `ee`, which doesn't exist.  This is likely supposed to be `dd`.

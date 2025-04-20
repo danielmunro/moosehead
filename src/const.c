@@ -318,7 +318,7 @@ const   struct  race_type race_table  []    =
   "rockbiter", true,
   0, 0, 0,
   0, RES_WEAPON|RES_LIGHTNING, VULN_MENTAL,
-  E|J|M|ee, A|B|C|D|E|F|G|H|I|J|K
+  E|J|M|dd, A|B|C|D|E|F|G|H|I|J|K
     },
 
     {
