@@ -5,41 +5,33 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h>
+
 #include "merc.h"
+#include "act_info.h"
+#include "act_move.h"
+#include "act_wiz.h"
+#include "lookup.h"
+#include "note.h"
 #include "tables.h"
 #include "gladiator.h"
 #include "recycle.h"
 
-/* the command procedures needed */
-DECLARE_DO_FUN(do_look);
-DECLARE_DO_FUN(do_echo);
-DECLARE_DO_FUN(do_startgladiator	);
-DECLARE_DO_FUN(do_endgladiator	);
-DECLARE_DO_FUN(do_removegladiator	);
-DECLARE_DO_FUN(do_gladiator	);
-DECLARE_DO_FUN(do_gbet          );
-DECLARE_DO_FUN(do_gscore        );
-DECLARE_DO_FUN(do_gtscore        );
-DECLARE_DO_FUN(do_skipbet        );
-DECLARE_DO_FUN(do_stand   );
-DECLARE_DO_FUN(do_odds   );
-DECLARE_DO_FUN(do_gstatus);
-
-/*
- * External functions.
- */
-int	nonclan_lookup	args( (const char *name) );
-void    append_note     args( (NOTE_DATA *glad_qnote)); 
-
-/*
- * Local functions.
- */
-void    gladiator_bet_resolve args( (CHAR_DATA *winner, CHAR_DATA *bettor));
-void    gladiator_start_countdown args((void));
-void    begin_gladiator args((void));
-void    end_gladiator args((void));
-void    single_update args((void));
-void    team_update args((void));
+void do_startgladiator (CHAR_DATA *ch, char *argument);
+void do_endgladiator (CHAR_DATA *ch, char *argument);
+void do_removegladiator (CHAR_DATA *ch, char *argument);
+void do_gladiator (CHAR_DATA *ch, char *argument);
+void do_gbet (CHAR_DATA *ch, char *argument);
+void do_gscore (CHAR_DATA *ch, char *argument);
+void do_gtscore (CHAR_DATA *ch, char *argument);
+void do_skipbet (CHAR_DATA *ch, char *argument);
+void do_odds (CHAR_DATA *ch, char *argument);
+void do_gstatus (CHAR_DATA *ch, char *argument);
+void gladiator_bet_resolve (CHAR_DATA *winner, CHAR_DATA *bettor);
+void gladiator_start_countdown (void);
+void begin_gladiator (void);
+void end_gladiator (void);
+void single_update (void);
+void team_update (void);
 
 void do_startgladiator(CHAR_DATA *ch, char *argument)
 {

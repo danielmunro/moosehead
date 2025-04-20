@@ -32,3 +32,4 @@ $ ./bin/run.sh mhs:latest
   * `convert.c` mentioned a function, `spec_guard`, but that function doesn't exist.  Using `spec_guard_d` instead.
   * Refactor `alloc_perm` -> 'GC_MALLOC'
   * VNUM data errors on startup
+  * `gamble.c` not referenced in Makefile -- can it be removed?
