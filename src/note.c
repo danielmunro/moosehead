@@ -25,26 +25,21 @@
 #include <gc.h>
 
 #include "merc.h"
+#include "act_info.h"
 #include "recycle.h"
 #include "tables.h"
 #include "clan.h"
 #include "lookup.h"
 
 /* globals from db.c for load_notes */
-#if !defined(macintosh)
-extern  int     _filbuf         args( (FILE *) );
-#endif
+extern  int     _filbuf        (FILE *);
 extern FILE *                  fpArea;
 extern char                    strArea[MAX_INPUT_LENGTH];
 
 /* local procedures */
-void load_thread(char *name, NOTE_DATA **list, int type, time_t free_time);
-void parse_note(CHAR_DATA *ch, char *argument, int type);
-bool hide_note(CHAR_DATA *ch, NOTE_DATA *pnote);
-
-/* imported functions */
-int	nonclan_lookup	args( (const char *name) );
-void do_help args(( CHAR_DATA *ch, char *argument ));
+void load_thread (char *name, NOTE_DATA **list, int type, time_t free_time);
+void parse_note (CHAR_DATA *ch, char *argument, int type);
+bool hide_note (CHAR_DATA *ch, NOTE_DATA *pnote);
 
 NOTE_DATA *note_list;
 NOTE_DATA *immortal_list;
