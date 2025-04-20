@@ -32,6 +32,7 @@
 
 #include <sys/types.h>
 #include <sys/time.h>
+#include <sys/ipc.h>
 #include <gc.h>
 #include <unistd.h>
 #include <signal.h>
@@ -44,10 +45,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <arpa/telnet.h>
 #include <netdb.h>
-#include <sys/time.h>
 #include <sys/resource.h>
-#include <pthread.h>
+#include <fcntl.h>
 
 #include "merc.h"
 #include "recycle.h"
@@ -59,6 +60,7 @@
 #include "clan.h"
 #include "log.h"
 #include "http.h"
+#include "lookup.h"
 
 /* command procedures needed */
 DECLARE_DO_FUN	( action_wraithform );
@@ -83,38 +85,16 @@ DECLARE_DO_FUN(do_tell);
 DECLARE_DO_FUN(do_grats);
 DECLARE_DO_FUN(do_gtell);
 
-/* External Functions */
-int	nonclan_lookup	args( (const char *name) );
-
 /*
  * Malloc debugging stuff.
  */
 
 #if defined(MALLOC_DEBUG)
 #include <malloc.h>
-extern  int     malloc_debug    args( ( int  ) );
-extern  int     malloc_verify   args( ( void ) );
+extern  int     malloc_debug    (int);
+extern  int     malloc_verify   (void);
 #endif
 int clanner_count = 0;
-
-
-/*
- * Signal handling.
- *   I dance around it.
- */
-#include <signal.h>
-#include <sys/ipc.h>
-
-
-/*
- * Socket and TCP/IP stuff.
- */
-
-#include <fcntl.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <arpa/telnet.h>
 
 extern char *help_greeting;
 
