@@ -21,16 +21,16 @@
 #include <string.h>
 #include <gc.h>
 #include <stdlib.h>
-#include "merc.h"
-#include "recycle.h"
-#include "lookup.h"
+#include <ctype.h>
 
-DECLARE_DO_FUN(do_help   );
-int liq_lookup (const char *name);
-int ispunct(int val);
-int isdigit(int val);
-void do_text(CHAR_DATA *ch, char *argument);
-void modify_room_marker(CLAN_DATA *clan, ROOM_INDEX_DATA *room, int dir, bool place);
+#include "merc.h"
+#include "act_info.h"
+#include "handler.h"
+#include "lookup.h"
+#include "note.h"
+#include "recycle.h"
+
+void modify_room_marker (CLAN_DATA *clan, ROOM_INDEX_DATA *room, int dir, bool place);
 
 extern   sh_int  rev_dir[];
 extern CLAN_DATA *clan_first;
