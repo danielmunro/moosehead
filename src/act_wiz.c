@@ -34,6 +34,7 @@
 #include "act_move.h"
 #include "clan.h"
 #include "comm.h"
+#include "interp.h"
 
 /*
  * Local functions.

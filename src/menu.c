@@ -23,6 +23,7 @@
 #include <time.h>
 
 #include "merc.h"
+#include "interp.h"
 #include "menu.h"
 
 void set_from_previous_menu(CHAR_DATA *ch) {

@@ -62,6 +62,7 @@
 #include "act_info.h"
 #include "act_move.h"
 #include "clan.h"
+#include "interp.h"
 #include "log.h"
 #include "http.h"
 #include "lookup.h"
@@ -3627,7 +3628,7 @@ if (IS_SET(ch->mhs,MHS_HIGHLANDER))
       act("$n has entered the game.",ch->pet,NULL,NULL,TO_ROOM,false);
   }
 #ifdef GAME_VERSION
-  do_unread(ch);
+  do_unread(ch, "");
   do_count(ch, "");
 #endif
   if(!IS_NPC(ch) && ch->pcdata->start_time > 0)

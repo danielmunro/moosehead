@@ -21,15 +21,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
 #include "merc.h"
 #include "interp.h"
 #include "tables.h"
 #include "lookup.h"
 #include "flags.h"
+#include "note.h"
 
 
-bool  check_social  args( ( CHAR_DATA *ch, char *command,
-          char *argument ) );
+
+bool check_social (CHAR_DATA *ch, char *command, char *argument);
 
 
 

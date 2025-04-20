@@ -3811,11 +3811,6 @@ char *  cont_bit_name   args( ( int cont_flags) );
 char *  clan_bit_name   args( ( int clan_flags) );
 char*	exit_bit_name	args( ( int exit_flags ) );
 
-
-/* interp.c */
-void    interpret       args( ( CHAR_DATA *ch, char *argument ) );
-bool	check_social	args( ( CHAR_DATA *ch, char *command, char *argument ));
-
 #include "input.h"
 
 /* clan.c */

@@ -89,7 +89,7 @@ void do_spool(CHAR_DATA *ch)
   return;
 }
 
-void do_unread(CHAR_DATA *ch)
+void do_unread(CHAR_DATA *ch, char *argument)
 {
     char buf[MAX_STRING_LENGTH];
     int count;
