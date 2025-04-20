@@ -34,6 +34,7 @@ extern  const struct  cmd_type  cmd_table [];
 extern  int     nAllocString;
 extern  int     nAllocPerm;
 
+/* local functions */
 bool check_social (CHAR_DATA *ch, char *command, char *argument);
 void interpret (CHAR_DATA *ch, char *argument);
 
@@ -41,7 +42,6 @@ void interpret (CHAR_DATA *ch, char *argument);
  * Command functions.
  * Defined in act_*.c (mostly).
  */
-DECLARE_DO_FUN( do_abolish      );
 DECLARE_DO_FUN( do_advance  );
 DECLARE_DO_FUN( do_afk    );
 DECLARE_DO_FUN( do_alia   );
