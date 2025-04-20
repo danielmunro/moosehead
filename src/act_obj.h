@@ -6,5 +6,7 @@ void return_clan_gear (CHAR_DATA *ch, OBJ_DATA *corpse);
 int get_link_limit (CHAR_DATA *ch);
 bool remove_obj (CHAR_DATA *ch, int iWear, bool fReplace);
 void wear_obj (CHAR_DATA *ch, OBJ_DATA *obj, bool fReplace);
+void do_get (CHAR_DATA *ch, char *argument);
+void do_sacrifice (CHAR_DATA *ch, char *argument);
 
 #endif //MOOSEHEAD_ACT_OBJ_H

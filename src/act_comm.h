@@ -21,5 +21,6 @@ void do_grats (CHAR_DATA *ch, char *argument);
 void do_gtell (CHAR_DATA *ch, char *argument);
 void do_quit (CHAR_DATA *ch, char *argument);
 void do_save (CHAR_DATA *ch, char *argument);
+void do_emote (CHAR_DATA *ch, char *argument);
 
 #endif //MOOSEHEAD_ACT_COMM_H

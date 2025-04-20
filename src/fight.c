@@ -26,7 +26,11 @@
 #include "recycle.h"
 #include "lookup.h"
 #include "clan.h"
+#include "db.h"
+#include "act_comm.h"
 #include "act_move.h"
+#include "act_obj.h"
+#include "act_wiz.h"
 
 #define MAX_DAMAGE_MESSAGE 44
 
@@ -34,26 +38,21 @@ extern char *const dir_name[];
 int override = 0;
 
 /* command procedures needed */
-DECLARE_DO_FUN(do_tail_slap);
-DECLARE_DO_FUN(do_backstab);
-DECLARE_DO_FUN(do_emote);
-DECLARE_DO_FUN(do_berserk);
-DECLARE_DO_FUN(do_bash);
-DECLARE_DO_FUN(do_bite);
-DECLARE_DO_FUN(do_breathe);
-DECLARE_DO_FUN(do_trip);
-DECLARE_DO_FUN(do_dirt);
-DECLARE_DO_FUN(do_fear);
-DECLARE_DO_FUN(do_flee);
-DECLARE_DO_FUN(do_hex);
-DECLARE_DO_FUN(do_kick);
-DECLARE_DO_FUN(do_disarm);
-DECLARE_DO_FUN(do_get);
-DECLARE_DO_FUN(do_recall);
-DECLARE_DO_FUN(do_yell);
-DECLARE_DO_FUN(do_sacrifice);
-DECLARE_DO_FUN(do_kcharge);
-DECLARE_DO_FUN(do_grab);
+void do_tail_slap (CHAR_DATA *ch, char *argument);
+void do_backstab (CHAR_DATA *ch, char *argument);
+void do_berserk (CHAR_DATA *ch, char *argument);
+void do_bash (CHAR_DATA *ch, char *argument);
+void do_bite (CHAR_DATA *ch, char *argument);
+void do_breathe (CHAR_DATA *ch, char *argument);
+void do_trip (CHAR_DATA *ch, char *argument);
+void do_dirt (CHAR_DATA *ch, char *argument);
+void do_fear (CHAR_DATA *ch, char *argument);
+void do_flee (CHAR_DATA *ch, char *argument);
+void do_hex (CHAR_DATA *ch, char *argument);
+void do_kick (CHAR_DATA *ch, char *argument);
+void do_disarm (CHAR_DATA *ch, char *argument);
+void do_kcharge (CHAR_DATA *ch, char *argument);
+void do_grab (CHAR_DATA *ch, char *argument);
 
 #ifdef DEITY_TRIAL_DEBUG_CODE
 extern int deity_value_override;
@@ -65,72 +64,65 @@ extern int bounty_complete;
 extern int bounty_type;
 extern bool bounty_downgrade;
 
-void select_bounty(int qualifier);
-
-CLAN_DATA *clan_lookup args(( const char *name ));
-
 /*
  * Local functions.
  */
-void kill args((CHAR_DATA * ch, char *argument, bool canChange ));
+void kill (CHAR_DATA * ch, char *argument, bool canChange);
 
-int check_myrmidon args((CHAR_DATA * ch, int sn ));
+int check_myrmidon (CHAR_DATA * ch, int sn);
 
-void flee args((CHAR_DATA * ch, char *argument, bool fWimpy ));
+void flee (CHAR_DATA * ch, char *argument, bool fWimpy);
 
-void handle_critical(CHAR_DATA *ch, int *damage, int dam_type, int diceroll, int base_dam);
+void handle_critical (CHAR_DATA *ch, int *damage, int dam_type, int diceroll, int base_dam);
 
-bool is_safe_steal args((CHAR_DATA * ch, CHAR_DATA * victim));
+bool is_safe_steal (CHAR_DATA * ch, CHAR_DATA * victim);
 
-bool is_clan_guard args((CHAR_DATA * victim));
+bool is_clan_guard (CHAR_DATA * victim);
 
-void do_cutpurse args((CHAR_DATA * ch, CHAR_DATA * victim));
+void do_cutpurse (CHAR_DATA * ch, CHAR_DATA * victim);
 
-void check_assist args((CHAR_DATA * ch, CHAR_DATA * victim));
+void check_assist (CHAR_DATA * ch, CHAR_DATA * victim);
 
-bool check_scales args((CHAR_DATA * ch, CHAR_DATA * victim, bool fSecondary ));
+bool check_scales (CHAR_DATA * ch, CHAR_DATA * victim, bool fSecondary);
 
-bool check_dodge args((CHAR_DATA * ch, CHAR_DATA * victim, bool fSecondary ));
+bool check_dodge (CHAR_DATA * ch, CHAR_DATA * victim, bool fSecondary);
 
-bool check_mistform args((CHAR_DATA * ch, CHAR_DATA * victim));
+bool check_mistform (CHAR_DATA * ch, CHAR_DATA * victim);
 
-bool check_kailindo args((CHAR_DATA * ch, CHAR_DATA * victim));
+bool check_kailindo (CHAR_DATA * ch, CHAR_DATA * victim);
 
-void check_killer args((CHAR_DATA * ch, CHAR_DATA * victim));
+void check_killer (CHAR_DATA * ch, CHAR_DATA * victim);
 
-bool check_parry args((CHAR_DATA * ch, CHAR_DATA * victim, bool fSecondary ));
+bool check_parry (CHAR_DATA * ch, CHAR_DATA * victim, bool fSecondary);
 
-bool check_shield_block args((CHAR_DATA * ch, CHAR_DATA * victim, bool fSecondary ));
+bool check_shield_block (CHAR_DATA * ch, CHAR_DATA * victim, bool fSecondary);
 
-bool check_nether args((CHAR_DATA * ch, CHAR_DATA * victim, bool fSecondary ));
+bool check_nether (CHAR_DATA * ch, CHAR_DATA * victim, bool fSecondary);
 
-void dam_message args((CHAR_DATA * ch, CHAR_DATA * victim, int dam,
-                              int dt, bool immune ));
+void dam_message (CHAR_DATA * ch, CHAR_DATA * victim, int dam,
+                  int dt, bool immune);
 
-void dam_message_new args((CHAR_DATA * ch, CHAR_DATA * victim, int dam,
-                                  int dt, bool immune ));
+void dam_message_new (CHAR_DATA * ch, CHAR_DATA * victim, int dam,
+                      int dt, bool immune);
 
-void death_cry args((CHAR_DATA * ch));
+void death_cry (CHAR_DATA * ch);
 
-void group_gain args((CHAR_DATA * ch, CHAR_DATA * victim));
+void group_gain (CHAR_DATA * ch, CHAR_DATA * victim);
 
-int xp_compute args((CHAR_DATA * gch, CHAR_DATA * victim,
-                            int total_levels ));
+int xp_compute (CHAR_DATA * gch, CHAR_DATA * victim,
+                int total_levels);
 
-bool is_safe args((CHAR_DATA * ch, CHAR_DATA * victim));
+bool is_safe (CHAR_DATA * ch, CHAR_DATA * victim);
 
-void one_hit args((CHAR_DATA * ch, CHAR_DATA * victim, int dt ));
+void one_hit (CHAR_DATA * ch, CHAR_DATA * victim, int dt);
 
-void mob_hit args((CHAR_DATA * ch, CHAR_DATA * victim, int dt ));
+void mob_hit (CHAR_DATA * ch, CHAR_DATA * victim, int dt);
 
-void raw_kill args((CHAR_DATA * victim, CHAR_DATA * ch));
+void raw_kill (CHAR_DATA * victim, CHAR_DATA * ch);
 
-void set_fighting args((CHAR_DATA * ch, CHAR_DATA * victim));
+void set_fighting (CHAR_DATA * ch, CHAR_DATA * victim);
 
-void disarm args((CHAR_DATA * ch, CHAR_DATA * victim));
-
-/* Externals */
-void remove_highlander args((CHAR_DATA * ch, CHAR_DATA * victim));
+void disarm (CHAR_DATA * ch, CHAR_DATA * victim);
 
 /*
  * Utility function for rangers

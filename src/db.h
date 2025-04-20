@@ -32,6 +32,7 @@ extern AREA_DATA  * area_first, * area_last;
 extern AREA_NAME_DATA  *area_name_first,*area_name_last;
 
 void rename_area (char *strArea);
+void select_bounty (int qualifier);
 
 /* from db2.c */
 extern int  social_count;
