@@ -37,7 +37,7 @@
 extern char *const dir_name[];
 int override = 0;
 
-/* command procedures needed */
+/* local functions */
 void do_tail_slap (CHAR_DATA *ch, char *argument);
 void do_backstab (CHAR_DATA *ch, char *argument);
 void do_berserk (CHAR_DATA *ch, char *argument);
