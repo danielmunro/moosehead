@@ -22,18 +22,17 @@
 #include <stdlib.h>
 
 #include "merc.h"
+#include "act_info.h"
+#include "lookup.h"
+#include "handler.h"
 #include "tables.h"
 #include "gladiator.h"
 #include "clan.h"
 
-/* command procedures needed */
-DECLARE_DO_FUN(do_look    );
-DECLARE_DO_FUN(do_recall  );
-DECLARE_DO_FUN(do_stand   );
+void do_recall (CHAR_DATA *ch, char *argument);
+bool recall (CHAR_DATA *ch, char *argument, bool fPray);
+void do_stand (CHAR_DATA *ch, char *argument);
 
-CLAN_DATA *clan_lookup   args( ( const char *name ) );
-bool recall args( (CHAR_DATA *ch, char *argument, bool fPray ) );
-bool  has_boat args( ( CHAR_DATA *ch ) );
 char	kludge_string[MAX_STRING_LENGTH];
 
 char *  const dir_name  []    =
