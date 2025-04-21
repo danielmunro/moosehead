@@ -22,5 +22,9 @@ void do_gtell (CHAR_DATA *ch, char *argument);
 void do_quit (CHAR_DATA *ch, char *argument);
 void do_save (CHAR_DATA *ch, char *argument);
 void do_emote (CHAR_DATA *ch, char *argument);
+void add_follower (CHAR_DATA *ch, CHAR_DATA *master);
+void stop_follower (CHAR_DATA *ch);
+void nuke_pets (CHAR_DATA *ch);
+void die_follower (CHAR_DATA *ch);
 
 #endif //MOOSEHEAD_ACT_COMM_H

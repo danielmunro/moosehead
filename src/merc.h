@@ -3503,10 +3503,6 @@ extern sh_int      posse_thug_kills;
 #define TIMESTAMP_UPPERMASK 64 | 128 | 256
 
 /* act_comm.c */
-void    add_follower    args( ( CHAR_DATA *ch, CHAR_DATA *master ) );
-void    stop_follower   args( ( CHAR_DATA *ch ) );
-void    nuke_pets       args( ( CHAR_DATA *ch ) );
-void    die_follower    args( ( CHAR_DATA *ch ) );
 void    die_ignore      args( ( CHAR_DATA *ch ) );
 bool    is_same_group   args( ( CHAR_DATA *ach, CHAR_DATA *bch ) );
 bool	group_has_crusader args( ( CHAR_DATA *ch ) );
