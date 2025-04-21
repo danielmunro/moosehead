@@ -3505,11 +3505,6 @@ extern sh_int      posse_thug_kills;
 extern char kludge_string[MAX_STRING_LENGTH];
 
 /* comm.c */
-#include "comm.h"
-void    show_string     args( ( struct descriptor_data *d, char *input) );
-void    close_socket    args( ( DESCRIPTOR_DATA *dclose ) );
-void    write_to_buffer args( ( DESCRIPTOR_DATA *d, const char *txt,
-          int length ) );
 void    send_to_char    args( ( const char *txt, CHAR_DATA *ch ) );
 void	send_to_room	args( ( const char *txt, ROOM_INDEX_DATA *room ) );
 void    page_to_char    args( ( const char *txt, CHAR_DATA *ch ) );

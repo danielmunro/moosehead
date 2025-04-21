@@ -12,6 +12,7 @@
 #include <yuarel.h>
 
 #include "merc.h"
+#include "comm.h"
 #include "log.h"
 #include "lookup.h"
 

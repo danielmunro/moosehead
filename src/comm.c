@@ -141,6 +141,9 @@ void creation_finalize (DESCRIPTOR_DATA *d, bool def);
 void creation_message (DESCRIPTOR_DATA *d, bool forward);
 int creation_step (DESCRIPTOR_DATA *d, bool forward, bool accept);
 bool is_creation (DESCRIPTOR_DATA *d);
+void show_string (struct descriptor_data *d, char *input);
+void close_socket (DESCRIPTOR_DATA *dclose);
+void write_to_buffer (DESCRIPTOR_DATA *d, const char *txt, int length);
 
 int run(const int mud_port, const int http_port) {
     struct timeval now_time;
