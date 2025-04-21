@@ -26,6 +26,7 @@
 
 #include "merc.h"
 #include "act_info.h"
+#include "act_wiz.h"
 #include "recycle.h"
 #include "tables.h"
 #include "clan.h"

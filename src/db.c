@@ -36,6 +36,7 @@
 #include "clan.h"
 #include "live_edit.h"
 #include "act_obj.h"
+#include "act_wiz.h"
 #include "log.h"
 
 extern int bounty_available[];

@@ -27,6 +27,7 @@
 #include "act_enter.h"
 #include "act_info.h"
 #include "act_move.h"
+#include "act_wiz.h"
 #include "fight.h"
 #include "tables.h"
 #include "recycle.h"

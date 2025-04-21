@@ -22,7 +22,9 @@
 #include <string.h>
 #include <time.h>
 #include <gc.h>
+
 #include "merc.h"
+#include "act_wiz.h"
 #include "recycle.h"
 #include "db.h"
 #include "ctype.h"

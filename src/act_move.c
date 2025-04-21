@@ -25,6 +25,7 @@
 #include "act_comm.h"
 #include "act_info.h"
 #include "act_obj.h"
+#include "act_wiz.h"
 #include "lookup.h"
 #include "handler.h"
 #include "tables.h"
