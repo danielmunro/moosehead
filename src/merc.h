@@ -3504,12 +3504,6 @@ extern sh_int      posse_thug_kills;
 
 extern char kludge_string[MAX_STRING_LENGTH];
 
-/* act_obj.c */
-void    get_obj         args( ( CHAR_DATA *ch, OBJ_DATA *obj,
-          OBJ_DATA *container ) );
-void remove_bonuses( CHAR_DATA *ch, OBJ_DATA *obj);
-void add_bonuses( CHAR_DATA *ch, OBJ_DATA *obj);
-
 /* act_wiz.c */
 void wiznet             args( (char *string, CHAR_DATA *ch, OBJ_DATA *obj,
              long flag, long flag_skip, int min_level ) );
