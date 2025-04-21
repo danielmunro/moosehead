@@ -117,36 +117,27 @@ const char *        build_version;
 key_t msg_key;
 int   msg_id;
 
-void    game_loop_unix          args( ( int control ) );
-int     init_socket             args( ( int port ) );
-void    init_descriptor         args( ( int control ) );
-bool    read_from_descriptor    args( ( DESCRIPTOR_DATA *d ) );
-bool    write_to_descriptor     
-	args( ( int desc, char *txt, int length, DESCRIPTOR_DATA *d ) );
-
-
-/*
- * Other local functions (OS-independent).
- */
-bool    check_parse_name        args( ( char *name ) );
-bool    check_reconnect         args( ( DESCRIPTOR_DATA *d, char *name,
-            bool fConn ) );
-bool    check_playing           args( ( DESCRIPTOR_DATA *d, char *name ) );
-int     main                    args( ( int argc, char **argv ) );
-void    nanny                   args( ( DESCRIPTOR_DATA *d, char *argument ) );
-void    show_stats		args( ( DESCRIPTOR_DATA *d ) );
-int 	calc_stat_cost		args( ( CHAR_DATA *ch, int attr_type ) );
-bool	can_use_points		args( ( CHAR_DATA *ch, int points ) );
-bool    process_output          args( ( DESCRIPTOR_DATA *d, bool fPrompt ) );
-void    read_from_buffer        args( ( DESCRIPTOR_DATA *d ) );
-void    stop_idling             args( ( CHAR_DATA *ch ) );
-void    bust_a_prompt           args( ( CHAR_DATA *ch ) );
-bool    check_mob_name          args( ( char *name, bool old_char ) );
-void creation_input(DESCRIPTOR_DATA *d, char *argument);
-void creation_finalize(DESCRIPTOR_DATA *d, bool def);
-void creation_message(DESCRIPTOR_DATA *d, bool forward);
-int creation_step(DESCRIPTOR_DATA *d, bool forward, bool accept);
-bool is_creation(DESCRIPTOR_DATA *d);
+/* local functions */
+void game_loop_unix (int control);
+int init_socket (int port);
+void init_descriptor (int control);
+bool read_from_descriptor (DESCRIPTOR_DATA *d);
+bool write_to_descriptor (int desc, char *txt, int length, DESCRIPTOR_DATA *d);
+bool check_parse_name (char *name);
+bool check_reconnect (DESCRIPTOR_DATA *d, char *name, bool fConn);
+bool check_playing (DESCRIPTOR_DATA *d, char *name);
+void nanny (DESCRIPTOR_DATA *d, char *argument);
+int calc_stat_cost (CHAR_DATA *ch, int attr_type);
+bool process_output (DESCRIPTOR_DATA *d, bool fPrompt);
+void read_from_buffer (DESCRIPTOR_DATA *d);
+void stop_idling (CHAR_DATA *ch);
+void bust_a_prompt (CHAR_DATA *ch);
+bool check_mob_name (char *name, bool old_char);
+void creation_input (DESCRIPTOR_DATA *d, char *argument);
+void creation_finalize (DESCRIPTOR_DATA *d, bool def);
+void creation_message (DESCRIPTOR_DATA *d, bool forward);
+int creation_step (DESCRIPTOR_DATA *d, bool forward, bool accept);
+bool is_creation (DESCRIPTOR_DATA *d);
 
 int run(const int mud_port, const int http_port) {
     struct timeval now_time;
@@ -3996,22 +3987,6 @@ void stop_idling( CHAR_DATA *ch )
     return;
 }
 
-bool can_use_points( CHAR_DATA *ch, int points )
-{
-    int i;
-
-    if ( points <= 0 ) return false;
-    for ( i = 0 ; i < MAX_STATS ; i++ )
-    {
-	if(i == STAT_END || i == STAT_AGT)
-	  continue;
-        if ( calc_stat_cost(ch,i) <= points 
-	  && get_max_train(ch,i) > ch->perm_stat[i] )
-		return true;
-    }
-    return false;
-}
-
 int calc_stat_cost( CHAR_DATA *ch, int attr_type )
 {
 
@@ -4045,40 +4020,6 @@ int calc_stat_cost( CHAR_DATA *ch, int attr_type )
   return cost;
 }
 
-
-void show_stats( DESCRIPTOR_DATA *d )
-{
-    CHAR_DATA *ch;
-    int i,statCost;
-    char buf[MAX_STRING_LENGTH];
-    static char *attrib_name[] = {
-	"Str", "Int", "Wis", "Dex", "Con", "Agt", "End", "Cha" };
-
-    if ( ( ch = d->character ) == NULL )
-    {
-	bug("display_stats : NULL ch in d",0);
-	return;
-    }
-
-    send_to_char("\n\r",ch);
-    for ( i = 0 ; i < MAX_STATS ; i++ )
-    {
-    if(i == STAT_AGT || i == STAT_END)
-	continue;
-    statCost = calc_stat_cost(ch,i);
-    sprintf(buf,"%s: Current: %2d, spend %d point%s to raise to %2d.\n\r",
-        attrib_name[i],
-	ch->perm_stat[i],
-	statCost,
-	statCost == 1 ? "" : "s",
-	ch->perm_stat[i]+1 );
-    send_to_char(buf,ch);
-    }
-
-    sprintf(buf,"You have %d points.  Improve which attribute? -> ",
-	ch->gen_data->bonus_points );
-    send_to_char(buf,ch);
-}
 /*
  * Write something to a given room
  * Hybred between stc and act, only works if awake

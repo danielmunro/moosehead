@@ -29,6 +29,7 @@
  #include "act_move.h"
  #include "act_obj.h"
  #include "act_wiz.h"
+ #include "comm.h"
  #include "magic.h"
  #include "recycle.h"
  #include "tables.h"
