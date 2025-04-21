@@ -26,6 +26,7 @@
 #include "recycle.h"
 #include "tables.h"
 #include "gladiator.h"
+#include "act_enter.h"
 #include "act_obj.h"
 #include "act_info.h"
 #include "act_comm.h"

@@ -3502,10 +3502,6 @@ extern sh_int      posse_thug_kills;
 #define TIMESTAMP_SHOW  256
 #define TIMESTAMP_UPPERMASK 64 | 128 | 256
 
-/* act_enter.c */
-RID  *get_random_room   args ( (CHAR_DATA *ch) );
-RID  *get_random_room_obj(void);
-
 /* act_info.c */
 void    set_title       args( ( CHAR_DATA *ch, char *title ) );
 void    show_list_to_char       args( ( OBJ_DATA *list, CHAR_DATA *ch,
