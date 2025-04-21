@@ -382,7 +382,6 @@ DECLARE_DO_FUN( do_stat   );
 DECLARE_DO_FUN( do_steal  );
 DECLARE_DO_FUN( do_story  );
 DECLARE_DO_FUN( do_string );
-DECLARE_DO_FUN( do_surname      );
 DECLARE_DO_FUN( do_switch );
 DECLARE_DO_FUN( do_syncarea );
 DECLARE_DO_FUN( do_synchelps );
