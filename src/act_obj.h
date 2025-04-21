@@ -10,5 +10,11 @@ void wear_obj (CHAR_DATA *ch, OBJ_DATA *obj, bool fReplace);
 void do_get (CHAR_DATA *ch, char *argument);
 void do_sacrifice (CHAR_DATA *ch, char *argument);
 void do_wear (CHAR_DATA *ch, char *argument);
+void unlink_item (CHAR_DATA *ch, OBJ_DATA *obj);
+void do_link (CHAR_DATA *ch, char *argument);
+void do_unlink (CHAR_DATA *ch, char *argument);
+void do_linksafe (CHAR_DATA *ch, char *argument);
+void steal (CHAR_DATA *ch, char *arg1, CHAR_DATA *victim);
+bool can_loot (CHAR_DATA *ch, OBJ_DATA *obj, bool loot_check);
 
 #endif //MOOSEHEAD_ACT_OBJ_H

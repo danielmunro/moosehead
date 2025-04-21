@@ -3505,12 +3505,6 @@ extern sh_int      posse_thug_kills;
 extern char kludge_string[MAX_STRING_LENGTH];
 
 /* act_obj.c */
-void unlink_item args((CHAR_DATA *ch, OBJ_DATA *obj));
-void do_link args((CHAR_DATA *ch, char *argument));
-void do_unlink args((CHAR_DATA *ch, char *argument));
-void do_linksafe args((CHAR_DATA *ch, char *argument));
-void  steal	args( ( CHAR_DATA *ch, char *arg1, CHAR_DATA *victim) );
-bool can_loot           args( (CHAR_DATA *ch, OBJ_DATA *obj, bool loot_check) );
 void    get_obj         args( ( CHAR_DATA *ch, OBJ_DATA *obj,
           OBJ_DATA *container ) );
 void remove_bonuses( CHAR_DATA *ch, OBJ_DATA *obj);

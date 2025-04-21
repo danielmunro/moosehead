@@ -43,6 +43,7 @@ CHAR_DATA *find_keeper (CHAR_DATA *ch);
 int get_cost (CHAR_DATA *keeper, OBJ_DATA *obj, bool fBuy);
 void obj_to_keeper (OBJ_DATA *obj, CHAR_DATA *ch);
 OBJ_DATA *get_obj_keeper (CHAR_DATA *ch, CHAR_DATA *keeper, char *argument);
+void steal (CHAR_DATA *ch, char *arg1, CHAR_DATA *victim);
 
 #define COST_ACCURACY   100
 #define COST_SPEED      300
