@@ -43,10 +43,6 @@ typedef void SPELL_FUN  args( ( int sn, int level, CHAR_DATA *ch, void *vo,
 #define DECLARE_SPELL_FUN( fun )        SPELL_FUN fun
 #endif
 
-/* system calls */
-int unlink();
-int system();
-
 typedef struct plan_exit_data           PLAN_EXIT_DATA;
 typedef struct alliance_data            ALLIANCE_DATA;
 typedef struct clan_data                CLAN_DATA;
