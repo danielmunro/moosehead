@@ -22,6 +22,7 @@
 #include <stdlib.h>
 
 #include "merc.h"
+#include "comm.h"
 #include "act_info.h"
 #include "act_move.h"
 

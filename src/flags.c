@@ -20,7 +20,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 #include "merc.h"
+#include "comm.h"
 #include "tables.h"
 #include "lookup.h"
 

@@ -28,6 +28,7 @@
 #include <gc.h>
 
 #include "merc.h"
+#include "comm.h"
 #include "db.h"
 #include "recycle.h"
 #include "music.h"

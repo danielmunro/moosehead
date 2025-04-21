@@ -22,6 +22,7 @@
 #include <time.h>
 
 #include "merc.h"
+#include "comm.h"
 #include "magic.h"
 #include "recycle.h"
 #include "tables.h"

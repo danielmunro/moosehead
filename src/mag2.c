@@ -27,6 +27,7 @@
 #include "act_info.h"
 #include "act_move.h"
 #include "act_obj.h"
+#include "comm.h"
 #include "magic.h"
 #include "tables.h"
 #include "gladiator.h"

@@ -28,6 +28,7 @@
 #include "act_move.h"
 #include "act_obj.h"
 #include "act_wiz.h"
+#include "comm.h"
 #include "fight.h"
 #include "handler.h"
 #include "tables.h"

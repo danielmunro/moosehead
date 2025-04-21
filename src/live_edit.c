@@ -25,6 +25,7 @@
 
 #include "merc.h"
 #include "act_info.h"
+#include "comm.h"
 #include "handler.h"
 #include "lookup.h"
 #include "note.h"

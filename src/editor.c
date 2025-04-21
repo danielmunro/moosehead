@@ -21,7 +21,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
 #include "merc.h"
+#include "comm.h"
 #include "recycle.h"
 #include "menu.h"
 

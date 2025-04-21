@@ -11,6 +11,7 @@
 #include "act_info.h"
 #include "act_move.h"
 #include "act_wiz.h"
+#include "comm.h"
 #include "lookup.h"
 #include "note.h"
 #include "tables.h"

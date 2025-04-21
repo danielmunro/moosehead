@@ -24,6 +24,7 @@
 #include <ctype.h>
 
 #include "merc.h"
+#include "comm.h"
 #include "recycle.h"
 #include "lookup.h"
 #include "tables.h"

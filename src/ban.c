@@ -23,6 +23,7 @@
 #include <unistd.h>
 
 #include "merc.h"
+#include "comm.h"
 #include "recycle.h"
 
 BAN_DATA *ban_list = NULL;

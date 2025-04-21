@@ -21,6 +21,7 @@
 #include <time.h>
 
 #include "merc.h"
+#include "comm.h"
 #include "tables.h"
 #include "interp.h"
 #include "gladiator.h"

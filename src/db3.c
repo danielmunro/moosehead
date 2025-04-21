@@ -29,6 +29,7 @@
 #include <unistd.h>
 
 #include "merc.h"
+#include "comm.h"
 #include "tables.h"
 #include "db.h"
 

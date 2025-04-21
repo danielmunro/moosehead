@@ -9,6 +9,7 @@
 
 #include "merc.h"
 #include "act_info.h"
+#include "comm.h"
 #include "recycle.h"
 #include "magic.h"
 

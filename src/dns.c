@@ -23,6 +23,7 @@
 #include <unistd.h>
 
 #include "merc.h"
+#include "comm.h"
 #include "recycle.h"
 
 DNS_DATA *dns_list = NULL;

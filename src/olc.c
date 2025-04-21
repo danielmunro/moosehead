@@ -25,6 +25,7 @@
 
 #include "merc.h"
 #include "act_wiz.h"
+#include "comm.h"
 #include "recycle.h"
 #include "db.h"
 #include "ctype.h"

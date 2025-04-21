@@ -22,6 +22,7 @@
 
 #include "merc.h"
 #include "act_comm.h"
+#include "comm.h"
 #include "tables.h"
 
 bool out_of_element( CHAR_DATA *ch)

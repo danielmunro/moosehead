@@ -3504,16 +3504,6 @@ extern sh_int      posse_thug_kills;
 
 extern char kludge_string[MAX_STRING_LENGTH];
 
-/* comm.c */
-void    send_to_char    args( ( const char *txt, CHAR_DATA *ch ) );
-void	send_to_room	args( ( const char *txt, ROOM_INDEX_DATA *room ) );
-void    page_to_char    args( ( const char *txt, CHAR_DATA *ch ) );
-void    act             args( ( const char *format, CHAR_DATA *ch,
-          const void *arg1, const void *arg2, int type, bool ooc ) );
-void    act_new         args( ( const char *format, CHAR_DATA *ch, 
-          const void *arg1, const void *arg2, int type,
-          int min_pos, bool ooc) );
-
 /* deity.c */
 void do_deity_msg(char *msg, CHAR_DATA *ch);
 void	give_gift	args( (CHAR_DATA *ch, int gift) );

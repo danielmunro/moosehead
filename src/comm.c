@@ -144,6 +144,11 @@ bool is_creation (DESCRIPTOR_DATA *d);
 void show_string (struct descriptor_data *d, char *input);
 void close_socket (DESCRIPTOR_DATA *dclose);
 void write_to_buffer (DESCRIPTOR_DATA *d, const char *txt, int length);
+void send_to_char (const char *txt, CHAR_DATA *ch);
+void act (const char *format, CHAR_DATA *ch, const void *arg1,
+          const void *arg2, int type, bool ooc);
+void act_new (const char *format, CHAR_DATA *ch, const void *arg1,
+              const void *arg2, int type, int min_pos, bool ooc);
 
 int run(const int mud_port, const int http_port) {
     struct timeval now_time;

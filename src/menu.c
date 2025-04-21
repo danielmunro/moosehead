@@ -23,6 +23,7 @@
 #include <time.h>
 
 #include "merc.h"
+#include "comm.h"
 #include "interp.h"
 #include "menu.h"
 

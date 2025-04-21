@@ -27,6 +27,7 @@
 #include "act_move.h"
 #include "act_obj.h"
 #include "act_wiz.h"
+#include "comm.h"
 #include "lookup.h"
 #include "music.h"
 #include "tables.h"

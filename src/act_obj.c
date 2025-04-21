@@ -29,6 +29,7 @@
 #include "act_info.h"
 #include "act_comm.h"
 #include "act_wiz.h"
+#include "comm.h"
 #include "magic.h"
 #include "special.h"
 #include "handler.h"
