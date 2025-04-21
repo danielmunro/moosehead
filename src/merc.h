@@ -3503,7 +3503,6 @@ extern sh_int      posse_thug_kills;
 #define TIMESTAMP_UPPERMASK 64 | 128 | 256
 
 /* act_comm.c */
-bool    send_timestamps args( ( CHAR_DATA *ch, bool send_now, bool global) );
 bool	check_parse_name	args( ( char * arg ) );
 bool	check_parse_surname	args( ( char * arg ) );
 void    check_sex       args( ( CHAR_DATA *ch) );
