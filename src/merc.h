@@ -3504,16 +3504,6 @@ extern sh_int      posse_thug_kills;
 
 extern char kludge_string[MAX_STRING_LENGTH];
 
-/* alias.c */
-void    substitute_alias args( (DESCRIPTOR_DATA *d, char *input) );
-
-/* ban.c */
-bool    check_ban       args( ( char *site, int type) );
-
-/* dns.c */
-bool	check_dns	args( ( char *site) );
-void	dns_site	args( (CHAR_DATA *ch, char *site) );
-
 /* comm.c */
 #include "comm.h"
 void    show_string     args( ( struct descriptor_data *d, char *input) );
