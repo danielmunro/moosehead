@@ -12,5 +12,7 @@ bool recall (CHAR_DATA *ch, char *argument, bool fPray);
 void action_ambush (CHAR_DATA *ch, char *argument);
 int find_door (CHAR_DATA *ch, char *arg);
 bool has_key (CHAR_DATA *ch, int key);
+void move_char (CHAR_DATA *ch, int door, bool follow);
+void fade (CHAR_DATA *ch, char *argument);
 
 #endif //MOOSEHEAD_ACT_MOVE_H

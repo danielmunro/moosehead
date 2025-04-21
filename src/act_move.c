@@ -34,6 +34,7 @@
 void do_recall (CHAR_DATA *ch, char *argument);
 bool recall (CHAR_DATA *ch, char *argument, bool fPray);
 void do_stand (CHAR_DATA *ch, char *argument);
+bool is_abolishable (AFFECT_DATA *af);
 
 char	kludge_string[MAX_STRING_LENGTH];
 

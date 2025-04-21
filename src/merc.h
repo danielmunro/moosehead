@@ -3502,11 +3502,7 @@ extern sh_int      posse_thug_kills;
 #define TIMESTAMP_SHOW  256
 #define TIMESTAMP_UPPERMASK 64 | 128 | 256
 
-/* act_move.c */
-bool	is_abolishable	args( ( AFFECT_DATA *af ) );
-void    move_char       args( ( CHAR_DATA *ch, int door, bool follow ) );
-extern	char	kludge_string[MAX_STRING_LENGTH];
-void 	fade	args( ( CHAR_DATA *ch, char *argument ) );
+extern char kludge_string[MAX_STRING_LENGTH];
 
 /* act_obj.c */
 void unlink_item args((CHAR_DATA *ch, OBJ_DATA *obj));
