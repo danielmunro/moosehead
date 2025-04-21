@@ -23,6 +23,7 @@
 #include <stdlib.h>
 
 #include "merc.h"
+#include "act_comm.h"
 #include "recycle.h"
 #include "lookup.h"
 #include "tables.h"

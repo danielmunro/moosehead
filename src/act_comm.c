@@ -38,6 +38,8 @@ void reclass (CHAR_DATA *ch, int class, bool fPenalty);
 void do_quit (CHAR_DATA *ch, char *argument);
 void add_follower (CHAR_DATA *ch, CHAR_DATA *master);
 void stop_follower (CHAR_DATA *ch);
+bool is_same_group (CHAR_DATA *ach, CHAR_DATA *bch);
+void remove_from_group (CHAR_DATA *ch);
 
 // New code to transfer (Also anywhere with timestamp)
 void send_timestamp(CHAR_DATA *ch, bool send_now, bool global)

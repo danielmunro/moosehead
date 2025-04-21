@@ -3502,16 +3502,6 @@ extern sh_int      posse_thug_kills;
 #define TIMESTAMP_SHOW  256
 #define TIMESTAMP_UPPERMASK 64 | 128 | 256
 
-/* act_comm.c */
-void    die_ignore      args( ( CHAR_DATA *ch ) );
-bool    is_same_group   args( ( CHAR_DATA *ach, CHAR_DATA *bch ) );
-bool	group_has_crusader args( ( CHAR_DATA *ch ) );
-int	group_has_how_many_crusader args( ( CHAR_DATA *ch ) );
-bool    group_has_cavalier      args( ( CHAR_DATA *ch ) ); 
-void	channel_vis_status	args( ( CHAR_DATA *ch, CHAR_DATA *victim ) );
-void remove_from_group args((CHAR_DATA *ch));
-void add_to_group args((CHAR_DATA *leader, CHAR_DATA *victim));
-
 /* act_enter.c */
 RID  *get_random_room   args ( (CHAR_DATA *ch) );
 RID  *get_random_room_obj(void);

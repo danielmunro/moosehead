@@ -26,5 +26,13 @@ void add_follower (CHAR_DATA *ch, CHAR_DATA *master);
 void stop_follower (CHAR_DATA *ch);
 void nuke_pets (CHAR_DATA *ch);
 void die_follower (CHAR_DATA *ch);
+void die_ignore (CHAR_DATA *ch);
+bool is_same_group (CHAR_DATA *ach, CHAR_DATA *bch);
+bool group_has_crusader (CHAR_DATA *ch);
+int group_has_how_many_crusader (CHAR_DATA *ch);
+bool group_has_cavalier (CHAR_DATA *ch);
+void add_to_group (CHAR_DATA *victim, CHAR_DATA *leader);
+void remove_from_group (CHAR_DATA *ch);
+void channel_vis_status (CHAR_DATA *ch, CHAR_DATA *victim);
 
 #endif //MOOSEHEAD_ACT_COMM_H
