@@ -73,6 +73,7 @@
 #include "mag2.h"
 #include "note.h"
 #include "recycle.h"
+#include "save.h"
 #include "skills.h"
 #include "tables.h"
 #include "update.h"

@@ -33,6 +33,7 @@
 #include "lookup.h"
 #include "mag2.h"
 #include "recycle.h"
+#include "save.h"
 #include "tables.h"
 
 #define START_OBJ(ch, hedit) (hedit ? (ch)->pcdata->clan_info->clan->planned : (ch)->pcdata->clan_info->pers_plan)

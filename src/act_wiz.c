@@ -38,6 +38,7 @@
 #include "lookup.h"
 #include "log.h"
 #include "recycle.h"
+#include "save.h"
 #include "skills.h"
 #include "special.h"
 #include "tables.h"

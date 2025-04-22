@@ -37,6 +37,7 @@
 #include "lookup.h"
 #include "mag2.h"
 #include "recycle.h"
+#include "save.h"
 #include "skills.h"
 #include "special.h"
 #include "tables.h"

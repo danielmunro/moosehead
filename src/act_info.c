@@ -38,6 +38,7 @@
 #include "log.h"
 #include "magic.h"
 #include "recycle.h"
+#include "save.h"
 #include "skills.h"
 #include "tables.h"
 

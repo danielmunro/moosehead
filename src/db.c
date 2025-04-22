@@ -40,6 +40,7 @@
 #include "lookup.h"
 #include "music.h"
 #include "recycle.h"
+#include "save.h"
 #include "special.h"
 
 extern int bounty_available[];

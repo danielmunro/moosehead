@@ -3716,13 +3716,6 @@ bool start_long_edit args((CHAR_DATA *ch, int limit, int type, char *base_str));
 void do_long_edit args((CHAR_DATA *ch, char *arg, int type, int edit_type));
 void end_long_edit args((CHAR_DATA *ch, char **result));
 
-
-/* save.c */
-void    save_char_obj   args( ( CHAR_DATA *ch ) );
-bool    load_char_obj   args( ( DESCRIPTOR_DATA *d, char *name ) );
-void    save_pits       args( (void) );
-void    load_pits       args( (void) );
-
 #undef  CD
 #undef  MID
 #undef  OD
