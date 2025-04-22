@@ -24,19 +24,20 @@
 #include <unistd.h>
 
 #include "merc.h"
-#include "recycle.h"
-#include "tables.h"
-#include "lookup.h"
-#include "handler.h"
+#include "act_comm.h"
 #include "act_enter.h"
 #include "act_info.h"
-#include "act_obj.h"
-#include "act_comm.h"
 #include "act_move.h"
+#include "act_obj.h"
 #include "clan.h"
 #include "comm.h"
 #include "db.h"
+#include "handler.h"
 #include "interp.h"
+#include "lookup.h"
+#include "log.h"
+#include "recycle.h"
+#include "tables.h"
 
 /*
  * Local functions.

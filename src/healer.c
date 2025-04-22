@@ -10,6 +10,7 @@
 
 #include "merc.h"
 #include "comm.h"
+#include "db.h"
 #include "magic.h"
 #include "gladiator.h"
 

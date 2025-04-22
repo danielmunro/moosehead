@@ -13,11 +13,12 @@
 #include "act_wiz.h"
 #include "comm.h"
 #include "db.h"
+#include "gladiator.h"
+#include "log.h"
 #include "lookup.h"
 #include "note.h"
-#include "tables.h"
-#include "gladiator.h"
 #include "recycle.h"
+#include "tables.h"
 
 /* local functions */
 void do_startgladiator (CHAR_DATA *ch, char *argument);

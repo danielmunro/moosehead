@@ -15,28 +15,29 @@
   *  around, comes around.                                                  *
   ***************************************************************************/
 
- #include <sys/types.h>
- #include <unistd.h>
- #include <sys/time.h>
- #include <gc.h>
- #include <stdio.h>
- #include <string.h>
- #include <stdlib.h>
- #include <ctype.h>
- #include <time.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/time.h>
+#include <gc.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <time.h>
 
- #include "merc.h"
- #include "act_comm.h"
- #include "act_move.h"
- #include "act_obj.h"
- #include "act_wiz.h"
- #include "comm.h"
- #include "db.h"
- #include "magic.h"
- #include "recycle.h"
- #include "tables.h"
- #include "lookup.h"
- #include "gladiator.h"
+#include "merc.h"
+#include "act_comm.h"
+#include "act_move.h"
+#include "act_obj.h"
+#include "act_wiz.h"
+#include "comm.h"
+#include "db.h"
+#include "gladiator.h"
+#include "lookup.h"
+#include "log.h"
+#include "magic.h"
+#include "recycle.h"
+#include "tables.h"
 
 /* local functions */
 void do_exits (CHAR_DATA *ch, char *argument);

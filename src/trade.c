@@ -10,8 +10,9 @@
 #include "merc.h"
 #include "act_info.h"
 #include "comm.h"
-#include "recycle.h"
+#include "db.h"
 #include "magic.h"
+#include "recycle.h"
 
 #define     PLR_NOTRADE         0
 #define     TRADE_REQUEST       1

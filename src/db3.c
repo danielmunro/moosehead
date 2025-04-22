@@ -30,8 +30,9 @@
 
 #include "merc.h"
 #include "comm.h"
-#include "tables.h"
 #include "db.h"
+#include "log.h"
+#include "tables.h"
 
 extern char *  const   dir_name        [];
 

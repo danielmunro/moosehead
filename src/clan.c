@@ -24,14 +24,15 @@
 #include <ctype.h>
 
 #include "merc.h"
+#include "act_obj.h"
 #include "comm.h"
 #include "db.h"
-#include "recycle.h"
-#include "lookup.h"
-#include "tables.h"
-#include "act_obj.h"
 #include "live_edit.h"
+#include "log.h"
+#include "lookup.h"
 #include "mag2.h"
+#include "recycle.h"
+#include "tables.h"
 
 #define START_OBJ(ch, hedit) (hedit ? (ch)->pcdata->clan_info->clan->planned : (ch)->pcdata->clan_info->pers_plan)
 

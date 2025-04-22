@@ -27,14 +27,14 @@
 #include "act_info.h"
 #include "act_obj.h"
 #include "act_wiz.h"
+#include "clan.h"
 #include "comm.h"
 #include "db.h"
+#include "gladiator.h"
+#include "lookup.h"
 #include "magic.h"
 #include "recycle.h"
 #include "tables.h"
-#include "gladiator.h"
-#include "clan.h"
-#include "lookup.h"
 
 /*
  * Local functions.

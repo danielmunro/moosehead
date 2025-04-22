@@ -26,12 +26,13 @@
 #include "merc.h"
 #include "act_wiz.h"
 #include "comm.h"
-#include "db.h"
-#include "recycle.h"
 #include "ctype.h"
+#include "db.h"
+#include "log.h"
 #include "lookup.h"
 #include "input.h"
 #include "menu.h"
+#include "recycle.h"
 
 /* What may appear to be memory leaks are not necessarily leaks, but safeguards.
    MOBs/Objects share the same strings as their indexes, so freeing that permanent

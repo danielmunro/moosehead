@@ -30,11 +30,12 @@
 #include "comm.h"
 #include "db.h"
 #include "deity.h"
-#include "magic.h"
-#include "tables.h"
 #include "gladiator.h"
+#include "log.h"
 #include "lookup.h"
+#include "magic.h"
 #include "scan.h"
+#include "tables.h"
 
 extern char *target_name;
 

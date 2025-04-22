@@ -24,11 +24,12 @@
 
 #include "merc.h"
 #include "act_comm.h"
-#include "db.h"
-#include "recycle.h"
-#include "lookup.h"
-#include "tables.h"
 #include "act_obj.h"
+#include "db.h"
+#include "log.h"
+#include "lookup.h"
+#include "recycle.h"
+#include "tables.h"
 
 
 

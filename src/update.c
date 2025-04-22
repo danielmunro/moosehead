@@ -30,13 +30,14 @@
 #include "comm.h"
 #include "db.h"
 #include "deity.h"
-#include "lookup.h"
-#include "music.h"
-#include "tables.h"
 #include "gladiator.h"
-#include "special.h"
-#include "recycle.h"
+#include "log.h"
+#include "lookup.h"
 #include "mag2.h"
+#include "music.h"
+#include "recycle.h"
+#include "special.h"
+#include "tables.h"
 
 /*
  * Local functions.

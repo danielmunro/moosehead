@@ -29,11 +29,12 @@
 #include "comm.h"
 #include "db.h"
 #include "deity.h"
+#include "gladiator.h"
+#include "interp.h"
+#include "log.h"
+#include "lookup.h"
 #include "recycle.h"
 #include "tables.h"
-#include "interp.h"
-#include "lookup.h"
-#include "gladiator.h"
 
 /* Locals */
 void reclass (CHAR_DATA *ch, int class, bool fPenalty);

@@ -22,18 +22,19 @@
 #include <time.h>
 
 #include "merc.h"
+#include "act_enter.h"
+#include "act_comm.h"
+#include "act_info.h"
+#include "act_obj.h"
 #include "comm.h"
 #include "db.h"
+#include "fight.h"
+#include "gladiator.h"
+#include "log.h"
+#include "lookup.h"
 #include "magic.h"
 #include "recycle.h"
 #include "tables.h"
-#include "gladiator.h"
-#include "act_enter.h"
-#include "act_obj.h"
-#include "act_info.h"
-#include "act_comm.h"
-#include "lookup.h"
-#include "fight.h"
 
 extern int bounty_item;
 extern int bounty_type;

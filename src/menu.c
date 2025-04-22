@@ -24,6 +24,7 @@
 
 #include "merc.h"
 #include "comm.h"
+#include "db.h"
 #include "interp.h"
 #include "menu.h"
 

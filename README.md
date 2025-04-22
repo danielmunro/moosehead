@@ -34,3 +34,4 @@ $ ./bin/run.sh mhs:latest
   * `sign.c` not referenced in Makefile -- can it be removed?
   * Move function declarations out of merc.h into respective .h files
   * Replace local declarations with including the file header
+  * `str_cmp` re-implemented in db.c

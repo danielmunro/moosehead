@@ -21,19 +21,20 @@
 #include <time.h>
 
 #include "merc.h"
-#include "comm.h"
-#include "deity.h"
-#include "tables.h"
-#include "interp.h"
-#include "gladiator.h"
-#include "recycle.h"
-#include "lookup.h"
-#include "clan.h"
-#include "db.h"
 #include "act_comm.h"
 #include "act_move.h"
 #include "act_obj.h"
 #include "act_wiz.h"
+#include "clan.h"
+#include "comm.h"
+#include "db.h"
+#include "deity.h"
+#include "gladiator.h"
+#include "interp.h"
+#include "log.h"
+#include "lookup.h"
+#include "recycle.h"
+#include "tables.h"
 
 #define MAX_DAMAGE_MESSAGE 44
 

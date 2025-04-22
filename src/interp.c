@@ -29,15 +29,17 @@
 #include "act_obj.h"
 #include "act_wiz.h"
 #include "comm.h"
-#include "interp.h"
-#include "fight.h"
-#include "tables.h"
-#include "lookup.h"
+#include "db.h"
 #include "flags.h"
+#include "fight.h"
+#include "interp.h"
+#include "log.h"
+#include "lookup.h"
 #include "mag2.h"
 #include "note.h"
 #include "remort.h"
 #include "skills.h"
+#include "tables.h"
 
 
 

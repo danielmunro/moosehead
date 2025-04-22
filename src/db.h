@@ -65,7 +65,30 @@ void free_string (char *pstr);
 
 void  convert_mob(MOB_INDEX_DATA *mob);
 void  convert_obj(OBJ_INDEX_DATA *obj);
+
 char *str_dup(const char *str);
+
+int number_fuzzy (int number);
+int number_range (int from, int to);
+int number_percent (void);
+int number_door (void);
+int number_bits (int width);
+long number_mm (void);
+int dice (int number, int size);
+int interpolate (int level, int value_00, int value_32);
+void smash_tilde (char *str);
+bool str_cmp (const char *astr, const char *bstr);
+bool str_prefix (const char *astr, const char *bstr);
+bool str_infix (const char *astr, const char *bstr);
+bool str_suffix (const char *astr, const char *bstr);
+char *capitalize (const char *str);
+void append_file (CHAR_DATA *ch, char *file, char *str);
+
+void bug (const char *str, int param);
+int get_area_min_vnum (AREA_DATA *area);
+int get_area_max_vnum (AREA_DATA *area);
+RECIPE_DATA * get_recipe_data (int recipe_number);
+void tail_chain (void);
 
 /* macro for flag swapping */
 #define GET_UNSET(flag1,flag2)  (~(flag1)&((flag1)|(flag2)))

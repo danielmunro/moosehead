@@ -30,6 +30,7 @@ This header file is not to be removed.
 
 #include "merc.h"
 #include "comm.h"
+#include "log.h"
 #include "recycle.h"
 
 

@@ -33,10 +33,11 @@
 #include "deity.h"
 #include "fight.h"
 #include "handler.h"
-#include "tables.h"
+#include "log.h"
+#include "lookup.h"
 #include "magic.h"
 #include "mag2.h"
-#include "lookup.h"
+#include "tables.h"
 
 void check_equip (CHAR_DATA *ch);
 bool check_wear	(CHAR_DATA *ch, OBJ_DATA *obj);

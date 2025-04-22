@@ -28,6 +28,7 @@
 #include "act_wiz.h"
 #include "comm.h"
 #include "db.h"
+#include "log.h"
 #include "lookup.h"
 #include "handler.h"
 #include "tables.h"

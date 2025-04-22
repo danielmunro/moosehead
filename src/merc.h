@@ -3504,31 +3504,6 @@ extern sh_int      posse_thug_kills;
 
 extern char kludge_string[MAX_STRING_LENGTH];
 
-/* db.c */
-int     number_fuzzy    args( ( int number ) );
-int     number_range    args( ( int from, int to ) );
-int     number_percent  args( ( void ) );
-int     number_door     args( ( void ) );
-int     number_bits     args( ( int width ) );
-long     number_mm       args( ( void ) );
-int     dice            args( ( int number, int size ) );
-int     interpolate     args( ( int level, int value_00, int value_32 ) );
-void    smash_tilde     args( ( char *str ) );
-bool    str_cmp         args( ( const char *astr, const char *bstr ) );
-bool    str_prefix      args( ( const char *astr, const char *bstr ) );
-bool    str_infix       args( ( const char *astr, const char *bstr ) );
-bool    str_suffix      args( ( const char *astr, const char *bstr ) );
-char *  capitalize      args( ( const char *str ) );
-void    append_file     args( ( CHAR_DATA *ch, char *file, char *str ) );
-
-void    bug             args( ( const char *str, int param ) );
-void    log_info      args( ( const char *str ) );
-void    log_error       args( ( const char *str ) );
-int     get_area_min_vnum  args( (AREA_DATA *area) );
-int     get_area_max_vnum  args( (AREA_DATA *area) );
-RECIPE_DATA * get_recipe_data args ( (int recipe_number ));
-void    tail_chain      args( ( void ) );
-
 /* effect.c */
 void    acid_effect     args( (void *vo, int level, int dam, int target) );
 void    cold_effect     args( (void *vo, int level, int dam, int target) );

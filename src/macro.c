@@ -29,10 +29,11 @@
 #include <time.h>
 
 #include "merc.h"
-#include "recycle.h"
-#include "input.h"
-#include "comm.h"
 #include "db.h"
+#include "comm.h"
+#include "input.h"
+#include "log.h"
+#include "recycle.h"
 
 void clear_macro_marks ( CHAR_DATA *ch )
 {

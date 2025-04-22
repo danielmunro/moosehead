@@ -24,6 +24,7 @@
 #include "merc.h"
 #include "act_obj.h"
 #include "comm.h"
+#include "db.h"
 #include "recycle.h"
 
 void acid_effect(void *vo, int level, int dam, int target)
