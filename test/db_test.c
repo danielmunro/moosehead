@@ -1,5 +1,7 @@
 #include <string.h>
 
+#include "../src/db.h"
+
 void test_str_dup_hello_world() {
     ok(strcmp("hello world", str_dup("hello world")) == 0);
 }

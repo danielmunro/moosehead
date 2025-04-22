@@ -1,5 +1,7 @@
 #include <string.h>
 
+#include "../src/input.h"
+
 void test_is_number_positive() {
     ok(is_number("0"));
     ok(is_number("1"));
