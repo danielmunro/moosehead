@@ -26,22 +26,13 @@ typedef short int     sh_int;
  */
 #define args( list )                    list
 typedef struct  char_data               CHAR_DATA;
-typedef void DO_FUN     args( ( CHAR_DATA *ch, char *argument ) );
-typedef bool SPEC_FUN   args( ( CHAR_DATA *ch ) );
-typedef void SPELL_FUN  args( ( int sn, int level, CHAR_DATA *ch, void *vo,
-        int target ) );
-/*
- *  Accommodate old non-Ansi compilers.
- */
-#if defined(TRADITIONAL)
-#define const
-#define args( list )                    ( )
-#define DECLARE_DO_FUN( fun )           void fun( )
-#define DECLARE_SPELL_FUN( fun )        void fun( )
-#else
+typedef void DO_FUN     (CHAR_DATA *ch, char *argument);
+typedef bool SPEC_FUN   (CHAR_DATA *ch);
+typedef void SPELL_FUN  (int sn, int level, CHAR_DATA *ch, void *vo,
+                         int target);
+
 #define DECLARE_DO_FUN( fun )           DO_FUN    fun
 #define DECLARE_SPELL_FUN( fun )        SPELL_FUN fun
-#endif
 
 typedef struct plan_exit_data           PLAN_EXIT_DATA;
 typedef struct alliance_data            ALLIANCE_DATA;
