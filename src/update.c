@@ -36,6 +36,7 @@
 #include "mag2.h"
 #include "music.h"
 #include "recycle.h"
+#include "skills.h"
 #include "special.h"
 #include "tables.h"
 

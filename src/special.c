@@ -37,6 +37,7 @@
 #include "lookup.h"
 #include "magic.h"
 #include "mag2.h"
+#include "skills.h"
 #include "tables.h"
 #include "update.h"
 

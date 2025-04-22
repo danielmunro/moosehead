@@ -35,6 +35,7 @@
 #include "log.h"
 #include "lookup.h"
 #include "recycle.h"
+#include "skills.h"
 #include "tables.h"
 #include "update.h"
 

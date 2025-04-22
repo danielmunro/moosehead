@@ -36,6 +36,7 @@
 #include "lookup.h"
 #include "magic.h"
 #include "recycle.h"
+#include "skills.h"
 #include "special.h"
 #include "tables.h"
 #include "update.h"

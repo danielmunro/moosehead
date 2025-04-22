@@ -33,6 +33,7 @@ $ ./bin/run.sh mhs:latest
   * `gamble.c` not referenced in Makefile -- can it be removed?
   * `sign.c` not referenced in Makefile -- can it be removed?
   * Move function declarations out of merc.h into respective .h files
-  * Replace local declarations with including the file header
+  * Replace local function declarations at the top of files with including the header where possible
   * `str_cmp` re-implemented in db.c
+  * `skill_lookup` move from `magic.c` -> `skills.c`
   * Many source files need a lot of includes... is there a better organization strategy?

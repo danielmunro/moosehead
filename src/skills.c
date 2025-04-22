@@ -13,9 +13,8 @@
 #include "db.h"
 #include "input.h"
 #include "magic.h"
+#include "skills.h"
 #include "update.h"
-
-void do_groups (CHAR_DATA *ch, char *argument);
 
 
 /* used to get new skills */
