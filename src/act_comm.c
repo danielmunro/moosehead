@@ -34,6 +34,7 @@
 #include "interp.h"
 #include "log.h"
 #include "lookup.h"
+#include "note.h"
 #include "recycle.h"
 #include "save.h"
 #include "skills.h"

@@ -3710,12 +3710,6 @@ extern char *target_name;
 void	dot		args( ( CHAR_DATA *ch, AFFECT_DATA *paf ) );
 bool	reup_affect	args( (CHAR_DATA *ch, int sn, int duration, int level) );
 
-/* note.c */
-void peek_argument args((char *argument, char *arg_first));
-bool start_long_edit args((CHAR_DATA *ch, int limit, int type, char *base_str));
-void do_long_edit args((CHAR_DATA *ch, char *arg, int type, int edit_type));
-void end_long_edit args((CHAR_DATA *ch, char **result));
-
 #undef  CD
 #undef  MID
 #undef  OD
