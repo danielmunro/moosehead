@@ -37,4 +37,5 @@ $ ./bin/run.sh mhs:latest
   * `str_cmp` re-implemented in db.c
   * `skill_lookup` move from `magic.c` -> `skills.c`
   * `slot_lookup` move from `magic.c` -> `db.c`
+  * `clear_string` move out of `live_edit.c`
   * Many source files need a lot of includes... is there a better organization strategy?

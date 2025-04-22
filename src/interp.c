@@ -34,6 +34,7 @@
 #include "fight.h"
 #include "input.h"
 #include "interp.h"
+#include "live_edit.h"
 #include "log.h"
 #include "lookup.h"
 #include "mag2.h"

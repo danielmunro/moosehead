@@ -33,6 +33,7 @@
 #include "fight.h"
 #include "gladiator.h"
 #include "input.h"
+#include "live_edit.h"
 #include "log.h"
 #include "lookup.h"
 #include "magic.h"

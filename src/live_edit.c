@@ -29,6 +29,7 @@
 #include "db.h"
 #include "handler.h"
 #include "input.h"
+#include "live_edit.h"
 #include "log.h"
 #include "lookup.h"
 #include "note.h"
@@ -36,6 +37,9 @@
 
 /* local function */
 void modify_room_marker (CLAN_DATA *clan, ROOM_INDEX_DATA *room, int dir, bool place);
+void load_plan_obj (PLAN_DATA *obj, bool strings);
+bool fread_plan_obj (FILE *fp, PLAN_DATA *obj);
+bool fread_plan_exit (FILE *fp, PLAN_DATA *first, CLAN_DATA *clan);
 
 extern   sh_int  rev_dir[];
 extern CLAN_DATA *clan_first;

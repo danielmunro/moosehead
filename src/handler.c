@@ -34,6 +34,7 @@
 #include "fight.h"
 #include "gladiator.h"
 #include "input.h"
+#include "live_edit.h"
 #include "lookup.h"
 #include "magic.h"
 #include "recycle.h"

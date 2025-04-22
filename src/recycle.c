@@ -24,6 +24,7 @@
 
 #include "merc.h"
 #include "db.h"
+#include "live_edit.h"
 #include "recycle.h"
 
 /* stuff for recyling notes */

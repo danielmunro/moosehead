@@ -3625,42 +3625,6 @@ char *  cont_bit_name   args( ( int cont_flags) );
 char *  clan_bit_name   args( ( int clan_flags) );
 char*	exit_bit_name	args( ( int exit_flags ) );
 
-// New help code
-void blast_punctuation args((char *arg, bool leave_quote, bool capitalize));
-void lower_only args((char *arg));
-int calc_cost_range args((int start, int count, bool hedit));
-void set_obj_cost args((CHAR_DATA *ch, PLAN_DATA *obj, bool hedit, bool override));
-bool check_can_edit args((CHAR_DATA *ch, int action, bool hedit));
-bool pay_hall_cost args((CHAR_DATA *ch, int amount, bool do_buy, bool hedit));
-void swap_rooms args((CHAR_DATA *ch, PLAN_DATA *old_room, PLAN_DATA *new_room, bool hedit));
-void load_plan_obj args((PLAN_DATA *obj, bool strings));
-void load_room_obj args((PLAN_DATA *obj, bool strings));
-void load_mob_obj args((PLAN_DATA *obj, bool strings));
-void load_item_obj args((PLAN_DATA *obj, bool strings));
-void load_exit_obj args((PLAN_DATA *obj, bool strings));
-void place_hall_obj args((CHAR_DATA *ch, PLAN_DATA *obj, bool hedit));
-int get_refund_amount args((CHAR_DATA *ch, int amount, bool hedit));
-int remove_hall_obj args((CHAR_DATA *ch, PLAN_DATA *obj, bool hedit));
-void reset_hall_obj args((CHAR_DATA *ch, PLAN_DATA *obj, bool reset_all));
-bool save_hall args((char *clan_name, PLAN_DATA *plans, bool save_immediately));
-void save_clan_list args((void));
-void load_clan_list args((void));
-void load_clan args((char *clan_name, int def_clan));
-void do_save_clan args((CLAN_DATA *clan));
-void save_clan args((CHAR_DATA *ch, bool save_c, bool save_h, bool hedit));
-bool fread_plan_obj args((FILE *fp, PLAN_DATA *obj));
-bool fread_plan_exit args((FILE *fp, PLAN_DATA *first, CLAN_DATA *clan));
-void fread_clan_hall args((FILE *fp, PLAN_DATA **head, CLAN_DATA *clan));
-void fread_clan_messages args((FILE *fp, CLAN_DATA *clan));
-void respawn_plan_obj args((PLAN_DATA *obj, PLAN_DATA *start, bool show_creation));
-int get_arg_dir args((char *arg));
-void clear_string args((char **str, char *new_str));
-void search_linked_rooms args((PLAN_DATA *start));
-int new_obj_index args((CHAR_DATA *ch, int type, bool hedit));
-void player_edit args((CHAR_DATA *ch, char *argument, bool hedit));
-void do_hedit args((CHAR_DATA *ch, char *argument));
-void do_pedit args((CHAR_DATA *ch, char *argument));
-
 #undef  CD
 #undef  MID
 #undef  OD

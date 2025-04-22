@@ -40,6 +40,10 @@
 
 CLAN_DATA *clan_first = NULL;
 
+/* local functions */
+void save_clan_list (void);
+void load_clan (char *clan_name, int def_clan);
+
 void add_clan_skill(CHAR_DATA *ch, int sn)
 {
   if(ch->pcdata->old_learned[sn] > 0)

@@ -31,6 +31,7 @@
 #include "comm.h"
 #include "db.h"
 #include "input.h"
+#include "live_edit.h"
 #include "lookup.h"
 #include "note.h"
 #include "recycle.h"
