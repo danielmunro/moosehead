@@ -40,6 +40,7 @@
 #include "note.h"
 #include "remort.h"
 #include "skills.h"
+#include "special.h"
 #include "tables.h"
 
 

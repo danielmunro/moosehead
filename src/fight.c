@@ -36,6 +36,7 @@
 #include "log.h"
 #include "lookup.h"
 #include "recycle.h"
+#include "special.h"
 #include "tables.h"
 #include "update.h"
 

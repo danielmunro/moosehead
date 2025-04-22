@@ -35,6 +35,7 @@
 #include "menu.h"
 #include "olc.h"
 #include "recycle.h"
+#include "special.h"
 
 /* What may appear to be memory leaks are not necessarily leaks, but safeguards.
    MOBs/Objects share the same strings as their indexes, so freeing that permanent

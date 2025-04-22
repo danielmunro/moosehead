@@ -32,6 +32,7 @@
 #include "comm.h"
 #include "db.h"
 #include "log.h"
+#include "special.h"
 #include "tables.h"
 
 extern char *  const   dir_name        [];

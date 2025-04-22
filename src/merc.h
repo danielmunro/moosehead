@@ -3750,16 +3750,6 @@ void    gn_remove       args( ( CHAR_DATA *ch, int gn) );
 void    group_add       args( ( CHAR_DATA *ch, const char *name, bool deduct) );
 void    group_remove    args( ( CHAR_DATA *ch, const char *name) );
 
-/* special.c */
-bool is_bounty_target args ( (CHAR_DATA *victim, bool kill) );
-void describe_mob_bounty args ( (CHAR_DATA *target, CHAR_DATA *teller, bool just_started) );
-bool is_shaded args ( (CHAR_DATA *shade) );
-void remove_shaded_room args ( (CHAR_DATA *shade) );
-SF *    spec_lookup     args( ( const char *name ) );
-char *  spec_name       args( ( SPEC_FUN *function ) );
-void quest_handler(CHAR_DATA *quest_npc, CHAR_DATA *ch, OBJ_DATA *obj, int quest, int update);
-void log_quest_detail(char *buf, int quest);
-
 #undef  CD
 #undef  MID
 #undef  OD

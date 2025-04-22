@@ -36,6 +36,7 @@
 #include "lookup.h"
 #include "magic.h"
 #include "scan.h"
+#include "special.h"
 #include "tables.h"
 
 extern char *target_name;

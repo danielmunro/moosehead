@@ -35,3 +35,4 @@ $ ./bin/run.sh mhs:latest
   * Move function declarations out of merc.h into respective .h files
   * Replace local declarations with including the file header
   * `str_cmp` re-implemented in db.c
+  * Many source files need a lot of includes... is there a better organization strategy?
