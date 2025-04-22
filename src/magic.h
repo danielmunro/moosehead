@@ -1,7 +1,22 @@
-/* spells used in Merc */
+#ifndef MOOSEHEAD_MAGIC_H
+#define MOOSEHEAD_MAGIC_H
 
+bool check_annointment (CHAR_DATA *victim, CHAR_DATA *ch);
+void apply_mala_damage (CHAR_DATA *ch, CHAR_DATA *victim, int amount);
+int find_spell (CHAR_DATA *ch, const char *name);
+int mana_cost (CHAR_DATA *ch, int min_mana, int level, int sn);
+int skill_lookup (const char *name);
+int slot_lookup (int slot);
+bool saves_spell (int level, CHAR_DATA *victim, int dam_type);
+int compute_casting_level (CHAR_DATA *ch, int sn);
+void obj_cast_spell (int sn, int level, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *obj);
+bool check_dispel (int dis_level, CHAR_DATA *victim, int sn);
+void dot (CHAR_DATA *ch, AFFECT_DATA *paf);
+bool reup_affect (CHAR_DATA *ch, int sn, int duration, int level);
 void say_spell (CHAR_DATA *ch, int sn);
 void spell_null (int sn, int level, CHAR_DATA *ch, void *vo, int target);
+
+extern char *target_name;
 
 /*
  * Spell functions.
@@ -259,3 +274,4 @@ DECLARE_SPELL_FUN(	spell_lacerate		);
 DECLARE_SPELL_FUN(	spell_clarity		);
 DECLARE_SPELL_FUN(      spell_stalk             );
 
+#endif //MOOSEHEAD_MAGIC_H

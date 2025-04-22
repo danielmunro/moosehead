@@ -33,6 +33,7 @@
 #include "fight.h"
 #include "input.h"
 #include "lookup.h"
+#include "magic.h"
 #include "recycle.h"
 #include "skills.h"
 #include "tables.h"

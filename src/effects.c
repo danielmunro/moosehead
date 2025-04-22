@@ -25,6 +25,7 @@
 #include "act_obj.h"
 #include "comm.h"
 #include "db.h"
+#include "magic.h"
 #include "recycle.h"
 #include "update.h"
 

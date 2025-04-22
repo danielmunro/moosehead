@@ -28,6 +28,7 @@
 #include "db.h"
 #include "log.h"
 #include "lookup.h"
+#include "magic.h"
 #include "recycle.h"
 #include "skills.h"
 #include "tables.h"

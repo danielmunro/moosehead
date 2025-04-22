@@ -28,6 +28,7 @@
 #include "act_move.h"
 #include "act_obj.h"
 #include "act_wiz.h"
+#include "clan.h"
 #include "comm.h"
 #include "db.h"
 #include "deity.h"

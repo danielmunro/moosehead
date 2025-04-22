@@ -11,6 +11,7 @@
 #include "merc.h"
 #include "db.h"
 #include "lookup.h"
+#include "magic.h"
 
 
 /* values for db2.c */

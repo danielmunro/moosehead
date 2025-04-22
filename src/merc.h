@@ -3643,14 +3643,6 @@ char *  cont_bit_name   args( ( int cont_flags) );
 char *  clan_bit_name   args( ( int clan_flags) );
 char*	exit_bit_name	args( ( int exit_flags ) );
 
-/* clan.c */
-int calculate_bonus_merit args((CHAR_DATA *ch, bool new_join));
-void set_clan_skills args((CHAR_DATA *ch));
-bool clan_kill_type args((CHAR_DATA *killer, CHAR_DATA *victim));
-void remove_clan_member args((CLAN_CHAR *cchar));
-void add_clan_member args((CLAN_DATA *clan, CHAR_DATA *ch, int rank));
-CLAN_CHAR *find_char_clan args((char *name));
-
 /* live_edit.c */
 void verify_pricing_table args((void));
 void edit_stop args((CHAR_DATA *ch));
@@ -3693,22 +3685,6 @@ int new_obj_index args((CHAR_DATA *ch, int type, bool hedit));
 void player_edit args((CHAR_DATA *ch, char *argument, bool hedit));
 void do_hedit args((CHAR_DATA *ch, char *argument));
 void do_pedit args((CHAR_DATA *ch, char *argument));
-
-/* magic.c */
-bool check_annointment args((CHAR_DATA *victim, CHAR_DATA *ch));
-void apply_mala_damage args((CHAR_DATA *ch, CHAR_DATA *victim, int amount));
-int     find_spell      args( ( CHAR_DATA *ch, const char *name) );
-int      mana_cost 	args( (CHAR_DATA *ch, int min_mana, int level, int sn) );
-int     skill_lookup    args( ( const char *name ) );
-int     slot_lookup     args( ( int slot ) );
-bool    saves_spell     args( ( int level, CHAR_DATA *victim, int dam_type ) );
-int     compute_casting_level args( ( CHAR_DATA *ch, int sn ) );
-void    obj_cast_spell  args( ( int sn, int level, CHAR_DATA *ch,
-            CHAR_DATA *victim, OBJ_DATA *obj ) );
-bool	check_dispel	args( ( int dis_level, CHAR_DATA *victim, int sn) );
-extern char *target_name;
-void	dot		args( ( CHAR_DATA *ch, AFFECT_DATA *paf ) );
-bool	reup_affect	args( (CHAR_DATA *ch, int sn, int duration, int level) );
 
 #undef  CD
 #undef  MID

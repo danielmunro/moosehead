@@ -70,6 +70,7 @@
 #include "log.h"
 #include "lookup.h"
 #include "macro.h"
+#include "magic.h"
 #include "mag2.h"
 #include "note.h"
 #include "recycle.h"

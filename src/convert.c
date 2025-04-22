@@ -24,6 +24,7 @@
 #include <time.h>
 
 #include "merc.h"
+#include "magic.h"
 #include "special.h"
 
 typedef struct link_type LINK;

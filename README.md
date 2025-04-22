@@ -36,4 +36,5 @@ $ ./bin/run.sh mhs:latest
   * Replace local function declarations at the top of files with including the header where possible
   * `str_cmp` re-implemented in db.c
   * `skill_lookup` move from `magic.c` -> `skills.c`
+  * `slot_lookup` move from `magic.c` -> `db.c`
   * Many source files need a lot of includes... is there a better organization strategy?

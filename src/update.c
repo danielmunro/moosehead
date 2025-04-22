@@ -33,6 +33,7 @@
 #include "gladiator.h"
 #include "log.h"
 #include "lookup.h"
+#include "magic.h"
 #include "mag2.h"
 #include "music.h"
 #include "recycle.h"
