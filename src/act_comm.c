@@ -30,6 +30,7 @@
 #include "comm.h"
 #include "db.h"
 #include "deity.h"
+#include "fight.h"
 #include "gladiator.h"
 #include "input.h"
 #include "interp.h"

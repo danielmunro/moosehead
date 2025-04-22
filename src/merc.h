@@ -3495,24 +3495,6 @@ extern sh_int      posse_thug_kills;
 
 extern char kludge_string[MAX_STRING_LENGTH];
 
-/* fight.c */
-void sort_clanner_items args((CHAR_DATA *ch, OBJ_DATA *container, OBJ_DATA **loot_start, bool do_linked));
-CHAR_DATA *check_is_online args((char *name));
-bool    is_safe         args( (CHAR_DATA *ch, CHAR_DATA *victim ) );
-bool    is_safe_steal   args( (CHAR_DATA *ch, CHAR_DATA *victim ) );
-bool    is_safe_spell   args( (CHAR_DATA *ch, CHAR_DATA *victim, bool area , int sn) );
-void    violence_update args( ( void ) );
-void    multi_hit       args( ( CHAR_DATA *ch, CHAR_DATA *victim, int dt ) );
-bool    damage          args( ( CHAR_DATA *ch, CHAR_DATA *victim, int dam,
-        int dt, int class, bool show, bool iOld ) );
-int	myrm_pen	args( ( CHAR_DATA *ch, CHAR_DATA *victim ) );
-void    update_pos      args( ( CHAR_DATA *victim ) );
-void    stop_fighting   args( ( CHAR_DATA *ch, bool fBoth ) );
-void    check_killer    args( ( CHAR_DATA *ch, CHAR_DATA *victim) );
-void	raw_kill	args( ( CHAR_DATA *victim, CHAR_DATA *ch) );
-bool    is_clan_guard   args( ( CHAR_DATA *victim) );
-void make_corpse( CHAR_DATA *ch, CHAR_DATA *killer );
-
 /* handler.c */
 void prompt_pulse_command args((CHAR_DATA *ch));
 void end_pulse_command args((CHAR_DATA *ch, bool success, bool violent));

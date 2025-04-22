@@ -32,6 +32,7 @@
 #include "clan.h"
 #include "comm.h"
 #include "db.h"
+#include "fight.h"
 #include "handler.h"
 #include "input.h"
 #include "interp.h"

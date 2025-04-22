@@ -32,6 +32,7 @@
 #include "act_wiz.h"
 #include "comm.h"
 #include "db.h"
+#include "fight.h"
 #include "gladiator.h"
 #include "input.h"
 #include "lookup.h"

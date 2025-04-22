@@ -30,6 +30,7 @@
 #include "db.h"
 #include "deity.h"
 #include "effects.h"
+#include "fight.h"
 #include "gladiator.h"
 #include "input.h"
 #include "interp.h"
@@ -65,6 +66,7 @@ void do_kick (CHAR_DATA *ch, char *argument);
 void do_disarm (CHAR_DATA *ch, char *argument);
 void do_kcharge (CHAR_DATA *ch, char *argument);
 void do_grab (CHAR_DATA *ch, char *argument);
+int myrm_pen (CHAR_DATA *ch, CHAR_DATA *victim);
 
 #ifdef DEITY_TRIAL_DEBUG_CODE
 extern int deity_value_override;
