@@ -35,6 +35,7 @@
 #include "interp.h"
 #include "log.h"
 #include "lookup.h"
+#include "mag2.h"
 #include "recycle.h"
 #include "skills.h"
 #include "special.h"

@@ -34,6 +34,7 @@
 #include "input.h"
 #include "log.h"
 #include "lookup.h"
+#include "mag2.h"
 #include "olc.h"
 #include "skills.h"
 #include "tables.h"

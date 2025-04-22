@@ -3694,10 +3694,6 @@ void player_edit args((CHAR_DATA *ch, char *argument, bool hedit));
 void do_hedit args((CHAR_DATA *ch, char *argument));
 void do_pedit args((CHAR_DATA *ch, char *argument));
 
-
-/* mag2.c */
-void	blow_orb	args( ( CHAR_DATA *victim,int sn ) );
-
 /* magic.c */
 bool check_annointment args((CHAR_DATA *victim, CHAR_DATA *ch));
 void apply_mala_damage args((CHAR_DATA *ch, CHAR_DATA *victim, int amount));
