@@ -22,6 +22,7 @@
 
 #include "merc.h"
 #include "comm.h"
+#include "deity.h"
 #include "tables.h"
 #include "interp.h"
 #include "gladiator.h"

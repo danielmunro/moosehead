@@ -28,6 +28,7 @@
 #include "act_move.h"
 #include "act_obj.h"
 #include "comm.h"
+#include "deity.h"
 #include "magic.h"
 #include "tables.h"
 #include "gladiator.h"

@@ -3504,20 +3504,6 @@ extern sh_int      posse_thug_kills;
 
 extern char kludge_string[MAX_STRING_LENGTH];
 
-/* deity.c */
-void do_deity_msg(char *msg, CHAR_DATA *ch);
-void	give_gift	args( (CHAR_DATA *ch, int gift) );
-void	reanimation	args( (CHAR_DATA *ch) );
-bool	has_gift	args( (CHAR_DATA *ch, int gift) );
-bool	is_aligned	args( (CHAR_DATA *ch) );
-void log_deity_favor(CHAR_DATA *ch, CHAR_DATA *alt, int type);
-bool deity_enchant_armor(CHAR_DATA *ch, int amount);
-bool deity_enchant_weapon(CHAR_DATA *ch, OBJ_DATA *obj, int amount);
-int do_favor_error(CHAR_DATA *ch, int rarity, int index, int xp, int favor_strength);
-int do_favor_reward(CHAR_DATA *ch, CHAR_DATA *victim, int rarity, int index, int xp, int favor_strength); 
-int deity_favor_message(CHAR_DATA *ch, CHAR_DATA *victim, int xp);
-int deity_trial_kill(CHAR_DATA *ch, CHAR_DATA *victim, int xp);
-
 /* db.c */
 char *  print_flags     args( ( long flag ));
 void    boot_db         args( ( void ) );
