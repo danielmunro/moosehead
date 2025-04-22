@@ -3643,13 +3643,6 @@ char *  cont_bit_name   args( ( int cont_flags) );
 char *  clan_bit_name   args( ( int clan_flags) );
 char*	exit_bit_name	args( ( int exit_flags ) );
 
-/* live_edit.c */
-void verify_pricing_table args((void));
-void edit_stop args((CHAR_DATA *ch));
-int count_edit_obj args((CHAR_DATA *ch, int flag, bool verbose, bool hedit));
-PLAN_DATA *find_edit_obj args((CHAR_DATA *ch, char *arg, bool hedit));
-PLAN_DATA *find_edit_obj_by_index args((PLAN_DATA *start, int type, int plan_index));
-PLAN_DATA *find_char_room_obj args((CHAR_DATA *ch, bool hedit));
 // New help code
 void blast_punctuation args((char *arg, bool leave_quote, bool capitalize));
 void lower_only args((char *arg));
