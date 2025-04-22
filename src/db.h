@@ -30,9 +30,11 @@ extern int     top_shop;
 extern int     mobile_count;
 extern int     newmobs;
 extern int     newobjs;
-extern AREA_DATA  * area_first, * area_last;
 
-extern AREA_NAME_DATA  *area_name_first,*area_name_last;
+extern AREA_DATA  * area_first, * area_last;
+extern AREA_NAME_DATA  *area_name_first, *area_name_last;
+
+extern int  social_count;
 
 void boot_db (void);
 void area_update (void);
@@ -50,9 +52,16 @@ void rename_area (char *strArea);
 void select_bounty (int qualifier);
 
 char fread_letter (FILE *fp);
-
-/* from db2.c */
-extern int  social_count;
+int fread_number (FILE *fp);
+long fread_flag (FILE *fp);
+char *fread_string (FILE *fp);
+char *fread_string_eol (FILE *fp);
+void fread_to_eol (FILE *fp);
+char *fread_word (FILE *fp);
+long flag_convert (char letter);
+void *alloc_perm (int sMem);
+void free_mem (void *pMem, int sMem);
+void free_string (char *pstr);
 
 void  convert_mob(MOB_INDEX_DATA *mob);
 void  convert_obj(OBJ_INDEX_DATA *obj);
@@ -62,7 +71,6 @@ char *str_dup(const char *str);
 #define GET_UNSET(flag1,flag2)  (~(flag1)&((flag1)|(flag2)))
 #define MAGIC_NUM 52571214
 
-/* db3.c */
 char *print_flags (long flag);
 void do_collate(CHAR_DATA *ch, char *argument);
 void save_area ( CHAR_DATA *ch, AREA_DATA *pArea );

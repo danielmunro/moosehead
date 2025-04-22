@@ -3505,19 +3505,6 @@ extern sh_int      posse_thug_kills;
 extern char kludge_string[MAX_STRING_LENGTH];
 
 /* db.c */
-int     fread_number    args( ( FILE *fp ) );
-long    fread_flag      args( ( FILE *fp ) );
-char *  fread_string    args( ( FILE *fp ) );
-char *  fread_string_eol args(( FILE *fp ) );
-void    fread_to_eol    args( ( FILE *fp ) );
-char *  fread_word      args( ( FILE *fp ) );
-long    flag_convert    args( ( char letter) );
-void *  alloc_mem       args( ( int sMem ) );
-void *  alloc_perm      args( ( int sMem ) );
-void    free_mem        args( ( void *pMem, int sMem ) );
-char *  str_dup         args( ( const char *str ) );
-char *  str_dup_perm    args( ( const char *str ) );
-void    free_string     args( ( char *pstr ) );
 int     number_fuzzy    args( ( int number ) );
 int     number_range    args( ( int from, int to ) );
 int     number_percent  args( ( void ) );

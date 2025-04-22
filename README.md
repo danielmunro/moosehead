@@ -23,8 +23,6 @@ $ ./bin/run.sh mhs:latest
 * Remove non-unix-architecture code
   * Partially done
 * GitHub pages
-* Clean up duplicate code/functions
-  * str_dup/str_dup_perm
 * DevOps
   * Deploy to prod from laptop
   * Restore from backup (dev & prod)

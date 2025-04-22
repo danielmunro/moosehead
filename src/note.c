@@ -28,9 +28,10 @@
 #include "act_info.h"
 #include "act_wiz.h"
 #include "comm.h"
+#include "clan.h"
+#include "db.h"
 #include "recycle.h"
 #include "tables.h"
-#include "clan.h"
 #include "lookup.h"
 
 /* globals from db.c for load_notes */

@@ -32,6 +32,7 @@
 #include "recycle.h"
 #include "input.h"
 #include "comm.h"
+#include "db.h"
 
 void clear_macro_marks ( CHAR_DATA *ch )
 {

@@ -21,7 +21,9 @@
 #include <string.h>
 #include <gc.h>
 #include <stdlib.h>
+
 #include "merc.h"
+#include "db.h"
 #include "recycle.h"
 
 /* stuff for recyling notes */

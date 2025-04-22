@@ -25,6 +25,7 @@
 
 #include "merc.h"
 #include "comm.h"
+#include "db.h"
 #include "recycle.h"
 #include "lookup.h"
 #include "tables.h"

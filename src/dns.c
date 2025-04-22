@@ -24,6 +24,7 @@
 
 #include "merc.h"
 #include "comm.h"
+#include "db.h"
 #include "recycle.h"
 
 DNS_DATA *dns_list = NULL;
