@@ -32,11 +32,11 @@
 #include "db.h"
 #include "input.h"
 #include "lookup.h"
+#include "note.h"
 #include "recycle.h"
 #include "tables.h"
 
 /* globals from db.c for load_notes */
-extern  int     _filbuf        (FILE *);
 extern FILE *                  fpArea;
 extern char                    strArea[MAX_INPUT_LENGTH];
 
