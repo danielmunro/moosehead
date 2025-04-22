@@ -28,6 +28,7 @@
 #include "act_obj.h"
 #include "comm.h"
 #include "db.h"
+#include "effects.h"
 #include "fight.h"
 #include "gladiator.h"
 #include "input.h"

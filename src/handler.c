@@ -30,6 +30,7 @@
 #include "clan.h"
 #include "comm.h"
 #include "db.h"
+#include "effects.h"
 #include "gladiator.h"
 #include "input.h"
 #include "lookup.h"

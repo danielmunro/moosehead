@@ -3504,15 +3504,6 @@ extern sh_int      posse_thug_kills;
 
 extern char kludge_string[MAX_STRING_LENGTH];
 
-/* effect.c */
-void    acid_effect     args( (void *vo, int level, int dam, int target) );
-void    cold_effect     args( (void *vo, int level, int dam, int target) );
-void    fire_effect     args( (void *vo, int level, int dam, int target) );
-void	holy_effect	args( (CHAR_DATA *victim, int level, int align, CHAR_DATA *ch ) );
-void    poison_effect   args( (void *vo, int level, int dam, int target) );
-void    shock_effect    args( (void *vo, int level, int dam, int target) );
-void	trap_effect	args( (CHAR_DATA *ch, AFFECT_DATA *paf ) );
-
 /* fight.c */
 void sort_clanner_items args((CHAR_DATA *ch, OBJ_DATA *container, OBJ_DATA **loot_start, bool do_linked));
 CHAR_DATA *check_is_online args((char *name));
@@ -3768,12 +3759,6 @@ SF *    spec_lookup     args( ( const char *name ) );
 char *  spec_name       args( ( SPEC_FUN *function ) );
 void quest_handler(CHAR_DATA *quest_npc, CHAR_DATA *ch, OBJ_DATA *obj, int quest, int update);
 void log_quest_detail(char *buf, int quest);
-
-/* teleport.c 
-RID *   room_by_name    args( ( char *target, int level, bool error) );
-*/
-/* update.c */
-bool spawn_rainbow args((void));
 
 #undef  CD
 #undef  MID

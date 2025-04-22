@@ -29,6 +29,7 @@
 #include "comm.h"
 #include "db.h"
 #include "deity.h"
+#include "effects.h"
 #include "gladiator.h"
 #include "input.h"
 #include "interp.h"
