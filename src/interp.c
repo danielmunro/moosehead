@@ -32,6 +32,7 @@
 #include "db.h"
 #include "flags.h"
 #include "fight.h"
+#include "input.h"
 #include "interp.h"
 #include "log.h"
 #include "lookup.h"

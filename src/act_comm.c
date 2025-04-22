@@ -30,6 +30,7 @@
 #include "db.h"
 #include "deity.h"
 #include "gladiator.h"
+#include "input.h"
 #include "interp.h"
 #include "log.h"
 #include "lookup.h"

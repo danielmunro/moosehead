@@ -33,6 +33,7 @@
 #include "comm.h"
 #include "db.h"
 #include "gladiator.h"
+#include "input.h"
 #include "lookup.h"
 #include "log.h"
 #include "magic.h"

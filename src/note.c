@@ -27,12 +27,13 @@
 #include "merc.h"
 #include "act_info.h"
 #include "act_wiz.h"
-#include "comm.h"
 #include "clan.h"
+#include "comm.h"
 #include "db.h"
+#include "input.h"
+#include "lookup.h"
 #include "recycle.h"
 #include "tables.h"
-#include "lookup.h"
 
 /* globals from db.c for load_notes */
 extern  int     _filbuf        (FILE *);

@@ -11,6 +11,7 @@
 #include "merc.h"
 #include "comm.h"
 #include "db.h"
+#include "input.h"
 #include "magic.h"
 #include "gladiator.h"
 

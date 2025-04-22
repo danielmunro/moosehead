@@ -28,17 +28,18 @@
 #include <gc.h>
 
 #include "merc.h"
-#include "comm.h"
-#include "db.h"
-#include "recycle.h"
-#include "music.h"
-#include "lookup.h"
-#include "gladiator.h"
-#include "clan.h"
-#include "live_edit.h"
 #include "act_obj.h"
 #include "act_wiz.h"
+#include "clan.h"
+#include "comm.h"
+#include "db.h"
+#include "gladiator.h"
+#include "input.h"
+#include "live_edit.h"
 #include "log.h"
+#include "lookup.h"
+#include "music.h"
+#include "recycle.h"
 
 extern int bounty_available[];
 extern int bounty_vnum;

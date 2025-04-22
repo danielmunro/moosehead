@@ -62,17 +62,18 @@
 #include "db.h"
 #include "dns.h"
 #include "dump_obj_csv.h"
-#include "recycle.h"
 #include "gladiator.h"
-#include "tables.h"
 #include "handler.h"
+#include "http.h"
+#include "input.h"
 #include "interp.h"
 #include "log.h"
-#include "http.h"
 #include "lookup.h"
 #include "mag2.h"
 #include "note.h"
+#include "recycle.h"
 #include "skills.h"
+#include "tables.h"
 
 /*
  * Malloc debugging stuff.

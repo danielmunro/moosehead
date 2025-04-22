@@ -11,6 +11,7 @@
 #include "act_info.h"
 #include "comm.h"
 #include "db.h"
+#include "input.h"
 #include "magic.h"
 #include "recycle.h"
 

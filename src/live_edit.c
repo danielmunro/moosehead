@@ -28,6 +28,7 @@
 #include "comm.h"
 #include "db.h"
 #include "handler.h"
+#include "input.h"
 #include "log.h"
 #include "lookup.h"
 #include "note.h"

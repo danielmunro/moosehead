@@ -30,6 +30,7 @@
 #include "db.h"
 #include "gladiator.h"
 #include "handler.h"
+#include "input.h"
 #include "log.h"
 #include "lookup.h"
 #include "magic.h"

@@ -31,9 +31,10 @@
 #include "comm.h"
 #include "db.h"
 #include "fight.h"
-#include "tables.h"
-#include "recycle.h"
+#include "input.h"
 #include "lookup.h"
+#include "recycle.h"
+#include "tables.h"
 
 extern int rainbow;
 

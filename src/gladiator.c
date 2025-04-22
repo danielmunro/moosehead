@@ -14,6 +14,7 @@
 #include "comm.h"
 #include "db.h"
 #include "gladiator.h"
+#include "input.h"
 #include "log.h"
 #include "lookup.h"
 #include "note.h"

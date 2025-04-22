@@ -25,8 +25,9 @@
 #include "merc.h"
 #include "comm.h"
 #include "db.h"
-#include "recycle.h"
+#include "input.h"
 #include "menu.h"
+#include "recycle.h"
 
 #define ID_LINE_CLEAR     1
 #define ID_LINE_SHOW      2

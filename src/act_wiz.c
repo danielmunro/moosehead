@@ -33,6 +33,7 @@
 #include "comm.h"
 #include "db.h"
 #include "handler.h"
+#include "input.h"
 #include "interp.h"
 #include "lookup.h"
 #include "log.h"

@@ -23,6 +23,7 @@
 #include "merc.h"
 #include "comm.h"
 #include "db.h"
+#include "input.h"
 #include "interp.h"
 
 /* does aliasing and other fun stuff */

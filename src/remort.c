@@ -24,6 +24,7 @@
 #include "act_comm.h"
 #include "comm.h"
 #include "db.h"
+#include "input.h"
 #include "tables.h"
 
 bool out_of_element( CHAR_DATA *ch)

@@ -27,6 +27,7 @@
 #include "act_obj.h"
 #include "comm.h"
 #include "db.h"
+#include "input.h"
 #include "live_edit.h"
 #include "log.h"
 #include "lookup.h"

@@ -3661,8 +3661,6 @@ char *  cont_bit_name   args( ( int cont_flags) );
 char *  clan_bit_name   args( ( int clan_flags) );
 char*	exit_bit_name	args( ( int exit_flags ) );
 
-#include "input.h"
-
 /* clan.c */
 int calculate_bonus_merit args((CHAR_DATA *ch, bool new_join));
 void set_clan_skills args((CHAR_DATA *ch));

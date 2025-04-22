@@ -11,6 +11,7 @@
 #include "act_comm.h"
 #include "comm.h"
 #include "db.h"
+#include "input.h"
 #include "magic.h"
 
 void do_groups (CHAR_DATA *ch, char *argument);

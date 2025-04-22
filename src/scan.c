@@ -23,6 +23,7 @@
 
 #include "merc.h"
 #include "comm.h"
+#include "input.h"
 #include "db.h"
 
 char *const distance[4]=

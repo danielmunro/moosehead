@@ -31,6 +31,7 @@
 #include "comm.h"
 #include "db.h"
 #include "gladiator.h"
+#include "input.h"
 #include "lookup.h"
 #include "magic.h"
 #include "recycle.h"

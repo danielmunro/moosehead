@@ -24,8 +24,9 @@
 #include "merc.h"
 #include "comm.h"
 #include "db.h"
-#include "tables.h"
+#include "input.h"
 #include "lookup.h"
+#include "tables.h"
 
 void do_flag(CHAR_DATA *ch, char *argument)
 {
