@@ -37,6 +37,7 @@
 #include "recycle.h"
 #include "special.h"
 #include "tables.h"
+#include "update.h"
 
 /*
  * Local functions.

@@ -38,6 +38,7 @@
 #include "magic.h"
 #include "mag2.h"
 #include "tables.h"
+#include "update.h"
 
 void check_equip (CHAR_DATA *ch);
 bool check_wear	(CHAR_DATA *ch, OBJ_DATA *obj);

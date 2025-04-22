@@ -13,6 +13,7 @@
 #include "db.h"
 #include "input.h"
 #include "magic.h"
+#include "update.h"
 
 void do_groups (CHAR_DATA *ch, char *argument);
 

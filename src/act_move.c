@@ -27,15 +27,16 @@
 #include "act_obj.h"
 #include "act_wiz.h"
 #include "comm.h"
+#include "clan.h"
 #include "db.h"
+#include "gladiator.h"
+#include "handler.h"
 #include "input.h"
 #include "log.h"
 #include "lookup.h"
-#include "handler.h"
 #include "olc.h"
 #include "tables.h"
-#include "gladiator.h"
-#include "clan.h"
+#include "update.h"
 
 /* local functions */
 void do_recall (CHAR_DATA *ch, char *argument);

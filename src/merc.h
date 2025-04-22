@@ -3774,10 +3774,6 @@ RID *   room_by_name    args( ( char *target, int level, bool error) );
 */
 /* update.c */
 bool spawn_rainbow args((void));
-void    advance_level   args( ( CHAR_DATA *ch ) );
-void    gain_exp        args( ( CHAR_DATA *ch, long gain ) );
-void    gain_condition  args( ( CHAR_DATA *ch, int iCond, int value ) );
-void    update_handler  args( ( void ) );
 
 #undef  CD
 #undef  MID

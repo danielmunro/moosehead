@@ -35,6 +35,7 @@
 #include "lookup.h"
 #include "recycle.h"
 #include "tables.h"
+#include "update.h"
 
 extern int rainbow;
 

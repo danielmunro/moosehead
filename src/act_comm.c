@@ -36,6 +36,7 @@
 #include "lookup.h"
 #include "recycle.h"
 #include "tables.h"
+#include "update.h"
 
 /* Locals */
 void reclass (CHAR_DATA *ch, int class, bool fPenalty);

@@ -26,6 +26,7 @@
 #include "comm.h"
 #include "db.h"
 #include "recycle.h"
+#include "update.h"
 
 void acid_effect(void *vo, int level, int dam, int target)
 {

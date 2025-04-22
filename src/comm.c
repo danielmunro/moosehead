@@ -75,6 +75,7 @@
 #include "recycle.h"
 #include "skills.h"
 #include "tables.h"
+#include "update.h"
 
 /*
  * Malloc debugging stuff.

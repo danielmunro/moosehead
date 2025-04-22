@@ -36,6 +36,7 @@
 #include "magic.h"
 #include "recycle.h"
 #include "tables.h"
+#include "update.h"
 
 extern int bounty_item;
 extern int bounty_type;

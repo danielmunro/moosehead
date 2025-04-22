@@ -36,6 +36,7 @@
 #include "lookup.h"
 #include "recycle.h"
 #include "tables.h"
+#include "update.h"
 
 #define MAX_DAMAGE_MESSAGE 44
 
