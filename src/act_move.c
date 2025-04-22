@@ -32,6 +32,7 @@
 #include "log.h"
 #include "lookup.h"
 #include "handler.h"
+#include "olc.h"
 #include "tables.h"
 #include "gladiator.h"
 #include "clan.h"

@@ -27,11 +27,13 @@
 #include "act_wiz.h"
 #include "comm.h"
 #include "ctype.h"
+#include "editor.h"
 #include "db.h"
 #include "log.h"
 #include "lookup.h"
 #include "input.h"
 #include "menu.h"
+#include "olc.h"
 #include "recycle.h"
 
 /* What may appear to be memory leaks are not necessarily leaks, but safeguards.

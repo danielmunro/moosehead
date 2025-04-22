@@ -3778,14 +3778,6 @@ void    advance_level   args( ( CHAR_DATA *ch ) );
 void    gain_exp        args( ( CHAR_DATA *ch, long gain ) );
 void    gain_condition  args( ( CHAR_DATA *ch, int iCond, int value ) );
 void    update_handler  args( ( void ) );
-/* editor.c */
-void do_line_editor       args( ( CHAR_DATA *ch, char *arg, DO_FUN *call_back ) );
-void insert_line_callback args ( (CHAR_DATA *ch, char *arg) );
-/* macro. c */
-void clear_macro_marks args ( ( CHAR_DATA *ch ) );
-bool check_macro       args ( ( CHAR_DATA *ch, char *argument ) );
-/* olc.c    */
-bool create_room      ( CHAR_DATA *ch, ROOM_INDEX_DATA *room, int dir );
 
 #undef  CD
 #undef  MID
