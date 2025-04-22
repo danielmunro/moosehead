@@ -1,3 +1,6 @@
+#ifndef MOOSEHEAD_DB_H
+#define MOOSEHEAD_DB_H
+
 /* files used in db.c */
 typedef struct area_name_data AREA_NAME_DATA;
 struct area_name_data {
@@ -31,8 +34,22 @@ extern AREA_DATA  * area_first, * area_last;
 
 extern AREA_NAME_DATA  *area_name_first,*area_name_last;
 
+void boot_db (void);
+void area_update (void);
+void MobIndexToInstance (CHAR_DATA *mob, MOB_INDEX_DATA *pMobIndex);
+void ObjIndexToInstance (OBJ_DATA *obj, OBJ_INDEX_DATA *pObjIndex, int level, bool favored);
+CHAR_DATA *create_mobile (MOB_INDEX_DATA *pMobIndex);
+void clone_mobile (CHAR_DATA *parent, CHAR_DATA *clone);
+OBJ_DATA *create_object (OBJ_INDEX_DATA *pObjIndex, int level, bool favored);
+void clone_object (OBJ_DATA *parent, OBJ_DATA *clone);
+char *get_extra_descr (const char *name, EXTRA_DESCR_DATA *ed);
+MOB_INDEX_DATA *get_mob_index (int vnum);
+OBJ_INDEX_DATA *get_obj_index (int vnum);
+ROOM_INDEX_DATA *get_room_index (int vnum);
 void rename_area (char *strArea);
 void select_bounty (int qualifier);
+
+char fread_letter (FILE *fp);
 
 /* from db2.c */
 extern int  social_count;
@@ -46,6 +63,9 @@ char *str_dup(const char *str);
 #define MAGIC_NUM 52571214
 
 /* db3.c */
+char *print_flags (long flag);
 void do_collate(CHAR_DATA *ch, char *argument);
 void save_area ( CHAR_DATA *ch, AREA_DATA *pArea );
 void update_area_list ( CHAR_DATA *ch, char *strArea );
+
+#endif //MOOSEHEAD_DB_H

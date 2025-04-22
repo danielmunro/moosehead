@@ -334,9 +334,7 @@ char      strArea[MAX_INPUT_LENGTH];
 
 
 
-/*
- * Local booting procedures.
-*/
+/* local functions */
 void init_mm (void);
 void load_area (FILE *fp, char *file_name);
 void load_cstat (FILE *fp);

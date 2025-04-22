@@ -22,9 +22,10 @@
 #include <stdlib.h>
 
 #include "merc.h"
-#include "comm.h"
 #include "act_info.h"
 #include "act_move.h"
+#include "comm.h"
+#include "db.h"
 
 /* random room generation procedure */
 ROOM_INDEX_DATA  *get_random_room(CHAR_DATA *ch)

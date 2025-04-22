@@ -35,6 +35,7 @@
 #include "act_move.h"
 #include "clan.h"
 #include "comm.h"
+#include "db.h"
 #include "interp.h"
 
 /*

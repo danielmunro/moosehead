@@ -3505,21 +3505,6 @@ extern sh_int      posse_thug_kills;
 extern char kludge_string[MAX_STRING_LENGTH];
 
 /* db.c */
-char *  print_flags     args( ( long flag ));
-void    boot_db         args( ( void ) );
-void    area_update     args( ( void ) );
-void    MobIndexToInstance  args( ( CHAR_DATA *mob, MOB_INDEX_DATA *pMobIndex ) );
-CD *    create_mobile   args( ( MOB_INDEX_DATA *pMobIndex ) );
-void    clone_mobile    args( ( CHAR_DATA *parent, CHAR_DATA *clone) );
-void    ObjIndexToInstance  args( ( OBJ_DATA *obj, OBJ_INDEX_DATA *pObjIndex, int level, bool favored ) );
-OD *    create_object   args( ( OBJ_INDEX_DATA *pObjIndex, int level, bool favored ) );
-void    clone_object    args( ( OBJ_DATA *parent, OBJ_DATA *clone ) );
-void    clear_char      args( ( CHAR_DATA *ch ) );
-char *  get_extra_descr args( ( const char *name, EXTRA_DESCR_DATA *ed ) );
-MID *   get_mob_index   args( ( int vnum ) );
-OID *   get_obj_index   args( ( int vnum ) );
-RID *   get_room_index  args( ( int vnum ) );
-char    fread_letter    args( ( FILE *fp ) );
 int     fread_number    args( ( FILE *fp ) );
 long    fread_flag      args( ( FILE *fp ) );
 char *  fread_string    args( ( FILE *fp ) );

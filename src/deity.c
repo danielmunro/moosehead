@@ -29,6 +29,7 @@
 #include "act_move.h"
 #include "act_wiz.h"
 #include "comm.h"
+#include "db.h"
 #include "fight.h"
 #include "tables.h"
 #include "recycle.h"

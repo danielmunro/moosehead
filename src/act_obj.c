@@ -26,6 +26,7 @@
 #include "gladiator.h"
 #include "recycle.h"
 #include "clan.h"
+#include "db.h"
 #include "act_info.h"
 #include "act_comm.h"
 #include "act_wiz.h"
