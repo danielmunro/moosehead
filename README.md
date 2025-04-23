@@ -31,8 +31,6 @@ $ ./bin/run.sh mhs:latest
   * `convert.c` mentioned a function, `spec_guard`, but that function doesn't exist.  Using `spec_guard_d` instead.
   * Refactor `alloc_perm` -> 'GC_MALLOC'
   * VNUM data errors on startup
-  * `gamble.c` not referenced in Makefile -- can it be removed?
-  * `sign.c` not referenced in Makefile -- can it be removed?
   * Move function declarations out of merc.h into respective .h files
   * Replace local function declarations at the top of files with including the header where possible
   * `str_cmp` re-implemented in db.c
