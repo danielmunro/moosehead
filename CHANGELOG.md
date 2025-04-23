@@ -1,5 +1,9 @@
 # Changelog
 
+## 2025-04-23
+
+* Moved function declarations out of `merc.h` and into respective header files.
+
 ## 2025-04-18
 
 * Added weekly and monthly backup jobs.  The current backup schedule is:
