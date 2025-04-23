@@ -2,6 +2,7 @@
 
 #include "merc.h"
 #include "db.h"
+#include "handler.h"
 #include "log.h"
 
 bool should_include(OBJ_INDEX_DATA *object) {

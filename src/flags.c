@@ -24,6 +24,7 @@
 #include "merc.h"
 #include "comm.h"
 #include "db.h"
+#include "handler.h"
 #include "input.h"
 #include "lookup.h"
 #include "tables.h"

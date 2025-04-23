@@ -34,6 +34,7 @@
 #include "comm.h"
 #include "db.h"
 #include "gladiator.h"
+#include "handler.h"
 #include "input.h"
 #include "live_edit.h"
 #include "log.h"

@@ -33,6 +33,7 @@
 #include "effects.h"
 #include "fight.h"
 #include "gladiator.h"
+#include "handler.h"
 #include "input.h"
 #include "live_edit.h"
 #include "lookup.h"
@@ -63,8 +64,8 @@ void prompt_pulse_command(CHAR_DATA *ch)
         sprintf(buf, "<Recalling in %d combat rounds>\n\r", (ch->pcdata->pulse_timer + 11) / 12);
       send_to_char(buf, ch);
       break;
-    default: send_to_char("<Unknown timer>\n\r", ch); break; 
-  } 
+    default: send_to_char("<Unknown timer>\n\r", ch); break;
+  }
 }
 
 bool tick_pulse_command(CHAR_DATA *ch)

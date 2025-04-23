@@ -32,6 +32,7 @@
 #include "deity.h"
 #include "fight.h"
 #include "gladiator.h"
+#include "handler.h"
 #include "log.h"
 #include "lookup.h"
 #include "magic.h"
@@ -46,20 +47,18 @@
 /*
  * Local functions.
  */
-int hit_gain  args( ( CHAR_DATA *ch ) );
-int mana_gain args( ( CHAR_DATA *ch ) );
-int move_gain args( ( CHAR_DATA *ch ) );
-void  dot_update	args( ( void ) );
-void  mobile_update args( ( void ) );
-void  weather_update  args( ( void ) );
-void  char_update args( ( void ) );
-void  obj_update  args( ( void ) );
-void  room_update args( ( void ) );
-void  aggr_update args( ( void ) );
-bool  ch_in_wraithform = false;
-void sector_damage args ((CHAR_DATA *ch));
-/* Externals */
-void remove_highlander args((CHAR_DATA *ch, CHAR_DATA *victim));
+int hit_gain (CHAR_DATA *ch);
+int mana_gain (CHAR_DATA *ch);
+int move_gain (CHAR_DATA *ch);
+void dot_update	(void);
+void mobile_update (void);
+void weather_update (void);
+void char_update (void);
+void obj_update (void);
+void room_update (void);
+void aggr_update (void);
+bool ch_in_wraithform = false;
+void sector_damage (CHAR_DATA *ch);
 
 /* used for saving */
 
@@ -131,7 +130,7 @@ void check_savant( CHAR_DATA *ch )
 	int dam;
        switch( number_percent() * number_percent() )
        {
-       case 1: 
+       case 1:
 	   act("The wind picks up and whips your cloak about violently.",
 		ch,NULL,NULL,TO_CHAR,false);
 	   ch->pcdata->savant += 10;
@@ -186,7 +185,7 @@ void check_savant( CHAR_DATA *ch )
        case 23:
        case 24:
        case 25:
-	    if ( number_percent() * number_percent() < ch->pcdata->savant ) 
+	    if ( number_percent() * number_percent() < ch->pcdata->savant )
 	    {
 	    REMOVE_BIT(ch->mhs,MHS_SAVANT);
 	    ch->pcdata->savant = 0;
@@ -197,8 +196,8 @@ void check_savant( CHAR_DATA *ch )
 	    break;
        };
    }
-   
-   if ( !IS_IMMORTAL(ch) && 
+
+   if ( !IS_IMMORTAL(ch) &&
 	number_percent() * number_percent() < 10 &&
 	number_percent() * number_percent() < 10 &&
 	number_percent() < ch->level &&
@@ -212,7 +211,7 @@ void check_savant( CHAR_DATA *ch )
 	act("$n cringes in sudden pain.",ch,NULL,NULL,TO_ROOM,false);
 	return;
     }
-    
+
     return;
 }
 
@@ -249,13 +248,13 @@ void check_vampirictouch( CHAR_DATA *ch)
   {
     return;
   }
-  if( 
+  if(
       //number_percent() * number_percent() < 25       &&
       number_percent() * number_percent() < 50       &&
       ((weapon = get_eq_char(ch,WEAR_WIELD)) != NULL) &&
       number_percent() < ch->level / (weapon->enchanted?5:2)  &&
       (!IS_SET(weapon->value[4],WEAPON_VAMPIRIC))  &&
-      (!IS_SET(weapon->value[4],WEAPON_FAVORED)) 
+      (!IS_SET(weapon->value[4],WEAPON_FAVORED))
     )
     {
       wiznet("Vampiric Weapon made by:  $N.",ch,NULL,WIZ_DEITYFAVOR,0,get_trust(ch));
@@ -263,7 +262,7 @@ void check_vampirictouch( CHAR_DATA *ch)
       act("$p suddenly looks a bit more {Dwicked{x.",ch,weapon,NULL,TO_CHAR,false);
       act("$p suddenly looks a bit more {Dwicked{x.",ch,weapon,NULL,TO_ROOM,false);
     }
-}  
+}
 
 
 void check_mutate( CHAR_DATA *ch )
@@ -288,15 +287,15 @@ void check_mutate( CHAR_DATA *ch )
 	 ch->vuln_flags  = race_table[new_race].vuln;
 	 ch->form        = race_table[new_race].form;
          ch->parts       = race_table[new_race].parts;
-		       
-		      
+
+
     for (i = 0; i < 5; i++) {
         if (pc_race_table[new_race].skills[i] == NULL) {
             break;
         }
         group_add(ch,pc_race_table[new_race].skills[i],false);
     }
-		
+
 	ch->size = pc_race_table[new_race].size;
 	ch->race = new_race;
 	send_to_char("Your body shimmers and shakes.\n\r",ch);
@@ -325,7 +324,7 @@ if( ch != NULL )
  {
     old_class = !IS_NPC(ch) ? ch->pcdata->old_class : 3;
 
-    ch->pcdata->last_level = 
+    ch->pcdata->last_level =
   ( ch->played + (int) (current_time - ch->logon) ) / 3600;
 
 /*    add_hp  = 3*(con_app[get_curr_stat(ch,STAT_CON)].hitp + number_range(
@@ -362,7 +361,7 @@ if( ch != NULL )
 
     mana = (fInt * .2 * ( 1 + fP1 + fP2 ) );
     mana += ( fWis * .1 * ( 1 + fP3 ) );
-  
+
     if ( ch->race == race_lookup("elf") || ch->race == race_lookup("half-elf"))
 	mana *= 1.1;
 
@@ -479,7 +478,7 @@ if( ch != NULL )
    }
   }
     return;
-}   
+}
 
 void do_level( CHAR_DATA *ch, char *argument )
 {
@@ -528,8 +527,8 @@ void do_level( CHAR_DATA *ch, char *argument )
       }
       ch->pcdata->confirm_outcast = false;
     }
-    
-	if( ch->pcdata->debit_level > 0 ) 
+
+	if( ch->pcdata->debit_level > 0 )
     {
     	ch->pcdata->debit_level--;
 	ch->exp += exp_per_level(ch,ch->pcdata->points);
@@ -555,7 +554,7 @@ void do_level( CHAR_DATA *ch, char *argument )
     ch->level++;
     advance_level(ch);
     save_char_obj(ch);
-		 
+
     sprintf(buf,"%s has attained level %d",ch->name,ch->level);
     log_info(buf);
     sprintf(buf,"$N has attained level %d!",ch->level);
@@ -582,7 +581,7 @@ void gain_exp( CHAR_DATA *ch, long gain )
     ch->exp = UMAX( exp_per_level(ch,ch->pcdata->points), ch->exp + gain );
   if(cur_exp != ch->exp)
   {
-    while ( ch->level < LEVEL_HERO && ch->exp >= 
+    while ( ch->level < LEVEL_HERO && ch->exp >=
   exp_per_level(ch,ch->pcdata->points) * (ch->level+count ) )
     {
    sprintf(buf,"You qualify for level %d!!\n\r", ch->level + count );
@@ -633,12 +632,12 @@ int hit_gain( CHAR_DATA *ch )
       case POS_FIGHTING:  gain /= 3;      break;
   }
 
-  
+
     }
     else
     {
   has_medium = room_has_medium(ch);
-  gain = UMAX(3,get_curr_stat(ch,STAT_CON) - 3 + ch->level/2); 
+  gain = UMAX(3,get_curr_stat(ch,STAT_CON) - 3 + ch->level/2);
   gain += class_table[ch->class].hp_max - 10;
   number = number_percent();
   if (number < get_skill(ch,gsn_fast_healing))
@@ -749,7 +748,7 @@ int mana_gain( CHAR_DATA *ch )
     else
     {
   has_medium = room_has_medium(ch);
-  gain = (get_curr_stat(ch,STAT_WIS) 
+  gain = (get_curr_stat(ch,STAT_WIS)
         + get_curr_stat(ch,STAT_INT) + ch->level) / 2;
   number = number_percent();
   if (number < get_skill(ch,gsn_meditation))
@@ -783,7 +782,7 @@ int mana_gain( CHAR_DATA *ch )
   if (!has_medium && ch->pcdata->condition[COND_THIRST] == 0 )
       gain /= 2;
 
-  if ( ch->pcdata->condition[COND_DRUNK] > 10 )  
+  if ( ch->pcdata->condition[COND_DRUNK] > 10 )
       gain = (gain + 1)*3 / 2;
 
     }
@@ -829,7 +828,7 @@ int mana_gain( CHAR_DATA *ch )
 
     if (ch->race == race_lookup("smurf"))
        gain *= 2;
-  
+
     if( is_affected(ch,gsn_clarity) )
 	gain = ( 100 + (ch->level/2) ) * gain / 100;
 
@@ -985,7 +984,7 @@ void mobile_update( void )
     {
   ch_next = ch->next;
 
-  if ( !IS_NPC(ch) || ch->in_room == NULL 
+  if ( !IS_NPC(ch) || ch->in_room == NULL
 	|| (IS_AFFECTED(ch,AFF_CHARM) && !IS_SET(ch->mhs, MHS_ELEMENTAL)) )
       continue;
 
@@ -1005,7 +1004,7 @@ void mobile_update( void )
     ch->gold += ch->pIndexData->wealth * number_range(1,20)/5000000;
     ch->silver += ch->pIndexData->wealth * number_range(1,20)/50000;
       }
-   
+
 
   /* That's all for sleeping / busy monster, and empty zones */
   if ( ch->position != POS_STANDING )
@@ -1042,7 +1041,7 @@ void mobile_update( void )
 
   /* Wander */
   if ( !ch->in_room->area->freeze
-  && !IS_SET(ch->act, ACT_SENTINEL) 
+  && !IS_SET(ch->act, ACT_SENTINEL)
   && number_bits(3) == 0
   && ( door = number_bits( 5 ) ) <= 5
   && ( pexit = ch->in_room->exit[door] ) != NULL
@@ -1050,14 +1049,14 @@ void mobile_update( void )
   &&   !IS_SET(pexit->exit_info, EX_CLOSED)
   &&   !IS_SET(pexit->u1.to_room->room_flags, ROOM_NO_MOB)
   && ( !IS_SET(ch->act, ACT_STAY_AREA)
-  ||   pexit->u1.to_room->area == ch->in_room->area ) 
+  ||   pexit->u1.to_room->area == ch->in_room->area )
   && ( !IS_SET(ch->act, ACT_OUTDOORS)
-  ||   !IS_SET(pexit->u1.to_room->room_flags,ROOM_INDOORS)) 
+  ||   !IS_SET(pexit->u1.to_room->room_flags,ROOM_INDOORS))
   && ( !IS_SET(ch->act, ACT_INDOORS)
   ||   IS_SET(pexit->u1.to_room->room_flags,ROOM_INDOORS)))
   {
       move_char( ch, door, false );
-  }                     
+  }
     }
 
     return;
@@ -1078,7 +1077,7 @@ void load_rbow_char(ROOM_INDEX_DATA *pRoom, int vnum)
   af.bitvector = 0;
   affect_to_char( rbowchar, &af );
   act("$n touches down right in front of you!", rbowchar, NULL, NULL, TO_ROOM, false);
-  /* Activate the AI just in case there's a player in the room already */ 
+  /* Activate the AI just in case there's a player in the room already */
   spec_rainbow(rbowchar);
 }
 
@@ -1226,7 +1225,7 @@ void weather_update( void )
 
     switch ( weather_info.sky )
     {
-    default: 
+    default:
   bug( "Weather_update: bad sky %d.", weather_info.sky );
   weather_info.sky = SKY_CLOUDLESS;
   break;
@@ -1313,10 +1312,10 @@ void weather_update( void )
  * Update all chars, including mobs.
 */
 void char_update( void )
-{   
+{
     CHAR_DATA *ch;
     CHAR_DATA *ch_next;
-    CHAR_DATA *ch_quit;    
+    CHAR_DATA *ch_quit;
     char buf[MAX_STRING_LENGTH];
     ch_quit = NULL;
 
@@ -1348,7 +1347,7 @@ void char_update( void )
 		if (ch->pcdata->abolish_timer-- < 0 )
 			ch->pcdata->abolish_timer = 0;
 	    }
-       
+
   if ( !IS_NPC(ch) )
             {
                 if(ch->pcdata->rlock_time > 0)
@@ -1372,7 +1371,7 @@ void char_update( void )
 
                 if (ch->pcdata->trap_timer-- < 0 )
                         ch->pcdata->trap_timer = 0;
-               
+
 /* REMOVED by Nightdagger on 04/13/03
                 if (ch->pcdata->deity_timer-- < 0 && ch->pcdata->deity != ch->pcdata->new_deity )
 		        {
@@ -1409,7 +1408,7 @@ void char_update( void )
 		}
 
             }
- 
+
 	if ( IS_SET(ch->mhs, MHS_BANISH))
 	  {
 	  REMOVE_BIT(ch->mhs, MHS_BANISH);
@@ -1426,14 +1425,14 @@ void char_update( void )
 	      	UMAX(0,ch->pcdata->skill_point_timer -1);
 
 
-	      if (ch->pcdata->skill_point_timer ==  0) 
+	      if (ch->pcdata->skill_point_timer ==  0)
 	      {
-	         ch->pcdata->skill_point_tracker = 
+	         ch->pcdata->skill_point_tracker =
 		   UMAX(0,ch->pcdata->skill_point_tracker - 1);
 		 if (ch->pcdata->skill_point_tracker > 0)
 			ch->pcdata->skill_point_timer = 2;
 	      }
-		 
+
 	   }
 
 	   if(ch->pcdata->last_attacked_by_timer == 0)
@@ -1446,27 +1445,27 @@ void char_update( void )
 
         if ( ch->timer > 30 )
             ch_quit = ch;
-            
+
   if (ch->position == POS_SLEEPING && !IS_NPC(ch)) {
      if ( IS_SET(ch->display, DISP_PROMPT)    && (ch->desc))
         send_to_char ("",ch);
-  }             
+  }
 
   if ( ch->position >= POS_STUNNED )
   {
-    
+
             /* check to see if we need to go home */
-      if (IS_NPC(ch) && ch->zone != NULL 
+      if (IS_NPC(ch) && ch->zone != NULL
 	  && ch->zone != ch->in_room->area
-          && ch->desc == NULL &&  ch->fighting == NULL 
-          && !IS_AFFECTED(ch,AFF_CHARM) 
-	  && ( number_percent() < 5 
+          && ch->desc == NULL &&  ch->fighting == NULL
+          && !IS_AFFECTED(ch,AFF_CHARM)
+	  && ( number_percent() < 5
 		|| (!str_prefix("spec_guard",spec_name(ch->spec_fun))
-		    && number_percent() < 33) ) 
+		    && number_percent() < 33) )
 	  && !ch->in_room->area->freeze
 	  && ch->in_room != get_room_index(ROOM_VNUM_LIMBO)
           && ch->passenger == NULL
-	  && ch->pIndexData->pShop == NULL) 
+	  && ch->pIndexData->pShop == NULL)
 	   {
               act("$n wanders on home.",ch,NULL,NULL,TO_ROOM,false);
               extract_char(ch,true);
@@ -1478,11 +1477,11 @@ void char_update( void )
 	    move players only who are in a standing position  */
 
 	 if ( !IS_NPC(ch)
-	     && ( ch->position >= POS_STANDING ) 
+	     && ( ch->position >= POS_STANDING )
 	     && ( ch->in_room != NULL )
 	     && (    ch->in_room->sector_type == SECT_AIR
-		 || ch->in_room->sector_type == SECT_WATER_NOSWIM 
-		 || ch->in_room->sector_type == SECT_WATER_SWIM          
+		 || ch->in_room->sector_type == SECT_WATER_NOSWIM
+		 || ch->in_room->sector_type == SECT_WATER_SWIM
 	        )
 	     && ( number_percent() > get_skill(ch, gsn_swim ) )
 	    )
@@ -1506,13 +1505,13 @@ void char_update( void )
 			 new_type = pexit->u1.to_room->sector_type;
 			 original_type = ch->in_room->sector_type;
 			 if( /* can't from air to water */
-			     (       original_type == SECT_AIR 
+			     (       original_type == SECT_AIR
 				&&  (    new_type == SECT_WATER_NOSWIM
 				       || new_type == SECT_WATER_SWIM
 				     )
 			     )
 			   || /* or from water to air */
-			     (       new_type == SECT_AIR 
+			     (       new_type == SECT_AIR
 				&&  (    original_type == SECT_WATER_NOSWIM
 				     || original_type == SECT_WATER_SWIM
 				    )
@@ -1526,7 +1525,7 @@ void char_update( void )
 			   /* move the player to the next room */
 			    move_char(ch, door, false);
 			 }
-		
+
                   } /* end else, for no room */
              } /* end on the NPC check */
 
@@ -1545,7 +1544,7 @@ void char_update( void )
       else
     ch->hit = ch->max_hit;
      }
-    else if(ch->desc != NULL 
+    else if(ch->desc != NULL
 	    && ch->in_room != get_room_index(ROOM_VNUM_LIMBO))
      {
    	/* Handle gargoyles first */
@@ -1603,11 +1602,11 @@ void char_update( void )
   else if ( ch->position == POS_MORTAL )
   {
       damage( ch, ch, 1, TYPE_UNDEFINED, DAM_NONE,false,false);
-  }     
+  }
 
   if ( ch->position == POS_STUNNED )
       update_pos( ch );
-      
+
   if ( ch->position == POS_SLEEPING )
     send_to_char ("\n\r",ch);
 
@@ -1663,7 +1662,7 @@ void char_update( void )
           if(ch->pcdata->start_time == 0)
             send_to_char("{WYou may now attack other players.{x\n\r", ch);
       }
-    
+
       if (ch->pcdata && ch->pcdata->quit_time > 0)
           --ch->pcdata->quit_time;
 
@@ -1685,7 +1684,7 @@ void char_update( void )
 	{
 	   REMOVE_BIT(ch->mhs,MHS_GLADIATOR);
            sprintf(buf, "%s has left the arena for the void.", ch->name);
-           gladiator_talk(buf); 
+           gladiator_talk(buf);
 	   send_to_char("You drifted into the void and were removed from the Arena.\n\r",ch);
 	   gladiator_left_arena(ch,false);
 	}
@@ -1702,14 +1701,14 @@ void char_update( void )
 	if ( is_mounted(ch) && !IS_NPC(ch->riding) )
 		clear_mount( ch );
         if ( ch->passenger != NULL )
-	    clear_mount( ch ); 
+	    clear_mount( ch );
 	char_to_room( ch, get_room_index( ROOM_VNUM_LIMBO ) );
     }
       }
 
 	gain_condition( ch, COND_DRUNK, ch->size > SIZE_LARGE ? -2 :  -1 );
 	if ( !IS_SET(ch->act,PLR_VAMP) ||
-	 ( IS_SET(ch->act,PLR_VAMP) && 
+	 ( IS_SET(ch->act,PLR_VAMP) &&
 	   ( time_info.hour < 5 || time_info.hour > 20 ) ) )
 	{
 	gain_condition( ch, COND_FULL, ch->size > SIZE_MEDIUM ? -4 : -2 );
@@ -1741,7 +1740,7 @@ void char_update( void )
 	 /*Gladiators Do not lose spell duration/level during wait */
 	 if (IS_SET(ch->mhs,MHS_GLADIATOR) && !IS_NPC(ch))
 	 {
-	     if (gladiator_info.time_left < 1 
+	     if (gladiator_info.time_left < 1
                  && gladiator_info.bet_counter < 1)
 	     {
                 paf->duration--;
@@ -1772,10 +1771,10 @@ void char_update( void )
     }
 
     /*Kill em if they're still in wraithform and haven't un wraithed*/
-    if ( ch_in_wraithform == true 
-         && is_affected(ch, skill_lookup("wraithform")) 
-         && paf->type == skill_lookup("wraithform") 
-       ) 
+    if ( ch_in_wraithform == true
+         && is_affected(ch, skill_lookup("wraithform"))
+         && paf->type == skill_lookup("wraithform")
+       )
     {
       if (!IS_IMMORTAL(ch) )
       {
@@ -1786,10 +1785,10 @@ void char_update( void )
     affect_remove( ch, paf,APPLY_BOTH );
 
       }
-  if (   !IS_AFFECTED(ch, AFF_CHARM) 
-      && IS_NPC(ch) 
-      && !IS_SET(ch->act,ACT_PET) 
-      && ch->master != NULL 
+  if (   !IS_AFFECTED(ch, AFF_CHARM)
+      && IS_NPC(ch)
+      && !IS_SET(ch->act,ACT_PET)
+      && ch->master != NULL
       && ch->fighting == NULL )
      die_follower( ch );
   }
@@ -1818,7 +1817,7 @@ void char_update( void )
 		    ch,NULL,NULL,TO_ROOM,false);
 		act("You breathe laboriously, gasping.",
 		    ch,NULL,NULL,TO_CHAR,false);
-		dam = dice(5,8); 
+		dam = dice(5,8);
 	    }
 
 	    damage(ch,ch,dam,gsn_asphyxiate,DAM_OTHER,false,true);
@@ -1845,7 +1844,7 @@ void char_update( void )
 		   break;
 	       }
 
-	    for ( i = 0 ; i < duration ; i++ ) 
+	    for ( i = 0 ; i < duration ; i++ )
 	       dam *= 2; /* dmage increases each round you have it */
 
 	    damage(ch,ch,dam,gsn_irradiate,DAM_ENERGY,false,true);
@@ -1863,7 +1862,7 @@ void char_update( void )
 
       if (ch->in_room == NULL)
     continue;
-            
+
       act("$n writhes in agony as plague sores erupt from $s skin.",
     ch,NULL,NULL,TO_ROOM,false);
       send_to_char("You writhe in agony from the plague.\n\r",ch);
@@ -1872,7 +1871,7 @@ void char_update( void )
               if (af->type == gsn_plague)
                     break;
             }
-        
+
             if (af == NULL)
             {
               REMOVE_BIT(ch->affected_by,AFF_PLAGUE);
@@ -1885,16 +1884,16 @@ void char_update( void )
 //  /* Removed contagion effect ****
       plague.where    = TO_AFFECTS;
             plague.type     = gsn_plague;
-            plague.level    = af->level - 1; 
+            plague.level    = af->level - 1;
             plague.duration   = number_range(1,2 * plague.level);
             plague.location   = APPLY_STR;
             plague.modifier   = -5;
             plague.bitvector  = AFF_PLAGUE;
-        
+
             for ( vch = ch->in_room->people; vch != NULL; vch = vch->next_in_room)
             {
-              if (!saves_spell(plague.level - 2,vch,DAM_DISEASE) 
-              && vch->level > 10 
+              if (!saves_spell(plague.level - 2,vch,DAM_DISEASE)
+              && vch->level > 10
               && !IS_IMMORTAL(vch)
               && !IS_AFFECTED(vch,AFF_PLAGUE) && number_bits(4) == 0)
               {
@@ -1974,8 +1973,8 @@ void char_update( void )
     } else {
       ch->life_timer--;        /* you still got some time left */
     }
-  }         
-    
+  }
+
     }
     /*
      * Autosave and autoquit.
@@ -2031,7 +2030,7 @@ void room_update( void )
     	  if ( raf->duration < 0 )
 		;
 	  else
-	  {   
+	  {
 	     if ( raf_next == NULL ||
 		  raf_next->type != raf->type ||
 		  raf_next->duration > 0 )
@@ -2047,18 +2046,18 @@ void room_update( void )
     }
     }
     return;
-} 
+}
 
 /*
  * Update all objs.
  * This function is performance sensitive.
  */
 void obj_update( void )
-{   
+{
     OBJ_DATA *obj;
     OBJ_DATA *obj_next;
     AFFECT_DATA *paf, *paf_next;
-    ROOM_INDEX_DATA *to_room; 
+    ROOM_INDEX_DATA *to_room;
 
     for ( obj = object_list; obj != NULL; obj = obj_next )
     {
@@ -2067,9 +2066,9 @@ void obj_update( void )
 
   obj_next = obj->next;
 
-  if (obj->item_type == ITEM_PORTAL 
-      && obj->value[2] > 0 
-      && obj->carried_by == NULL 
+  if (obj->item_type == ITEM_PORTAL
+      && obj->value[2] > 0
+      && obj->carried_by == NULL
       && IS_SET(obj->value[2], GATE_RANDOM_ROOM))
   {
     obj->value[4] -= 1;
@@ -2123,7 +2122,7 @@ void obj_update( void )
           act(skill_table[paf->type].msg_obj,
         rch,obj,NULL,TO_CHAR,false);
       }
-      if (obj->in_room != NULL 
+      if (obj->in_room != NULL
       && obj->in_room->people != NULL)
       {
           rch = obj->in_room->people;
@@ -2159,20 +2158,20 @@ void obj_update( void )
           send_to_char("Your floating disc shimmers and begins to fade\n\r",obj->carried_by);
 
        /* if the object is in a room, is takeable, and is in air or water */
-        if (     obj->in_room != NULL 
-	     && IS_SET( obj->wear_flags , ITEM_TAKE ) 
-	     && ( obj->item_type != ITEM_FURNITURE ) 
+        if (     obj->in_room != NULL
+	     && IS_SET( obj->wear_flags , ITEM_TAKE )
+	     && ( obj->item_type != ITEM_FURNITURE )
 	     && (    obj->in_room->sector_type == SECT_AIR
-		 || obj->in_room->sector_type == SECT_WATER_NOSWIM 
-		 || obj->in_room->sector_type == SECT_WATER_SWIM          
+		 || obj->in_room->sector_type == SECT_WATER_NOSWIM
+		 || obj->in_room->sector_type == SECT_WATER_SWIM
 	        )
 	   )
-	{ 
+	{
 /* pick a direction, similar to tsumani code, can't move
    if no door in that direction, no room in that direction,
    room is a clan hall, door is closed,  go from air to
    water or water to air , I split it up in different
-   if statements to simplify it for the reader */ 
+   if statements to simplify it for the reader */
 
          EXIT_DATA *pexit;
          int original_type, new_type;
@@ -2188,13 +2187,13 @@ void obj_update( void )
          new_type = pexit->u1.to_room->sector_type;
 	 original_type = obj->in_room->sector_type;
          if( /* can't from air to water */
-             (       original_type == SECT_AIR 
+             (       original_type == SECT_AIR
 		&&  (    new_type == SECT_WATER_NOSWIM
 		       || new_type == SECT_WATER_SWIM
 		     )
 	     )
 	   || /* or from water to air */
-	     (       new_type == SECT_AIR 
+	     (       new_type == SECT_AIR
 	        &&  (    original_type == SECT_WATER_NOSWIM
 	       	     || original_type == SECT_WATER_SWIM
 	            )
@@ -2202,7 +2201,7 @@ void obj_update( void )
 	   )
 	   continue;
 
-/* send a message to people in the original room with the object */  
+/* send a message to people in the original room with the object */
           if (( rch = obj->in_room->people ) != NULL )
 	  {
 	     if ( original_type == SECT_AIR )
@@ -2220,7 +2219,7 @@ void obj_update( void )
          obj_from_room(obj);
 	 obj_to_room(obj,pexit->u1.to_room);
 
-/* send a message to people in the new room with the object */  
+/* send a message to people in the new room with the object */
           if (( rch = obj->in_room->people ) != NULL )
 	  {
 	     if ( original_type == SECT_AIR )
@@ -2234,7 +2233,7 @@ void obj_update( void )
 	       act( "$p floats in.", rch, obj, NULL, TO_CHAR ,false);
              }
           }
-        
+
       }
      continue;
      }
@@ -2248,13 +2247,13 @@ void obj_update( void )
   case ITEM_CORPSE_NPC: message = "$p decays into dust."; break;
   case ITEM_CORPSE_PC:  message = "$p decays into dust."; break;
   case ITEM_FOOD:       message = "$p decomposes."; break;
-  case ITEM_POTION:     message = "$p has evaporated from disuse."; 
+  case ITEM_POTION:     message = "$p has evaporated from disuse.";
                 break;
   case ITEM_PORTAL:     message = "$p fades out of existence."; break;
-  case ITEM_CONTAINER: 
+  case ITEM_CONTAINER:
       if (CAN_WEAR(obj,ITEM_WEAR_FLOAT))
     if (obj->contains)
-        message = 
+        message =
     "$p flickers and vanishes, spilling its contents on the floor.";
     else
         message = "$p flickers and vanishes.";
@@ -2265,7 +2264,7 @@ void obj_update( void )
 
   if ( obj->carried_by != NULL )
   {
-      if (IS_NPC(obj->carried_by) 
+      if (IS_NPC(obj->carried_by)
       &&  obj->carried_by->pIndexData->pShop != NULL)
     obj->carried_by->silver += obj->cost/5;
       else
@@ -2353,7 +2352,7 @@ void aggr_update( void )
   wch_next = wch->next;
   if ( IS_NPC(wch) || !wch->pcdata
   ||   wch->level >= LEVEL_IMMORTAL
-  ||   wch->in_room == NULL 
+  ||   wch->in_room == NULL
   ||   wch->in_room->area->empty)
       continue;
 
@@ -2368,9 +2367,9 @@ void aggr_update( void )
       && !IS_AFFECTED(ch,AFF_CALM)
       && !IS_AFFECTED(ch,AFF_CHARM)
       && ch->fighting == NULL
-      && can_see( ch, wch, false ) 
-      && !IS_IMMORTAL(wch) 
-      && number_bits(1) != 0 
+      && can_see( ch, wch, false )
+      && !IS_IMMORTAL(wch)
+      && number_bits(1) != 0
       && ch->pIndexData->pShop == NULL
       && !IS_SET(ch->act,ACT_TRAIN)
       && !IS_SET(ch->act,ACT_PRACTICE)
@@ -2379,9 +2378,9 @@ void aggr_update( void )
       && ch->pIndexData->vnum != 3011
            )
       {
-         multi_hit( ch, wch, TYPE_UNDEFINED ); 
+         multi_hit( ch, wch, TYPE_UNDEFINED );
          continue;
-      } 
+      }
 
       if ( !IS_NPC(ch)
       ||   !IS_SET(ch->act, ACT_AGGRESSIVE)
@@ -2391,7 +2390,7 @@ void aggr_update( void )
       ||   IS_AFFECTED(ch, AFF_CHARM)
       ||   !IS_AWAKE(ch)
       ||   ( IS_SET(ch->act, ACT_WIMPY) && IS_AWAKE(wch) )
-      ||   !can_see( ch, wch, false ) 
+      ||   !can_see( ch, wch, false )
       ||   number_bits(1) == 0)
     continue;
 
@@ -2409,8 +2408,8 @@ void aggr_update( void )
     if ( !IS_NPC(vch)
     &&   vch->level < LEVEL_IMMORTAL
     &&  vch->position > POS_INCAP
-    &&   ch->level >= vch->level - 5 
-    &&   get_curr_stat(vch,STAT_SOC) + (vch->level - ch->level) / 3 <= number_range(16,23) 
+    &&   ch->level >= vch->level - 5
+    &&   get_curr_stat(vch,STAT_SOC) + (vch->level - ch->level) / 3 <= number_range(16,23)
     &&   ( !IS_SET(ch->act, ACT_WIMPY) || !IS_AWAKE(vch) )
     &&   can_see( ch, vch, false ) )
     {
@@ -2537,7 +2536,7 @@ void update_handler( void )
           bounty_vnum, bounty_room, extra, bounty_complete, bounty_type,
           bounty_downgrade ? " down" : "");
       else
-        sprintf(buf, "Mob %d(In %d) bounty failed (%d %d%s).", bounty_vnum, 
+        sprintf(buf, "Mob %d(In %d) bounty failed (%d %d%s).", bounty_vnum,
           bounty_room, bounty_complete, bounty_type,
           bounty_downgrade ? " down" : "");
       bounty_complete = UMAX(0, bounty_complete - 1);
@@ -2563,7 +2562,7 @@ void dot_update( void )
     for ( ch = char_list ; ch != NULL ; ch = ch_next )
     {
 	ch_next = ch->next;
-	
+
 	sector_damage(ch);
 
       if ( ch->affected == NULL || (IS_SET(ch->mhs,MHS_GLADIATOR) && !IS_NPC(ch)
@@ -2609,7 +2608,7 @@ void sector_damage(CHAR_DATA *ch)
 	  }
           break;
         case SECT_WATER_PLANE:
-	  if ( number_percent() < 40 && !IS_SET(ch->imm_flags, IMM_DROWNING) && !IS_IMMORTAL(ch) && char_safe == false ) 
+	  if ( number_percent() < 40 && !IS_SET(ch->imm_flags, IMM_DROWNING) && !IS_IMMORTAL(ch) && char_safe == false )
 /*       ( (!is_affected(ch, skill_lookup("water breathing"))) || (!is_affected(ch,skill_lookup("wraithform"))) )
 */
           {

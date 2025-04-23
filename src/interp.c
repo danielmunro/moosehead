@@ -32,6 +32,7 @@
 #include "db.h"
 #include "flags.h"
 #include "fight.h"
+#include "handler.h"
 #include "input.h"
 #include "interp.h"
 #include "live_edit.h"

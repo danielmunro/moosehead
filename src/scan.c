@@ -23,6 +23,7 @@
 
 #include "merc.h"
 #include "comm.h"
+#include "handler.h"
 #include "input.h"
 #include "db.h"
 

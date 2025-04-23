@@ -25,6 +25,7 @@
 #include "merc.h"
 #include "comm.h"
 #include "db.h"
+#include "handler.h"
 #include "input.h"
 #include "menu.h"
 #include "recycle.h"

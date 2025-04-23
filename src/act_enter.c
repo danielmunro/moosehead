@@ -26,6 +26,7 @@
 #include "act_move.h"
 #include "comm.h"
 #include "db.h"
+#include "handler.h"
 
 /* random room generation procedure */
 ROOM_INDEX_DATA  *get_random_room(CHAR_DATA *ch)

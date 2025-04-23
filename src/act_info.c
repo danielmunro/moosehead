@@ -34,6 +34,7 @@
 #include "db.h"
 #include "fight.h"
 #include "gladiator.h"
+#include "handler.h"
 #include "input.h"
 #include "lookup.h"
 #include "log.h"

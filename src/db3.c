@@ -31,6 +31,7 @@
 #include "merc.h"
 #include "comm.h"
 #include "db.h"
+#include "handler.h"
 #include "log.h"
 #include "special.h"
 #include "tables.h"

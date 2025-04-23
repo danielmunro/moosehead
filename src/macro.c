@@ -31,6 +31,7 @@
 #include "merc.h"
 #include "db.h"
 #include "comm.h"
+#include "handler.h"
 #include "input.h"
 #include "log.h"
 #include "recycle.h"

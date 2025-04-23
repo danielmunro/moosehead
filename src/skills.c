@@ -11,6 +11,7 @@
 #include "act_comm.h"
 #include "comm.h"
 #include "db.h"
+#include "handler.h"
 #include "input.h"
 #include "magic.h"
 #include "skills.h"

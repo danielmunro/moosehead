@@ -29,6 +29,7 @@
 #include "ctype.h"
 #include "editor.h"
 #include "db.h"
+#include "handler.h"
 #include "log.h"
 #include "lookup.h"
 #include "input.h"
