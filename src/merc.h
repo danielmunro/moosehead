@@ -3293,7 +3293,6 @@ extern sh_int gsn_blade_barrier;
             (ch)->in_room->room_flags,              \
             ROOM_INDOORS))
 
-/* #define WAIT_STATE(ch, npulse)  ((ch)->wait = UMAX((ch)->wait, (npulse))) */
 #define WAIT_STATE	wait_state
 #define DAZE_STATE(ch, npulse)  ((ch)->daze = UMAX((ch)->daze, (npulse)))
 #define get_carry_weight(ch)    ((ch)->carry_weight + (ch)->silver/10 +  \
@@ -3366,8 +3365,6 @@ extern  const   struct  liq_type        liq_table       [];
 extern  const   struct  skill_type      skill_table     [MAX_SKILL];
 extern  const   struct  group_type      group_table     [MAX_GROUP];
 extern          struct social_type      social_table    [MAX_SOCIALS];
-/* extern  char *  const                title_table     [MAX_CLASS] [MAX_LEVEL+1] [2];
-*/
 
 
 /*
@@ -3389,7 +3386,6 @@ extern          char                    bug_buf         [];
 extern          char                    dns_buf         [];
 extern          time_t                  current_time;
 extern          bool                    fLogAll;
-//extern          FILE *                  fpReserve;
 extern          KILL_DATA               kill_table      [];
 extern          char                    log_buf         [];
 extern          TIME_INFO_DATA          time_info;
@@ -3446,11 +3442,7 @@ extern sh_int      posse_thug_kills;
 #else
 #define HELP_FILE       DATA_DIR "/area/new_helps.are"
 #define HELP_BAK        DATA_DIR "/area/new_helps.bak"
-#ifdef ANDARONDEV
 #define HELP_FILE_OLC   DATA_DIR "/olc/olcarea/new_helps.are"
-#else
-#define HELP_FILE_OLC   DATA_DIR "/olc/olcarea/new_helps.are"
-#endif
 #endif
 
 #ifdef OLC_VERSION
