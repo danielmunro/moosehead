@@ -44,12 +44,6 @@
 #include "skills.h"
 #include "tables.h"
 
-/* local functions */
-void do_exits (CHAR_DATA *ch, char *argument);
-void do_look (CHAR_DATA *ch, char *argument);
-void do_help (CHAR_DATA *ch, char *argument);
-void do_affects (CHAR_DATA *ch, char *argument);
-
  char *  const  where_name      [] =
  {
      "<{Wused as light{x>     ",
@@ -75,24 +69,23 @@ void do_affects (CHAR_DATA *ch, char *argument);
 };
 
 
- /* for do_count */
- int max_on = 0;
+int max_on = 0;
 int clanner_on = 0;
 extern int rainbow;
 extern AREA_DATA *rainbow_area;
 extern HELP_TRACKER *help_track_first; // New help code
 
-/*
-  * Local functions.
-  */
- char *  format_obj_to_char      args( ( OBJ_DATA *obj, CHAR_DATA *ch,
-             bool fShort ) );
- void    show_char_to_char_0     args( ( CHAR_DATA *victim, CHAR_DATA *ch ) );
- void    show_char_to_char_1     args( ( CHAR_DATA *victim, CHAR_DATA *ch ) );
- void    show_char_to_char       args( ( CHAR_DATA *list, CHAR_DATA *ch ) );
- bool    check_blind             args( ( CHAR_DATA *ch ) );
- bool    check_match             args( ( CHAR_DATA *ch, CHAR_DATA *victim) );
-
+/* local functions */
+char *format_obj_to_char (OBJ_DATA *obj, CHAR_DATA *ch, bool fShort);
+void show_char_to_char_0 (CHAR_DATA *victim, CHAR_DATA *ch);
+void show_char_to_char_1 (CHAR_DATA *victim, CHAR_DATA *ch);
+void show_char_to_char (CHAR_DATA *list, CHAR_DATA *ch);
+bool check_blind (CHAR_DATA *ch);
+bool check_match (CHAR_DATA *ch, CHAR_DATA *victim);
+void do_exits (CHAR_DATA *ch, char *argument);
+void do_look (CHAR_DATA *ch, char *argument);
+void do_help (CHAR_DATA *ch, char *argument);
+void do_affects (CHAR_DATA *ch, char *argument);
 
 /** Ranger stuff **/
 void do_species( CHAR_DATA *ch, char *argument )
