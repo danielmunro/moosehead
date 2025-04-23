@@ -567,7 +567,7 @@ void do_species( CHAR_DATA *ch, char *argument )
 
  void show_char_to_char_1( CHAR_DATA *victim, CHAR_DATA *ch )
  {
-     char buf[MAX_STRING_LENGTH];
+     char buf[MAX_STRING_LENGTH] = "";
      OBJ_DATA *obj;
      int iWear;
      int percent;
@@ -616,8 +616,8 @@ void do_species( CHAR_DATA *ch, char *argument )
 
            if (IS_NPC(victim) && victim->pIndexData)
            {
-              sprintf (temp_buf,"[%d] ",victim->pIndexData->vnum);
-              strcat (buf,temp_buf);
+              sprintf (temp_buf,"[%d] ", victim->pIndexData->vnum);
+              strcat (buf, temp_buf);
            }
         }
        if(!IS_NPC(ch) && IS_SET(ch->pcdata->edit_flags, EDITMODE_HALL) &&
