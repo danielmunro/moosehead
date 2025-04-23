@@ -6,7 +6,6 @@ long wiznet_lookup (const char *name);
 char *extra2_bit_name(int extra_flags2);
 bool has_boat (CHAR_DATA *ch);
 int count_fight_size (CHAR_DATA *ch);
-
 bool tick_pulse_command(CHAR_DATA *ch);
 void prompt_pulse_command (CHAR_DATA *ch);
 void end_pulse_command (CHAR_DATA *ch, bool success, bool violent);
