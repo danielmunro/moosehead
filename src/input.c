@@ -19,7 +19,6 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <stdlib.h>
-#include "macros.h"
 
 void string_to_lower(char *str) {
     for (int i = 0; str[i]; i++) {
