@@ -1,4 +1,3 @@
-#define _GNU_SOURCE
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <errno.h>
@@ -13,6 +12,7 @@
 #include <yuarel.h>
 
 #include "merc.h"
+#include "comm.h"
 #include "log.h"
 #include "lookup.h"
 
@@ -20,6 +20,7 @@ int server_fd;
 struct sockaddr_in server_addr;
 const int BUFFER_SIZE = 104857600;
 
+/* local functions */
 char *index_endpoint(struct yuarel url);
 char *players_endpoint(struct yuarel url);
 char *races_endpoint(struct yuarel url);
@@ -124,7 +125,7 @@ char *help_endpoint(struct yuarel url) {
     }
 
     for (HELP_TRACKER *pTrack = help_tracks[0]; pTrack != NULL; pTrack = pTrack->next) {
-        if (str_cmp(params[0].val, pTrack->keyword) == 0 && pTrack->help->level <= LEVEL_HERO) {
+        if (strcmp(params[0].val, pTrack->keyword) == 0 && pTrack->help->level <= LEVEL_HERO) {
             json_auto_t *help_text = json_string(pTrack->help->text);
             json_object_set(response, "help", help_text);
             found = true;
@@ -153,7 +154,7 @@ char *classes_endpoint(struct yuarel url) {
         json_auto_t *weapon = json_string(weapon_name_lookup(class_table[i].weapon));
         json_object_set(class, "starting_weapon", weapon);
         for (HELP_TRACKER *pTrack = help_tracks[0]; pTrack != NULL; pTrack = pTrack->next) {
-            if (str_cmp(class_table[i].name, pTrack->keyword) == 0) {
+            if (strcmp(class_table[i].name, pTrack->keyword) == 0) {
                 json_auto_t *help_text = json_string(pTrack->help->text);
                 json_object_set(class, "description", help_text);
                 break;
@@ -246,7 +247,7 @@ char *races_endpoint(struct yuarel url) {
         json_object_set(stats, "cha", stat_cha);
         json_object_set(race, "stats", stats);
         for (HELP_TRACKER *pTrack = help_tracks[0]; pTrack != NULL; pTrack = pTrack->next) {
-            if (str_cmp(pc_race_table[i].name, pTrack->keyword) == 0) {
+            if (strcmp(pc_race_table[i].name, pTrack->keyword) == 0) {
                 json_auto_t *help_text = json_string(pTrack->help->text);
                 json_object_set(race, "description", help_text);
                 break;

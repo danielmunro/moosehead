@@ -23,29 +23,32 @@
 #include <time.h>
 
 #include "merc.h"
+#include "act_comm.h"
+#include "act_info.h"
+#include "act_obj.h"
+#include "act_wiz.h"
+#include "clan.h"
+#include "comm.h"
+#include "db.h"
+#include "effects.h"
+#include "fight.h"
+#include "gladiator.h"
+#include "handler.h"
+#include "input.h"
+#include "live_edit.h"
+#include "lookup.h"
 #include "magic.h"
 #include "recycle.h"
+#include "skills.h"
+#include "special.h"
 #include "tables.h"
-#include "gladiator.h"
-#include "clan.h"
-#include "lookup.h"
-
-/* command procedures needed */
-DECLARE_DO_FUN(do_return  );
-DECLARE_DO_FUN(do_look  );
-
-
+#include "update.h"
 
 /*
  * Local functions.
  */
-void  affect_modify args( ( CHAR_DATA *ch, AFFECT_DATA *paf, bool fAdd, int AppType ) );
-void  destruct_trade args( ( TRADE_DATA *trade, bool ifree ) );
-/*
- * External functions.
- */
-int	nonclan_lookup	args( (const char *name) );
-
+void affect_modify (CHAR_DATA *ch, AFFECT_DATA *paf, bool fAdd, int AppType);
+void destruct_trade (TRADE_DATA *trade, bool ifree);
 
 void prompt_pulse_command(CHAR_DATA *ch)
 {
@@ -61,8 +64,8 @@ void prompt_pulse_command(CHAR_DATA *ch)
         sprintf(buf, "<Recalling in %d combat rounds>\n\r", (ch->pcdata->pulse_timer + 11) / 12);
       send_to_char(buf, ch);
       break;
-    default: send_to_char("<Unknown timer>\n\r", ch); break; 
-  } 
+    default: send_to_char("<Unknown timer>\n\r", ch); break;
+  }
 }
 
 bool tick_pulse_command(CHAR_DATA *ch)

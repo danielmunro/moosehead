@@ -20,7 +20,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
+
 #include "merc.h"
+#include "comm.h"
+#include "db.h"
+#include "input.h"
 #include "recycle.h"
 
 DNS_DATA *dns_list = NULL;

@@ -21,7 +21,11 @@
 #include <string.h>
 #include <gc.h>
 #include <stdlib.h>
+
 #include "merc.h"
+#include "db.h"
+#include "handler.h"
+#include "live_edit.h"
 #include "recycle.h"
 
 /* stuff for recyling notes */

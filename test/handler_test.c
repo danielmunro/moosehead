@@ -1,5 +1,7 @@
 #include <stdbool.h>
 
+#include "../src/handler.h"
+
 void test_avg_weapon_damage_new_type() {
     ok(6 == avg_weapon_damage(true, 2, 5));
     ok(42 == avg_weapon_damage(true, 4, 20));

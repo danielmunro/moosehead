@@ -21,28 +21,32 @@
 #include <string.h>
 #include <time.h>
 #include <ctype.h>
-#include "merc.h"
-#include "magic.h"
-#include "tables.h"
-#include "gladiator.h"
-#include "lookup.h"
 
-DECLARE_DO_FUN(action_wraithform);
-DECLARE_DO_FUN(action_zealot_convert);
-DECLARE_DO_FUN(do_look);
-DECLARE_DO_FUN(do_scan);
-DECLARE_DO_FUN(do_morph);
-DECLARE_DO_FUN(do_shapemorph);
-DECLARE_DO_FUN(do_shapeshift);
+#include "merc.h"
+#include "act_comm.h"
+#include "act_info.h"
+#include "act_move.h"
+#include "act_obj.h"
+#include "comm.h"
+#include "db.h"
+#include "deity.h"
+#include "fight.h"
+#include "gladiator.h"
+#include "handler.h"
+#include "input.h"
+#include "live_edit.h"
+#include "log.h"
+#include "lookup.h"
+#include "magic.h"
+#include "scan.h"
+#include "skills.h"
+#include "special.h"
+#include "tables.h"
 
 extern char *target_name;
 
-int find_door args( ( CHAR_DATA *ch, char *arg ) );
-bool  has_key   args( ( CHAR_DATA *ch, int key ) );
 extern sh_int rev_dir [];
-void  remove_all_objs  args( (CHAR_DATA *ch, bool verbose) );
-void  shapeshift_remove args ((CHAR_DATA *ch));
-void  wear_obj  args( (CHAR_DATA *ch, OBJ_DATA *obj, bool fReplace ) );
+void shapeshift_remove (CHAR_DATA *ch);
 
 
 void spell_restore_mana(int sn,int level,CHAR_DATA *ch,void *vo,int target)

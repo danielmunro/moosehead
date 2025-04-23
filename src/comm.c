@@ -32,6 +32,7 @@
 
 #include <sys/types.h>
 #include <sys/time.h>
+#include <sys/ipc.h>
 #include <gc.h>
 #include <unistd.h>
 #include <signal.h>
@@ -44,47 +45,39 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <arpa/telnet.h>
 #include <netdb.h>
-#include <sys/time.h>
 #include <sys/resource.h>
-#include <pthread.h>
+#include <fcntl.h>
 
 #include "merc.h"
-#include "recycle.h"
-#include "gladiator.h"
-#include "tables.h"
-#include "dump_obj_csv.h"
-#include "handler.h"
+#include "act_info.h"
 #include "act_comm.h"
+#include "act_move.h"
+#include "act_obj.h"
+#include "act_wiz.h"
+#include "alias.h"
+#include "ban.h"
 #include "clan.h"
-#include "log.h"
+#include "db.h"
+#include "dns.h"
+#include "dump_obj_csv.h"
+#include "gladiator.h"
+#include "handler.h"
 #include "http.h"
-
-/* command procedures needed */
-DECLARE_DO_FUN	( action_wraithform );
-DECLARE_DO_FUN (action_zealot_convert);
-DECLARE_DO_FUN   ( action_ambush );
-DECLARE_DO_FUN(do_help          );
-DECLARE_DO_FUN(do_look          );
-DECLARE_DO_FUN(do_skills        );
-DECLARE_DO_FUN(do_outfit        );
-DECLARE_DO_FUN(do_count		);
-DECLARE_DO_FUN(do_unread        );
-DECLARE_DO_FUN(do_gossip);
-DECLARE_DO_FUN(do_ooc);
-DECLARE_DO_FUN(do_question);
-DECLARE_DO_FUN(do_answer);
-DECLARE_DO_FUN(do_clantalk);
-DECLARE_DO_FUN(do_auction);
-DECLARE_DO_FUN(do_music);
-DECLARE_DO_FUN(do_quest);
-DECLARE_DO_FUN(do_reply);
-DECLARE_DO_FUN(do_tell);
-DECLARE_DO_FUN(do_grats);
-DECLARE_DO_FUN(do_gtell);
-
-/* External Functions */
-int	nonclan_lookup	args( (const char *name) );
+#include "input.h"
+#include "interp.h"
+#include "log.h"
+#include "lookup.h"
+#include "macro.h"
+#include "magic.h"
+#include "mag2.h"
+#include "note.h"
+#include "recycle.h"
+#include "save.h"
+#include "skills.h"
+#include "tables.h"
+#include "update.h"
 
 /*
  * Malloc debugging stuff.
@@ -92,29 +85,10 @@ int	nonclan_lookup	args( (const char *name) );
 
 #if defined(MALLOC_DEBUG)
 #include <malloc.h>
-extern  int     malloc_debug    args( ( int  ) );
-extern  int     malloc_verify   args( ( void ) );
+extern  int     malloc_debug    (int);
+extern  int     malloc_verify   (void);
 #endif
 int clanner_count = 0;
-
-
-/*
- * Signal handling.
- *   I dance around it.
- */
-#include <signal.h>
-#include <sys/ipc.h>
-
-
-/*
- * Socket and TCP/IP stuff.
- */
-
-#include <fcntl.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <arpa/telnet.h>
 
 extern char *help_greeting;
 
@@ -151,36 +125,35 @@ const char *        build_version;
 key_t msg_key;
 int   msg_id;
 
-void    game_loop_unix          args( ( int control ) );
-int     init_socket             args( ( int port ) );
-void    init_descriptor         args( ( int control ) );
-bool    read_from_descriptor    args( ( DESCRIPTOR_DATA *d ) );
-bool    write_to_descriptor     
-	args( ( int desc, char *txt, int length, DESCRIPTOR_DATA *d ) );
-
-
-/*
- * Other local functions (OS-independent).
- */
-bool    check_parse_name        args( ( char *name ) );
-bool    check_reconnect         args( ( DESCRIPTOR_DATA *d, char *name,
-            bool fConn ) );
-bool    check_playing           args( ( DESCRIPTOR_DATA *d, char *name ) );
-int     main                    args( ( int argc, char **argv ) );
-void    nanny                   args( ( DESCRIPTOR_DATA *d, char *argument ) );
-void    show_stats		args( ( DESCRIPTOR_DATA *d ) );
-int 	calc_stat_cost		args( ( CHAR_DATA *ch, int attr_type ) );
-bool	can_use_points		args( ( CHAR_DATA *ch, int points ) );
-bool    process_output          args( ( DESCRIPTOR_DATA *d, bool fPrompt ) );
-void    read_from_buffer        args( ( DESCRIPTOR_DATA *d ) );
-void    stop_idling             args( ( CHAR_DATA *ch ) );
-void    bust_a_prompt           args( ( CHAR_DATA *ch ) );
-bool    check_mob_name          args( ( char *name, bool old_char ) );
-void creation_input(DESCRIPTOR_DATA *d, char *argument);
-void creation_finalize(DESCRIPTOR_DATA *d, bool def);
-void creation_message(DESCRIPTOR_DATA *d, bool forward);
-int creation_step(DESCRIPTOR_DATA *d, bool forward, bool accept);
-bool is_creation(DESCRIPTOR_DATA *d);
+/* local functions */
+void game_loop_unix (int control);
+int init_socket (int port);
+void init_descriptor (int control);
+bool read_from_descriptor (DESCRIPTOR_DATA *d);
+bool write_to_descriptor (int desc, char *txt, int length, DESCRIPTOR_DATA *d);
+bool check_parse_name (char *name);
+bool check_reconnect (DESCRIPTOR_DATA *d, char *name, bool fConn);
+bool check_playing (DESCRIPTOR_DATA *d, char *name);
+void nanny (DESCRIPTOR_DATA *d, char *argument);
+int calc_stat_cost (CHAR_DATA *ch, int attr_type);
+bool process_output (DESCRIPTOR_DATA *d, bool fPrompt);
+void read_from_buffer (DESCRIPTOR_DATA *d);
+void stop_idling (CHAR_DATA *ch);
+void bust_a_prompt (CHAR_DATA *ch);
+bool check_mob_name (char *name, bool old_char);
+void creation_input (DESCRIPTOR_DATA *d, char *argument);
+void creation_finalize (DESCRIPTOR_DATA *d, bool def);
+void creation_message (DESCRIPTOR_DATA *d, bool forward);
+int creation_step (DESCRIPTOR_DATA *d, bool forward, bool accept);
+bool is_creation (DESCRIPTOR_DATA *d);
+void show_string (struct descriptor_data *d, char *input);
+void close_socket (DESCRIPTOR_DATA *dclose);
+void write_to_buffer (DESCRIPTOR_DATA *d, const char *txt, int length);
+void send_to_char (const char *txt, CHAR_DATA *ch);
+void act (const char *format, CHAR_DATA *ch, const void *arg1,
+          const void *arg2, int type, bool ooc);
+void act_new (const char *format, CHAR_DATA *ch, const void *arg1,
+              const void *arg2, int type, int min_pos, bool ooc);
 
 int run(const int mud_port, const int http_port) {
     struct timeval now_time;
@@ -3663,8 +3636,8 @@ if (IS_SET(ch->mhs,MHS_HIGHLANDER))
       act("$n has entered the game.",ch->pet,NULL,NULL,TO_ROOM,false);
   }
 #ifdef GAME_VERSION
-  do_unread(ch,"");
-  do_count(ch,"");
+  do_unread(ch, "");
+  do_count(ch, "");
 #endif
   if(!IS_NPC(ch) && ch->pcdata->start_time > 0)
   {
@@ -4030,22 +4003,6 @@ void stop_idling( CHAR_DATA *ch )
     return;
 }
 
-bool can_use_points( CHAR_DATA *ch, int points )
-{
-    int i;
-
-    if ( points <= 0 ) return false;
-    for ( i = 0 ; i < MAX_STATS ; i++ )
-    {
-	if(i == STAT_END || i == STAT_AGT)
-	  continue;
-        if ( calc_stat_cost(ch,i) <= points 
-	  && get_max_train(ch,i) > ch->perm_stat[i] )
-		return true;
-    }
-    return false;
-}
-
 int calc_stat_cost( CHAR_DATA *ch, int attr_type )
 {
 
@@ -4079,40 +4036,6 @@ int calc_stat_cost( CHAR_DATA *ch, int attr_type )
   return cost;
 }
 
-
-void show_stats( DESCRIPTOR_DATA *d )
-{
-    CHAR_DATA *ch;
-    int i,statCost;
-    char buf[MAX_STRING_LENGTH];
-    static char *attrib_name[] = {
-	"Str", "Int", "Wis", "Dex", "Con", "Agt", "End", "Cha" };
-
-    if ( ( ch = d->character ) == NULL )
-    {
-	bug("display_stats : NULL ch in d",0);
-	return;
-    }
-
-    send_to_char("\n\r",ch);
-    for ( i = 0 ; i < MAX_STATS ; i++ )
-    {
-    if(i == STAT_AGT || i == STAT_END)
-	continue;
-    statCost = calc_stat_cost(ch,i);
-    sprintf(buf,"%s: Current: %2d, spend %d point%s to raise to %2d.\n\r",
-        attrib_name[i],
-	ch->perm_stat[i],
-	statCost,
-	statCost == 1 ? "" : "s",
-	ch->perm_stat[i]+1 );
-    send_to_char(buf,ch);
-    }
-
-    sprintf(buf,"You have %d points.  Improve which attribute? -> ",
-	ch->gen_data->bonus_points );
-    send_to_char(buf,ch);
-}
 /*
  * Write something to a given room
  * Hybred between stc and act, only works if awake

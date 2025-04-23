@@ -26,11 +26,15 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/resource.h>
-#include "merc.h"
-#include "tables.h"
-#include "db.h"
+#include <unistd.h>
 
-int fputc(int,FILE *);
+#include "merc.h"
+#include "comm.h"
+#include "db.h"
+#include "handler.h"
+#include "log.h"
+#include "special.h"
+#include "tables.h"
 
 extern char *  const   dir_name        [];
 

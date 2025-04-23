@@ -22,15 +22,29 @@
 #include <time.h>
 
 #include "merc.h"
-#include "tables.h"
+#include "act_comm.h"
+#include "act_enter.h"
+#include "act_info.h"
+#include "act_move.h"
+#include "act_obj.h"
+#include "act_wiz.h"
+#include "clan.h"
+#include "comm.h"
+#include "db.h"
+#include "deity.h"
+#include "fight.h"
+#include "handler.h"
+#include "live_edit.h"
+#include "log.h"
+#include "lookup.h"
 #include "magic.h"
 #include "mag2.h"
-#include "lookup.h"
+#include "skills.h"
+#include "tables.h"
+#include "update.h"
 
-void	check_equip	args( (CHAR_DATA *ch) );
-bool	check_wear	args( (CHAR_DATA *ch, OBJ_DATA *obj) );
-void	one_hit		args( ( CHAR_DATA *ch, CHAR_DATA *victim, int dt ) );
-int     count_fight_size args( (CHAR_DATA *ch) );
+void check_equip (CHAR_DATA *ch);
+bool check_wear	(CHAR_DATA *ch, OBJ_DATA *obj);
 
 extern int social_count_targeted;
 extern int social_count;
@@ -44,75 +58,60 @@ int bounty_item = -1;
 int bounty_room = -1;
 int bounty_complete = 0;
 bool bounty_downgrade = false;
- 
-/* command procedures needed */
-DECLARE_DO_FUN(do_order	);
-DECLARE_DO_FUN( do_wear	);
-DECLARE_DO_FUN(do_rescue);
-DECLARE_DO_FUN(do_yell		);
-DECLARE_DO_FUN(do_bash		);
-DECLARE_DO_FUN(do_open		);
-DECLARE_DO_FUN(do_close		);
-DECLARE_DO_FUN(do_say	);
-DECLARE_DO_FUN(do_backstab);
-DECLARE_DO_FUN(do_flee);
-DECLARE_DO_FUN(do_murder);
-DECLARE_DO_FUN(do_wake);
-DECLARE_DO_FUN(do_stand);
-void say_spell( CHAR_DATA *ch, int sn );
 
 /*
  * The following special functions are available for mobiles.
  */
-DECLARE_SPEC_FUN(	spec_breath_any		);
-DECLARE_SPEC_FUN(	spec_breath_acid	);
-DECLARE_SPEC_FUN(	spec_breath_fire	);
-DECLARE_SPEC_FUN(	spec_breath_frost	);
-DECLARE_SPEC_FUN(	spec_breath_gas		);
-DECLARE_SPEC_FUN(	spec_breath_lightning	);
-DECLARE_SPEC_FUN(	spec_cast_adept		);
-DECLARE_SPEC_FUN(	spec_cast_cleric	);
-DECLARE_SPEC_FUN(	spec_cast_judge		);
-DECLARE_SPEC_FUN(	spec_cast_mage		);
-DECLARE_SPEC_FUN(	spec_cast_undead	);
-DECLARE_SPEC_FUN(	spec_executioner	);
-DECLARE_SPEC_FUN(	spec_fido		);
-DECLARE_SPEC_FUN(	spec_guard_l		);
-DECLARE_SPEC_FUN(	spec_guard_d		);
-DECLARE_SPEC_FUN(	spec_janitor		);
-DECLARE_SPEC_FUN(	spec_mayor		);
-DECLARE_SPEC_FUN(	spec_poison		);
-DECLARE_SPEC_FUN(	spec_thief		);
-DECLARE_SPEC_FUN(	spec_puff		);
-DECLARE_SPEC_FUN(	spec_phoenix		);
-DECLARE_SPEC_FUN(	spec_nasty		);
-DECLARE_SPEC_FUN(	spec_troll_member	);
-DECLARE_SPEC_FUN(	spec_ogre_member	);
-DECLARE_SPEC_FUN(	spec_patrolman		);
-DECLARE_SPEC_FUN(	spec_rabbit		);
-DECLARE_SPEC_FUN(	spec_cast_dispel	);
-DECLARE_SPEC_FUN(	spec_monk		);
-DECLARE_SPEC_FUN(	spec_altirin_undead	);
-DECLARE_SPEC_FUN(	spec_vhan		);
-DECLARE_SPEC_FUN(	spec_drachlan_melee	);
-DECLARE_SPEC_FUN(	spec_drachlan_medic	);
-DECLARE_SPEC_FUN(	spec_average		);
-DECLARE_SPEC_FUN(	spec_salesman		);
-DECLARE_SPEC_FUN(	spec_elemental_fire	);
-DECLARE_SPEC_FUN(	spec_elemental_king	);
-DECLARE_SPEC_FUN(	spec_elemental_water	);
-DECLARE_SPEC_FUN(	spec_elemental_water_king	);
-DECLARE_SPEC_FUN(       spec_honor_guard        );
-DECLARE_SPEC_FUN(       spec_demise_guard       );
-DECLARE_SPEC_FUN(       spec_posse_guard        );
-DECLARE_SPEC_FUN(       spec_zealot_guard       );
-DECLARE_SPEC_FUN(       spec_warlock_guard      );
-DECLARE_SPEC_FUN(       spec_jabber             );
-DECLARE_SPEC_FUN(       spec_rainbow       );
-DECLARE_SPEC_FUN(       spec_poison_eater       );
-DECLARE_SPEC_FUN(       spec_insane_mime        );
-DECLARE_SPEC_FUN(       spec_clan_guardian        );
-DECLARE_SPEC_FUN( spec_shade_bounty );
+bool spec_breath_any (CHAR_DATA *ch);
+bool spec_breath_acid (CHAR_DATA *ch);
+bool spec_breath_fire (CHAR_DATA *ch);
+bool spec_breath_frost (CHAR_DATA *ch);
+bool spec_breath_gas (CHAR_DATA *ch);
+bool spec_breath_lightning (CHAR_DATA *ch);
+bool spec_breath_fire (CHAR_DATA *ch);
+bool spec_cast_adept (CHAR_DATA *ch);
+bool spec_cast_cleric (CHAR_DATA *ch);
+bool spec_cast_judge (CHAR_DATA *ch);
+bool spec_cast_mage (CHAR_DATA *ch);
+bool spec_cast_undead (CHAR_DATA *ch);
+bool spec_executioner (CHAR_DATA *ch);
+bool spec_fido (CHAR_DATA *ch);
+bool spec_guard_l (CHAR_DATA *ch);
+bool spec_guard_d (CHAR_DATA *ch);
+bool spec_janitor (CHAR_DATA *ch);
+bool spec_mayor (CHAR_DATA *ch);
+bool spec_poison (CHAR_DATA *ch);
+bool spec_thief (CHAR_DATA *ch);
+bool spec_puff (CHAR_DATA *ch);
+bool spec_phoenix (CHAR_DATA *ch);
+bool spec_nasty (CHAR_DATA *ch);
+bool spec_troll_member (CHAR_DATA *ch);
+bool spec_ogre_member (CHAR_DATA *ch);
+bool spec_patrolman (CHAR_DATA *ch);
+bool spec_rabbit (CHAR_DATA *ch);
+bool spec_cast_dispel (CHAR_DATA *ch);
+bool spec_monk (CHAR_DATA *ch);
+bool spec_altirin_undead (CHAR_DATA *ch);
+bool spec_vhan (CHAR_DATA *ch);
+bool spec_drachlan_melee (CHAR_DATA *ch);
+bool spec_drachlan_medic (CHAR_DATA *ch);
+bool spec_average (CHAR_DATA *ch);
+bool spec_salesman (CHAR_DATA *ch);
+bool spec_elemental_fire (CHAR_DATA *ch);
+bool spec_elemental_king (CHAR_DATA *ch);
+bool spec_elemental_water (CHAR_DATA *ch);
+bool spec_elemental_water_king (CHAR_DATA *ch);
+bool spec_honor_guard (CHAR_DATA *ch);
+bool spec_demise_guard (CHAR_DATA *ch);
+bool spec_posse_guard (CHAR_DATA *ch);
+bool spec_zealot_guard (CHAR_DATA *ch);
+bool spec_warlock_guard (CHAR_DATA *ch);
+bool spec_jabber (CHAR_DATA *ch);
+bool spec_rainbow (CHAR_DATA *ch);
+bool spec_poison_eater (CHAR_DATA *ch);
+bool spec_insane_mime (CHAR_DATA *ch);
+bool spec_clan_guardian (CHAR_DATA *ch);
+bool spec_shade_bounty (CHAR_DATA *ch);
 
 extern int rainbow;
 extern time_t rainbow_found;

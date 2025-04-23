@@ -27,7 +27,12 @@ This header file is not to be removed.
 #include <unistd.h>
 #include <errno.h>
 #include <time.h>
+
 #include "merc.h"
+#include "comm.h"
+#include "handler.h"
+#include "input.h"
+#include "log.h"
 #include "recycle.h"
 
 

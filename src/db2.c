@@ -8,9 +8,12 @@
 #include <time.h>
 #include <sys/types.h>
 #include <sys/time.h>
+
 #include "merc.h"
 #include "db.h"
+#include "handler.h"
 #include "lookup.h"
+#include "magic.h"
 
 
 /* values for db2.c */
@@ -18,8 +21,6 @@ struct                         social_type social_table    [MAX_SOCIALS];
 int                            social_count    = 0;
 int                            social_count_targeted = 0;
 extern AREA_DATA *             area_last;
-
-extern void rename_area (char *strArea);
 
 /* snarf a socials file */
 void load_socials( FILE *fp)

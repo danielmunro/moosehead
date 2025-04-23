@@ -19,11 +19,15 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
-#include "merc.h"
-#include "tables.h"
 
-DECLARE_DO_FUN(do_remort    );
-DECLARE_DO_FUN(do_quit  );
+#include "merc.h"
+#include "act_comm.h"
+#include "comm.h"
+#include "db.h"
+#include "handler.h"
+#include "input.h"
+#include "skills.h"
+#include "tables.h"
 
 bool out_of_element( CHAR_DATA *ch)
 { 

@@ -24,45 +24,48 @@
 #include <unistd.h>
 
 #include "merc.h"
-#include "recycle.h"
-#include "tables.h"
-#include "lookup.h"
-#include "handler.h"
-#include "act_info.h"
-#include "act_obj.h"
 #include "act_comm.h"
+#include "act_enter.h"
+#include "act_info.h"
+#include "act_move.h"
+#include "act_obj.h"
 #include "clan.h"
-
-/* command procedures needed */
-DECLARE_DO_FUN(do_rstat);
-DECLARE_DO_FUN(do_mstat);
-DECLARE_DO_FUN(do_ostat);
-DECLARE_DO_FUN(do_rset);
-DECLARE_DO_FUN(do_mset);
-DECLARE_DO_FUN(do_oset);
-DECLARE_DO_FUN(do_sset);
-DECLARE_DO_FUN(do_mfind);
-DECLARE_DO_FUN(do_ofind);
-DECLARE_DO_FUN(do_slookup);
-DECLARE_DO_FUN(do_mload);
-DECLARE_DO_FUN(do_oload);
-DECLARE_DO_FUN(do_force);
-DECLARE_DO_FUN(do_quit);
-DECLARE_DO_FUN(do_save);
-DECLARE_DO_FUN(do_look);
-DECLARE_DO_FUN(do_force);
-DECLARE_DO_FUN(do_stand);
-DECLARE_DO_FUN(do_disconnect);
-DECLARE_DO_FUN(do_help);
-DECLARE_DO_FUN(do_clantalk);
+#include "comm.h"
+#include "db.h"
+#include "fight.h"
+#include "handler.h"
+#include "input.h"
+#include "interp.h"
+#include "live_edit.h"
+#include "lookup.h"
+#include "log.h"
+#include "magic.h"
+#include "recycle.h"
+#include "save.h"
+#include "skills.h"
+#include "special.h"
+#include "tables.h"
+#include "update.h"
 
 /*
  * Local functions.
  */
-ROOM_INDEX_DATA *find_location(CHAR_DATA *ch, char *arg);
-bool check_parse_name(char *name);
+void do_rstat (CHAR_DATA *ch, char *argument);
+void do_mstat (CHAR_DATA *ch, char *argument);
+void do_ostat (CHAR_DATA *ch, char *argument);
+void do_rset (CHAR_DATA *ch, char *argument);
+void do_mset (CHAR_DATA *ch, char *argument);
+void do_oset (CHAR_DATA *ch, char *argument);
+void do_sset (CHAR_DATA *ch, char *argument);
+void do_mfind (CHAR_DATA *ch, char *argument);
+void do_ofind (CHAR_DATA *ch, char *argument);
+void do_slookup (CHAR_DATA *ch, char *argument);
+void do_mload (CHAR_DATA *ch, char *argument);
+void do_oload (CHAR_DATA *ch, char *argument);
+void do_force (CHAR_DATA *ch, char *argument);
+void do_disconnect (CHAR_DATA *ch, char *argument);
+ROOM_INDEX_DATA *find_location (CHAR_DATA *ch, char *arg);
 void remove_highlander (CHAR_DATA *ch,CHAR_DATA *victim);
-char *format_obj_to_char (OBJ_DATA *obj, CHAR_DATA *ch, bool fShort);
 
 char * const wear_name[] = { "<{Wused as light{x>     ",
 		"<{Wworn on finger{x>    ", "<{Wworn on finger{x>    ",

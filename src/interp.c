@@ -21,15 +21,33 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
 #include "merc.h"
-#include "interp.h"
-#include "tables.h"
-#include "lookup.h"
+#include "act_comm.h"
+#include "act_info.h"
+#include "act_move.h"
+#include "act_obj.h"
+#include "act_wiz.h"
+#include "comm.h"
+#include "db.h"
 #include "flags.h"
+#include "fight.h"
+#include "handler.h"
+#include "input.h"
+#include "interp.h"
+#include "live_edit.h"
+#include "log.h"
+#include "lookup.h"
+#include "mag2.h"
+#include "note.h"
+#include "remort.h"
+#include "skills.h"
+#include "special.h"
+#include "tables.h"
 
 
-bool  check_social  args( ( CHAR_DATA *ch, char *command,
-          char *argument ) );
+
+bool check_social (CHAR_DATA *ch, char *command, char *argument);
 
 
 

@@ -21,14 +21,24 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include "merc.h"
-#include "tables.h"
-#include "recycle.h"
-#include "lookup.h"
 
-DECLARE_DO_FUN(do_recall  );
-DECLARE_DO_FUN(do_rescue  );
-DECLARE_DO_FUN(do_look  );
+#include "merc.h"
+#include "act_comm.h"
+#include "act_enter.h"
+#include "act_info.h"
+#include "act_move.h"
+#include "act_wiz.h"
+#include "comm.h"
+#include "db.h"
+#include "fight.h"
+#include "handler.h"
+#include "input.h"
+#include "lookup.h"
+#include "magic.h"
+#include "recycle.h"
+#include "skills.h"
+#include "tables.h"
+#include "update.h"
 
 extern int rainbow;
 
@@ -37,7 +47,11 @@ int deity_value_override = 0;
 int deity_msg_override = 0;
 #endif
 
-bool recall	args( ( CHAR_DATA *ch, char *argument, bool fPray ) );
+/* local functions */
+void do_deity_msg (char *msg, CHAR_DATA *ch);
+void give_gift (CHAR_DATA *ch,int gift);
+void reanimation (CHAR_DATA *ch);
+void log_deity_favor (CHAR_DATA *ch, CHAR_DATA *alt, int type);
 
 void do_pledg( CHAR_DATA *ch, char *argument )
 {

@@ -21,21 +21,40 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include "merc.h"
-#include "recycle.h"
-#include "tables.h"
-#include "interp.h"
-#include "lookup.h"
-#include "gladiator.h"
+#include <unistd.h>
 
-/* In comm.c */
-void count_clanners(void);
+#include "merc.h"
+#include "act_info.h"
+#include "act_wiz.h"
+#include "clan.h"
+#include "comm.h"
+#include "db.h"
+#include "deity.h"
+#include "fight.h"
+#include "gladiator.h"
+#include "handler.h"
+#include "input.h"
+#include "interp.h"
+#include "live_edit.h"
+#include "log.h"
+#include "lookup.h"
+#include "magic.h"
+#include "note.h"
+#include "recycle.h"
+#include "save.h"
+#include "skills.h"
+#include "tables.h"
+#include "update.h"
+
+#define HAS_MHS(ch,flag) (IS_SET((ch)->mhs,(flag)))
 
 /* Locals */
-void reclass		args( ( CHAR_DATA *ch, int class, bool fPenalty ) );
-
-/* Externals */
-void remove_highlander  args (( CHAR_DATA *ch, CHAR_DATA *victim));
+void reclass (CHAR_DATA *ch, int class, bool fPenalty);
+void do_quit (CHAR_DATA *ch, char *argument);
+void add_follower (CHAR_DATA *ch, CHAR_DATA *master);
+void stop_follower (CHAR_DATA *ch);
+bool is_same_group (CHAR_DATA *ach, CHAR_DATA *bch);
+void remove_from_group (CHAR_DATA *ch);
 
 // New code to transfer (Also anywhere with timestamp)
 void send_timestamp(CHAR_DATA *ch, bool send_now, bool global)

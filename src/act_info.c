@@ -15,30 +15,34 @@
   *  around, comes around.                                                  *
   ***************************************************************************/
 
- #include <sys/types.h>
- #include <unistd.h>
- #include <sys/time.h>
- #include <gc.h>
- #include <stdio.h>
- #include <string.h>
- #include <stdlib.h>
- #include <ctype.h>
- #include <time.h>
- #include "merc.h"
- #include "magic.h"
- #include "recycle.h"
- #include "tables.h"
- #include "lookup.h"
- #include "gladiator.h"
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/time.h>
+#include <gc.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <time.h>
 
- /* command procedures needed */
- DECLARE_DO_FUN( do_exits        );
- DECLARE_DO_FUN( do_look         );
- DECLARE_DO_FUN( do_help         );
- DECLARE_DO_FUN( do_affects      );
- DECLARE_DO_FUN( do_play         );
- DECLARE_DO_FUN( do_outfit       );
- DECLARE_DO_FUN( do_dismount     );
+#include "merc.h"
+#include "act_comm.h"
+#include "act_move.h"
+#include "act_obj.h"
+#include "act_wiz.h"
+#include "comm.h"
+#include "db.h"
+#include "fight.h"
+#include "gladiator.h"
+#include "handler.h"
+#include "input.h"
+#include "lookup.h"
+#include "log.h"
+#include "magic.h"
+#include "recycle.h"
+#include "save.h"
+#include "skills.h"
+#include "tables.h"
 
  char *  const  where_name      [] =
  {
@@ -65,24 +69,23 @@
 };
 
 
- /* for do_count */
- int max_on = 0;
+int max_on = 0;
 int clanner_on = 0;
 extern int rainbow;
 extern AREA_DATA *rainbow_area;
 extern HELP_TRACKER *help_track_first; // New help code
 
-/*
-  * Local functions.
-  */
- char *  format_obj_to_char      args( ( OBJ_DATA *obj, CHAR_DATA *ch,
-             bool fShort ) );
- void    show_char_to_char_0     args( ( CHAR_DATA *victim, CHAR_DATA *ch ) );
- void    show_char_to_char_1     args( ( CHAR_DATA *victim, CHAR_DATA *ch ) );
- void    show_char_to_char       args( ( CHAR_DATA *list, CHAR_DATA *ch ) );
- bool    check_blind             args( ( CHAR_DATA *ch ) );
- bool    check_match             args( ( CHAR_DATA *ch, CHAR_DATA *victim) );
-
+/* local functions */
+char *format_obj_to_char (OBJ_DATA *obj, CHAR_DATA *ch, bool fShort);
+void show_char_to_char_0 (CHAR_DATA *victim, CHAR_DATA *ch);
+void show_char_to_char_1 (CHAR_DATA *victim, CHAR_DATA *ch);
+void show_char_to_char (CHAR_DATA *list, CHAR_DATA *ch);
+bool check_blind (CHAR_DATA *ch);
+bool check_match (CHAR_DATA *ch, CHAR_DATA *victim);
+void do_exits (CHAR_DATA *ch, char *argument);
+void do_look (CHAR_DATA *ch, char *argument);
+void do_help (CHAR_DATA *ch, char *argument);
+void do_affects (CHAR_DATA *ch, char *argument);
 
 /** Ranger stuff **/
 void do_species( CHAR_DATA *ch, char *argument )
@@ -564,7 +567,7 @@ void do_species( CHAR_DATA *ch, char *argument )
 
  void show_char_to_char_1( CHAR_DATA *victim, CHAR_DATA *ch )
  {
-     char buf[MAX_STRING_LENGTH];
+     char buf[MAX_STRING_LENGTH] = "";
      OBJ_DATA *obj;
      int iWear;
      int percent;
@@ -613,8 +616,8 @@ void do_species( CHAR_DATA *ch, char *argument )
 
            if (IS_NPC(victim) && victim->pIndexData)
            {
-              sprintf (temp_buf,"[%d] ",victim->pIndexData->vnum);
-              strcat (buf,temp_buf);
+              sprintf (temp_buf,"[%d] ", victim->pIndexData->vnum);
+              strcat (buf, temp_buf);
            }
         }
        if(!IS_NPC(ch) && IS_SET(ch->pcdata->edit_flags, EDITMODE_HALL) &&

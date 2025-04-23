@@ -21,7 +21,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+
 #include "merc.h"
+#include "comm.h"
 
 void do_blackjack(CHAR_DATA *ch,char *argument)
 {

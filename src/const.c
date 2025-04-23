@@ -33,9 +33,6 @@
 #include "merc.h"
 #include "magic.h"
 #include "interp.h"
-/*
- #include "imc-mercbase.h"
- */
 
 /* for deities */
 const struct deity_type deity_table[] =
@@ -1754,11 +1751,6 @@ const struct  liq_type  liq_table []  =
  * Slot numbers must never be changed as they appear in #OBJECTS sections.
  */
 #define SLOT(n) n
-
-/*Put the Game def here first */
-#ifdef NEVER_VERSION
-/*END of  Old skill table  put endifdef here*/
-#endif
 
 const   struct  group_type      group_table     [MAX_GROUP]     =
 {

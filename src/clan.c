@@ -24,16 +24,26 @@
 #include <ctype.h>
 
 #include "merc.h"
-#include "recycle.h"
-#include "lookup.h"
-#include "tables.h"
 #include "act_obj.h"
+#include "comm.h"
+#include "db.h"
+#include "handler.h"
+#include "input.h"
 #include "live_edit.h"
+#include "log.h"
+#include "lookup.h"
 #include "mag2.h"
+#include "recycle.h"
+#include "save.h"
+#include "tables.h"
 
 #define START_OBJ(ch, hedit) (hedit ? (ch)->pcdata->clan_info->clan->planned : (ch)->pcdata->clan_info->pers_plan)
 
 CLAN_DATA *clan_first = NULL;
+
+/* local functions */
+void save_clan_list (void);
+void load_clan (char *clan_name, int def_clan);
 
 void add_clan_skill(CHAR_DATA *ch, int sn)
 {

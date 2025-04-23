@@ -1,3 +1,7 @@
+#include "../src/handler.h"
+#include "../src/magic.h"
+#include "../src/skills.h"
+
 void test_skill_level_only_reclass_has_skill() {
     // given
     CHAR_DATA ch;

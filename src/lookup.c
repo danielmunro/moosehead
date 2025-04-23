@@ -19,8 +19,9 @@
 #include <stdio.h>
 #include <time.h>
 #include "merc.h"
-#include "tables.h"
+#include "db.h"
 #include "lookup.h"
+#include "tables.h"
 
 int flag_lookup (const char *name, const struct flag_type *flag_table)
 {

@@ -22,18 +22,33 @@
 #include <stdlib.h>
 
 #include "merc.h"
-#include "tables.h"
-#include "gladiator.h"
+#include "act_comm.h"
+#include "act_info.h"
+#include "act_obj.h"
+#include "act_wiz.h"
+#include "comm.h"
 #include "clan.h"
+#include "db.h"
+#include "fight.h"
+#include "gladiator.h"
+#include "handler.h"
+#include "input.h"
+#include "live_edit.h"
+#include "log.h"
+#include "lookup.h"
+#include "magic.h"
+#include "mag2.h"
+#include "olc.h"
+#include "skills.h"
+#include "tables.h"
+#include "update.h"
 
-/* command procedures needed */
-DECLARE_DO_FUN(do_look    );
-DECLARE_DO_FUN(do_recall  );
-DECLARE_DO_FUN(do_stand   );
+/* local functions */
+void do_recall (CHAR_DATA *ch, char *argument);
+bool recall (CHAR_DATA *ch, char *argument, bool fPray);
+void do_stand (CHAR_DATA *ch, char *argument);
+bool is_abolishable (AFFECT_DATA *af);
 
-CLAN_DATA *clan_lookup   args( ( const char *name ) );
-bool recall args( (CHAR_DATA *ch, char *argument, bool fPray ) );
-bool  has_boat args( ( CHAR_DATA *ch ) );
 char	kludge_string[MAX_STRING_LENGTH];
 
 char *  const dir_name  []    =

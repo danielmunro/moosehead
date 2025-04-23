@@ -20,7 +20,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
+
 #include "merc.h"
+#include "comm.h"
+#include "db.h"
+#include "handler.h"
+#include "input.h"
 #include "recycle.h"
 
 BAN_DATA *ban_list = NULL;

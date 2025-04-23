@@ -21,9 +21,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
 #include "merc.h"
-#include "recycle.h"
+#include "comm.h"
+#include "db.h"
+#include "handler.h"
+#include "input.h"
 #include "menu.h"
+#include "recycle.h"
 
 #define ID_LINE_CLEAR     1
 #define ID_LINE_SHOW      2
@@ -37,6 +42,7 @@
 
 #define FLA_LINE_NUM      1
 
+/* local functions */
 void edit_line_show ( CHAR_DATA *ch, bool show_pos );
 void insert_line (CHAR_DATA *ch,char *mode,int ins_after,bool show);
 int count_lines ( CHAR_DATA *ch );

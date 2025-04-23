@@ -20,9 +20,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 #include "merc.h"
-#include "tables.h"
+#include "comm.h"
+#include "db.h"
+#include "handler.h"
+#include "input.h"
 #include "lookup.h"
+#include "tables.h"
 
 void do_flag(CHAR_DATA *ch, char *argument)
 {

@@ -22,15 +22,26 @@
 #include <time.h>
 
 #include "merc.h"
-#include "magic.h"
-#include "recycle.h"
-#include "tables.h"
-#include "gladiator.h"
-#include "act_obj.h"
-#include "act_info.h"
+#include "act_enter.h"
 #include "act_comm.h"
-#include "lookup.h"
+#include "act_info.h"
+#include "act_obj.h"
+#include "comm.h"
+#include "db.h"
+#include "effects.h"
 #include "fight.h"
+#include "gladiator.h"
+#include "handler.h"
+#include "input.h"
+#include "log.h"
+#include "lookup.h"
+#include "magic.h"
+#include "mag2.h"
+#include "recycle.h"
+#include "skills.h"
+#include "special.h"
+#include "tables.h"
+#include "update.h"
 
 extern int bounty_item;
 extern int bounty_type;
@@ -39,9 +50,9 @@ extern int bounty_timer;
 /*
  * Local functions.
  */
-bool cast_spell args((CHAR_DATA *ch, char *argument, bool fChant, bool fFocus));
-void  say_spell args( ( CHAR_DATA *ch, int sn ) );
-void write_spell( CHAR_DATA *ch, int sn );
+bool cast_spell (CHAR_DATA *ch, char *argument, bool fChant, bool fFocus);
+void say_spell (CHAR_DATA *ch, int sn);
+void write_spell (CHAR_DATA *ch, int sn);
 
 bool check_annointment(CHAR_DATA *victim, CHAR_DATA *ch)
 {
