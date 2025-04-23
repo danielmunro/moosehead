@@ -3025,28 +3025,6 @@ struct  room_index_data
 #define TARGET_ROOM                 2
 #define TARGET_NONE                 3
 
-#ifdef NEVER_VERSION
-
-/*
- * Skills include spells as a particular case.
- */
-struct  skill_type
-{
-    char *      name;                   /* Name of skill                */
-    sh_int      skill_level[MAX_CLASS]; /* Level needed by class        */
-    sh_int      rating[MAX_CLASS];      /* How hard it is to learn      */      
-    SPELL_FUN * spell_fun;              /* Spell pointer (for spells)   */
-    sh_int      target;                 /* Legal targets                */
-    sh_int      minimum_position;       /* Position for caster / user   */
-    sh_int *    pgsn;                   /* Pointer to associated gsn    */
-    sh_int      slot;                   /* Slot for #OBJECT loading     */
-    sh_int      min_mana;               /* Minimum mana used            */
-    sh_int      beats;                  /* Waiting time after use       */
-    char *      noun_damage;            /* Damage message               */
-    char *      msg_off;                /* Wear off message             */
-    char *      msg_obj;                /* Wear off message for obects  */
-};
-#endif
 
 /*
  * Skills include spells as a particular case.
@@ -3078,8 +3056,6 @@ struct  group_type
     char *      spells[MAX_IN_GROUP];
 };
 
-#define VOIDSIG void
-extern VOIDSIG dummy();
 
 /*
  * These are skill_lookup return values for common skills and spells.
@@ -3270,19 +3246,12 @@ extern sh_int gsn_blade_barrier;
 /*
  * Character macros.
  */
-#define HAS_MHS(ch,flag)	(IS_SET((ch)->mhs,(flag)))
 #define HAS_KIT(ch,ikit)	((ch)->kit == (kit_lookup(ikit)))
 #define IS_NPC(ch)              (IS_SET((ch)->act, ACT_IS_NPC))
 #define IS_IMMORTAL(ch)         (get_trust(ch) >= LEVEL_IMMORTAL)
-#define IS_HERO(ch)             (get_trust(ch) >= LEVEL_HERO)
 #define IS_TRUSTED(ch,level)    (get_trust((ch)) >= (level))
 #define IS_AFFECTED(ch, sn)     (IS_SET((ch)->affected_by, (sn)))
 
-#define GET_AGE(ch)             ((int) (17 + ((ch)->played \
-            + current_time - (ch)->logon )/72000))
-
-#define COLOR_ON(ch)		(IS_SET((ch)->display,DISP_COLOR))
-#define IS_CAPPED(ch)		(IS_NPC((ch)) ? false : (ch)->pcdata->capped)
 #define IS_GOOD(ch)             (ch->alignment >= 350)
 #define IS_EVIL(ch)             (ch->alignment <= -350)
 #define IS_NEUTRAL(ch)          (!IS_GOOD(ch) && !IS_EVIL(ch))
@@ -3308,8 +3277,6 @@ extern sh_int gsn_blade_barrier;
 #define DAZE_STATE(ch, npulse)  ((ch)->daze = UMAX((ch)->daze, (npulse)))
 #define get_carry_weight(ch)    ((ch)->carry_weight + (ch)->silver/10 +  \
                   (ch)->gold * 2 / 5)
-
-
 
 /*
  * Object macros.

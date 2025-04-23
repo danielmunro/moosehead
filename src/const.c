@@ -1752,11 +1752,6 @@ const struct  liq_type  liq_table []  =
  */
 #define SLOT(n) n
 
-/*Put the Game def here first */
-#ifdef NEVER_VERSION
-/*END of  Old skill table  put endifdef here*/
-#endif
-
 const   struct  group_type      group_table     [MAX_GROUP]     =
 {
 

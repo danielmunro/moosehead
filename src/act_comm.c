@@ -46,6 +46,8 @@
 #include "tables.h"
 #include "update.h"
 
+#define HAS_MHS(ch,flag) (IS_SET((ch)->mhs,(flag)))
+
 /* Locals */
 void reclass (CHAR_DATA *ch, int class, bool fPenalty);
 void do_quit (CHAR_DATA *ch, char *argument);
