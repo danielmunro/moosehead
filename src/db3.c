@@ -19,9 +19,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-#ifdef GAME_VERSION
 #include <gc.h>
-#endif
 #include <time.h>
 #include <sys/types.h>
 #include <sys/time.h>
@@ -539,11 +537,7 @@ void update_area_list ( CHAR_DATA *ch, char *strArea )
   FILE *fpList;
   AREA_NAME_DATA *area_name;
   
-#ifdef OLC_VERSION
-  area_name = alloc_perm (sizeof (AREA_NAME_DATA));
-#else
   area_name = GC_MALLOC (sizeof (AREA_NAME_DATA));
-#endif
   area_name->name = str_dup (strArea);
   if (!area_name_first) {
     area_name_first = area_name_last = area_name;

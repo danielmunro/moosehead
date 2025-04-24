@@ -59,7 +59,6 @@ char *fread_string_eol (FILE *fp);
 void fread_to_eol (FILE *fp);
 char *fread_word (FILE *fp);
 long flag_convert (char letter);
-void *alloc_perm (int sMem);
 void free_string (char *pstr);
 
 void  convert_mob(MOB_INDEX_DATA *mob);

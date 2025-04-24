@@ -36,11 +36,7 @@ NOTE_DATA *new_note()
     NOTE_DATA *note;
 
     if (note_free == NULL)
-#ifdef OLC_VERSION
-   note = alloc_perm(sizeof(*note));
-#else
   note = GC_MALLOC(sizeof(*note));
-#endif
     else
     { 
   note = note_free;
@@ -75,11 +71,7 @@ DNS_DATA *new_dns(void)
     DNS_DATA *dns;
 
     if (dns_free == NULL)
-#ifdef OLC_VERSION
-  dns = alloc_perm(sizeof(*dns));
-#else
   dns = GC_MALLOC(sizeof(*dns));
-#endif
     else
     {
   dns = dns_free;
@@ -113,11 +105,7 @@ BAN_DATA *new_ban(void)
     BAN_DATA *ban;
 
     if (ban_free == NULL)
-#ifdef OLC_VERSION
-  ban = alloc_perm(sizeof(*ban));
-#else
   ban = GC_MALLOC(sizeof(*ban));
-#endif
     else
     {
   ban = ban_free;
@@ -151,11 +139,7 @@ DESCRIPTOR_DATA *new_descriptor(void)
     DESCRIPTOR_DATA *d;
 
     if (descriptor_free == NULL)
-#ifdef OLC_VERSION
-  d = alloc_perm(sizeof(*d));
-#else
   d = GC_MALLOC(sizeof(*d));
-#endif
     else
     {
   d = descriptor_free;
@@ -200,11 +184,7 @@ GEN_DATA *new_gen_data(void)
     GEN_DATA *gen;
 
     if (gen_data_free == NULL)
-#ifdef OLC_VERSION
-  gen = alloc_perm(sizeof(*gen));
-#else
   gen = GC_MALLOC(sizeof(*gen));
-#endif
     else
     {
   gen = gen_data_free;
@@ -234,11 +214,7 @@ EXTRA_DESCR_DATA *new_extra_descr(void)
     EXTRA_DESCR_DATA *ed;
 
     if (extra_descr_free == NULL)
-#ifdef OLC_VERSION
-  ed = alloc_perm(sizeof(*ed));
-#else
   ed = GC_MALLOC(sizeof(*ed));
-#endif
     else
     {
   ed = extra_descr_free;
@@ -274,11 +250,7 @@ CLAN_DATA *new_clan(void)
 
     if (clan_free == NULL)
     {
-#ifdef OLC_VERSION
-   clan = alloc_perm(sizeof(*clan));
-#else
   clan = GC_MALLOC(sizeof(*clan));
-#endif
     }
     else
     {
@@ -321,11 +293,7 @@ CLAN_CHAR *new_clan_char(void)
     CLAN_CHAR *cchar;
 
     if (clan_char_free == NULL)
-#ifdef OLC_VERSION
-   cchar = alloc_perm(sizeof(*cchar));
-#else
   cchar = GC_MALLOC(sizeof(*cchar));
-#endif
     else
     {
   cchar = clan_char_free;
@@ -366,11 +334,7 @@ ALLIANCE_DATA *new_ally(void)
     ALLIANCE_DATA *ally;
 
     if (ally_free == NULL)
-#ifdef OLC_VERSION
-   ally = alloc_perm(sizeof(*ally));
-#else
   ally = GC_MALLOC(sizeof(*ally));
-#endif
     else
     {
   ally = ally_free;
@@ -404,11 +368,7 @@ MERIT_TRACKER *new_merit(void)
     MERIT_TRACKER *merit;
 
     if (merit_free == NULL)
-#ifdef OLC_VERSION
-  merit = alloc_perm(sizeof(*merit));
-#else
   merit = GC_MALLOC(sizeof(*merit));
-#endif
     else
     {
   merit = merit_free;
@@ -443,11 +403,7 @@ PLAN_DATA *new_plan(void)
     PLAN_DATA *plan;
 
     if (plan_free == NULL)
-#ifdef OLC_VERSION
-   plan = alloc_perm(sizeof(*plan));
-#else
   plan = GC_MALLOC(sizeof(*plan));
-#endif
     else
     {
   plan = plan_free;
@@ -494,11 +450,7 @@ PLAN_EXIT_DATA *new_p_exit(void)
     PLAN_EXIT_DATA *p_exit;
 
     if (p_exit_free == NULL)
-#ifdef OLC_VERSION
-   p_exit = alloc_perm(sizeof(*p_exit) * 6);
-#else
   p_exit = GC_MALLOC(sizeof(*p_exit) * 6);
-#endif
     else
     {
   p_exit = p_exit_free;
@@ -530,11 +482,7 @@ DAMAGE_DATA *new_damage(void)
     DAMAGE_DATA *da;
 
     if (damage_free == NULL)
-#ifdef OLC_VERSION
-   da = alloc_perm(sizeof(*da));
-#else
   da = GC_MALLOC(sizeof(*da));
-#endif
     else
     {
   da = damage_free;
@@ -568,11 +516,7 @@ AFFECT_DATA *new_affect(void)
     AFFECT_DATA *af;
 
     if (affect_free == NULL)
-#ifdef OLC_VERSION
-   af = alloc_perm(sizeof(*af));
-#else
   af = GC_MALLOC(sizeof(*af));
-#endif
     else
     {
   af = affect_free;
@@ -607,11 +551,7 @@ TRADE_DATA *new_trade(void)
     TRADE_DATA *trade;
 
     if (trade_free == NULL)
-#ifdef OLC_VERSION
-  trade = alloc_perm(sizeof(*trade));
-#else
   trade = GC_MALLOC(sizeof(*trade));
-#endif
   else
     {
   trade = trade_free;
@@ -640,11 +580,7 @@ OBJ_DATA *new_obj(void)
     OBJ_DATA *obj;
 
     if (obj_free == NULL)
-#ifdef OLC_VERSION
-  obj = alloc_perm(sizeof(*obj));
-#else
   obj = GC_MALLOC(sizeof(*obj));
-#endif
     else
     {
   obj = obj_free;
@@ -713,11 +649,7 @@ CHAR_DATA *new_char (void)
     int i;
 
     if (char_free == NULL)
-#ifdef OLC_VERSION
-  ch = alloc_perm(sizeof(*ch));
-#else
   ch = GC_MALLOC(sizeof(*ch));
-#endif
     else
     {
   ch = char_free;
@@ -810,11 +742,7 @@ PC_DATA *new_pcdata(void)
     static EDIT_DATA edit_zero;
 
     if (pcdata_free == NULL)
-#ifdef OLC_VERSION
-  pcdata = alloc_perm(sizeof(*pcdata));
-#else
   pcdata = GC_MALLOC(sizeof(*pcdata));
-#endif
     else
     {
   pcdata = pcdata_free;
@@ -934,11 +862,7 @@ BUFFER *new_buf()
     BUFFER *buffer;
 
     if (buf_free == NULL) 
-#ifdef OLC_VERSION
-  buffer = alloc_perm(sizeof(*buffer));
-#else
   buffer = GC_MALLOC(sizeof(*buffer));
-#endif
     else
     {
   buffer = buf_free;
@@ -965,11 +889,7 @@ BUFFER *new_buf_size(int size)
     BUFFER *buffer;
  
     if (buf_free ==  NULL)
-#ifdef OLC_VERSION
-        buffer = alloc_perm(sizeof(*buffer));
-#else
         buffer = GC_MALLOC(sizeof(*buffer));
-#endif
     else
     {
         buffer = buf_free;
@@ -1078,11 +998,7 @@ EXIT_DATA *new_exit ()
   
   if ( exit_free == NULL )
   {
-#ifdef OLC_VERSION
-    exit            = alloc_perm( sizeof(*exit) );
-#else
     exit            = GC_MALLOC( sizeof(*exit) );
-#endif
   }
   else
   {
@@ -1110,11 +1026,7 @@ RESET_DATA *new_reset ()
 
   if ( reset_free == NULL )
   {
-#ifdef OLC_VERSION
-    reset             = alloc_perm( sizeof(RESET_DATA) );
-#else
     reset             = GC_MALLOC( sizeof(RESET_DATA) );
-#endif
   }
   else
   {
@@ -1137,12 +1049,8 @@ AREA_DATA *new_area ()
   AREA_DATA *area;
   static AREA_DATA z_area;
   
-#ifdef OLC_VERSION
-  area = alloc_perm( sizeof(AREA_DATA) );
-#else
   area = GC_MALLOC( sizeof(AREA_DATA) );
-#endif
-  
+
   *area = z_area;  
   return area;
 }
@@ -1155,11 +1063,7 @@ LINE_EDIT_DATA *new_edit ()
   
   if ( edit_free == NULL )
   {
-#ifdef OLC_VERSION
-    edit            = alloc_perm( sizeof (LINE_EDIT_DATA) );
-#else
     edit            = GC_MALLOC( sizeof (LINE_EDIT_DATA) );
-#endif
   }
   else
   {
@@ -1184,11 +1088,7 @@ LINE_DATA *new_line_data ()
     
   if ( line_free == NULL )
   {
-#ifdef OLC_VERSION
-    line            = alloc_perm( sizeof (LINE_DATA) );
-#else
     line            = GC_MALLOC( sizeof (LINE_DATA) );
-#endif
   }
   else
   {
@@ -1214,11 +1114,7 @@ MACRO_DATA *new_macro ()
     
   if ( macro_free == NULL )
   {
-#ifdef OLC_VERSION
-    macro            = alloc_perm( sizeof (MACRO_DATA) );
-#else
     macro            = GC_MALLOC( sizeof (MACRO_DATA) );
-#endif
   }
   else
   {
@@ -1254,11 +1150,7 @@ VNUM_RANGE_DATA *new_range ()
     
   if ( range_free == NULL )
   {
-#ifdef OLC_VERSION
-    range            = alloc_perm( sizeof (VNUM_RANGE_DATA) );
-#else
     range            = GC_MALLOC( sizeof (VNUM_RANGE_DATA) );
-#endif
   }
   else
   {

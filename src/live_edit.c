@@ -649,11 +649,7 @@ void set_room_exits(PLAN_DATA *obj)
     {/* Check if it exists. If not, add it. */
       if(((ROOM_INDEX_DATA*)obj->to_place)->exit[i] == NULL)
       {
-#ifdef OLC_VERSION
-        pRoomIndex->exit[i] = alloc_perm( sizeof(*pRoomIndex->exit[i]) );
-#else
         pRoomIndex->exit[i] = GC_MALLOC( sizeof(*pRoomIndex->exit[i]) );
-#endif
 /* Exits currently disabled */
 /*        if(obj->exits[i].exit && obj->exits[i].exit->to_place)
           *pRoomIndex->exit[i] = *((EXIT_DATA*)(obj->exits[i].exit->to_place));*/
@@ -674,11 +670,7 @@ void set_room_exits(PLAN_DATA *obj)
           if(target->vnum >= 0)
             modify_room_marker(obj->clan, target, rev_dir[i], true);
 
-#ifdef OLC_VERSION
-          target->exit[rev_dir[i]] = alloc_perm( sizeof(*target->exit[rev_dir[i]]) );
-#else
           target->exit[rev_dir[i]] = GC_MALLOC( sizeof(*target->exit[rev_dir[i]]) );
-#endif
 /* Exits currently disabled */
 /*          if(obj->exits[i].exit && obj->exits[i].exit->to_place)
             *target->exit[rev_dir[i]] = *((EXIT_DATA*)(obj->exits[i].exit->to_place));*/
@@ -739,11 +731,7 @@ void load_room_obj(PLAN_DATA *obj, bool strings)
   ROOM_INDEX_DATA *pRoomIndex;
   if(obj->to_place == NULL)
   {
-#ifdef OLC_VERSION
-    pRoomIndex      = alloc_perm( sizeof(*pRoomIndex) );
-#else
     pRoomIndex      = GC_MALLOC( sizeof(*pRoomIndex) );
-#endif
     obj->to_place = pRoomIndex;
   }
   else
@@ -842,11 +830,7 @@ void load_mob_obj(PLAN_DATA *obj, bool strings)
   SHOP_DATA *pShop;
   if(obj->to_place == NULL)
   {
-#ifdef OLC_VERSION
-    pMobIndex                       = alloc_perm( sizeof(*pMobIndex) );
-#else /*game version*/
     pMobIndex                       = GC_MALLOC( sizeof(*pMobIndex) );
-#endif
     obj->to_place = pMobIndex;
   }
   else
@@ -880,11 +864,7 @@ void load_mob_obj(PLAN_DATA *obj, bool strings)
       SET_BIT(pMobIndex->act, ACT_IS_HEALER);
     if(IS_SET(obj->flags, PLAN_MOB_MERCHANT) && pMobIndex->pShop == NULL)
     {
-  #ifdef OLC_VERSION
-      pShop     = alloc_perm( sizeof(*pShop) );
-  #else
       pShop     = GC_MALLOC( sizeof(*pShop) );
-  #endif
       pShop->keeper   = obj->plan_index * -1;
       for ( i = 0; i < MAX_TRADE; i++ )
         pShop->buy_type[i] = 0;
@@ -992,11 +972,7 @@ void modify_room_marker(CLAN_DATA *clan, ROOM_INDEX_DATA *room, int dir, bool pl
     OBJ_DATA *object;
     char buf[256];
     char *dirstr = NULL;
-#ifdef OLC_VERSION
-    sign_base                       = alloc_perm( sizeof(*sign_base) );
-#else
     sign_base                       = GC_MALLOC( sizeof(*sign_base) );
-#endif
     sign_base->vnum = sign_vnum;
     sign_base->item_type = ITEM_TRASH;
     sign_base->area = 0;
@@ -1056,11 +1032,7 @@ void update_room_sign(CLAN_DATA *clan, ROOM_INDEX_DATA *room)
   {/* Generate a new sign */
     OBJ_INDEX_DATA *sign_base;
     OBJ_DATA *object;
-#ifdef OLC_VERSION
-    sign_base                       = alloc_perm( sizeof(*sign_base) );
-#else
     sign_base                       = GC_MALLOC( sizeof(*sign_base) );
-#endif
     sign_base->vnum = sign_vnum;
     sign_base->item_type = ITEM_TRASH;
     sign_base->area = 0;
@@ -1080,11 +1052,7 @@ void load_item_obj(PLAN_DATA *obj, bool strings)
   OBJ_INDEX_DATA *pObjIndex;
   if(obj->to_place == NULL)
   {
-#ifdef OLC_VERSION
-    pObjIndex                       = alloc_perm( sizeof(*pObjIndex) );
-#else
     pObjIndex                       = GC_MALLOC( sizeof(*pObjIndex) );
-#endif
     obj->to_place = pObjIndex;
   }
   else
@@ -1181,11 +1149,7 @@ void load_exit_obj(PLAN_DATA *obj, bool strings)
   EXIT_DATA *pexit;
   if(obj->to_place == NULL)
   {
-#ifdef OLC_VERSION
-    pexit     = alloc_perm( sizeof(*pexit) );
-#else
     pexit     = GC_MALLOC( sizeof(*pexit) );
-#endif
     obj->to_place = pexit;
   }
   else

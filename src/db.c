@@ -1046,11 +1046,7 @@ void boot_db( void )
     }
       }      
      
-#ifdef OLC_VERSION
-      area_name = alloc_perm (sizeof (AREA_NAME_DATA));
-#else /*game version*/
-      area_name = GC_MALLOC (sizeof (AREA_NAME_DATA));
-#endif
+      area_name = GC_MALLOC(sizeof (AREA_NAME_DATA));
       area_name->name = str_dup (strArea);
       if (!area_name_first) {
         area_name_first = area_name_last = area_name;
@@ -1158,11 +1154,7 @@ void load_area( FILE *fp, char *file_name )
 {
     AREA_DATA *pArea,*temp_last;     
 
-#ifdef OLC_VERSION
-    pArea   = alloc_perm( sizeof(*pArea) );
-#else /*game version*/
-    pArea   = GC_MALLOC( sizeof(*pArea) );    
-#endif
+    pArea   = GC_MALLOC( sizeof(*pArea) );
     temp_last = area_last;
     area_last = pArea;
     pArea->file_name     = str_dup (file_name); 
@@ -1208,11 +1200,7 @@ void load_cstat( FILE *fp )
 
     for ( ; ; )
     {
-#ifdef OLC_VERSION
-       cstat   = alloc_perm( sizeof(*cstat) );
-#else /*game version*/
        cstat   = GC_MALLOC( sizeof(*cstat) );
-#endif
 
        word = fread_word(fp);
        if ( word[0] == '$' )
@@ -1244,11 +1232,7 @@ void load_recipes( FILE *fp)
 	
 	for ( ; ; )
 	{
-#ifdef OLC_VERSION
-		recipe = alloc_perm ( sizeof (*recipe));
-#else
 		recipe = GC_MALLOC( sizeof (*recipe) );
-#endif
 		test = fread_letter(fp);
 		if (test == '$')
 			break;
@@ -1314,12 +1298,8 @@ void create_help_tracks(void)
     base = one_argument(pHelp->keyword, part);
     
     while(part[0] != '\0')
-    {// Break it down into the various keywords
-    //#ifdef OLC_VERSION
-    //  phTracker   = alloc_perm( sizeof(*phTracker) );
-    //#else /*game version*/
+    {
       phTracker   = GC_MALLOC( sizeof(*phTracker) );
-    //#endif
       phTracker->help = pHelp;
       clear_string(&phTracker->keyword, part);
       if(!help_track_first ||
@@ -1381,11 +1361,7 @@ int load_new_helps(HELP_DATA **first, HELP_DATA **last)
   new_helps = true;
   for ( ; ; )
   {
-  //#ifdef OLC_VERSION
-  //  pHelp   = alloc_perm( sizeof(*pHelp) );
-  //#else /*game version*/
     pHelp   = GC_MALLOC( sizeof(*pHelp) );
-  //#endif
     pHelp->level  = fread_number( fp );
     pHelp->keyword  = fread_string( fp );
     if ( pHelp->keyword[0] == '$' )
@@ -1451,11 +1427,7 @@ void load_helps( FILE *fp )
 
     for ( ; ; )
     {
-#ifdef OLC_VERSION
-  pHelp   = alloc_perm( sizeof(*pHelp) );
-#else /*game version*/
   pHelp   = GC_MALLOC( sizeof(*pHelp) );
-#endif
   pHelp->level  = fread_number( fp );
   pHelp->keyword  = fread_string( fp );
   if ( pHelp->keyword[0] == '$' )
@@ -1533,11 +1505,7 @@ void load_old_mob( FILE *fp )
       area_last->min_vnum_mob = vnum;
   }  
 
-#ifdef OLC_VERSION
-  pMobIndex     = alloc_perm( sizeof(*pMobIndex) );
-#else /*game version*/
   pMobIndex     = GC_MALLOC( sizeof(*pMobIndex) );
-#endif
   pMobIndex->vnum     = vnum;
   pMobIndex->new_format   = false;
   pMobIndex->player_name    = fread_string( fp );
@@ -1683,11 +1651,7 @@ void load_old_obj( FILE *fp )
       area_last->min_vnum_obj = vnum;
   }    
 
-#ifdef OLC_VERSION
-  pObjIndex     = alloc_perm( sizeof(*pObjIndex) );
-#else /*game version*/
   pObjIndex     = GC_MALLOC( sizeof(*pObjIndex) );
-#endif
   pObjIndex->vnum     = vnum;
   pObjIndex->new_format   = false;
   pObjIndex->reset_num    = 0;
@@ -1733,11 +1697,7 @@ void load_old_obj( FILE *fp )
       {
     AFFECT_DATA *paf;
 
-#ifdef OLC_VERSION
-    paf     = alloc_perm( sizeof(*paf) );
-#else
     paf     = GC_MALLOC( sizeof(*paf) );
-#endif
     paf->where    = TO_OBJECT;
     paf->type   = -1;
     paf->level    = 20; /* RT temp fix */
@@ -1754,11 +1714,7 @@ void load_old_obj( FILE *fp )
       {
     EXTRA_DESCR_DATA *ed;
 
-#ifdef OLC_VERSION
-    ed      = alloc_perm( sizeof(*ed) );
-#else
     ed      = GC_MALLOC( sizeof(*ed) );
-#endif
     ed->keyword   = fread_string( fp );
     ed->description   = fread_string( fp );
     ed->next    = pObjIndex->extra_descr;
@@ -1840,11 +1796,7 @@ void load_resets( FILE *fp )
       continue;
   }
 
-#ifdef OLC_VERSION
-  pReset    = alloc_perm( sizeof(*pReset) );
-#else
   pReset    = GC_MALLOC( sizeof(*pReset) );
-#endif
   pReset->command = letter;
   /* if_flag */   fread_number( fp );
   pReset->arg1  = fread_number( fp );
@@ -1964,11 +1916,7 @@ void load_rooms( FILE *fp )
       area_last->min_vnum_room = vnum;
   }      
 
-#ifdef OLC_VERSION
-  pRoomIndex      = alloc_perm( sizeof(*pRoomIndex) );
-#else
   pRoomIndex      = GC_MALLOC( sizeof(*pRoomIndex) );
-#endif
   pRoomIndex->owner   = str_dup("");
   pRoomIndex->people    = NULL;
   pRoomIndex->contents    = NULL;
@@ -2029,11 +1977,7 @@ void load_rooms( FILE *fp )
         bug( "Fread_rooms: vnum %d has bad door number.", vnum );        
     }
 
-#ifdef OLC_VERSION
-    pexit     = alloc_perm( sizeof(*pexit) );
-#else
     pexit     = GC_MALLOC( sizeof(*pexit) );
-#endif
     		fread_string( fp );
     pexit->keyword    = fread_string( fp );
     pexit->exit_info  = 0;
@@ -2062,11 +2006,7 @@ void load_rooms( FILE *fp )
       {
     EXTRA_DESCR_DATA *ed;
 
-#ifdef OLC_VERSION
-    ed      = alloc_perm( sizeof(*ed) );
-#else
     ed      = GC_MALLOC( sizeof(*ed) );
-#endif
     ed->keyword   = fread_string( fp );
     ed->description   = fread_string( fp );
     ed->next    = pRoomIndex->extra_descr;
@@ -2113,11 +2053,7 @@ void load_shops( FILE *fp )
   MOB_INDEX_DATA *pMobIndex;
   int iTrade;
 
-#ifdef OLC_VERSION
-  pShop     = alloc_perm( sizeof(*pShop) );
-#else
   pShop     = GC_MALLOC( sizeof(*pShop) );
-#endif
   pShop->keeper   = fread_number( fp );
   if ( pShop->keeper == 0 )
       break;
@@ -3813,45 +3749,6 @@ void fread_to_eol( FILE *fp )
     ungetc( c, fp );
     return;
 }
-
-/*
- * Old memory code, use GC_MALLOC instead (see the gc/ directory 
- * for more information.
- *
- */
-#ifdef OLC_VERSION
-void *alloc_perm( int sMem )
-{
-    static char *pMemPerm;
-    static int iMemPerm;
-    void *pMem;
-
-    while ( sMem % sizeof(long) != 0 )
-  sMem++;
-    if ( sMem > MAX_PERM_BLOCK )
-    {
-  bug( "Alloc_perm: %d too large.", sMem );
-  exit( 1 );
-    }
-
-    if ( pMemPerm == NULL || iMemPerm + sMem > MAX_PERM_BLOCK )
-    {
-  iMemPerm = 0;
-  if ( ( pMemPerm = GC_MALLOC( MAX_PERM_BLOCK ) ) == NULL )
-  {
-      perror( "Alloc_perm" );
-      exit( 1 );
-  }
-    }
-
-    pMem        = pMemPerm + iMemPerm;
-    iMemPerm   += sMem;
-    nAllocPerm += 1;
-    sAllocPerm += sMem;
-    return pMem;
-}
-
-#endif
 
 /*
  * Duplicate a string into dynamic memory.

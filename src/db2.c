@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#ifdef GAME_VERSION
 #include <gc.h>
-#endif
 #include <ctype.h>
 #include <time.h>
 #include <sys/types.h>
@@ -210,11 +208,7 @@ void load_mobiles( FILE *fp )
             area_last->min_vnum_mob = vnum;
         }          
  
-#ifdef OLC_VERSION
-        pMobIndex                       = alloc_perm( sizeof(*pMobIndex) );
-#else /*game version*/
         pMobIndex                       = GC_MALLOC( sizeof(*pMobIndex) );
-#endif
         pMobIndex->vnum                 = vnum;
 	pMobIndex->area			= area_last;
   pMobIndex->new_format   = true;
@@ -406,11 +400,7 @@ void load_objects( FILE *fp )
             area_last->min_vnum_obj = vnum;
         }            
  
-#ifdef OLC_VERSION
-        pObjIndex                       = alloc_perm( sizeof(*pObjIndex) );
-#else
         pObjIndex                       = GC_MALLOC( sizeof(*pObjIndex) );
-#endif
         pObjIndex->vnum                 = vnum;
         pObjIndex->area                 = area_last;
         pObjIndex->new_format           = true;
@@ -515,11 +505,7 @@ void load_objects( FILE *fp )
             {
                 AFFECT_DATA *paf;
 
-#ifdef OLC_VERSION
-                paf                     = alloc_perm( sizeof(*paf) );
-#else
                 paf                     = GC_MALLOC( sizeof(*paf) );
-#endif
 		paf->where    = TO_OBJECT;
                 paf->type               = -1;
                 paf->level              = pObjIndex->level;
@@ -536,11 +522,7 @@ void load_objects( FILE *fp )
             {
                 AFFECT_DATA *paf;
  
-#ifdef OLC_VERSION
-                paf                     = alloc_perm( sizeof(*paf) );
-#else           
                 paf                     = GC_MALLOC( sizeof(*paf) );
-#endif
     letter      = fread_letter(fp);
     switch (letter)
     {
@@ -578,11 +560,7 @@ void load_objects( FILE *fp )
             else if ( letter == 'E' )
             {
                 EXTRA_DESCR_DATA *ed;
-#ifdef OLC_VERSION
-                ed                     = alloc_perm( sizeof(*ed) );
-#else           
                 ed                      = GC_MALLOC( sizeof(*ed) );
-#endif
                 ed->keyword             = fread_string( fp );
                 ed->description         = fread_string( fp );
                 ed->next                = pObjIndex->extra_descr;
