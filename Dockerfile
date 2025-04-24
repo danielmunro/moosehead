@@ -1,7 +1,7 @@
 FROM ubuntu:24.04
 
-ARG RUN_VERSION
-ENV RUN_VERSION=$RUN_VERSION
+ARG RUN_VERSION="GAME_VERSION"
+ENV RUN_VERSION=${RUN_VERSION}
 
 RUN apt update
 RUN apt install -y -- curl gcc libgc-dev libatomic-ops-dev libjansson-dev make file gdb git
