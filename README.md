@@ -29,7 +29,6 @@ $ ./bin/run.sh mhs:latest
 * Add command to get build version information
 * Issues
   * `convert.c` mentioned a function, `spec_guard`, but that function doesn't exist.  Using `spec_guard_d` instead.
-  * Refactor `alloc_perm` -> 'GC_MALLOC'
   * VNUM data errors on startup
   * Move function declarations out of merc.h into respective .h files
   * Replace local function declarations at the top of files with including the header where possible

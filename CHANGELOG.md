@@ -1,5 +1,10 @@
 # Changelog
 
+## 2025-04-24
+
+* Refactored out usages of `alloc_perm` and `alloc_free`, in favor of `GC_MALLOC`, and `GC_FREE`.
+* There is a flag in Makefiles for building either the game version or the olc version.  This was hardcoded to the game version and had to be changed to build the olc version.  This can now be configured via the new `--olc` option in the `dev-reload` [command](https://github.com/danielmunro/moosehead/blob/992f2e16b44bfeae8d4fa16b90ac50ce529cb2e2/Argcfile.sh#L32).
+
 ## 2025-04-23
 
 * Moved function declarations out of `merc.h` and into respective header files.
