@@ -26,9 +26,9 @@ $ ./bin/run.sh mhs:latest
 * DevOps
   * Deploy to prod from laptop
   * Restore from backup (dev & prod)
+  * `mhs` to build docker image, login to ghcr, push
 * Add command to get build version information
 * Issues
-  * `convert.c` mentioned a function, `spec_guard`, but that function doesn't exist.  Using `spec_guard_d` instead.
   * VNUM data errors on startup
   * Move function declarations out of merc.h into respective .h files
   * Replace local function declarations at the top of files with including the header where possible
