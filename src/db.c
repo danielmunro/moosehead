@@ -3014,7 +3014,11 @@ void ObjIndexToInstance ( OBJ_DATA *obj, OBJ_INDEX_DATA *pObjIndex, int level, b
     switch ( obj->item_type )
     {
     default:
-  bug( "Read_object: vnum %d bad type.", pObjIndex->vnum );
+        sprintf(log_buf, "bad object item_type :: name %s, vnum %d, item_type %d",
+                pObjIndex->name,
+                pObjIndex->vnum,
+                obj->item_type);
+        log_error(log_buf);
   break;
 
     case ITEM_LIGHT:
@@ -3112,7 +3116,7 @@ void ObjIndexToInstance ( OBJ_DATA *obj, OBJ_INDEX_DATA *pObjIndex, int level, b
 
 
       }
-      log_info(log_buf);
+      log_debug(log_buf);
       weapons_popped = 0;
     }
 
@@ -3382,7 +3386,8 @@ ROOM_INDEX_DATA *get_room_index( int vnum )
 
     if ( fBootDb )
     {
-  bug( "Get_room_index: bad vnum %d while booting.", vnum );  
+        sprintf(log_buf, "bad room vnum while booting :: %d", vnum);
+        log_error(log_buf);
     }
 
     return NULL;
