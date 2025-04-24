@@ -28,11 +28,18 @@ backup() {
 }
 
 # @cmd Reload a dev environment
-# @flag -t --tail    Tail the container log
+# @flag -t --tail Tail the container log
+# @flag -o --olc  Run as OLC
 dev_reload() {
-  echo "building the container"
+  if [ $argc_olc -eq 1 ]; then
+    RUN_VERSION="OLC_VERSION"
+  else
+    RUN_VERSION="GAME_VERSION"
+  fi
 
-  docker build -t mhs:latest .
+  echo "building the container with run version ${RUN_VERSION}"
+
+  docker build --build-arg RUN_VERSION=$RUN_VERSION -t mhs:latest .
 
   CONTAINER=$(docker ps --quiet --filter label=mhs)
 
@@ -55,14 +62,17 @@ dev_reload() {
 
 # @cmd Run the tests
 test() {
-  docker build -f Dockerfile-test -t mhs:test .
+  docker build --build-arg RUN_VERSION=GAME_VERSION -f Dockerfile-test -t mhs:test .
   docker run mhs:test
 }
 
 # @cmd Deploy a production image
 # @arg image_repo!
 # @arg tag!
+# @flag -rv --run-version The version to run, either GAME_VERSION or OLC_VERSION
 prod_deploy() {
+  RUN_VERSION=${argc_run_version:-"GAME_VERSION"}
+
   echo "pulling the container"
 
   docker pull $argc_image_repo:$argc_tag
