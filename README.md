@@ -38,3 +38,4 @@ $ ./bin/run.sh mhs:latest
   * `slot_lookup` move from `magic.c` -> `db.c`
   * `clear_string` move out of `live_edit.c`
   * Many source files need a lot of includes... is there a better organization strategy?
+  * Can probably remove lib atomic_ops
