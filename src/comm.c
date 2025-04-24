@@ -1738,7 +1738,7 @@ void write_to_buffer( DESCRIPTOR_DATA *d, const char *txt, int length )
   outbuf      = GC_MALLOC( 2 * d->outsize );
 #endif
   strncpy( outbuf, d->outbuf, d->outtop );
-  free_mem( d->outbuf, d->outsize );
+  GC_FREE(d->outbuf);
   d->outbuf   = outbuf;
   d->outsize *= 2;
     }
@@ -4083,27 +4083,19 @@ void page_to_char( const char *txt, CHAR_DATA *ch )
     if (ch->desc->showstr_head &&
        (strlen(txt)+strlen(ch->desc->showstr_head)+1) < 32000)
     {
-#ifdef OLC_VERSION
-      char *temp=alloc_mem(strlen(txt) + strlen(ch->desc->showstr_head) + 1);
-#else
       char *temp=GC_MALLOC(strlen(txt) + strlen(ch->desc->showstr_head) + 1);
-#endif
       strcpy(temp, ch->desc->showstr_head);
       strcat(temp, txt);
       ch->desc->showstr_point = temp +
        (ch->desc->showstr_point - ch->desc->showstr_head);
-      free_mem(ch->desc->showstr_head, strlen(ch->desc->showstr_head) + 1);
+      GC_FREE(ch->desc->showstr_head);
       ch->desc->showstr_head=temp;
     }
     else
     {
       if (ch->desc->showstr_head)
-      free_mem(ch->desc->showstr_head, strlen(ch->desc->showstr_head)+1);
-#ifdef OLC_VERSION
-      ch->desc->showstr_head = alloc_mem(strlen(txt) + 1);
-#else
+      GC_FREE(ch->desc->showstr_head);
       ch->desc->showstr_head = GC_MALLOC(strlen(txt) + 1);
-#endif
       strcpy(ch->desc->showstr_head,txt);
       ch->desc->showstr_point = ch->desc->showstr_head;
       show_string(ch->desc,"");
@@ -4123,7 +4115,7 @@ void show_string(struct descriptor_data *d, char *input) {
     one_argument(input, buf);
     if (buf[0] != '\0') {
         if (d->showstr_head) {
-            free_mem(d->showstr_head, strlen(d->showstr_head));
+            GC_FREE(d->showstr_head);
             d->showstr_head = 0;
         }
         d->showstr_point = 0;
@@ -4143,7 +4135,7 @@ void show_string(struct descriptor_data *d, char *input) {
             for (chk = d->showstr_point; isspace(*chk); chk++) {}
             if (!*chk) {
                 if (d->showstr_head) {
-                    free_mem(d->showstr_head, strlen(d->showstr_head));
+                    GC_FREE(d->showstr_head);
                     d->showstr_head = 0;
                 }
                 d->showstr_point = 0;

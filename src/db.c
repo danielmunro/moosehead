@@ -3814,12 +3814,6 @@ void fread_to_eol( FILE *fp )
     return;
 }
 
-void free_mem( void *pMem, int sMem )
-{
-	GC_FREE(pMem);     
-    return;
-}    
-
 /*
  * Old memory code, use GC_MALLOC instead (see the gc/ directory 
  * for more information.
@@ -3895,7 +3889,7 @@ void free_string( char *pstr )
     || ( pstr >= string_space && pstr < top_string ) )
   return;
 
-    free_mem( pstr, strlen(pstr) + 1 );
+    GC_FREE(pstr);
     return;
 }
 

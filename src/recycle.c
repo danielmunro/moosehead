@@ -185,7 +185,7 @@ void free_descriptor(DESCRIPTOR_DATA *d)
 
     free_string( d->host );
     free_string( d->name );
-    free_mem( d->outbuf, d->outsize );
+    GC_FREE(d->outbuf);
     INVALIDATE(d);
     d->next = descriptor_free;
     descriptor_free = d;
@@ -1001,7 +1001,7 @@ void free_buf(BUFFER *buffer)
     if (!IS_VALID(buffer))
   return;
 
-    free_mem(buffer->string,buffer->size);
+    GC_FREE(buffer->string);
     buffer->string = NULL;
     buffer->size   = 0;
     buffer->state  = BUFFER_FREED;
@@ -1049,7 +1049,7 @@ bool add_buf(BUFFER *buffer, char *string)
 #endif
 
   strcpy(buffer->string,oldstr);
-  free_mem(oldstr,oldsize);
+  GC_FREE(oldstr);
     }
 
     strcat(buffer->string,string);

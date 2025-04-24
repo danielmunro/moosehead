@@ -318,7 +318,7 @@ void free_list (LINK *list)
     for ( ; list != NULL; list = link_next)
     {
 	link_next = list->next;
-	free_mem(list,sizeof(*list));
+	GC_FREE(list);
      }
 }
 

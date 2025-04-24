@@ -2366,8 +2366,8 @@ void do_search(CHAR_DATA *ch, char *argument)
          * Clean up.
          */
         free_buf(output);
-        free_mem( prgpstrShow, count * sizeof(char *) );
-        free_mem( prgnShow,    count * sizeof(int)    );
+        GC_FREE(prgpstrShow);
+        GC_FREE(prgnShow);
         return;
       }
     }
