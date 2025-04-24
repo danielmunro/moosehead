@@ -31,7 +31,7 @@ backup() {
 # @flag -t --tail Tail the container log
 # @flag -o --olc  Run as OLC
 dev_reload() {
-  if [ $argc_olc -eq 1 ]; then
+  if [ "$argc_olc" == "1" ]; then
     RUN_VERSION="OLC_VERSION"
   else
     RUN_VERSION="GAME_VERSION"
