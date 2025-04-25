@@ -152,7 +152,7 @@ Set Graphics Rendition:
 #define MAX_CLASS                  15
 #define MAX_GIFTS		   16
 #define MAX_GIFT		    3
-#define MAX_PC_RACE                17
+#define MAX_PC_RACE                18
 #define MAX_CLAN                   22 
 #define MAX_DEITY                  11
 #define MAX_SAC_PNTS              300
