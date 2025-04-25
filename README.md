@@ -26,7 +26,6 @@ $ ./bin/run.sh mhs:latest
 * DevOps
   * Deploy to prod from laptop
   * Restore from backup (dev & prod)
-  * `mhs` to build docker image, login to ghcr, push
 * Add command to get build version information
 * Issues
   * VNUM data errors on startup
