@@ -26,7 +26,7 @@
 #include "merc.h"
 #include "act_wiz.h"
 #include "comm.h"
-#include "ctype.h"
+#include "const.h"
 #include "editor.h"
 #include "db.h"
 #include "handler.h"

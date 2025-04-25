@@ -25,6 +25,7 @@
 #include "merc.h"
 #include "act_comm.h"
 #include "act_obj.h"
+#include "const.h"
 #include "db.h"
 #include "handler.h"
 #include "live_edit.h"

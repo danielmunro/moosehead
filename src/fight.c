@@ -27,6 +27,7 @@
 #include "act_wiz.h"
 #include "clan.h"
 #include "comm.h"
+#include "const.h"
 #include "db.h"
 #include "deity.h"
 #include "effects.h"

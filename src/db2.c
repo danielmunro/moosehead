@@ -8,6 +8,7 @@
 #include <sys/time.h>
 
 #include "merc.h"
+#include "const.h"
 #include "db.h"
 #include "handler.h"
 #include "lookup.h"

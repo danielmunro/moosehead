@@ -152,7 +152,7 @@ Set Graphics Rendition:
 #define MAX_CLASS                  15
 #define MAX_GIFTS		   16
 #define MAX_GIFT		    3
-#define MAX_PC_RACE                17 
+#define MAX_PC_RACE                17
 #define MAX_CLAN                   22 
 #define MAX_DEITY                  11
 #define MAX_SAC_PNTS              300
@@ -3325,23 +3325,7 @@ extern  const   struct  agt_app_type    agt_app         [26];
 extern  const   struct  end_app_type    end_app         [26];
 extern  const   struct  soc_app_type    soc_app         [26];
 
-
-extern	const	struct	improve_type	improve_table	[];
-extern	const	struct  kit_type	kit_table	[];
-extern  const   struct  class_type      class_table     [MAX_CLASS];
-extern	const	struct	deity_type	deity_table     [];
-extern  const   struct  weapon_type     weapon_table    [];
-extern  const   struct  item_type       item_table      [];
-extern  const   struct  wiznet_type     wiznet_table    [];
-extern  const   struct  pnet_type       pnet_table      [];
-extern  const   struct  attack_type     attack_table    [];
-extern  const   struct  race_type       race_table      [];
-extern  const   struct  pc_race_type    pc_race_table   [];
-extern  const   struct  material_type	material_table  [];
 extern  const   struct  spec_type       spec_table      [];
-extern  const   struct  liq_type        liq_table       [];
-extern  const   struct  skill_type      skill_table     [MAX_SKILL];
-extern  const   struct  group_type      group_table     [MAX_GROUP];
 extern          struct social_type      social_table    [MAX_SOCIALS];
 
 

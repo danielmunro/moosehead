@@ -28,6 +28,7 @@
 
 #include "merc.h"
 #include "comm.h"
+#include "const.h"
 #include "db.h"
 #include "handler.h"
 #include "log.h"

@@ -6,13 +6,13 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <unistd.h>
-#include <gc.h>
 #include <jansson.h>
 #include <regex.h>
 #include <yuarel.h>
 
 #include "merc.h"
 #include "comm.h"
+#include "const.h"
 #include "log.h"
 #include "lookup.h"
 

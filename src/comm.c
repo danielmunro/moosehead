@@ -59,6 +59,7 @@
 #include "alias.h"
 #include "ban.h"
 #include "clan.h"
+#include "const.h"
 #include "db.h"
 #include "dns.h"
 #include "dump_obj_csv.h"

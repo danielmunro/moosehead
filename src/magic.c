@@ -27,6 +27,7 @@
 #include "act_info.h"
 #include "act_obj.h"
 #include "comm.h"
+#include "const.h"
 #include "db.h"
 #include "effects.h"
 #include "fight.h"

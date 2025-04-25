@@ -18,7 +18,9 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <time.h>
+
 #include "merc.h"
+#include "const.h"
 #include "db.h"
 #include "lookup.h"
 #include "tables.h"

@@ -31,6 +31,7 @@
 #include "act_obj.h"
 #include "clan.h"
 #include "comm.h"
+#include "const.h"
 #include "db.h"
 #include "fight.h"
 #include "handler.h"

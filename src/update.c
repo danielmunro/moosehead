@@ -28,6 +28,7 @@
 #include "act_obj.h"
 #include "act_wiz.h"
 #include "comm.h"
+#include "const.h"
 #include "db.h"
 #include "deity.h"
 #include "fight.h"

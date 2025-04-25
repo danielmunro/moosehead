@@ -26,6 +26,7 @@
 #include "merc.h"
 #include "act_info.h"
 #include "comm.h"
+#include "const.h"
 #include "db.h"
 #include "handler.h"
 #include "input.h"
