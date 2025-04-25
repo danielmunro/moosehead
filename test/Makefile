@@ -19,7 +19,7 @@ INCLUDE = -I/usr/local/include
 OPTIMIZATION_LEVEL = -O2
 
 C_FLAGS =  -Dmoose $(OPTIMIZATION_LEVEL) $(WARNINGS) $(VERSION) $(LOGS) $(INCLUDE)
-L_FLAGS =  -lm -lcrypt -lpthread -ldl -latomic_ops -lgc -ltap -ljansson -lyuarel
+L_FLAGS =  -lm -lcrypt -lpthread -ldl -lgc -ltap -ljansson -lyuarel
 
 O_FILES = ../src/act_comm.o ../src/act_enter.o ../src/act_info.o ../src/act_move.o ../src/act_obj.o\
 		  ../src/act_wiz.o ../src/alias.o ../src/ban.o ../src/comm.o ../src/const.o ../src/db.o ../src/db2.o ../src/dns.o\

@@ -4,7 +4,7 @@ ARG RUN_VERSION="GAME_VERSION"
 ENV RUN_VERSION=${RUN_VERSION}
 
 RUN apt update
-RUN apt install -y -- curl gcc libgc-dev libatomic-ops-dev libjansson-dev make file gdb git
+RUN apt install -y -- curl gcc libgc-dev libjansson-dev make file gdb git
 
 RUN <<-EOF
         git clone https://github.com/jacketizer/libyuarel.git
