@@ -574,11 +574,7 @@ void init_descriptor(int control) {
     dnew->showstr_head = NULL;
     dnew->showstr_point = NULL;
     dnew->outsize = 2048;
-#ifdef OLC_VERSION
-    dnew->outbuf        = alloc_mem( dnew->outsize );
-#else  /*game version*/
     dnew->outbuf = GC_MALLOC(dnew->outsize);
-#endif
 
     if (getpeername(desc, (struct sockaddr *) &sock, &addr_len) < 0) {
         perror("New_descriptor: getpeername");
@@ -1732,11 +1728,7 @@ void write_to_buffer( DESCRIPTOR_DATA *d, const char *txt, int length )
       close_socket(d);
       return;
   }
-#ifdef OLC_VERSION
-  outbuf      = alloc_mem( 2 * d->outsize );
-#else /*game version*/
   outbuf      = GC_MALLOC( 2 * d->outsize );
-#endif
   strncpy( outbuf, d->outbuf, d->outtop );
   GC_FREE(d->outbuf);
   d->outbuf   = outbuf;
@@ -1763,10 +1755,6 @@ bool write_to_descriptor( int desc, char *str, int length, DESCRIPTOR_DATA *d )
    char *point;
    char buf[2];
    char buf2[MAX_STRING_LENGTH];
-#if defined(macintosh) || defined(MSDOS)
-   if ( desc == 0 )
-     desc = 1;
-#endif
 
   if( d->character == NULL || !IS_SET(d->character->mhs,MHS_OLC) )
   {
@@ -1899,11 +1887,6 @@ bool write_to_descriptor( int desc, char *txt, int length, DESCRIPTOR_DATA *d )
     int iStart;
     int nWrite;
     int nBlock;
-
-#if defined(macintosh) || defined(MSDOS)
-    if ( desc == 0 )
-  desc = 1;
-#endif
 
     if ( length <= 0 )
   length = strlen(txt);
@@ -3782,15 +3765,8 @@ bool check_parse_name( char *name )
     if ( strlen(name) <  2 )
   return false;
 
-#if defined(MSDOS)
-    if ( strlen(name) >  8 )
-  return false;
-#endif
-
-#if defined(macintosh) || defined(unix)
     if ( strlen(name) > 12 )
   return false;
-#endif
 
     /*
      * Alphanumerics only.

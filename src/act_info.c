@@ -212,13 +212,8 @@ void do_species( CHAR_DATA *ch, char *argument )
      count = 0;
      for ( obj = list; obj != NULL; obj = obj->next_content )
    count++;
-#ifdef OLC_VERSION
-     prgpstrShow = alloc_mem( count * sizeof(char *) );
-     prgnShow    = alloc_mem( count * sizeof(int)    );
-#else
      prgpstrShow = GC_MALLOC( count * sizeof(char *) );
      prgnShow    = GC_MALLOC( count * sizeof(int)    );
-#endif
      nShow       = 0;
 
      /*

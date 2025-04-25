@@ -1370,11 +1370,7 @@ bool start_long_edit(CHAR_DATA *ch, int limit, int type, char *base_str)
   ch->pcdata->edit_type = type;
   ch->pcdata->edit_limit = limit;
   ch->pcdata->edit_count = 0;
-#ifdef OLC_VERSION
-  ch->pcdata->edit_str = alloc_mem(limit + 2);
-#else
   ch->pcdata->edit_str = GC_MALLOC(limit + 2);
-#endif
   if(base_str != NULL && (ch->pcdata->edit_len = strlen(base_str)) <= limit)
   {
     int i;
@@ -1714,12 +1710,6 @@ void end_long_edit(CHAR_DATA *ch, char **result)
     if(*result != NULL)/* Allows cancel to function */
       free_string(*result);
     *result = str_dup(ch->pcdata->edit_str);
-/*#ifdef OLC_VERSION
-    *result = alloc_mem(ch->pcdata->edit_len + 1);
-#else
-    *result = GC_MALLOC(ch->pcdata->edit_len + 1);
-#endif
-    strcpy(*result, ch->pcdata->edit_str);*/
   }
   /* Release string and clear edit data */
   GC_FREE(ch->pcdata->edit_str);

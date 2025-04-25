@@ -172,11 +172,7 @@ bool notify_clan_char(char *string, CLAN_CHAR *target, bool offline)
         overflow = true;
         len += strlen("You have reached the limit on offline messages.\n\r");
       }
-#ifdef OLC_VERSION
-    target->messages = alloc_mem(len + 1);
-#else
-    target->messages = GC_MALLOC(len);
-#endif
+      target->messages = GC_MALLOC(len);
       strcpy(target->messages, old_string);
       strcat(target->messages, string);
       if(overflow)

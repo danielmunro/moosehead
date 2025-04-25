@@ -2273,13 +2273,8 @@ void do_search(CHAR_DATA *ch, char *argument)
           if((IS_SET(looting->rarity, search_type) || looting->item_type == ITEM_MONEY) && can_see_obj(ch, looting))
             count++;
         }
-    #ifdef OLC_VERSION
-         prgpstrShow = alloc_mem( count * sizeof(char *) );
-         prgnShow    = alloc_mem( count * sizeof(int)    );
-    #else
          prgpstrShow = GC_MALLOC( count * sizeof(char *) );
          prgnShow    = GC_MALLOC( count * sizeof(int)    );
-    #endif
          nShow       = 0;
 
          /*

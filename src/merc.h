@@ -3395,8 +3395,6 @@ extern sh_int      posse_thug_kills;
  * Then we close it whenever we need to open a file (e.g. a save file).
  */
 
-#define alloc_mem GC_MALLOC
-
 #define BASE_DIR        "/mud/moosehead"
 #define DATA_DIR        BASE_DIR "/data"
 #define PLAYER_DIR      DATA_DIR "/player/"    /* Player files */

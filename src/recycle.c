@@ -873,11 +873,7 @@ BUFFER *new_buf()
     buffer->state = BUFFER_SAFE;
     buffer->size  = get_size(BASE_BUF);
 
-#ifdef OLC_VERSION
-    buffer->string  = alloc_mem(buffer->size);
-#else
     buffer->string  = GC_MALLOC(buffer->size);
-#endif
     buffer->string[0] = '\0';
     VALIDATE(buffer);
 
@@ -904,11 +900,7 @@ BUFFER *new_buf_size(int size)
         bug("new_buf: buffer size %d too large.",size);
         exit(1);
     }
-#ifdef OLC_VERSION
-    buffer->string      = alloc_mem(buffer->size);
-#else
     buffer->string      = GC_MALLOC(buffer->size);
-#endif
     buffer->string[0]   = '\0';
     VALIDATE(buffer);
  
@@ -962,11 +954,7 @@ bool add_buf(BUFFER *buffer, char *string)
 
     if (buffer->size != oldsize)
     {
-#ifdef OLC_VERSION
-  buffer->string  = alloc_mem(buffer->size);
-#else
   buffer->string  = GC_MALLOC(buffer->size);
-#endif
 
   strcpy(buffer->string,oldstr);
   GC_FREE(oldstr);
