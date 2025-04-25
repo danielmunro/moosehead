@@ -1,3 +1,4 @@
+#include "../src/const.h"
 #include "../src/handler.h"
 #include "../src/magic.h"
 #include "../src/skills.h"
