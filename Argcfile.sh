@@ -66,8 +66,18 @@ test() {
   docker run mhs:test
 }
 
+# @cmd Build a production image
+# @arg username!
+# @arg cr_pat!
+# @arg image!
+prod_build() {
+  docker build -t $argc_image .
+  echo "$argc_cr_pat" | docker login -u $argc_username ghcr.io --password-stdin
+  docker push $argc_image
+}
+
 # @cmd Deploy a production image
-# @arg image_repo!
+# @arg image!
 # @arg tag!
 # @flag -rv --run-version The version to run, either GAME_VERSION or OLC_VERSION
 prod_deploy() {
@@ -75,7 +85,7 @@ prod_deploy() {
 
   echo "pulling the container"
 
-  docker pull $argc_image_repo:$argc_tag
+  docker pull $argc_image:$argc_tag
 
   CONTAINER=$(docker ps --quiet --filter label=mhs)
 
@@ -87,7 +97,7 @@ prod_deploy() {
 
   echo "running the new container"
 
-  run $argc_image_repo $argc_tag
+  run $argc_image $argc_tag
 
   echo "done"
 }
