@@ -26,7 +26,13 @@
 #include "comm.h"
 #include "db.h"
 #include "input.h"
+#include "note.h"
 #include "recycle.h"
+
+/*
+ * for tracking bad dns
+ */
+#define DNS_FILE DATA_DIR "/area/dns.txt"
 
 DNS_DATA *dns_list = NULL;
 

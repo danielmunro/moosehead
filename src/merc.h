@@ -3396,37 +3396,6 @@ extern sh_int      posse_thug_kills;
 #endif
 #define NULL_FILE       "/dev/null"     /* To reserve one stream        */
 
-#ifdef OLC_VERSION // New help code
-#define HELP_FILE       DATA_DIR "/olc/olcarea/new_helps.are"
-#define HELP_BAK        DATA_DIR "/olc/olcarea/new_helps.bak"
-#else
-#define HELP_FILE       DATA_DIR "/area/new_helps.are"
-#define HELP_BAK        DATA_DIR "/area/new_helps.bak"
-#define HELP_FILE_OLC   DATA_DIR "/olc/olcarea/new_helps.are"
-#endif
-
-#ifdef OLC_VERSION
-#define AREA_LIST       DATA_DIR "/area/area.lst"  /* List of areas*/
-#else
-#define AREA_LIST       DATA_DIR "/area/area.act"  /* List of areas*/
-#endif
-#define BUG_FILE        DATA_DIR "/area/bugs.not" /* For 'bug' and bug()*/
-#define TYPO_FILE       DATA_DIR "/area/typos.txt" /* For 'typo'*/
-#define NOTE_FILE       DATA_DIR "/area/notes.not"/* For 'notes'*/
-#define IDEA_FILE       DATA_DIR "/area/ideas.not"
-#define PENALTY_FILE    DATA_DIR "/area/penal.not"
-#define CLAN_FILE	    DATA_DIR "/area/clan.not"
-#define IMMORTAL_FILE	DATA_DIR "/area/immortal.not"
-#define NEWS_FILE       DATA_DIR "/area/news.not"
-#define CHANGES_FILE    DATA_DIR "/area/chang.not"
-#define OOC_FILE	    DATA_DIR "/area/ooc.not"
-#define QUEST_FILE	    DATA_DIR "/area/quest.not"
-#define SHUTDOWN_FILE   DATA_DIR "/area/shutdown.txt"/* For 'shutdown'*/
-#define BAN_FILE        DATA_DIR "/area/ban.txt" /* for bans */
-#define DNS_FILE        DATA_DIR "/area/dns.txt" /* for bad DNS servers */
-#define MUSIC_FILE      DATA_DIR "/area/music.txt" /* for lyrics */
-#define OLC_LOG_FILE    DATA_DIR "/log/olc.log"
-
 #define TIMESTAMP_MASK 63
 #define TIMESTAMP_GLOBAL 64
 #define TIMESTAMP_TELLS 128

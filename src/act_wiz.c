@@ -49,6 +49,11 @@
 #include "update.h"
 
 /*
+ * For 'shutdown'
+ */
+#define SHUTDOWN_FILE DATA_DIR "/area/shutdown.txt"
+
+/*
  * Local functions.
  */
 void do_rstat (CHAR_DATA *ch, char *argument);

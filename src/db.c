@@ -42,6 +42,7 @@
 #include "lookup.h"
 #include "magic.h"
 #include "music.h"
+#include "note.h"
 #include "recycle.h"
 #include "save.h"
 #include "special.h"

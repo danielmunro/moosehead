@@ -27,7 +27,13 @@
 #include "db.h"
 #include "handler.h"
 #include "input.h"
+#include "note.h"
 #include "recycle.h"
+
+/*
+ * for tracking bans
+ */
+#define BAN_FILE DATA_DIR "/area/ban.txt"
 
 BAN_DATA *ban_list = NULL;
 

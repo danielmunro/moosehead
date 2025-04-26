@@ -40,8 +40,8 @@
 #include "tables.h"
 
 /* globals from db.c for load_notes */
-extern FILE *                  fpArea;
-extern char                    strArea[MAX_INPUT_LENGTH];
+extern FILE *fpArea;
+extern char strArea[MAX_INPUT_LENGTH];
 
 /* local procedures */
 void load_thread (char *name, NOTE_DATA **list, int type, time_t free_time);

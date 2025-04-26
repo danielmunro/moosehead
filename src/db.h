@@ -88,13 +88,25 @@ int get_area_max_vnum (AREA_DATA *area);
 RECIPE_DATA * get_recipe_data (int recipe_number);
 void tail_chain (void);
 
-/* macro for flag swapping */
-#define GET_UNSET(flag1,flag2)  (~(flag1)&((flag1)|(flag2)))
-#define MAGIC_NUM 52571214
-
 char *print_flags (long flag);
 void do_collate(CHAR_DATA *ch, char *argument);
 void save_area ( CHAR_DATA *ch, AREA_DATA *pArea );
 void update_area_list ( CHAR_DATA *ch, char *strArea );
+
+/*
+ * macro for flag swapping
+ */
+#define GET_UNSET(flag1,flag2)  (~(flag1)&((flag1)|(flag2)))
+
+#ifdef OLC_VERSION
+#define AREA_LIST       DATA_DIR "/area/area.lst"  /* List of areas*/
+#define HELP_FILE       DATA_DIR "/olc/olcarea/new_helps.are"
+#define HELP_BAK        DATA_DIR "/olc/olcarea/new_helps.bak"
+#else
+#define AREA_LIST       DATA_DIR "/area/area.act"  /* List of areas*/
+#define HELP_FILE       DATA_DIR "/area/new_helps.are"
+#define HELP_BAK        DATA_DIR "/area/new_helps.bak"
+#define HELP_FILE_OLC   DATA_DIR "/olc/olcarea/new_helps.are"
+#endif
 
 #endif //MOOSEHEAD_DB_H

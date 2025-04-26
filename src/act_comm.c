@@ -47,6 +47,11 @@
 #include "tables.h"
 #include "update.h"
 
+/*
+ * For logging typos
+ */
+#define TYPO_FILE DATA_DIR "/area/typos.txt"
+
 #define HAS_MHS(ch,flag) (IS_SET((ch)->mhs,(flag)))
 
 /* Locals */
@@ -2549,14 +2554,6 @@ void do_pose( CHAR_DATA *ch, char *argument )
 }
 
 
-/*
-void do_bug( CHAR_DATA *ch, char *argument )
-{
-    append_file( ch, BUG_FILE, argument );
-    send_to_char( "Bug logged.\n\r", ch );
-    return;
-}
-*/
 
 void do_typo( CHAR_DATA *ch, char *argument )
 {
