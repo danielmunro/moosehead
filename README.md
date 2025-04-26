@@ -24,7 +24,6 @@ $ ./bin/run.sh mhs:latest
   * Partially done
 * GitHub pages
 * DevOps
-  * Deploy to prod from laptop
   * Restore from backup (dev & prod)
 * Add command to get build version information
 * Issues
