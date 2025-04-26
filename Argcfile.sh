@@ -92,6 +92,7 @@ reload() {
 }
 
 # @cmd Deploy a production image
+# @arg ssh_keyfile!
 # @arg ssh_destination!
 # @arg ssh_port!
 # @arg image!
@@ -102,7 +103,7 @@ prod_deploy() {
 
   echo "ssh to prod machine"
 
-  ssh $argc_ssh_destination -p $argc_ssh_port << EOF
+  ssh -i $argc_ssh_keyfile $argc_ssh_destination -p $argc_ssh_port << EOF
 
 cd github/moosehead
 

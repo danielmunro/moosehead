@@ -23,4 +23,8 @@ jobs:
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add /home/runner/.ssh/github_actions
       - name: Deploy to production
-        run: ./bin/mhs prod-deploy ${{ secrets.SSH_USER}}@${{ secrets.SSH_HOST }} ${{ secrets.SSH_PORT }} ${{ secrets.IMAGE_REPO }} ${{ inputs.tag }}
+        run: ./bin/mhs prod-deploy /home/runner/.ssh/github_actions \
+                                   ${{ secrets.SSH_USER}}@${{ secrets.SSH_HOST }} \
+                                   ${{ secrets.SSH_PORT }} \
+                                   ${{ secrets.IMAGE_REPO }} \
+                                   ${{ inputs.tag }}
