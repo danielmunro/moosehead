@@ -13,6 +13,7 @@ The project builds upon the DikuMUD/Merc codebase while adding significant enhan
 - A small collection of unit tests
 - CI workflow and production deployment workflow
 - Automated offsite backups for all data (players, areas, notes, etc)
+- Comprehensive [item list](https://docs.google.com/spreadsheets/d/1ZtGP1EvX6mS6D_E57067qJYIVuVS6fQpzZF7GdRK9vA/edit?gid=918610314#gid=918610314) with filtering and sorting
 
 ## How to Play
 
