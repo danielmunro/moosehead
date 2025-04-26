@@ -27,7 +27,7 @@ backup() {
              offen/docker-volume-backup:v2
 }
 
-# @cmd Reload a dev environment
+# @cmd Build the current source and reload the running container
 # @flag -t --tail Tail the container log
 # @flag -o --olc  Run as OLC
 dev_reload() {
@@ -76,17 +76,10 @@ prod_build() {
   docker push $argc_image
 }
 
-# @cmd Deploy a production image
+# @cmd Stop the running container and start a new one
 # @arg image!
 # @arg tag!
-# @flag -rv --run-version The version to run, either GAME_VERSION or OLC_VERSION
-prod_deploy() {
-  RUN_VERSION=${argc_run_version:-"GAME_VERSION"}
-
-  echo "pulling the container"
-
-  docker pull $argc_image:$argc_tag
-
+reload() {
   CONTAINER=$(docker ps --quiet --filter label=mhs)
 
   if [ ! -z "$CONTAINER" ]; then
@@ -95,11 +88,37 @@ prod_deploy() {
     docker rm $CONTAINER
   fi
 
-  echo "running the new container"
-
   run $argc_image $argc_tag
+}
 
-  echo "done"
+# @cmd Deploy a production image
+# @arg ssh_destination!
+# @arg ssh_port!
+# @arg image!
+# @arg tag!
+# @flag -rv --run-version The version to run, either GAME_VERSION or OLC_VERSION
+prod_deploy() {
+  RUN_VERSION=${argc_run_version:-"GAME_VERSION"}
+
+  echo "ssh to prod machine"
+
+  ssh $argc_ssh_destination -p $argc_ssh_port << EOF
+
+cd github/moosehead
+
+git pull
+
+echo "pulling the container"
+
+docker pull $argc_image:$argc_tag
+
+echo "running the new container"
+
+./bin/mhs reload $argc_image $argc_tag
+
+echo "done"
+
+EOF
 }
 
 # ARGC-BUILD {
@@ -132,9 +151,10 @@ USAGE: Argcfile <COMMAND>
 
 COMMANDS:
   backup       Create a backup of MHS data
-  dev_reload   Reload a dev environment [aliases: dev-reload]
+  dev_reload   Build the current source and reload the running container [aliases: dev-reload]
   test         Run the tests
   prod_build   Build a production image [aliases: prod-build]
+  reload       Stop the running container and start a new one
   prod_deploy  Deploy a production image [aliases: prod-deploy]
 EOF
     exit
@@ -147,7 +167,7 @@ _argc_version() {
 
 _argc_parse() {
     local _argc_key _argc_action
-    local _argc_subcmds="backup, dev_reload, dev-reload, test, prod_build, prod-build, prod_deploy, prod-deploy"
+    local _argc_subcmds="backup, dev_reload, dev-reload, test, prod_build, prod-build, reload, prod_deploy, prod-deploy"
     while [[ $_argc_index -lt $_argc_len ]]; do
         _argc_item="${argc__args[_argc_index]}"
         _argc_key="${_argc_item%%=*}"
@@ -184,6 +204,11 @@ _argc_parse() {
             _argc_action=_argc_parse_prod_build
             break
             ;;
+        reload)
+            _argc_index=$((_argc_index + 1))
+            _argc_action=_argc_parse_reload
+            break
+            ;;
         prod_deploy | prod-deploy)
             _argc_index=$((_argc_index + 1))
             _argc_action=_argc_parse_prod_deploy
@@ -203,6 +228,9 @@ _argc_parse() {
                 ;;
             prod_build | prod-build)
                 _argc_usage_prod_build
+                ;;
+            reload)
+                _argc_usage_reload
                 ;;
             prod_deploy | prod-deploy)
                 _argc_usage_prod_deploy
@@ -281,7 +309,7 @@ _argc_parse_backup() {
 
 _argc_usage_dev_reload() {
     cat <<-'EOF'
-Reload a dev environment
+Build the current source and reload the running container
 
 USAGE: Argcfile dev_reload [OPTIONS]
 
@@ -457,13 +485,74 @@ _argc_parse_prod_build() {
     fi
 }
 
+_argc_usage_reload() {
+    cat <<-'EOF'
+Stop the running container and start a new one
+
+USAGE: Argcfile reload <IMAGE> <TAG>
+
+ARGS:
+  <IMAGE>
+  <TAG>
+EOF
+    exit
+}
+
+_argc_parse_reload() {
+    local _argc_key _argc_action
+    local _argc_subcmds=""
+    while [[ $_argc_index -lt $_argc_len ]]; do
+        _argc_item="${argc__args[_argc_index]}"
+        _argc_key="${_argc_item%%=*}"
+        case "$_argc_key" in
+        --help | -help | -h)
+            _argc_usage_reload
+            ;;
+        --)
+            _argc_dash="${#argc__positionals[@]}"
+            argc__positionals+=("${argc__args[@]:$((_argc_index + 1))}")
+            _argc_index=$_argc_len
+            break
+            ;;
+        *)
+            argc__positionals+=("$_argc_item")
+            _argc_index=$((_argc_index + 1))
+            ;;
+        esac
+    done
+    if [[ -n "${_argc_action:-}" ]]; then
+        $_argc_action
+    else
+        argc__fn=reload
+        if [[ "${argc__positionals[0]:-}" == "help" ]] && [[ "${#argc__positionals[@]}" -eq 1 ]]; then
+            _argc_usage_reload
+        fi
+        _argc_match_positionals 0 0
+        local values_index values_size
+        IFS=: read -r values_index values_size <<<"${_argc_match_positionals_values[0]:-}"
+        if [[ -n "$values_index" ]]; then
+            argc_image="${argc__positionals[values_index]}"
+        else
+            _argc_die "error: the required environments \`<IMAGE>\` were not provided"
+        fi
+        IFS=: read -r values_index values_size <<<"${_argc_match_positionals_values[1]:-}"
+        if [[ -n "$values_index" ]]; then
+            argc_tag="${argc__positionals[values_index]}"
+        else
+            _argc_die "error: the required environments \`<TAG>\` were not provided"
+        fi
+    fi
+}
+
 _argc_usage_prod_deploy() {
     cat <<-'EOF'
 Deploy a production image
 
-USAGE: Argcfile prod_deploy [OPTIONS] <IMAGE> <TAG>
+USAGE: Argcfile prod_deploy [OPTIONS] <SSH-DESTINATION> <SSH-PORT> <IMAGE> <TAG>
 
 ARGS:
+  <SSH-DESTINATION>
+  <SSH-PORT>
   <IMAGE>
   <TAG>
 
@@ -517,15 +606,27 @@ _argc_parse_prod_deploy() {
         if [[ "${argc__positionals[0]:-}" == "help" ]] && [[ "${#argc__positionals[@]}" -eq 1 ]]; then
             _argc_usage_prod_deploy
         fi
-        _argc_match_positionals 0 0
+        _argc_match_positionals 0 0 0 0
         local values_index values_size
         IFS=: read -r values_index values_size <<<"${_argc_match_positionals_values[0]:-}"
+        if [[ -n "$values_index" ]]; then
+            argc_ssh_destination="${argc__positionals[values_index]}"
+        else
+            _argc_die "error: the required environments \`<SSH-DESTINATION>\` were not provided"
+        fi
+        IFS=: read -r values_index values_size <<<"${_argc_match_positionals_values[1]:-}"
+        if [[ -n "$values_index" ]]; then
+            argc_ssh_port="${argc__positionals[values_index]}"
+        else
+            _argc_die "error: the required environments \`<SSH-PORT>\` were not provided"
+        fi
+        IFS=: read -r values_index values_size <<<"${_argc_match_positionals_values[2]:-}"
         if [[ -n "$values_index" ]]; then
             argc_image="${argc__positionals[values_index]}"
         else
             _argc_die "error: the required environments \`<IMAGE>\` were not provided"
         fi
-        IFS=: read -r values_index values_size <<<"${_argc_match_positionals_values[1]:-}"
+        IFS=: read -r values_index values_size <<<"${_argc_match_positionals_values[3]:-}"
         if [[ -n "$values_index" ]]; then
             argc_tag="${argc__positionals[values_index]}"
         else

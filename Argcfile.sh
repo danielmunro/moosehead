@@ -27,7 +27,7 @@ backup() {
              offen/docker-volume-backup:v2
 }
 
-# @cmd Reload a dev environment
+# @cmd Build the current source and reload the running container
 # @flag -t --tail Tail the container log
 # @flag -o --olc  Run as OLC
 dev_reload() {
@@ -76,17 +76,10 @@ prod_build() {
   docker push $argc_image
 }
 
-# @cmd Deploy a production image
+# @cmd Stop the running container and start a new one
 # @arg image!
 # @arg tag!
-# @flag -rv --run-version The version to run, either GAME_VERSION or OLC_VERSION
-prod_deploy() {
-  RUN_VERSION=${argc_run_version:-"GAME_VERSION"}
-
-  echo "pulling the container"
-
-  docker pull $argc_image:$argc_tag
-
+reload() {
   CONTAINER=$(docker ps --quiet --filter label=mhs)
 
   if [ ! -z "$CONTAINER" ]; then
@@ -95,11 +88,37 @@ prod_deploy() {
     docker rm $CONTAINER
   fi
 
-  echo "running the new container"
-
   run $argc_image $argc_tag
+}
 
-  echo "done"
+# @cmd Deploy a production image
+# @arg ssh_destination!
+# @arg ssh_port!
+# @arg image!
+# @arg tag!
+# @flag -rv --run-version The version to run, either GAME_VERSION or OLC_VERSION
+prod_deploy() {
+  RUN_VERSION=${argc_run_version:-"GAME_VERSION"}
+
+  echo "ssh to prod machine"
+
+  ssh $argc_ssh_destination -p $argc_ssh_port << EOF
+
+cd github/moosehead
+
+git pull
+
+echo "pulling the container"
+
+docker pull $argc_image:$argc_tag
+
+echo "running the new container"
+
+./bin/mhs reload $argc_image $argc_tag
+
+echo "done"
+
+EOF
 }
 
 eval "$(argc --argc-eval "$0" "$@")"
