@@ -11,6 +11,7 @@ jobs:
   deploy-production:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Add SSH key
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
