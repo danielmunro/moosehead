@@ -10,11 +10,10 @@ telnet ruinsofmidgaard.com 4000
 
 # Development
 
-Requires docker to run locally. Use the helper `run.sh`:
+Requires docker to run locally. Use the `mhs` CLI:
 
 ```
-$ docker build . -t mhs:latest
-$ ./bin/run.sh mhs:latest
+$ ./bin/mhs dev-reload
 ```
 
 ## Unordered Todos
