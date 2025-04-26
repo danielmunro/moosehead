@@ -46,6 +46,16 @@ telnet ruinsofmidgaard.com 4000
 
 A CLI is provided for doing common development and operations tasks.
 
+```
+COMMANDS:
+backup       Create a backup of MHS data
+dev_reload   Build the current source and reload the running container [aliases: dev-reload]
+test         Run the tests
+prod_build   Build a production image [aliases: prod-build]
+reload       Stop the running container and start a new one
+prod_deploy  Deploy a production image [aliases: prod-deploy]
+```
+
 ## Local Development
 
 Docker is only supported way to build and run locally. Use the `mhs` CLI to build and run a container:
