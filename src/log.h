@@ -1,5 +1,4 @@
-#ifndef MOOSEHEAD_LOG_H
-#define MOOSEHEAD_LOG_H
+#pragma once
 
 void log_debug(const char *str);
 void log_info(const char *str);
@@ -14,5 +13,3 @@ enum LogLevel {
 #ifndef LOG_LEVEL
 #define LOG_LEVEL LOG_INFO
 #endif
-
-#endif //MOOSEHEAD_LOG_H

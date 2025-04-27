@@ -1,5 +1,4 @@
-#ifndef MOOSEHEAD_FIGHT_H
-#define MOOSEHEAD_FIGHT_H
+#pragma once
 
 void set_fighting (CHAR_DATA *ch, CHAR_DATA *victim);
 void one_hit (CHAR_DATA *ch, CHAR_DATA *victim, int dt);
@@ -22,5 +21,3 @@ void check_killer (CHAR_DATA *ch, CHAR_DATA *victim);
 void raw_kill (CHAR_DATA *victim, CHAR_DATA *ch);
 bool is_clan_guard (CHAR_DATA *victim);
 void make_corpse (CHAR_DATA *ch, CHAR_DATA *killer);
-
-#endif //MOOSEHEAD_FIGHT_H

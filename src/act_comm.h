@@ -1,5 +1,4 @@
-#ifndef MOOSEHEAD_ACT_COMM_H
-#define MOOSEHEAD_ACT_COMM_H
+#pragma once
 
 void do_immtalk (CHAR_DATA *ch, char *argument);
 void send_timestamp (CHAR_DATA *ch, bool send_now, bool global);
@@ -34,5 +33,3 @@ bool group_has_cavalier (CHAR_DATA *ch);
 void add_to_group (CHAR_DATA *victim, CHAR_DATA *leader);
 void remove_from_group (CHAR_DATA *ch);
 void channel_vis_status (CHAR_DATA *ch, CHAR_DATA *victim);
-
-#endif //MOOSEHEAD_ACT_COMM_H

@@ -1,5 +1,4 @@
-#ifndef MOOSEHEAD_ACT_WIZ_H
-#define MOOSEHEAD_ACT_WIZ_H
+#pragma once
 
 void remove_highlander (CHAR_DATA *ch, CHAR_DATA *victim);
 void do_outfit (CHAR_DATA *ch, char *argument);
@@ -9,5 +8,3 @@ void wiznet (char *string, CHAR_DATA *ch, OBJ_DATA *obj, long flag,
              long flag_skip, int min_level);
 void pnet (char *string, CHAR_DATA *ch, OBJ_DATA *obj, long flag,
            long flag_skip, int min_level);
-
-#endif //MOOSEHEAD_ACT_WIZ_H

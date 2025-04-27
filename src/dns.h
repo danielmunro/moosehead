@@ -1,6 +1,4 @@
-#ifndef MOOSEHEAD_DNS_H
-#define MOOSEHEAD_DNS_H
+#pragma once
 
 void dns_site (CHAR_DATA *ch, char *argument);
 
-#endif //MOOSEHEAD_DNS_H

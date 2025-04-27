@@ -1,5 +1,4 @@
-#ifndef MOOSEHEAD_COMM_H
-#define MOOSEHEAD_COMM_H
+#pragma once
 
 extern const char *build_version;
 
@@ -17,5 +16,3 @@ void act (const char *format, CHAR_DATA *ch, const void *arg1,
           const void *arg2, int type, bool ooc);
 void act_new (const char *format, CHAR_DATA *ch, const void *arg1,
               const void *arg2, int type, int min_pos, bool ooc);
-
-#endif //MOOSEHEAD_COMM_H

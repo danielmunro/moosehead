@@ -1,4 +1,6 @@
 
+#pragma once
+
 /* $Id: gladiator.h,v 1.4 2000/07/24 15:50:09 mud Exp $"; */
 
 /*

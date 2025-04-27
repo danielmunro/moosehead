@@ -1,5 +1,4 @@
-#ifndef MOOSEHEAD_HANDLER_H
-#define MOOSEHEAD_HANDLER_H
+#pragma once
 
 void affect_modify(CHAR_DATA *ch, AFFECT_DATA *paf, bool fAdd, int AppType);
 long wiznet_lookup (const char *name);
@@ -134,5 +133,3 @@ char *comm_bit_name (int comm_flags);
 char *cont_bit_name (int cont_flags);
 char *clan_bit_name (int clan_flags);
 char *exit_bit_name (int exit_flags);
-
-#endif //MOOSEHEAD_HANDLER_H

@@ -1,6 +1,3 @@
-#ifndef MOOSEHEAD_ALIAS_H
-#define MOOSEHEAD_ALIAS_H
+#pragma once
 
 void substitute_alias (DESCRIPTOR_DATA *d, char *argument);
-
-#endif //MOOSEHEAD_ALIAS_H

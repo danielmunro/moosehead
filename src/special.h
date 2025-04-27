@@ -1,5 +1,4 @@
-#ifndef MOOSEHEAD_SPECIAL_H
-#define MOOSEHEAD_SPECIAL_H
+#pragma once
 
 void bounty_admin_claim (CHAR_DATA *ch, CHAR_DATA *shade, OBJ_DATA *obj);
 bool spec_rainbow (CHAR_DATA *creature);
@@ -17,4 +16,3 @@ char *spec_name (SPEC_FUN *function);
 void quest_handler (CHAR_DATA *quest_npc, CHAR_DATA *ch, OBJ_DATA *obj, int quest, int update);
 void log_quest_detail (char *buf, int quest);
 
-#endif //MOOSEHEAD_SPECIAL_H

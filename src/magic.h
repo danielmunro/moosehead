@@ -1,5 +1,4 @@
-#ifndef MOOSEHEAD_MAGIC_H
-#define MOOSEHEAD_MAGIC_H
+#pragma once
 
 bool check_annointment (CHAR_DATA *victim, CHAR_DATA *ch);
 void apply_mala_damage (CHAR_DATA *ch, CHAR_DATA *victim, int amount);
@@ -273,5 +272,3 @@ DECLARE_SPELL_FUN(	spell_immolate		);
 DECLARE_SPELL_FUN(	spell_lacerate		);
 DECLARE_SPELL_FUN(	spell_clarity		);
 DECLARE_SPELL_FUN(      spell_stalk             );
-
-#endif //MOOSEHEAD_MAGIC_H

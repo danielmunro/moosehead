@@ -1,3 +1,5 @@
+#pragma once
+
 /* this is a listing of all the commands and command related data */
 
 /* for command types */
@@ -425,4 +427,3 @@ DECLARE_DO_FUN( action_ambush );
 DECLARE_DO_FUN( do_shieldbash );
 DECLARE_DO_FUN( do_bounty );
 DECLARE_DO_FUN( do_ftick);
-/* */

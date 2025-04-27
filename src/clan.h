@@ -1,5 +1,4 @@
-#ifndef MOOSEHEAD_CLAN_H
-#define MOOSEHEAD_CLAN_H
+#pragma once
 
 void calculate_award_tribute(CLAN_DATA *clan);
 void notify_clan(char *string, CLAN_DATA *clan);
@@ -13,5 +12,3 @@ bool clan_kill_type (CHAR_DATA *killer, CHAR_DATA *victim);
 void remove_clan_member (CLAN_CHAR *cchar);
 void add_clan_member (CLAN_DATA *clan, CHAR_DATA *ch, int rank);
 CLAN_CHAR *find_char_clan (char *name);
-
-#endif //MOOSEHEAD_CLAN_H

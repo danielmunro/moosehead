@@ -1,5 +1,4 @@
-#ifndef MOOSEHEAD_TABLES_H
-#define MOOSEHEAD_TABLES_H
+#pragma once
 
 struct flag_type
 {
@@ -78,5 +77,3 @@ extern	const	struct	flag_type	portal_flags[];
 extern	const	struct	flag_type	room_flags[];
 extern	const	struct	flag_type	exit_flags[];
 extern  const   struct  flag_type       clan_flags[];
-
-#endif //MOOSEHEAD_TABLES_H

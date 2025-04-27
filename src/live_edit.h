@@ -1,5 +1,4 @@
-#ifndef MOOSEHEAD_LIVE_EDIT_H
-#define MOOSEHEAD_LIVE_EDIT_H
+#pragma once
 
 void verify_price_table (void);
 bool check_legal_hall (ROOM_INDEX_DATA *room);
@@ -18,5 +17,3 @@ void respawn_plan_obj (PLAN_DATA *obj, PLAN_DATA *start, bool show_creation);
 void clear_string (char **str, char *new_str);
 void do_hedit (CHAR_DATA *ch, char *argument);
 void do_pedit (CHAR_DATA *ch, char *argument);
-
-#endif //MOOSEHEAD_LIVE_EDIT_H

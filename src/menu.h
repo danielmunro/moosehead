@@ -1,5 +1,4 @@
-#ifndef MOOSEHEAD_MENU_H
-#define MOOSEHEAD_MENU_H
+#pragma once
 
 #define MAX_MENU_ITEMS 64
 
@@ -29,4 +28,3 @@ void set_from_previous_menu(CHAR_DATA *ch);
 
 void set_previous_menu(CHAR_DATA *ch);
 
-#endif //MOOSEHEAD_MENU_H

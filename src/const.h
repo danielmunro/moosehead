@@ -1,5 +1,4 @@
-#ifndef MOOSEHEAD_CONST_H
-#define MOOSEHEAD_CONST_H
+#pragma once
 
 extern const struct	improve_type  improve_table[];
 extern const struct kit_type      kit_table[];
@@ -16,5 +15,3 @@ extern const struct material_type material_table[];
 extern const struct liq_type      liq_table[];
 extern const struct skill_type    skill_table[MAX_SKILL];
 extern const struct group_type    group_table[MAX_GROUP];
-
-#endif //MOOSEHEAD_CONST_H

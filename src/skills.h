@@ -1,5 +1,4 @@
-#ifndef MOOSEHEAD_SKILLS_H
-#define MOOSEHEAD_SKILLS_H
+#pragma once
 
 void do_skills (CHAR_DATA *ch, char *argument);
 void do_groups (CHAR_DATA *ch, char *argument);
@@ -14,5 +13,3 @@ void gn_add (CHAR_DATA *ch, int gn);
 void gn_remove (CHAR_DATA *ch, int gn);
 void group_add (CHAR_DATA *ch, const char *name, bool deduct);
 void group_remove (CHAR_DATA *ch, const char *name);
-
-#endif //MOOSEHEAD_SKILLS_H

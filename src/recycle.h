@@ -1,3 +1,5 @@
+#pragma once
+
 /* externs */
 extern char str_empty[1];
 extern int mobile_count;

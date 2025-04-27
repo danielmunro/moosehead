@@ -1,7 +1,4 @@
-#ifndef MOOSEHEAD_WEB_H
-#define MOOSEHEAD_WEB_H
+#pragma once
 
 void start_http_thread(int port);
 void close_http_socket();
-
-#endif //MOOSEHEAD_WEB_H

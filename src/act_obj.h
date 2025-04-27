@@ -1,5 +1,4 @@
-#ifndef MOOSEHEAD_ACT_OBJ_H
-#define MOOSEHEAD_ACT_OBJ_H
+#pragma once
 
 int set_rarity (OBJ_DATA *obj);
 void return_clan_gear (CHAR_DATA *ch, OBJ_DATA *corpse);
@@ -18,5 +17,3 @@ void do_linksafe (CHAR_DATA *ch, char *argument);
 void steal (CHAR_DATA *ch, char *arg1, CHAR_DATA *victim);
 bool can_loot (CHAR_DATA *ch, OBJ_DATA *obj, bool loot_check);
 void remove_bonuses (CHAR_DATA *ch, OBJ_DATA *obj);
-
-#endif //MOOSEHEAD_ACT_OBJ_H

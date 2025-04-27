@@ -1,5 +1,4 @@
-#ifndef MOOSEHEAD_DB_H
-#define MOOSEHEAD_DB_H
+#pragma once
 
 /* files used in db.c */
 typedef struct area_name_data AREA_NAME_DATA;
@@ -109,4 +108,3 @@ void update_area_list ( CHAR_DATA *ch, char *strArea );
 #define HELP_FILE_OLC   DATA_DIR "/olc/olcarea/new_helps.are"
 #endif
 
-#endif //MOOSEHEAD_DB_H

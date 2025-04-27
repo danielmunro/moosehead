@@ -1,3 +1,5 @@
+#pragma once
+
 #define MAX_IMM_COMM 27
 
 #include "tables.h"
