@@ -55,15 +55,12 @@ int override = 0;
 
 /* local functions */
 void do_tail_slap (CHAR_DATA *ch, char *argument);
-void do_backstab (CHAR_DATA *ch, char *argument);
 void do_berserk (CHAR_DATA *ch, char *argument);
-void do_bash (CHAR_DATA *ch, char *argument);
 void do_bite (CHAR_DATA *ch, char *argument);
 void do_breathe (CHAR_DATA *ch, char *argument);
 void do_trip (CHAR_DATA *ch, char *argument);
 void do_dirt (CHAR_DATA *ch, char *argument);
 void do_fear (CHAR_DATA *ch, char *argument);
-void do_flee (CHAR_DATA *ch, char *argument);
 void do_hex (CHAR_DATA *ch, char *argument);
 void do_kick (CHAR_DATA *ch, char *argument);
 void do_disarm (CHAR_DATA *ch, char *argument);

@@ -1,7 +1,4 @@
-
 #pragma once
-
-/* $Id: gladiator.h,v 1.4 2000/07/24 15:50:09 mud Exp $"; */
 
 /*
  * Structure types.
@@ -35,13 +32,12 @@ struct  gladiator_info_data
  */
 extern          GLADIATOR_INFO_DATA     gladiator_info;
 
-
-void set_glad_name args((CHAR_DATA *ch));
-void gladiator_rename_all args((void));
-void  gladiator_update args( ( void ) );
-void  remove_gladiator args ((CHAR_DATA *ch));   
-void  gladiator_left_arena args ((CHAR_DATA *ch, bool DidQuit));   
-void  gladiator_talk	args( ( char *txt) );
-void  gladiator_talk_ooc  args( ( char *txt) );
-void  gladiator_winner  args( (CHAR_DATA *ch) );
-void  gladiator_kill args( ( CHAR_DATA *victim, CHAR_DATA *ch ) );
+void set_glad_name (CHAR_DATA *ch);
+void gladiator_rename_all (void);
+void  gladiator_update (void);
+void  remove_gladiator (CHAR_DATA *ch);
+void  gladiator_left_arena (CHAR_DATA *ch, bool DidQuit);
+void  gladiator_talk (char *txt);
+void  gladiator_talk_ooc (char *txt);
+void  gladiator_winner (CHAR_DATA *ch);
+void  gladiator_kill (CHAR_DATA *victim, CHAR_DATA *ch);

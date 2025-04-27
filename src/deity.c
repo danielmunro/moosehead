@@ -31,6 +31,7 @@
 #include "comm.h"
 #include "const.h"
 #include "db.h"
+#include "deity.h"
 #include "fight.h"
 #include "handler.h"
 #include "input.h"
@@ -49,10 +50,8 @@ int deity_msg_override = 0;
 #endif
 
 /* local functions */
-void do_deity_msg (char *msg, CHAR_DATA *ch);
 void give_gift (CHAR_DATA *ch,int gift);
 void reanimation (CHAR_DATA *ch);
-void log_deity_favor (CHAR_DATA *ch, CHAR_DATA *alt, int type);
 
 void do_pledg( CHAR_DATA *ch, char *argument )
 {

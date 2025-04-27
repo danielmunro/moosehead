@@ -24,6 +24,7 @@
 #include <unistd.h>
 
 #include "merc.h"
+#include "act_comm.h"
 #include "act_info.h"
 #include "act_wiz.h"
 #include "clan.h"
@@ -56,11 +57,6 @@
 
 /* Locals */
 void reclass (CHAR_DATA *ch, int class, bool fPenalty);
-void do_quit (CHAR_DATA *ch, char *argument);
-void add_follower (CHAR_DATA *ch, CHAR_DATA *master);
-void stop_follower (CHAR_DATA *ch);
-bool is_same_group (CHAR_DATA *ach, CHAR_DATA *bch);
-void remove_from_group (CHAR_DATA *ch);
 
 // New code to transfer (Also anywhere with timestamp)
 void send_timestamp(CHAR_DATA *ch, bool send_now, bool global)
@@ -234,16 +230,16 @@ void channel_vis_status( CHAR_DATA *ch, CHAR_DATA *victim )
 { 
     char buf[MAX_STRING_LENGTH];    
     if ( !IS_IMMORTAL(ch) || 
-       ( !ch->invis_level && !ch->incog_level ) ||	
-         !can_see(victim,ch,true) ||	
+       ( !ch->invis_level && !ch->incog_level ) ||      
+         !can_see(victim,ch,true) ||    
          victim == ch )
-    		return;    
+                return;    
 
     sprintf(buf,"({W%s{x@{W%d{x) ",
-	ch->invis_level ? 
-	  (IS_SET(victim->display,DISP_BRIEF_WHOLIST)?"W":"Wizi") : 
-	  (IS_SET(victim->display,DISP_BRIEF_WHOLIST)?"I":"Incog"),
-	ch->invis_level ? ch->invis_level : ch->incog_level);    
+        ch->invis_level ? 
+          (IS_SET(victim->display,DISP_BRIEF_WHOLIST)?"W":"Wizi") : 
+          (IS_SET(victim->display,DISP_BRIEF_WHOLIST)?"I":"Incog"),
+        ch->invis_level ? ch->invis_level : ch->incog_level);    
 
     send_to_char(buf,victim);    
     return;
@@ -325,85 +321,85 @@ return;
 
 
     if ( !HAS_MHS(ch,MHS_OLD_RECLASS) 
-	 && ch->level <= 50 && ch->class == class_lookup("elementalist") )
+         && ch->level <= 50 && ch->class == class_lookup("elementalist") )
     {
-	send_to_char("You must be at least level 51 to reclass.\n\r",ch);
-	return;
+        send_to_char("You must be at least level 51 to reclass.\n\r",ch);
+        return;
     }
 
     if ( !HAS_MHS(ch,MHS_OLD_RECLASS) && ch->level <= 25 )
     {
-	send_to_char("You must be at least level 26 to reclass.\n\r",ch);
-	return;
+        send_to_char("You must be at least level 26 to reclass.\n\r",ch);
+        return;
     }
 
     one_argument(argument,arg);
     if( arg[0] == '\0' )
     {
-	send_to_char("Syntax: reclass <class>\n\r",ch);
-	send_to_char("        reclass check\n\r",ch);
+        send_to_char("Syntax: reclass <class>\n\r",ch);
+        send_to_char("        reclass check\n\r",ch);
         return;
     }
 
     if ( !str_cmp(arg,"check") )
     {
     /*
-	int penalty;
-	char buf[MAX_STRING_LENGTH];
-	*/
+        int penalty;
+        char buf[MAX_STRING_LENGTH];
+        */
 
-	if ( class_table[ch->class].reclass )
-	{
-	    send_to_char("You already reclassed.\n\r",ch);
-	    return;
-	}
+        if ( class_table[ch->class].reclass )
+        {
+            send_to_char("You already reclassed.\n\r",ch);
+            return;
+        }
 
-	send_to_char("Available reclasses: ",ch);
-   	for ( i = 0 ; i< MAX_CLASS ; i++ )
-	{
-	    if ( !class_table[i].reclass )
-		continue;
+        send_to_char("Available reclasses: ",ch);
+        for ( i = 0 ; i< MAX_CLASS ; i++ )
+        {
+            if ( !class_table[i].reclass )
+                continue;
 
-	   if( class_table[i].allowed[0] == ch->class ||
-	       class_table[i].allowed[1] == ch->class )
-	       send_to_char( class_table[i].name, ch );
-	   else
-	   if ( ch->class == class_lookup("elementalist") &&
-		i != class_lookup("berzerker") )
-	       send_to_char( class_table[i].name, ch );
-	   else
-	   continue;
+           if( class_table[i].allowed[0] == ch->class ||
+               class_table[i].allowed[1] == ch->class )
+               send_to_char( class_table[i].name, ch );
+           else
+           if ( ch->class == class_lookup("elementalist") &&
+                i != class_lookup("berzerker") )
+               send_to_char( class_table[i].name, ch );
+           else
+           continue;
 
-	   send_to_char(" ", ch);
-	}
+           send_to_char(" ", ch);
+        }
 
 /*
-	sprintf(buf, "\n\rCreation Point Offset: %2d\n\r",  
+        sprintf(buf, "\n\rCreation Point Offset: %2d\n\r",  
                     UMAX(0, (int) (80-ch->pcdata->points) / 4 ) );
-	send_to_char(buf,ch);
-	penalty =  UMAX(0, (int) (51-ch->level) / 3 );
+        send_to_char(buf,ch);
+        penalty =  UMAX(0, (int) (51-ch->level) / 3 );
         penalty += UMAX(0, (int) (30-ch->level) );
-	sprintf(buf, "Level Offset:          %2d\n\r", penalty);
-	send_to_char(buf,ch);
-	send_to_char("-------------         ----\n\r",ch);
+        sprintf(buf, "Level Offset:          %2d\n\r", penalty);
+        send_to_char(buf,ch);
+        send_to_char("-------------         ----\n\r",ch);
         sprintf(buf, "Total Penalty:         %2d\n\r",
-		penalty + UMAX(0, (int) (80-ch->pcdata->points) /4) );
-	send_to_char(buf,ch);
+                penalty + UMAX(0, (int) (80-ch->pcdata->points) /4) );
+        send_to_char(buf,ch);
 
-	if ( !is_clan(ch) )
-		send_to_char("You will -NOT- be able to join a clan.\n\r",ch);
-	else
-		send_to_char("You -WILL- be able to join a clan.\n\r",ch);
-		*/
-	return;
+        if ( !is_clan(ch) )
+                send_to_char("You will -NOT- be able to join a clan.\n\r",ch);
+        else
+                send_to_char("You -WILL- be able to join a clan.\n\r",ch);
+                */
+        return;
     }
 
     class = class_lookup(arg);
     
     if( class == -1 )
     {
-	send_to_char("You want to be a WHAT?\n\r",ch);
-	return;
+        send_to_char("You want to be a WHAT?\n\r",ch);
+        return;
     }
 
     if(IS_SET(ch->mhs,MHS_SHAPESHIFTED) || IS_SET(ch->mhs,MHS_SHAPEMORPHED))
@@ -414,37 +410,37 @@ return;
 
     if ( HAS_MHS(ch,MHS_OLD_RECLASS) )
     {
-	REMOVE_BIT(ch->mhs, MHS_OLD_RECLASS);
-	reclass( ch, class, false );
+        REMOVE_BIT(ch->mhs, MHS_OLD_RECLASS);
+        reclass( ch, class, false );
         return;
     }
 
     if( class_table[ch->class].reclass
-	|| !class_table[class].reclass || IS_NPC(ch) )
+        || !class_table[class].reclass || IS_NPC(ch) )
     {
-	send_to_char("You can not reclass to that.\n\r",ch);
-	return;
+        send_to_char("You can not reclass to that.\n\r",ch);
+        return;
     }
 
     if ( class_table[class].allowed[0] != ch->class &&
-	 class_table[class].allowed[1] != ch->class &&
+         class_table[class].allowed[1] != ch->class &&
          ch->class != class_lookup("elementalist") )
     {
-	send_to_char("You don't qualify for that reclass.\n\r",ch);
-	return;
+        send_to_char("You don't qualify for that reclass.\n\r",ch);
+        return;
     }
     else
     if ( class == class_lookup("berzerker") && 
-	 ch->class == class_lookup("elementalist") )
+         ch->class == class_lookup("elementalist") )
     {
-	send_to_char("You don't qualify for that reclass.\n\r",ch);
-	return;
+        send_to_char("You don't qualify for that reclass.\n\r",ch);
+        return;
     }
 
     if( ch->level < 26 || ch->level > 51 ) 
     {
-	send_to_char("You must be between levels 26 and 51 to reclass.\n\r",ch);
-	return;
+        send_to_char("You must be between levels 26 and 51 to reclass.\n\r",ch);
+        return;
     }
 
     reclass(ch, class, true );
@@ -532,8 +528,8 @@ void reclass( CHAR_DATA *ch, int class, bool fPenalty  )
     ch->exp = 0;
  /*
     if ( is_clan(ch) ) 
-	 SET_BIT(ch->act,PLR_CANCLAN);
-	 */
+         SET_BIT(ch->act,PLR_CANCLAN);
+         */
     ch->clan = 0;
     ch->kit = 0;
     ch->pcdata->rank = 0;
@@ -546,13 +542,13 @@ void reclass( CHAR_DATA *ch, int class, bool fPenalty  )
 
     for ( gn = 0; gn < MAX_GROUP; gn++ )
     {
-	gn_remove(ch,gn);
+        gn_remove(ch,gn);
     }
     raw_kill(ch,ch);
     send_to_char("You will now be forced to quit. Upon reconnecting you "
-		 "will begin the character generation process in your new "
-		 "class.  If you loose link during this process, see an "
-		 "IMM as soon as possible.\n\r",ch);
+                 "will begin the character generation process in your new "
+                 "class.  If you loose link during this process, see an "
+                 "IMM as soon as possible.\n\r",ch);
     SET_BIT(ch->act,PLR_RECLASS);
     /*
     ch->perm_stat[class_table[ch->class].attr_prime] += 3; 
@@ -578,28 +574,28 @@ void do_color( CHAR_DATA *ch, char *argument)
     one_argument(argument,arg2);
     if( arg[0] == '\0' )
     {
-	send_to_char("You must specify ON or OFF.\n\r",ch);
-	return;
+        send_to_char("You must specify ON or OFF.\n\r",ch);
+        return;
     }
 
     if(!str_cmp(arg,"on"))
     {
-	if(!IS_SET(ch->display,DISP_COLOR))
-	    SET_BIT(ch->display,DISP_COLOR);
-	send_to_char("Color {CENABLED{x.\n\r",ch);
-	acted = true;
+        if(!IS_SET(ch->display,DISP_COLOR))
+            SET_BIT(ch->display,DISP_COLOR);
+        send_to_char("Color {CENABLED{x.\n\r",ch);
+        acted = true;
     }
 
     if(!str_cmp(arg,"off"))
     {
-	if(IS_SET(ch->display,DISP_COLOR))
-	    REMOVE_BIT(ch->display,DISP_COLOR);
-	send_to_char("Color {RDISABLED{x.\n\r",ch);
-	acted = true;
+        if(IS_SET(ch->display,DISP_COLOR))
+            REMOVE_BIT(ch->display,DISP_COLOR);
+        send_to_char("Color {RDISABLED{x.\n\r",ch);
+        acted = true;
     }
 
     if(acted == false)
-	send_to_char("That's not a valid option for color.\n\r",ch);
+        send_to_char("That's not a valid option for color.\n\r",ch);
 
     return;
 }
@@ -622,9 +618,9 @@ void do_channels( CHAR_DATA *ch, char *argument)
 
     send_to_char("OOC            ",ch);
     if (!IS_SET(ch->comm,COMM_NOOOC))
-	send_to_char("{CON{x\n\r",ch);
+        send_to_char("{CON{x\n\r",ch);
     else
-	send_to_char("{ROFF{x\n\r",ch);
+        send_to_char("{ROFF{x\n\r",ch);
 
     send_to_char("clan gossip    ",ch);
     if (!IS_SET(ch->comm,COMM_NOAUCTION))
@@ -699,12 +695,12 @@ void do_channels( CHAR_DATA *ch, char *argument)
    
     if (ch->ignoring != NULL)
     {
-	sprintf(buf,"You are ignoring {W%s{x.\n\r",ch->ignoring->name);
-	send_to_char(buf,ch);
+        sprintf(buf,"You are ignoring {W%s{x.\n\r",ch->ignoring->name);
+        send_to_char(buf,ch);
     }
     else
     {
-	send_to_char("You are not ignoring anyone.\n\r",ch);
+        send_to_char("You are not ignoring anyone.\n\r",ch);
     }
 
     if (ch->lines != PAGELEN)
@@ -795,16 +791,16 @@ void do_afk ( CHAR_DATA *ch, char * argument)
     if (IS_SET(ch->comm,COMM_AFK))
     {
       send_to_char("AFK mode removed. Type 'replay' to see tells.\n\r",ch);
-	if(!IS_NPC(ch))
-	{
-	  if(ch->pcdata->afk_counter == 1)
-	  {
+        if(!IS_NPC(ch))
+        {
+          if(ch->pcdata->afk_counter == 1)
+          {
       sprintf(buf,"You have %d message waiting.\n\r",ch->pcdata->afk_counter);
-	  }else{
+          }else{
       sprintf(buf,"You have %d messages waiting.\n\r",ch->pcdata->afk_counter);
-	  }
+          }
       send_to_char(buf,ch);
-	}
+        }
       act("$n returns from {CAFK{x.",ch,NULL,NULL,TO_ROOM,true);
       REMOVE_BIT(ch->comm,COMM_AFK);
     }
@@ -826,8 +822,8 @@ void do_replay (CHAR_DATA *ch, char *argument)
 
     if ( ch->pcdata->buffer == NULL )
     {
-	send_to_char("You have no tells buffered.\n\r",ch);
-	return;
+        send_to_char("You have no tells buffered.\n\r",ch);
+        return;
     }
 
 
@@ -891,7 +887,7 @@ void do_auction( CHAR_DATA *ch, char *argument )
        d->character != ch &&
        !IS_SET(victim->comm,COMM_NOAUCTION) &&
        !IS_SET(victim->comm,COMM_QUIET) 
-	&& (victim->ignoring != ch) )
+        && (victim->ignoring != ch) )
 
   {
       send_timestamp(victim, true, true);
@@ -1017,7 +1013,7 @@ void do_gossip( CHAR_DATA *ch, char *argument )
        (d->character != ch) &&
        (!IS_SET(victim->comm,COMM_NOGOSSIP)) &&
        (!IS_SET(victim->comm,COMM_QUIET))  &&
-	(victim->ignoring != ch) )
+        (victim->ignoring != ch) )
   {
     send_timestamp(victim, true, true);
     channel_vis_status(ch,victim);
@@ -1402,7 +1398,7 @@ void do_music( CHAR_DATA *ch, char *argument )
         (victim->ignoring != ch) )
   {
       send_timestamp(victim, true, true);
-	channel_vis_status(ch,victim);
+        channel_vis_status(ch,victim);
       act_new("$n MUSIC: '$t'",
         ch,argument,d->character,TO_VICT,POS_SLEEPING,true);
   }
@@ -1480,9 +1476,9 @@ void do_clantalk( CHAR_DATA *ch, char *argument )
       sprintf( buf, "$n {Gclans{x '%s'", argument );
     for ( d = descriptor_list; d != NULL; d = d->next )
     { 
-	CHAR_DATA *victim;
+        CHAR_DATA *victim;
 
-	victim = d->original ? d->original : d->character;
+        victim = d->original ? d->original : d->character;
 
      if( d->connected != CON_PLAYING ) continue;
 
@@ -1501,7 +1497,7 @@ void do_clantalk( CHAR_DATA *ch, char *argument )
         } else {
             sprintf(buf, "[%s] ", clan_table[ch->clan].who_name);
         }
-	    send_to_char(buf,victim);
+            send_to_char(buf,victim);
       } 
 
     channel_vis_status(ch,d->character);
@@ -1546,7 +1542,7 @@ void do_immtalk( CHAR_DATA *ch, char *argument )
       if(d->character == ch)
         continue;
       send_timestamp(d->character, true, true);
-	channel_vis_status(ch,d->character);
+        channel_vis_status(ch,d->character);
       act_new("$n: $t",ch,argument,d->character,TO_VICT,POS_DEAD,true);
   }
     }
@@ -1567,11 +1563,11 @@ void do_whisper( CHAR_DATA *ch, char *argument )
   return;
     }
 
-		if ( ( victim = get_char_room( ch, arg ) ) == NULL )
-		{
-		  send_to_char( "They aren't here.\n\r", ch );
-		  return;
-		}
+                if ( ( victim = get_char_room( ch, arg ) ) == NULL )
+                {
+                  send_to_char( "They aren't here.\n\r", ch );
+                  return;
+                }
 
     if ( is_affected(ch, gsn_cone_of_silence ) )
     return;
@@ -1593,11 +1589,11 @@ void do_sayto( CHAR_DATA *ch, char *argument )
   return;
     }
 
-		if ( ( victim = get_char_room( ch, arg ) ) == NULL )
-		{
-		  send_to_char( "They aren't here.\n\r", ch );
-		  return;
-		}
+                if ( ( victim = get_char_room( ch, arg ) ) == NULL )
+                {
+                  send_to_char( "They aren't here.\n\r", ch );
+                  return;
+                }
 
     if ( is_affected(ch, gsn_cone_of_silence ) )
     return;
@@ -1661,15 +1657,15 @@ void do_silence( CHAR_DATA *ch, char *argument )
 
     if ( IS_SET( ch->comm, COMM_SILENCE ) )
     {
-	send_to_char("Silence removed, brace for spam!\n\r",ch);
-	REMOVE_BIT(ch->comm, COMM_SILENCE);
+        send_to_char("Silence removed, brace for spam!\n\r",ch);
+        REMOVE_BIT(ch->comm, COMM_SILENCE);
         return;
     }
     else
     {
-	send_to_char("Ahhhhhhh, no more spam.\n\r",ch);
-	SET_BIT(ch->comm,COMM_SILENCE);
-	return;
+        send_to_char("Ahhhhhhh, no more spam.\n\r",ch);
+        SET_BIT(ch->comm,COMM_SILENCE);
+        return;
     }
 }
 
@@ -1835,7 +1831,7 @@ void do_tell( CHAR_DATA *ch, char *argument )
     }
  */ 
     if ((IS_SET(victim->comm,COMM_QUIET) || 
-	IS_SET(victim->comm,COMM_DEAF) || (victim->ignoring == ch) )
+        IS_SET(victim->comm,COMM_DEAF) || (victim->ignoring == ch) )
     && !IS_IMMORTAL(ch))
     {
   act( "$E is not receiving tells.", ch, 0, victim, TO_CHAR, true );
@@ -1876,7 +1872,7 @@ void do_tell( CHAR_DATA *ch, char *argument )
     {
       if(IS_SET(victim->display,DISP_COLOR))
         act_new(BOLD"\x07$n tells you"NORMAL" '$t'",
-		ch,argument,victim,TO_VICT,POS_DEAD,true);
+                ch,argument,victim,TO_VICT,POS_DEAD,true);
       else
       act_new("\x07$n tells you '$t'",ch,argument,victim,TO_VICT,POS_DEAD,true);
     }
@@ -1884,7 +1880,7 @@ void do_tell( CHAR_DATA *ch, char *argument )
     {
       if(IS_SET(victim->display,DISP_COLOR))
         act_new(BOLD"$n tells you"NORMAL" '$t'",
-		ch,argument,victim,TO_VICT,POS_DEAD,true);
+                ch,argument,victim,TO_VICT,POS_DEAD,true);
       else
       act_new("$n tells you '$t'",ch,argument,victim,TO_VICT,POS_DEAD,true);
     }
@@ -1910,10 +1906,10 @@ void do_noreply( CHAR_DATA *ch, char *argument )
 
   for ( d = descriptor_list; d != NULL; d = d->next )
       {
-	if ( d->connected == CON_PLAYING
-	   &&  (d->character->reply == ch)
-	   &&  (d->character->level <= ch->level) )
-	d->character->reply = NULL;
+        if ( d->connected == CON_PLAYING
+           &&  (d->character->reply == ch)
+           &&  (d->character->level <= ch->level) )
+        d->character->reply = NULL;
        }
    return;
 }
@@ -2026,7 +2022,7 @@ void do_reply( CHAR_DATA *ch, char *argument )
     }
  **/
     if ((IS_SET(victim->comm,COMM_QUIET) || 
-	IS_SET(victim->comm,COMM_DEAF) || (victim->ignoring == ch))
+        IS_SET(victim->comm,COMM_DEAF) || (victim->ignoring == ch))
     &&  !IS_IMMORTAL(ch) && !IS_IMMORTAL(victim))
     {
   act_new( "$E is not receiving tells.", ch, 0, victim, TO_CHAR,POS_DEAD,true);
@@ -2076,7 +2072,7 @@ void do_reply( CHAR_DATA *ch, char *argument )
       {
       if(IS_SET(victim->display,DISP_COLOR))
         act_new(BOLD"\x07$n tells you"NORMAL" '$t'",
-		ch,argument,victim,TO_VICT,POS_DEAD,true);
+                ch,argument,victim,TO_VICT,POS_DEAD,true);
       else
       act_new("\x07$n tells you '$t'",ch,argument,victim,TO_VICT,POS_DEAD,true);
       }
@@ -2084,7 +2080,7 @@ void do_reply( CHAR_DATA *ch, char *argument )
       {
       if(IS_SET(victim->display,DISP_COLOR))
         act_new(BOLD"$n tells you"NORMAL" '$t'",
-		ch,argument,victim,TO_VICT,POS_DEAD,true);
+                ch,argument,victim,TO_VICT,POS_DEAD,true);
       else
         act_new("$n tells you '$t'",ch,argument,victim,TO_VICT,POS_DEAD,true);
       }
@@ -2519,32 +2515,32 @@ void do_pose( CHAR_DATA *ch, char *argument )
       class = ch->class;
     else
       {
-	switch(ch->class)
-	{
-	case 4: class = number_range(1,2);
-		break;
-	case 5: class = number_range(2,3);
-		if( class == 2) class--;
-		break;
-	case 6: class = number_range(2,3);
-		break;
-	case 7: class = number_range(0,1);
-		break;
-	case 8: class = number_range(1,2);
-		if(class == 1) class--;
-		break;
-	case 9: class = number_range(0,1);
-		if(class == 1) class += 2;
-		break;
-	case 10: class = number_range(0,1);
-		break;
-	case 11:
-	case 12:
-	case 13:
-	case 14: class = ch->class - 11;
-		break;
-	default: class = 0;
-	}
+        switch(ch->class)
+        {
+        case 4: class = number_range(1,2);
+                break;
+        case 5: class = number_range(2,3);
+                if( class == 2) class--;
+                break;
+        case 6: class = number_range(2,3);
+                break;
+        case 7: class = number_range(0,1);
+                break;
+        case 8: class = number_range(1,2);
+                if(class == 1) class--;
+                break;
+        case 9: class = number_range(0,1);
+                if(class == 1) class += 2;
+                break;
+        case 10: class = number_range(0,1);
+                break;
+        case 11:
+        case 12:
+        case 13:
+        case 14: class = ch->class - 11;
+                break;
+        default: class = 0;
+        }
       }
 
     act( pose_table[pose].message[2*class+0], ch, NULL, NULL, TO_CHAR, false );
@@ -2629,16 +2625,16 @@ void do_quit_command ( CHAR_DATA *ch, char *argument )
   return;
     }
     
-	for ( paf = ch->affected ; paf != NULL ; paf = paf_next )
+        for ( paf = ch->affected ; paf != NULL ; paf = paf_next )
         {
             paf_next = paf->next;
 
             if ( paf->where == DAMAGE_OVER_TIME )
-		can_quit=false;
-	}
+                can_quit=false;
+        }
 
     if (ch->pcdata && ch->pcdata->quit_time > 0 && !IS_IMMORTAL (ch) 
-	&& ((!ch->pcdata->clan_info && ch->in_room->clan != ch->clan) || ch->in_room->vnum >= 0 || !can_quit ) ) {
+        && ((!ch->pcdata->clan_info && ch->in_room->clan != ch->clan) || ch->in_room->vnum >= 0 || !can_quit ) ) {
       send_to_char ("Things are getting interesting.. wait a few ticks.\n\r",ch);
       return;
     }
@@ -2667,15 +2663,15 @@ void do_quit( CHAR_DATA *ch, char *argument )
 
   if(ch->pcdata->deity_trial_timer > 0)
   {
-	sprintf(buf, "You abandon the trial given to you by %s\n\r", deity_table[ch->pcdata->deity].pname);
-	send_to_char(buf,ch);
-	ch->pcdata->deity_trial_timer = 0;
-	log_deity_favor(ch, NULL, DEITY_TRIAL_FAIL_QUIT);
+        sprintf(buf, "You abandon the trial given to you by %s\n\r", deity_table[ch->pcdata->deity].pname);
+        send_to_char(buf,ch);
+        ch->pcdata->deity_trial_timer = 0;
+        log_deity_favor(ch, NULL, DEITY_TRIAL_FAIL_QUIT);
   }
   edit_stop(ch);
   end_long_edit(ch, NULL);/* Handles its own safety checks */
   send_to_char(
-	"Alas, all good things must come to an end.\n\r",ch);
+        "Alas, all good things must come to an end.\n\r",ch);
     act( "$n has left the game.", ch, NULL, NULL, TO_ROOM, false );
     sprintf( log_buf, "%s has quit.", ch->name );
   log_info( log_buf );
@@ -2686,7 +2682,7 @@ void do_quit( CHAR_DATA *ch, char *argument )
   }
   wiznet("$N rejoins the real world.",ch,NULL,WIZ_LOGINS,WIZ_SITES,get_trust(ch));
   if( (!IS_IMMORTAL(ch) || (ch->incog_level == 0 && ch->invis_level == 0))
-	&& !str_cmp(arg, "") )
+        && !str_cmp(arg, "") )
   {
     pnet("$N leaves Boinga.",ch,NULL,PNET_LOGINS,0,IS_IMMORTAL(ch) ? get_trust(ch) : 1);
   }
@@ -2707,33 +2703,33 @@ if (IS_SET(ch->mhs,MHS_HIGHLANDER))
       if ( d->connected == CON_PLAYING &&
            d->character != ch &&
            IS_SET(victm->mhs,MHS_HIGHLANDER) &&
-	   (victm->pcdata->highlander_data[ALL_KILLS] >= 6))
+           (victm->pcdata->highlander_data[ALL_KILLS] >= 6))
         send_to_char(buf, victm);
    }
    remove_highlander(ch,ch); 
 }
   count_clanners();
-	if (IS_SET(ch->mhs,MHS_GLADIATOR))
-	{
+        if (IS_SET(ch->mhs,MHS_GLADIATOR))
+        {
            sprintf(buf, "%s got scared and quit the arena!", ch->name);
            gladiator_talk(buf); 
-	   gladiator_left_arena(ch,true);
-	
+           gladiator_left_arena(ch,true);
+        
            
-	   for ( d_glad = descriptor_list; d_glad != NULL; d_glad = d_glad->next)
-	   {
-		if(d_glad->character != NULL && !IS_NPC(d_glad->character) &&  d_glad->character->pcdata->glad_bet_on == ch)
-		{
-	          sprintf(buf, "The bookie refunds your bet of %d on %s.", 
-			  d_glad->character->pcdata->glad_bet_amt, ch->name);
-		  send_to_char(buf, d_glad->character);
-		  d_glad->character->pcdata->glad_bet_on = d_glad->character;
-		  d_glad->character->pcdata->glad_bet_amt = 0;
-		}
+           for ( d_glad = descriptor_list; d_glad != NULL; d_glad = d_glad->next)
+           {
+                if(d_glad->character != NULL && !IS_NPC(d_glad->character) &&  d_glad->character->pcdata->glad_bet_on == ch)
+                {
+                  sprintf(buf, "The bookie refunds your bet of %d on %s.", 
+                          d_glad->character->pcdata->glad_bet_amt, ch->name);
+                  send_to_char(buf, d_glad->character);
+                  d_glad->character->pcdata->glad_bet_on = d_glad->character;
+                  d_glad->character->pcdata->glad_bet_amt = 0;
+                }
            }
-	   REMOVE_BIT(ch->mhs,MHS_GLADIATOR);
+           REMOVE_BIT(ch->mhs,MHS_GLADIATOR);
 
-	}
+        }
 
     /*
      * After extract_char the ch is no longer valid!
@@ -2863,10 +2859,10 @@ void add_follower( CHAR_DATA *ch, CHAR_DATA *master )
     {
 
     if ( ( is_clan(ch) && !is_clan(master) ) ||
-	 (!is_clan(ch) &&  is_clan(master) ) )
+         (!is_clan(ch) &&  is_clan(master) ) )
     {
-	send_to_char("The boundries of magic forbid it.\n\r",ch);
-	return;
+        send_to_char("The boundries of magic forbid it.\n\r",ch);
+        return;
     }
 
     if ( is_affected(master,gsn_wound_transfer) )
@@ -2879,7 +2875,7 @@ void add_follower( CHAR_DATA *ch, CHAR_DATA *master )
     for ( gch = char_list ; gch != NULL ; gch = gch->next )
     {
        if ( is_same_group(gch,master) &&
-	    is_affected(gch,gsn_wound_transfer) )
+            is_affected(gch,gsn_wound_transfer) )
        {
        send_to_char("The boundries of magic forbid it.\n\r",ch);
        return;
@@ -2957,7 +2953,7 @@ void die_ignore( CHAR_DATA *ch )
     for ( fch = char_list; fch != NULL; fch = fch->next )
     {
   if ( fch->ignoring == ch )
-	fch->ignoring = NULL;
+        fch->ignoring = NULL;
     }
 
     return;
@@ -3008,24 +3004,24 @@ void do_order( CHAR_DATA *ch, char *argument )
     if( is_affected(ch,skill_lookup("wraithform")) )
     {
        send_to_char("No ordering while in wraithform.\n\r",ch);
-	return;
+        return;
     }
 
    
     for ( cmd = 0; cmd_table[cmd].name[0] != '\0'; cmd++ )
     {
-	if ( arg2[0] == cmd_table[cmd].name[0]
-	    &&   !str_prefix( arg2, cmd_table[cmd].name ))
-	{
-	  if (cmd_table[cmd].order == 0 )
-	  {
-	  send_to_char("That will not be done.\n\r",ch);
-	  return;
-	  }
-	  else
-	  break;
-	}
-	
+        if ( arg2[0] == cmd_table[cmd].name[0]
+            &&   !str_prefix( arg2, cmd_table[cmd].name ))
+        {
+          if (cmd_table[cmd].order == 0 )
+          {
+          send_to_char("That will not be done.\n\r",ch);
+          return;
+          }
+          else
+          break;
+        }
+        
     }
 
     if ( arg[0] == '\0' || argument[0] == '\0' )
@@ -3106,75 +3102,75 @@ void do_order( CHAR_DATA *ch, char *argument )
 /* Does exactly what it says, can't remove a leader */
 void remove_from_group(CHAR_DATA *ch)
 {
-	if(ch->leader == NULL)
-		return; // No leader to break off of
-	if(ch->leader->follower == ch)
-		ch->leader->follower = ch->next_groupmate;
-	else
-	{
-		CHAR_DATA *prev = ch->leader->follower;
-		while(prev != NULL && prev->next_groupmate != ch)
-			prev = prev->next_groupmate;
-		if(prev != NULL)
-		{// Found the follower in this group chain
-			prev->next_groupmate = ch->next_groupmate;
-		}
-		else
-			bug("Failed to find follower in leader's group list.", 0);
-	}
-	ch->next_groupmate = NULL;
-	ch->leader = NULL;
+        if(ch->leader == NULL)
+                return; // No leader to break off of
+        if(ch->leader->follower == ch)
+                ch->leader->follower = ch->next_groupmate;
+        else
+        {
+                CHAR_DATA *prev = ch->leader->follower;
+                while(prev != NULL && prev->next_groupmate != ch)
+                        prev = prev->next_groupmate;
+                if(prev != NULL)
+                {// Found the follower in this group chain
+                        prev->next_groupmate = ch->next_groupmate;
+                }
+                else
+                        bug("Failed to find follower in leader's group list.", 0);
+        }
+        ch->next_groupmate = NULL;
+        ch->leader = NULL;
 }
 
 void add_to_group(CHAR_DATA *victim, CHAR_DATA *leader)
 {
-	CHAR_DATA *fol;
-	victim->leader = leader;
-	
-	fol = leader->follower;
+        CHAR_DATA *fol;
+        victim->leader = leader;
+        
+        fol = leader->follower;
         if(fol != NULL)
         {
-	  while(fol->next_groupmate && fol != victim)
-		fol = fol->next_groupmate;/* Leaves fol at the end of the list, useful later */
+          while(fol->next_groupmate && fol != victim)
+                fol = fol->next_groupmate;/* Leaves fol at the end of the list, useful later */
         }
-	/* DO NOT MOVE fol NOW UNLESS YOU FIX THE NPC HANDLING FURTHER IN THE FUNCTION */
-	if(fol == victim)
-	{/* Not a huge problem, but they're already in the list and shouldn't be */
-		bug("Multiple follow attempted.", 0);
-	}
-	else
-	{
-		/* Basic sorting here, let's get this readable instead of the mess it is now */
-		if(!IS_NPC(victim) && fol)
-		{/* Players go before any NPCs 
-			* Could sometimes skip looping by checking fol's NPC status but the code would get messier */
-	  	  if(IS_NPC(leader->follower))
+        /* DO NOT MOVE fol NOW UNLESS YOU FIX THE NPC HANDLING FURTHER IN THE FUNCTION */
+        if(fol == victim)
+        {/* Not a huge problem, but they're already in the list and shouldn't be */
+                bug("Multiple follow attempted.", 0);
+        }
+        else
+        {
+                /* Basic sorting here, let's get this readable instead of the mess it is now */
+                if(!IS_NPC(victim) && fol)
+                {/* Players go before any NPCs 
+                        * Could sometimes skip looping by checking fol's NPC status but the code would get messier */
+                  if(IS_NPC(leader->follower))
                     fol = NULL;// Needs to go in at the start of the list
                   else
                   {
-		    fol = leader->follower;// We know they have a follower this time
-		    while(fol->next_groupmate && !IS_NPC(fol->next_groupmate))
-		      fol = fol->next_groupmate;
+                    fol = leader->follower;// We know they have a follower this time
+                    while(fol->next_groupmate && !IS_NPC(fol->next_groupmate))
+                      fol = fol->next_groupmate;
                   }
-		}
-		/* NPC HANDLING, NPCs go at the end of the list - where fol currently is. No loop needed. */
+                }
+                /* NPC HANDLING, NPCs go at the end of the list - where fol currently is. No loop needed. */
                 if(fol == NULL)
                 {
                    victim->next_groupmate = leader->follower;
-		   leader->follower = victim;
+                   leader->follower = victim;
                 }
                 else
                 {
-		   victim->next_groupmate = fol->next_groupmate;
-		   fol->next_groupmate = victim;
+                   victim->next_groupmate = fol->next_groupmate;
+                   fol->next_groupmate = victim;
                 }
-	}
+        }
 }
 
 void do_gprompt( CHAR_DATA *ch, char *argument )
 {
-	if(IS_NPC(ch))
-		return;
+        if(IS_NPC(ch))
+                return;
   if (IS_SET(ch->pcdata->new_opt_flags,OPT_NOGPROMPT))
   {
     send_to_char("Group hp prompt will now show.\n\r",ch);
@@ -3195,54 +3191,54 @@ void display_group_member(CHAR_DATA *ch, CHAR_DATA *gch)
         gch->level,
         IS_NPC(gch) ? "Mob" : class_table[gch->class].who_name,
         capitalize( PERS(gch,ch,true) )); 
-	if ( is_affected(gch,gsn_rage) )
+        if ( is_affected(gch,gsn_rage) )
               sprintf(buf2, "H: {c????{x M: %d/%d V: %d/%d %6d xp\n\r",gch->mana, gch->max_mana, gch->move, gch->max_move, gch->exp);
-//		strcat(buf,"{c???? {xM:");
-	    else
+//              strcat(buf,"{c???? {xM:");
+            else
               sprintf(buf2, "H: %d/%d M: %d/%d V: %d/%d %6d xp\n\r",gch->hit, gch->max_hit, gch->mana, gch->max_mana, gch->move, gch->max_move, gch->exp);
-/*	if ( gch->hit >= UMAX((9*gch->max_hit)/10,1) )
-		strcat(buf,"{W**** {xM:");
-	    else
-	    if ( gch->hit * 100 / UMAX(gch->max_hit,1) > 75 )
-		strcat(buf,"{W***- {xM:");
-	    else
-	    if ( gch->hit * 100 / UMAX(gch->max_hit,1) > 50 )
-		strcat(buf,"{Y**-- {xM:");
-	    else
-	    if ( gch->hit * 100 / UMAX(gch->max_hit,1) > 25 )
-		strcat(buf,"{R*--- {xM:");
-	    else
-		strcat(buf,"{r---- {xM:");
+/*      if ( gch->hit >= UMAX((9*gch->max_hit)/10,1) )
+                strcat(buf,"{W**** {xM:");
+            else
+            if ( gch->hit * 100 / UMAX(gch->max_hit,1) > 75 )
+                strcat(buf,"{W***- {xM:");
+            else
+            if ( gch->hit * 100 / UMAX(gch->max_hit,1) > 50 )
+                strcat(buf,"{Y**-- {xM:");
+            else
+            if ( gch->hit * 100 / UMAX(gch->max_hit,1) > 25 )
+                strcat(buf,"{R*--- {xM:");
+            else
+                strcat(buf,"{r---- {xM:");
 
-	    if ( gch->mana >= UMAX((9*gch->max_mana)/10,1) )
-		strcat(buf,"{W**** {xV:");
-	    else
-	    if ( gch->mana * 100 / UMAX(gch->max_mana,1) > 75 )
-		strcat(buf,"{W***- {xV:");
-	    else
-	    if ( gch->mana * 100 / UMAX(gch->max_mana,1) > 50 )
-		strcat(buf,"{Y**-- {xV:");
-	    else
-	    if ( gch->mana * 100 / UMAX(gch->max_mana,1) > 25 )
-		strcat(buf,"{R*--- {xV:");
-	    else
-		strcat(buf,"{r---- {xV:");
+            if ( gch->mana >= UMAX((9*gch->max_mana)/10,1) )
+                strcat(buf,"{W**** {xV:");
+            else
+            if ( gch->mana * 100 / UMAX(gch->max_mana,1) > 75 )
+                strcat(buf,"{W***- {xV:");
+            else
+            if ( gch->mana * 100 / UMAX(gch->max_mana,1) > 50 )
+                strcat(buf,"{Y**-- {xV:");
+            else
+            if ( gch->mana * 100 / UMAX(gch->max_mana,1) > 25 )
+                strcat(buf,"{R*--- {xV:");
+            else
+                strcat(buf,"{r---- {xV:");
 
-	    if ( gch->move >= UMAX((9*gch->max_move)/10,1) )
-		strcat(buf,"{W****{x");
-	    else
-	    if ( gch->move * 100 / UMAX(gch->max_move,1) > 75 )
-		strcat(buf,"{W***-{x");
-	    else
-	    if ( gch->move * 100 / UMAX(gch->max_move,1) > 50 )
-		strcat(buf,"{Y**--{x");
-	    else
-	    if ( gch->move * 100 / UMAX(gch->max_move,1) > 25 )
-		strcat(buf,"{R*---{x");
-	    else
-		strcat(buf,"{r----{x");*/
-//	    sprintf( buf2, "%6d xp\n\r", gch->exp    );
-	    strcat(buf,buf2);
+            if ( gch->move >= UMAX((9*gch->max_move)/10,1) )
+                strcat(buf,"{W****{x");
+            else
+            if ( gch->move * 100 / UMAX(gch->max_move,1) > 75 )
+                strcat(buf,"{W***-{x");
+            else
+            if ( gch->move * 100 / UMAX(gch->max_move,1) > 50 )
+                strcat(buf,"{Y**--{x");
+            else
+            if ( gch->move * 100 / UMAX(gch->max_move,1) > 25 )
+                strcat(buf,"{R*---{x");
+            else
+                strcat(buf,"{r----{x");*/
+//          sprintf( buf2, "%6d xp\n\r", gch->exp    );
+            strcat(buf,buf2);
     send_to_char( buf, ch );
 }
 
@@ -3372,10 +3368,10 @@ void do_group( CHAR_DATA *ch, char *argument )
     }
 
     if(ch->position < POS_RESTING)
-	{
-	  send_to_char("Too late for that...",ch);
-	  return;
-	}
+        {
+          send_to_char("Too late for that...",ch);
+          return;
+        }
 //    victim->leader = ch;
     add_to_group(victim, ch);
     act( "$N joins $n's group.", ch, NULL, victim, TO_NOTVICT,false);
@@ -3548,13 +3544,13 @@ void do_gtell( CHAR_DATA *ch, char *argument )
     for ( gch = char_list; gch != NULL; gch = gch->next )
     {
   if ( is_same_group( gch, ch ) )
-	{
+        {
         send_timestamp(gch, true, false);
-	if(IS_SET(gch->display,DISP_COLOR))
+        if(IS_SET(gch->display,DISP_COLOR))
       send_to_char( bufc, gch );
-	else
+        else
       send_to_char( buf, gch );
-	}
+        }
     }
 
     return;
@@ -3576,7 +3572,7 @@ bool is_same_group( CHAR_DATA *ach, CHAR_DATA *bch )
     if (!IS_NPC(ach) && !IS_NPC(bch))
     {
        if (IS_SET(ach->mhs,MHS_GLADIATOR) && IS_SET(bch->mhs,MHS_GLADIATOR)
-	   && (gladiator_info.type == 2 || gladiator_info.type == 3)
+           && (gladiator_info.type == 2 || gladiator_info.type == 3)
            && gladiator_info.bet_counter == 0)
        {
           if(ach->pcdata->gladiator_team == bch->pcdata->gladiator_team)
@@ -3597,7 +3593,7 @@ bool has_group_mates( CHAR_DATA *ch )
 //    CHAR_DATA *vch;
 
     if ( IS_NPC(ch) || ch == NULL)
-	return false;
+        return false;
     if(ch->leader || ch->follower)
       return true;
     return false;
@@ -3605,14 +3601,14 @@ bool has_group_mates( CHAR_DATA *ch )
 /*    for ( d = descriptor_list ; d != NULL ; d= d->next )
     {
        if ( ( vch = d->character ) == NULL )
-		continue;
+                continue;
 
-	if ( vch == ch )
-		continue;*/
-/* this is where i check if someone has the current char as the leader 	
-	or if the vch is the leader for the current char */
-/*	if ( ch == vch->leader || vch == ch->leader )
-	   return true;
+        if ( vch == ch )
+                continue;*/
+/* this is where i check if someone has the current char as the leader  
+        or if the vch is the leader for the current char */
+/*      if ( ch == vch->leader || vch == ch->leader )
+           return true;
 
     }
 
@@ -3627,19 +3623,19 @@ bool group_has_crusader( CHAR_DATA *ch )
     CHAR_DATA *vch;
 
     if ( IS_NPC(ch) )
-	return false;
+        return false;
 
     for ( d = descriptor_list ; d != NULL ; d= d->next )
     {
        if ( ( vch = d->character ) == NULL )
-		continue;
+                continue;
 
-	if ( is_same_group( ch, vch ) && 
-		vch->class == class_lookup("crusader") &&
+        if ( is_same_group( ch, vch ) && 
+                vch->class == class_lookup("crusader") &&
                 vch->in_room == ch->in_room  &&
-		has_group_mates(ch) 
-		)
-	  return true;
+                has_group_mates(ch) 
+                )
+          return true;
     }
 
     return false;
@@ -3660,7 +3656,7 @@ bool group_has_cavalier( CHAR_DATA *ch )
 
         if ( is_same_group( ch, vch ) &&
                 vch->kit == kit_lookup("cavalier") &&
-		(is_mounted(vch) && IS_NPC(vch->riding) && vch->riding->pIndexData->vnum == MOB_VNUM_WARHORSE) &&
+                (is_mounted(vch) && IS_NPC(vch->riding) && vch->riding->pIndexData->vnum == MOB_VNUM_WARHORSE) &&
                 vch->in_room == ch->in_room  &&
                 has_group_mates(ch)
                 )
@@ -3678,19 +3674,19 @@ int group_has_how_many_crusader( CHAR_DATA *ch )
     int number_of =0;
 
     if ( IS_NPC(ch) )
-	return 0;
+        return 0;
 
     for ( d = descriptor_list ; d != NULL ; d= d->next )
     {
        if ( ( vch = d->character ) == NULL )
-		continue;
+                continue;
 
-	if ( is_same_group( ch, vch ) && 
-		vch->class == class_lookup("crusader") &&
+        if ( is_same_group( ch, vch ) && 
+                vch->class == class_lookup("crusader") &&
                 vch->in_room == ch->in_room /* &&
-		has_group_mates(ch) */ //No longer needs group mates
-		)
-		number_of++;
+                has_group_mates(ch) */ //No longer needs group mates
+                )
+                number_of++;
     }
 
     return number_of;
@@ -3841,15 +3837,15 @@ return;
        {
       send_to_char("You now have sanctioning priveledges.\n\r", victim);
       SET_BIT(victim->pcdata->clan_flags, CLAN_ALLOW_SANC);
-	sprintf(buf,"$N enables %s's sanctioning ability." ,victim->name);
-	wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
+        sprintf(buf,"$N enables %s's sanctioning ability." ,victim->name);
+        wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
        }
      else
       {
       send_to_char("Your sanctioning priveledges have been revoked.\n\r", victim);
       REMOVE_BIT(victim->pcdata->clan_flags, CLAN_ALLOW_SANC);
-	sprintf(buf,"$N revokes %s's sanctioning ability." ,victim->name);
-	wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
+        sprintf(buf,"$N revokes %s's sanctioning ability." ,victim->name);
+        wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
       }
 
       break;
@@ -3860,15 +3856,15 @@ return;
       {
       send_to_char("You have been forbidden to use the clan channel.\n\r", victim);
       SET_BIT(victim->pcdata->clan_flags, CLAN_NO_CHANNEL);
-	sprintf(buf,"$N sanctions %s's with no clan channel." ,victim->name);
-	wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
+        sprintf(buf,"$N sanctions %s's with no clan channel." ,victim->name);
+        wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
       }
       else
       {
       send_to_char("You are once more permitted to use the clan channel.\n\r", victim);
       REMOVE_BIT(victim->pcdata->clan_flags, CLAN_NO_CHANNEL);
-	sprintf(buf,"$N removes %s's sanctions of no clan channel." ,victim->name);
-	wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
+        sprintf(buf,"$N removes %s's sanctions of no clan channel." ,victim->name);
+        wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
       }
     break;
 
@@ -3879,8 +3875,8 @@ return;
     {
      send_to_char("You have been forbidden entrance to your clan hall.\n\r", victim);
      SET_BIT(victim->pcdata->clan_flags, CLAN_NO_HALL);
-	sprintf(buf,"$N sanctions %s's with no clan hall." ,victim->name);
-	wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
+        sprintf(buf,"$N sanctions %s's with no clan hall." ,victim->name);
+        wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
      if ( victim->in_room->clan && victim->in_room->clan == victim->clan)
      {
      send_to_char("You have been forcefully ejected from your clan hall.\n\r", victim);
@@ -3894,8 +3890,8 @@ return;
     {
      send_to_char("You are once more permitted to enter the clan hall.\n\r", victim);
      REMOVE_BIT(victim->pcdata->clan_flags, CLAN_NO_HALL);
-	sprintf(buf,"$N removes %s's sanctions of no clan hall." ,victim->name);
-	wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
+        sprintf(buf,"$N removes %s's sanctions of no clan hall." ,victim->name);
+        wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
     }
     }
 
@@ -3905,15 +3901,15 @@ return;
     {
       send_to_char("The clan healer will no longer provide services for you.\n\r", victim);
       SET_BIT(victim->pcdata->clan_flags, CLAN_NO_HEALER);
-	sprintf(buf,"$N sanctions %s's with no clan healer." ,victim->name);
-	wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
+        sprintf(buf,"$N sanctions %s's with no clan healer." ,victim->name);
+        wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
     }
     else
     { 
       send_to_char("The clan healer will once more provide his services to you.\n\r", victim);
       REMOVE_BIT(victim->pcdata->clan_flags, CLAN_NO_HEALER);
-	sprintf(buf,"$N removes %s's sanctions of no clan healer." ,victim->name);
-	wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
+        sprintf(buf,"$N removes %s's sanctions of no clan healer." ,victim->name);
+        wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
     }
     }
 
@@ -3924,15 +3920,15 @@ return;
     {
       send_to_char("You have been forbidden to use the clan portals.\n\r", victim);
       SET_BIT(victim->pcdata->clan_flags, CLAN_NO_PORTALS);
-	sprintf(buf,"$N sanctions %s's with no clan portals." ,victim->name);
-	wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
+        sprintf(buf,"$N sanctions %s's with no clan portals." ,victim->name);
+        wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
     }
     else
     {
       send_to_char("You are once more permitted to use the clan portals.\n\r", victim);
       REMOVE_BIT(victim->pcdata->clan_flags, CLAN_NO_PORTALS);
-	sprintf(buf,"$N removes %s's sanctions of no clan portals." ,victim->name);
-	wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
+        sprintf(buf,"$N removes %s's sanctions of no clan portals." ,victim->name);
+        wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
     }
     break;
     
@@ -3941,15 +3937,15 @@ return;
     {
       send_to_char("You will receive no benefit from the clan regen room.\n\r", victim);
       SET_BIT(victim->pcdata->clan_flags, CLAN_NO_REGEN);
-	sprintf(buf,"$N sanctions %s's with no clan regen." ,victim->name);
-	wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
+        sprintf(buf,"$N sanctions %s's with no clan regen." ,victim->name);
+        wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
     }
     else
     {
       send_to_char("You will once again receive the benefits of the clan regen room.\n\r", victim);
       REMOVE_BIT(victim->pcdata->clan_flags, CLAN_NO_REGEN);
-	sprintf(buf,"$N removes %s's sanctions of no clan regen." ,victim->name);
-	wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
+        sprintf(buf,"$N removes %s's sanctions of no clan regen." ,victim->name);
+        wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
     }
     break;
 
@@ -3960,15 +3956,15 @@ return;
      {
       send_to_char("You may no longer purchase items at the clan store.\n\r", victim);
       SET_BIT(victim->pcdata->clan_flags, CLAN_NO_STORE);
-	sprintf(buf,"$N sanctions %s's with no clan store." ,victim->name);
-	wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
+        sprintf(buf,"$N sanctions %s's with no clan store." ,victim->name);
+        wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
      }
      else
      {
       send_to_char("You may once more purchase items at the clan store.\n\r", victim);
       REMOVE_BIT(victim->pcdata->clan_flags, CLAN_NO_STORE);
-	sprintf(buf,"$N removes %s's sanctions of no clan store." ,victim->name);
-	wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
+        sprintf(buf,"$N removes %s's sanctions of no clan store." ,victim->name);
+        wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
      }
     }
 
@@ -3978,15 +3974,15 @@ return;
      {
        send_to_char("You have been forbidden to use your clan skills.\n\r", victim);
        SET_BIT(victim->pcdata->clan_flags, CLAN_NO_SKILL_1);
-	sprintf(buf,"$N sanctions %s's with no clan skill." ,victim->name);
-	wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
+        sprintf(buf,"$N sanctions %s's with no clan skill." ,victim->name);
+        wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
      }
      else
      {
        send_to_char("You are once more permitted to use your clan skills.\n\r", victim);
        REMOVE_BIT(victim->pcdata->clan_flags, CLAN_NO_SKILL_1);
-	sprintf(buf,"$N removes %s's sanctions of no clan skill." ,victim->name);
-	wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
+        sprintf(buf,"$N removes %s's sanctions of no clan skill." ,victim->name);
+        wiznet(buf,ch,NULL,WIZ_PENALTIES,WIZ_SECURE,0);
      }
     }
     if (!str_prefix(arg2, "show"))
@@ -4023,33 +4019,33 @@ void do_bounty( CHAR_DATA *ch, char *argument )
 
     if ( arg[0] == '\0' )
     {
-	send_to_char("Usage: bounty <character> <amount in gold>\n\r",ch);
-	return;
+        send_to_char("Usage: bounty <character> <amount in gold>\n\r",ch);
+        return;
     }
 
     if ( !str_cmp(arg,"list") || !str_cmp(arg,"show") )
     {
-	DESCRIPTOR_DATA *d;
-	char buf[MAX_STRING_LENGTH];
+        DESCRIPTOR_DATA *d;
+        char buf[MAX_STRING_LENGTH];
 
- 	sprintf(buf,"{W%-28s Amount{x\n\r\n\r","Character");
-	send_to_char(buf,ch);
+        sprintf(buf,"{W%-28s Amount{x\n\r\n\r","Character");
+        send_to_char(buf,ch);
 
-	for ( d = descriptor_list ; d != NULL ; d = d->next )
-	{
-	    if ( d->connected != CON_PLAYING || d->character == NULL )
-		continue;
+        for ( d = descriptor_list ; d != NULL ; d = d->next )
+        {
+            if ( d->connected != CON_PLAYING || d->character == NULL )
+                continue;
 
-	    if ( d->character->pcdata == NULL )
-		continue;
+            if ( d->character->pcdata == NULL )
+                continue;
 
-	    if ( d->character->pcdata->bounty <= 0 )
- 		continue;
+            if ( d->character->pcdata->bounty <= 0 )
+                continue;
 
-	    sprintf(buf,"%-28s %ld\n\r",d->character->name,d->character->pcdata->bounty);
-	    send_to_char(buf,ch);
-	}
-	return;
+            sprintf(buf,"%-28s %ld\n\r",d->character->name,d->character->pcdata->bounty);
+            send_to_char(buf,ch);
+        }
+        return;
     }
     victim = get_char_online(ch,arg);
 
@@ -4068,12 +4064,12 @@ void do_bounty( CHAR_DATA *ch, char *argument )
     if ( IS_IMMORTAL(victim) )
     {
         send_to_char("Don't be a dumb bunny.  Setting a bounty on an Imm, you have a death-wish.\r\n",ch);
-	return;
+        return;
     }
 /*    if ( ch->clan == clan_lookup("hunter") )
     {
-	send_to_char("You cannot set a bounty as a bounty hunter yourself!\n\r",ch);
-	return;
+        send_to_char("You cannot set a bounty as a bounty hunter yourself!\n\r",ch);
+        return;
     }*/
     if ( IS_NPC(victim) )
     {
@@ -4082,23 +4078,23 @@ void do_bounty( CHAR_DATA *ch, char *argument )
     }
 
     if ( !is_clan(victim) || !is_clan(ch) || 
-			(IS_SET(victim->mhs, MHS_GLADIATOR) && victim->pcdata->save_clan == 0) || 
-				(IS_SET(ch->mhs, MHS_GLADIATOR) && ch->pcdata->save_clan == 0))
+                        (IS_SET(victim->mhs, MHS_GLADIATOR) && victim->pcdata->save_clan == 0) || 
+                                (IS_SET(ch->mhs, MHS_GLADIATOR) && ch->pcdata->save_clan == 0))
     {
-	send_to_char("Impossible.\n\r",ch);
-	return;
+        send_to_char("Impossible.\n\r",ch);
+        return;
     }
 
     if ( *arg2 == '\0' || !is_number(arg2) )
     {
-        send_to_char("Usage: bounty <character> <amount in gold>\n\r",ch); 	
- 	return;
+        send_to_char("Usage: bounty <character> <amount in gold>\n\r",ch);      
+        return;
     }
 
     if ( (amt = atoi(arg2)) < 200 || amt > ch->gold )
-    {	
-	send_to_char("Bounties must be at least 200 gold and no more than what you have.\n\r",ch);
-	return;
+    {   
+        send_to_char("Bounties must be at least 200 gold and no more than what you have.\n\r",ch);
+        return;
     }
 
     victim->pcdata->bounty += amt;
@@ -4114,3 +4110,5 @@ void do_bounty( CHAR_DATA *ch, char *argument )
     pnet(log_buf,NULL,NULL,PNET_BOUNTY,0,0);
     return;
 }
+
+

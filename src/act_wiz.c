@@ -29,6 +29,7 @@
 #include "act_info.h"
 #include "act_move.h"
 #include "act_obj.h"
+#include "act_wiz.h"
 #include "clan.h"
 #include "comm.h"
 #include "const.h"
@@ -71,7 +72,6 @@ void do_oload (CHAR_DATA *ch, char *argument);
 void do_force (CHAR_DATA *ch, char *argument);
 void do_disconnect (CHAR_DATA *ch, char *argument);
 ROOM_INDEX_DATA *find_location (CHAR_DATA *ch, char *arg);
-void remove_highlander (CHAR_DATA *ch,CHAR_DATA *victim);
 
 char * const wear_name[] = { "<{Wused as light{x>     ",
 		"<{Wworn on finger{x>    ", "<{Wworn on finger{x>    ",

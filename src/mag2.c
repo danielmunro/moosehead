@@ -39,6 +39,7 @@
 #include "log.h"
 #include "lookup.h"
 #include "magic.h"
+#include "mag2.h"
 #include "scan.h"
 #include "skills.h"
 #include "special.h"
@@ -47,8 +48,6 @@
 extern char *target_name;
 
 extern sh_int rev_dir [];
-void shapeshift_remove (CHAR_DATA *ch);
-
 
 void spell_restore_mana(int sn,int level,CHAR_DATA *ch,void *vo,int target)
 {

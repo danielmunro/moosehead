@@ -48,7 +48,6 @@
 /*
  * Local functions.
  */
-void affect_modify (CHAR_DATA *ch, AFFECT_DATA *paf, bool fAdd, int AppType);
 void destruct_trade (TRADE_DATA *trade, bool ifree);
 
 void prompt_pulse_command(CHAR_DATA *ch)

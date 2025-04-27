@@ -59,6 +59,7 @@
 #include "alias.h"
 #include "ban.h"
 #include "clan.h"
+#include "comm.h"
 #include "const.h"
 #include "db.h"
 #include "dns.h"
@@ -131,8 +132,6 @@ void game_loop_unix (int control);
 int init_socket (int port);
 void init_descriptor (int control);
 bool read_from_descriptor (DESCRIPTOR_DATA *d);
-bool write_to_descriptor (int desc, char *txt, int length, DESCRIPTOR_DATA *d);
-bool check_parse_name (char *name);
 bool check_reconnect (DESCRIPTOR_DATA *d, char *name, bool fConn);
 bool check_playing (DESCRIPTOR_DATA *d, char *name);
 void nanny (DESCRIPTOR_DATA *d, char *argument);
@@ -148,13 +147,6 @@ void creation_message (DESCRIPTOR_DATA *d, bool forward);
 int creation_step (DESCRIPTOR_DATA *d, bool forward, bool accept);
 bool is_creation (DESCRIPTOR_DATA *d);
 void show_string (struct descriptor_data *d, char *input);
-void close_socket (DESCRIPTOR_DATA *dclose);
-void write_to_buffer (DESCRIPTOR_DATA *d, const char *txt, int length);
-void send_to_char (const char *txt, CHAR_DATA *ch);
-void act (const char *format, CHAR_DATA *ch, const void *arg1,
-          const void *arg2, int type, bool ooc);
-void act_new (const char *format, CHAR_DATA *ch, const void *arg1,
-              const void *arg2, int type, int min_pos, bool ooc);
 
 int run(const int mud_port, const int http_port) {
     struct timeval now_time;

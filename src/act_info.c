@@ -26,6 +26,7 @@
 #include <time.h>
 
 #include "merc.h"
+#include "act_info.h"
 #include "act_comm.h"
 #include "act_move.h"
 #include "act_obj.h"
@@ -83,10 +84,6 @@ void show_char_to_char_1 (CHAR_DATA *victim, CHAR_DATA *ch);
 void show_char_to_char (CHAR_DATA *list, CHAR_DATA *ch);
 bool check_blind (CHAR_DATA *ch);
 bool check_match (CHAR_DATA *ch, CHAR_DATA *victim);
-void do_exits (CHAR_DATA *ch, char *argument);
-void do_look (CHAR_DATA *ch, char *argument);
-void do_help (CHAR_DATA *ch, char *argument);
-void do_affects (CHAR_DATA *ch, char *argument);
 
 /** Ranger stuff **/
 void do_species( CHAR_DATA *ch, char *argument )
@@ -5292,4 +5289,6 @@ void do_newbie(CHAR_DATA *ch, char *argument)
     }
     return;
 }
+
+
 
