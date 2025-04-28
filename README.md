@@ -26,14 +26,14 @@ telnet ruinsofmidgaard.com 4000
 ## Repository Structure
 ```
 .
-├── src/                    # Core game engine source code
+├── src/                   # Core game engine source code
 │   ├── act_*.c/h          # Character action implementations
 │   ├── magic.c/h          # Spell system implementation
 │   ├── clan.c/h           # Clan system implementation
 │   ├── db.c/h             # Database and data loading
 │   ├── http.c/h           # HTTP API implementation
 │   └── Makefile           # Build configuration
-├── test/                   # Test suite
+├── test/                  # Test suite
 │   ├── *_test.c           # Unit tests for core components
 │   └── Makefile           # Test build configuration
 ├── bin/
