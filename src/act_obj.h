@@ -17,3 +17,6 @@ void do_linksafe (CHAR_DATA *ch, char *argument);
 void steal (CHAR_DATA *ch, char *arg1, CHAR_DATA *victim);
 bool can_loot (CHAR_DATA *ch, OBJ_DATA *obj, bool loot_check);
 void remove_bonuses (CHAR_DATA *ch, OBJ_DATA *obj);
+bool is_repairable (OBJ_DATA *obj);
+int check_repair_obj(OBJ_DATA *obj, CHAR_DATA *ch, CHAR_DATA *weapon, CHAR_DATA *armor, bool verbose);
+void add_bonuses( CHAR_DATA *ch, OBJ_DATA *obj);

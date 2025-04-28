@@ -158,24 +158,38 @@ int set_rarity(OBJ_DATA *obj)
   return obj->rarity;
 }
 
+/*
+ * Check if an object is repairable
+ */
+bool is_repairable(OBJ_DATA *obj)
+{
+    if (obj->item_type == ITEM_WEAPON)
+        return true;
+    else if (obj->item_type == ITEM_ARMOR || obj->item_type == ITEM_CLOTHING
+             || obj->item_type == ITEM_DRINK_CON || obj->item_type == ITEM_JEWELRY
+             || obj->item_type == ITEM_LIGHT ||
+             (obj->wear_flags && obj->wear_flags != ITEM_HOLD))
+        return true;
+
+    return false;
+}
 
 int check_repair_obj(OBJ_DATA *obj, CHAR_DATA *ch, CHAR_DATA *weapon, CHAR_DATA *armor, bool verbose)
 {
   int cost = 0;
   CHAR_DATA *victim = NULL;
-  if(obj->item_type == ITEM_WEAPON)
-    victim = weapon;
-  else if(obj->item_type == ITEM_ARMOR || obj->item_type == ITEM_CLOTHING
-    || obj->item_type == ITEM_DRINK_CON || obj->item_type == ITEM_JEWELRY
-    || obj->item_type == ITEM_LIGHT ||
-    (obj->wear_flags && obj->wear_flags != ITEM_HOLD))
-    victim = armor;
-  else
+
+  if (!is_repairable(obj))
   {
     if(verbose)
-      send_to_char("That item is too fragile to repair.\n\r", ch);
+        send_to_char("That item is too fragile to repair.\n\r", ch);
     return cost;
   }
+
+  if(obj->item_type == ITEM_WEAPON)
+    victim = weapon;
+  else
+    victim = armor;
 
   if(victim == NULL)
   {
