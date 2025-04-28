@@ -101,19 +101,30 @@ reload() {
 prod_deploy() {
   RUN_VERSION=${argc_run_version:-"GAME_VERSION"}
 
+  echo "check for valid image: ${argc_image:$argc_tag}"
+
+  docker manifest inspect $argc_image:$argc_tag > /dev/null
+
+  if [ $? -ne 0 ]; then
+    echo "image $argc_image:$argc_tag does not exist"
+    exit 1
+  fi
+
   echo "ssh to prod machine"
 
   ssh -i $argc_ssh_keyfile $argc_ssh_destination -p $argc_ssh_port << EOF
+
+echo "pulling the latest code
 
 cd github/moosehead
 
 git pull
 
-echo "pulling the container"
+echo "pulling the docker image"
 
 docker pull $argc_image:$argc_tag
 
-echo "running the new container"
+echo "running the new image"
 
 ./bin/mhs reload $argc_image $argc_tag
 
