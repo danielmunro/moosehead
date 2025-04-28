@@ -47,7 +47,7 @@ $ ./bin/mhs dev-reload
 
 ## HTTP API
 
-The HTTP API is currently read-only.  Available endpoints are:
+A read-only HTTP API is available:
 
 - `GET /` -- retrieve a list of endpoints
 - `GET /build` -- get the current game build version
