@@ -114,7 +114,7 @@ prod_deploy() {
 
   ssh -i $argc_ssh_keyfile $argc_ssh_destination -p $argc_ssh_port << EOF
 
-echo "pulling the latest code
+echo "pulling the latest code"
 
 cd github/moosehead
 
