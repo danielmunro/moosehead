@@ -17,5 +17,9 @@ void test_skill_level_only_reclass_has_skill() {
 }
 
 void run_skills_tests() {
+    diag("Running skills test");
+
     test_skill_level_only_reclass_has_skill();
+
+    diag("Finished skills test");
 }

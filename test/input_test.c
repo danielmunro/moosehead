@@ -193,6 +193,8 @@ void test_one_argument_cs_single_quotes() {
 }
 
 void run_input_tests() {
+    diag("Running input test");
+
     test_is_number_positive();
     test_is_number_negative();
     test_is_number_false();
@@ -218,4 +220,6 @@ void run_input_tests() {
     test_one_argument_cs_successive();
     test_one_argument_cs_double_quotes();
     test_one_argument_cs_single_quotes();
+
+    diag("Finished input test");
 }
