@@ -35,6 +35,7 @@
 #include "input.h"
 #include "log.h"
 #include "recycle.h"
+#include "string_util.h"
 
 void clear_macro_marks ( CHAR_DATA *ch )
 {

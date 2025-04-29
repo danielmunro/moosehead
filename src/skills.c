@@ -16,6 +16,7 @@
 #include "input.h"
 #include "magic.h"
 #include "skills.h"
+#include "string_util.h"
 #include "update.h"
 
 

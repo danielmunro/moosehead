@@ -43,6 +43,7 @@
 #include "scan.h"
 #include "skills.h"
 #include "special.h"
+#include "string_util.h"
 #include "tables.h"
 
 extern char *target_name;

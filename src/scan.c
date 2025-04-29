@@ -26,6 +26,7 @@
 #include "handler.h"
 #include "input.h"
 #include "db.h"
+#include "string_util.h"
 
 char *const distance[4]=
 {

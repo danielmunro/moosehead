@@ -39,6 +39,7 @@
 #include "magic.h"
 #include "recycle.h"
 #include "skills.h"
+#include "string_util.h"
 #include "tables.h"
 #include "update.h"
 

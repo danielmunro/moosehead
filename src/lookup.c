@@ -23,6 +23,7 @@
 #include "const.h"
 #include "db.h"
 #include "lookup.h"
+#include "string_util.h"
 #include "tables.h"
 
 int flag_lookup (const char *name, const struct flag_type *flag_table)

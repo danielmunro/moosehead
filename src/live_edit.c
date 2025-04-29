@@ -35,6 +35,7 @@
 #include "lookup.h"
 #include "note.h"
 #include "recycle.h"
+#include "string_util.h"
 
 /* local function */
 void modify_room_marker (CLAN_DATA *clan, ROOM_INDEX_DATA *room, int dir, bool place);

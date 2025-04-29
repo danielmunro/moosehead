@@ -22,6 +22,7 @@
 #include "lookup.h"
 #include "note.h"
 #include "recycle.h"
+#include "string_util.h"
 #include "tables.h"
 
 /* local functions */

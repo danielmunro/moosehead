@@ -44,6 +44,7 @@
 #include "recycle.h"
 #include "save.h"
 #include "skills.h"
+#include "string_util.h"
 #include "tables.h"
 
  char *  const  where_name      [] =

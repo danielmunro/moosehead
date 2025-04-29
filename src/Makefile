@@ -27,7 +27,7 @@ O_FILES = act_comm.o act_enter.o act_info.o act_move.o act_obj.o\
 	  fight.o flags.o gladiator.o handler.o healer.o http.o ident.o\
 	  input.o interp.o live_edit.o log.o lookup.o macro.o mag2.o\
 	  magic.o main.o menu.o note.o olc.o recycle.o remort.o save.o\
-	  scan.o skills.o special.o tables.o trade.o update.o
+	  scan.o skills.o special.o string_util.o tables.o trade.o update.o
 
 moose: $(O_FILES)
 	rm -f moose

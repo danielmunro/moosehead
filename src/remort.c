@@ -28,6 +28,7 @@
 #include "handler.h"
 #include "input.h"
 #include "skills.h"
+#include "string_util.h"
 #include "tables.h"
 
 bool out_of_element( CHAR_DATA *ch)

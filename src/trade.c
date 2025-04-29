@@ -15,6 +15,7 @@
 #include "input.h"
 #include "magic.h"
 #include "recycle.h"
+#include "string_util.h"
 
 #define     PLR_NOTRADE         0
 #define     TRADE_REQUEST       1

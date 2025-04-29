@@ -26,7 +26,7 @@ O_FILES = ../src/act_comm.o ../src/act_enter.o ../src/act_info.o ../src/act_move
 		  ../src/db3.o ../src/deity.o ../src/dump_obj_csv.o ../src/editor.o ../src/effects.o ../src/fight.o ../src/flags.o\
 		  ../src/gladiator.o ../src/handler.o ../src/healer.o ../src/http.o ../src/ident.o ../src/input.o ../src/interp.o ../src/log.o ../src/lookup.o ../src/macro.o\
 		  ../src/mag2.o ../src/magic.o ../src/menu.o ../src/note.o ../src/olc.o ../src/recycle.o ../src/remort.o\
-		  ../src/save.o ../src/scan.o ../src/skills.o ../src/special.o ../src/tables.o ../src/trade.o ../src/update.o \
+		  ../src/save.o ../src/scan.o ../src/skills.o ../src/special.o ../src/string_util.o ../src/tables.o ../src/trade.o ../src/update.o \
 		  ../src/live_edit.o ../src/clan.o main.o
 
 moose: $(O_FILES)

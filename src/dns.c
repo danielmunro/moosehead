@@ -28,6 +28,7 @@
 #include "input.h"
 #include "note.h"
 #include "recycle.h"
+#include "string_util.h"
 
 /*
  * for tracking bad dns

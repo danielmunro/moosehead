@@ -42,6 +42,7 @@
 #include "mag2.h"
 #include "olc.h"
 #include "skills.h"
+#include "string_util.h"
 #include "tables.h"
 #include "update.h"
 

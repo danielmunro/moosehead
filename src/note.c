@@ -37,6 +37,7 @@
 #include "lookup.h"
 #include "note.h"
 #include "recycle.h"
+#include "string_util.h"
 #include "tables.h"
 
 /* globals from db.c for load_notes */
