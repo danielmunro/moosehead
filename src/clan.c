@@ -2062,7 +2062,7 @@ void load_clans(void)
     }
     while(!feof(fp) && str_cmp(input, "#End"))
     {
-      sprintf(log_buf, "loading clan: %s", input);
+      sprintf(log_buf, "loading clan: %.24s", input);
       log_debug(log_buf);
       load_clan(input, default_clan);
       if (fscanf(fp, "%s %d", input, &default_clan) < 2) {
