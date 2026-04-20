@@ -2218,59 +2218,61 @@ void do_glance ( CHAR_DATA *ch, char *argument )
    if ( can_see_obj( ch, obj ) )
    {
        pdesc = get_extra_descr( arg3, obj->extra_descr );
-       if ( pdesc != NULL ) {
-           if (++count == number) {
-               send_to_char(pdesc, ch);
-               /* LORE */
-               if (!IS_NPC(ch) &&
-                   number_percent() < get_skill(ch, gsn_lore)) {
-                   if ((number_percent() * number_percent()) < 40
-                       && !IS_OBJ_STAT(obj, ITEM_SELL_EXTRACT)) {
-                       if (obj->pIndexData->cost == obj->cost) {
-                           obj->cost += (get_skill(ch, gsn_lore) *
-                                         0.001 * obj->cost);
-                           send_to_char("Your understanding of the lore behind it increases its worth!\n\r", ch);
-                       }
-                   }
-                   if (ch->mana >= 20) {
-                       spell_identify(gsn_lore,
-                                      (4 * obj->level) / 3, ch, obj, TARGET_OBJ);
-                       ch->mana -= 20;
-                       check_improve(ch, gsn_lore, true, 4);
-                   }
-               }
-               return;
+       if ( pdesc != NULL )
+         if (++count == number)
+         {
+         send_to_char( pdesc, ch );
+         /* LORE */
+         if (!IS_NPC(ch) &&
+       number_percent( ) < get_skill(ch,gsn_lore))
+           {
+       if ( ( number_percent( ) * number_percent( ) ) < 40
+            && !IS_OBJ_STAT(obj,ITEM_SELL_EXTRACT))
+         {
+           if(obj->pIndexData->cost == obj->cost)
+           {
+            obj->cost += ( get_skill(ch,gsn_lore) *
+             0.001 * obj->cost);
+           send_to_char( "Your understanding of the lore behind it increases its worth!\n\r",  ch );
            }
-       } else {
-           continue;
-       }
+         }
+       if (ch->mana >= 20){
+       spell_identify(gsn_lore,
+           (4* obj->level)/3,ch,obj,TARGET_OBJ);
+       ch->mana -= 20;
+       check_improve(ch,gsn_lore,true,4);}
+           }
+         return;
+         }
+       else continue;
        pdesc = get_extra_descr( arg3, obj->pIndexData->extra_descr );
-       if ( pdesc != NULL ) {
-           if (++count == number) {
-               send_to_char(pdesc, ch);
-               /* LORE */
-               if (!IS_NPC(ch) &&
-                   number_percent() <= get_skill(ch, gsn_lore)) {
-                   if ((number_percent() * number_percent()) < 40
-                       && !IS_OBJ_STAT(obj, ITEM_SELL_EXTRACT)) {
-                       if (obj->pIndexData->cost == obj->cost) {
-                           obj->cost += (get_skill(ch, gsn_lore) *
-                                         0.001 * obj->cost);
-                           send_to_char("Your understanding of the lore behind it increases its worth!\n\r", ch);
-                       }
-                   }
-                   if (ch->mana >= 20) {
-                       spell_identify(gsn_lore,
-                                      (4 * obj->level) / 3, ch, obj, TARGET_OBJ);
-                       ch->mana -= 20;
-                       check_improve(ch, gsn_lore, true, 4);
-                   }
-               }
-               return;
+       if ( pdesc != NULL )
+         if (++count == number)
+         {
+         send_to_char( pdesc, ch );
+         /* LORE */
+         if (!IS_NPC(ch) &&
+       number_percent( ) <= get_skill(ch,gsn_lore))
+           {
+       if ( ( number_percent( ) * number_percent( ) ) < 40
+            && !IS_OBJ_STAT(obj,ITEM_SELL_EXTRACT))
+         {
+           if(obj->pIndexData->cost == obj->cost)
+           {
+           obj->cost += ( get_skill(ch,gsn_lore) *
+             0.001 * obj->cost);
+           send_to_char( "Your understanding of the lore behind it increases its worth!\n\r",  ch );
            }
-       } else {
-           continue;
-       }
+         }
+       if(ch->mana >= 20){
+       spell_identify(gsn_lore,
+           (4* obj->level)/3,ch,obj,TARGET_OBJ);
+       ch->mana -= 20;
+       check_improve(ch,gsn_lore,true,4);}
+           }
+         return;
+         }
+       else continue;
 
        if ( is_name( arg3, obj->name ) )
          if (++count == number)
