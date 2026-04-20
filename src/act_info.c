@@ -2218,7 +2218,7 @@ void do_glance ( CHAR_DATA *ch, char *argument )
    if ( can_see_obj( ch, obj ) )
    {
        pdesc = get_extra_descr( arg3, obj->extra_descr );
-       if ( pdesc != NULL )
+       if ( pdesc != NULL ) {
          if (++count == number)
          {
          send_to_char( pdesc, ch );
@@ -2243,10 +2243,12 @@ void do_glance ( CHAR_DATA *ch, char *argument )
        check_improve(ch,gsn_lore,true,4);}
            }
          return;
+         } else {
+          continue;
          }
-       else continue;
+       }
        pdesc = get_extra_descr( arg3, obj->pIndexData->extra_descr );
-       if ( pdesc != NULL )
+       if ( pdesc != NULL ) {
          if (++count == number)
          {
          send_to_char( pdesc, ch );
@@ -2271,8 +2273,10 @@ void do_glance ( CHAR_DATA *ch, char *argument )
        check_improve(ch,gsn_lore,true,4);}
            }
          return;
+         } else {
+          continue;
          }
-       else continue;
+       }
 
        if ( is_name( arg3, obj->name ) )
          if (++count == number)
