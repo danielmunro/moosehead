@@ -2050,6 +2050,7 @@ void load_clans(void)
   FILE *fp;
   bool outcast = false, loner = false;
   sprintf( cload, "%s%s", CLAN_DIR, "clan_list" );
+  char log_buf[256];
   if((fp = fopen(cload, "r")) == NULL)
   {
     bug("No clan list found to load.", 0);
@@ -2061,6 +2062,8 @@ void load_clans(void)
     }
     while(!feof(fp) && str_cmp(input, "#End"))
     {
+      sprintf(log_buf, "loading clan: %s", input);
+      log_debug(log_buf);
       load_clan(input, default_clan);
       if (fscanf(fp, "%s %d", input, &default_clan) < 2) {
           log_error("load_clans: error reading default_clan 2");

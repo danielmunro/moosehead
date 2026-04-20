@@ -917,6 +917,7 @@ void mark_mob_bounties(void)
 
 void boot_db( void )
 {
+  log_debug("boot_db");
   /* needed to keep track of area file names */
   /* help.are and a few others don't have an AREA_DATA */
   AREA_NAME_DATA *area_name;
@@ -1013,6 +1014,7 @@ void boot_db( void )
      */
     {
   FILE *fpList;
+  log_debug("load_new_helps");
 
   top_help = load_new_helps(&help_first, &help_last);//New help code
 
@@ -1132,19 +1134,28 @@ void boot_db( void )
     {
   fix_exits( );
   fBootDb = false;
+  log_debug("area_update");
   area_update( );
+  log_debug("load_notes");
   load_notes( );
+  log_debug("load_bans");
   load_bans();
+  log_debug("load_dns");
   load_dns();
+  log_debug("load_clans");
   load_clans();
+  log_debug("load_pits");
   load_pits();
+  log_debug("verify_price_table");
   verify_price_table();
   /* load_songs(); */
   // Link the help files regardless of load method
+  log_debug("create_help_tracks");
   create_help_tracks();
+  log_debug("mark_mob_bounties");
   mark_mob_bounties();
     }
-
+    log_debug("done boot_db");
     return;
 }
 
