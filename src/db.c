@@ -3573,12 +3573,12 @@ char *fread_string( FILE *fp )
             plast++;
             break;
  
-        case EOF:
-  /* temp fix */
-            bug( "Fread_string: EOF", 0 );
-      return NULL;
-            /* exit( 1 ); */
-            break;
+  //       case EOF:
+  // /* temp fix */
+  //           bug( "Fread_string: EOF", 0 );
+  //     return NULL;
+  //           /* exit( 1 ); */
+  //           break;
  
         case '\n':
             plast++;
@@ -3681,14 +3681,14 @@ char *fread_string_eol( FILE *fp )
         default:
             break;
  
-        case EOF:
-            bug( "Fread_string_eol  EOF", 0 );
-            if ( fp != stdin ) fclose( fp );
-            fp = NULL;
-            if (area_last)
-              rename_area (area_last->file_name);            
-            exit( 1 );
-            break;
+        // case EOF:
+        //     bug( "Fread_string_eol  EOF", 0 );
+        //     if ( fp != stdin ) fclose( fp );
+        //     fp = NULL;
+        //     if (area_last)
+        //       rename_area (area_last->file_name);            
+        //     exit( 1 );
+        //     break;
  
         case '\n':  case '\r':
             {
